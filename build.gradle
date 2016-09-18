@@ -4,7 +4,9 @@ version '0.1'
 apply plugin: 'java'
 apply plugin: 'application'
 
-sourceCompatibility = 1.5
+sourceCompatibility = 1.8
+
+mainClassName = 'com.mr_ramych.sigmacoin.Main'
 
 repositories {
     mavenCentral()
