@@ -26,3 +26,12 @@ project(':core') {
         testCompile "junit:junit:$jUnitVersion"
     }
 }
+
+project(':desktopgui') {
+    apply plugin: 'java'
+    apply plugin: 'application'
+
+    dependencies {
+        compile project(':core')
+    }
+}
