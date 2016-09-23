@@ -2,3 +2,27 @@ apply plugin: 'java'
 apply plugin: 'application'
 apply plugin: 'eclipse'
 apply plugin: 'idea'
+
+allprojects {
+    ext {
+        jUnitVersion = '4.12'
+        guavaVersion = '19.0'
+    }
+
+    repositories {
+        mavenLocal()
+        mavenCentral()
+        maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
+        maven { url "https://oss.sonatype.org/content/repositories/releases/" }
+    }
+}
+
+project(':core') {
+    apply plugin: 'java'
+
+    dependencies {
+        compile "com.google.guava:guava:$guavaVersion"
+
+        testCompile "junit:junit:$jUnitVersion"
+    }
+}
