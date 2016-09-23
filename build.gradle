@@ -1,17 +1,4 @@
-group 'com.mr_ramych'
-version '0.1'
-
 apply plugin: 'java'
 apply plugin: 'application'
-
-sourceCompatibility = 1.8
-
-mainClassName = 'com.mr_ramych.sigmacoin.Main'
-
-repositories {
-    mavenCentral()
-}
-
-dependencies {
-    testCompile group: 'junit', name: 'junit', version: '4.11'
-}
+apply plugin: 'eclipse'
+apply plugin: 'idea'
