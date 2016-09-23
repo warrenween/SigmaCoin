@@ -1,7 +1,8 @@
 #Gradle
 .gradle
-core/build
-desktopgui/build
+build/
+core/build/
+desktopgui/build/
 
 #IntelliJ IDEA
 .idea
