@@ -1,1 +1,1 @@
-# starco-coin
+# Sigma Coin
