@@ -1,4 +1,4 @@
-package com.mr_ramych.sigmacoin.core;
+package org.opensecreto.sigmacoin.core;
 
 public class CoinConfig {
 

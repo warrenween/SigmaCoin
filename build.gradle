@@ -5,6 +5,8 @@ allprojects {
     ext {
         jUnitVersion = '4.12'
         guavaVersion = '19.0'
+        bouncyCastleVersion = '1.55'
+        gsonVersion = '2.8.0'
     }
 
     repositories {
@@ -20,6 +22,9 @@ project(':core') {
 
     dependencies {
         compile "com.google.guava:guava:$guavaVersion"
+        compile "com.google.code.gson:gson:$gsonVersion"
+
+        compile "org.bouncycastle:bcprov-jdk15on:$bouncyCastleVersion"
 
         testCompile "junit:junit:$jUnitVersion"
     }
