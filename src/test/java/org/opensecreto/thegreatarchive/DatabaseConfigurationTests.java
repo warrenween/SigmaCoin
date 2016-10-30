@@ -3,8 +3,8 @@ package org.opensecreto.thegreatarchive;
 import org.assertj.core.api.Assertions;
 import org.assertj.core.api.Fail;
 import org.fluttercode.datafactory.impl.DataFactory;
-import org.opensecreto.thegreatearchive.DatabaseConfiguration;
-import org.opensecreto.thegreatearchive.exceptions.ImmutableFieldException;
+import org.opensecreto.TheGreatBlockchainArchive.DatabaseConfiguration;
+import org.opensecreto.TheGreatBlockchainArchive.exceptions.ImmutableFieldException;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 

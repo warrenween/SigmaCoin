@@ -1,4 +1,4 @@
-package org.opensecreto.thegreatearchive;
+package org.opensecreto.TheGreatBlockchainArchive;
 
 import java.io.IOException;
 import java.io.RandomAccessFile;

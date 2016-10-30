@@ -1,4 +1,4 @@
-package org.opensecreto.thegreatearchive.exceptions;
+package org.opensecreto.TheGreatBlockchainArchive.exceptions;
 
 public class ImmutableFieldException extends Exception {
 

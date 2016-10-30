@@ -1,6 +1,6 @@
-package org.opensecreto.thegreatearchive;
+package org.opensecreto.TheGreatBlockchainArchive;
 
-import org.opensecreto.thegreatearchive.exceptions.ImmutableFieldException;
+import org.opensecreto.TheGreatBlockchainArchive.exceptions.ImmutableFieldException;
 
 public class DatabaseConfiguration {
 
