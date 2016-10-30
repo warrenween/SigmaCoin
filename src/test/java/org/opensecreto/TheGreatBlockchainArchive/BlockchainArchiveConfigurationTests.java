@@ -11,12 +11,16 @@ public class BlockchainArchiveConfigurationTests {
 
     private String randomStringA;
     private String randomStringB;
+    private int randomIntA;
+    private int randomIntB;
 
     @BeforeTest
     public void prepareTestData() {
         DataFactory dataFactory = new DataFactory();
         randomStringA = dataFactory.getRandomChars(6, 18);
         randomStringB = dataFactory.getRandomChars(6, 18);
+        randomIntA = dataFactory.getNumberBetween(0, Integer.MAX_VALUE);
+        randomIntB = dataFactory.getNumberBetween(0, Integer.MAX_VALUE);
     }
 
     @Test
@@ -33,6 +37,22 @@ public class BlockchainArchiveConfigurationTests {
 
         Assertions.assertThatThrownBy(() -> config.setPath(randomStringB)).isInstanceOf(ImmutableFieldException.class);
         Assertions.assertThat(config.getPath()).isEqualTo(randomStringA);
+    }
+
+    @Test
+    public void testHashLength() {
+        BlockchainArchiveConfiguration config = new BlockchainArchiveConfiguration();
+
+        try {
+            config.setHashLength(randomIntA);
+            Assertions.assertThat(config.getHashLength()).isEqualTo(randomIntA);
+        } catch (ImmutableFieldException e) {
+            Fail.fail("No exception is expected", e);
+        }
+        config.setImmutable();
+
+        Assertions.assertThatThrownBy(() -> config.setHashLength(randomIntB)).isInstanceOf(ImmutableFieldException.class);
+        Assertions.assertThat(config.getHashLength()).isEqualTo(randomIntA);
     }
 
     @Test
