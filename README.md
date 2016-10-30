@@ -1,5 +1,5 @@
-## The Great Archive
-Simple file based database (dispite of this it is great). 
+## The Great Blockchain Archive
+Simple file based database (despite of this it is great).
 
 Designed to use as little memory, as possible.
 
