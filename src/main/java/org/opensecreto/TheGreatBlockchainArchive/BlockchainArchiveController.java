@@ -3,12 +3,12 @@ package org.opensecreto.TheGreatBlockchainArchive;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 
-public class DatabaseController {
+public class BlockchainArchiveController {
 
-    public DatabaseConfiguration configuration;
+    public BlockchainArchiveConfiguration configuration;
     private RandomAccessFile database;
 
-    public DatabaseController(DatabaseConfiguration configuration) throws IOException {
+    public BlockchainArchiveController(BlockchainArchiveConfiguration configuration) throws IOException {
         this.configuration = configuration;
         configuration.setImmutable();
 

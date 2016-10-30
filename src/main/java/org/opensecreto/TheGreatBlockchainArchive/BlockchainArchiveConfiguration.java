@@ -2,7 +2,7 @@ package org.opensecreto.TheGreatBlockchainArchive;
 
 import org.opensecreto.TheGreatBlockchainArchive.exceptions.ImmutableFieldException;
 
-public class DatabaseConfiguration {
+public class BlockchainArchiveConfiguration {
 
     private boolean immutable;
 

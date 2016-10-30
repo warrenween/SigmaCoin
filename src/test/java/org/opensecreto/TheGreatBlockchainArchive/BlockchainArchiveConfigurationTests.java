@@ -7,7 +7,7 @@ import org.opensecreto.TheGreatBlockchainArchive.exceptions.ImmutableFieldExcept
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
-public class DatabaseConfigurationTests {
+public class BlockchainArchiveConfigurationTests {
 
     private String randomStringA;
     private String randomStringB;
@@ -21,7 +21,7 @@ public class DatabaseConfigurationTests {
 
     @Test
     public void testPath() {
-        DatabaseConfiguration config = new DatabaseConfiguration();
+        BlockchainArchiveConfiguration config = new BlockchainArchiveConfiguration();
 
         try {
             config.setPath(randomStringA);
@@ -37,7 +37,7 @@ public class DatabaseConfigurationTests {
 
     @Test
     public void testImmutable() {
-        DatabaseConfiguration config = new DatabaseConfiguration();
+        BlockchainArchiveConfiguration config = new BlockchainArchiveConfiguration();
 
         Assertions.assertThat(config.isImmutable()).isEqualTo(false);
         config.setImmutable();
