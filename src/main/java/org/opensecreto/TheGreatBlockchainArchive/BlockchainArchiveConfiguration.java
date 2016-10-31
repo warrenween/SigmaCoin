@@ -6,18 +6,26 @@ public class BlockchainArchiveConfiguration {
 
     private boolean immutable;
 
-    private String path;
+    private String indexFile;
+    private String blockchainFile;
     private int hashLength;
 
-    public String getPath() {
-        return path;
+    public String getIndexFile() {
+        return indexFile;
     }
 
-    public void setPath(String path) throws ImmutableFieldException {
-        if (immutable) {
-            throw new ImmutableFieldException("Can not change fields of immutable object.");
-        }
-        this.path = path;
+    public void setIndexFile(String indexFile) throws ImmutableFieldException {
+        failImmutable();
+        this.indexFile = indexFile;
+    }
+
+    public String getBlockchainFile() throws ImmutableFieldException {
+        return blockchainFile;
+    }
+
+    public void setBlockchainFile(String blockchainFile) {
+        failImmutable();
+        this.blockchainFile = blockchainFile;
     }
 
     public int getHashLength() {
@@ -25,9 +33,7 @@ public class BlockchainArchiveConfiguration {
     }
 
     public void setHashLength(int hashLength) throws ImmutableFieldException {
-        if (immutable) {
-            throw new ImmutableFieldException("Can not change fields of immutable object.");
-        }
+        failImmutable();
         this.hashLength = hashLength;
     }
 
@@ -37,6 +43,12 @@ public class BlockchainArchiveConfiguration {
 
     public boolean isImmutable() {
         return immutable;
+    }
+
+    private void failImmutable() {
+        if (immutable) {
+            throw new ImmutableFieldException("Can not change fields of immutable object.");
+        }
     }
 
 }

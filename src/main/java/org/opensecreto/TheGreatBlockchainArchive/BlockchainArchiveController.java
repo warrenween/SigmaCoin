@@ -15,8 +15,8 @@ public class BlockchainArchiveController {
         this.configuration = configuration;
         configuration.setImmutable();
 
-        index = new RandomAccessFile(configuration.getPath() + "index.data", "rwd");
-        blockchain = new RandomAccessFile(configuration.getPath() + "blockchain.dat", "rwd");
+        index = new RandomAccessFile(configuration.getIndexFile(), "rwd");
+        blockchain = new RandomAccessFile(configuration.getBlockchainFile(), "rwd");
     }
 
     /**

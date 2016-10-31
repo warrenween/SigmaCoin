@@ -24,19 +24,35 @@ public class BlockchainArchiveConfigurationTests {
     }
 
     @Test
-    public void testPath() {
+    public void testIndexFile() {
         BlockchainArchiveConfiguration config = new BlockchainArchiveConfiguration();
 
         try {
-            config.setPath(randomStringA);
-            Assertions.assertThat(config.getPath()).isEqualTo(randomStringA);
+            config.setIndexFile(randomStringA);
+            Assertions.assertThat(config.getIndexFile()).isEqualTo(randomStringA);
         } catch (ImmutableFieldException e) {
             Fail.fail("No exception is expected", e);
         }
         config.setImmutable();
 
-        Assertions.assertThatThrownBy(() -> config.setPath(randomStringB)).isInstanceOf(ImmutableFieldException.class);
-        Assertions.assertThat(config.getPath()).isEqualTo(randomStringA);
+        Assertions.assertThatThrownBy(() -> config.setIndexFile(randomStringB)).isInstanceOf(ImmutableFieldException.class);
+        Assertions.assertThat(config.getIndexFile()).isEqualTo(randomStringA);
+    }
+
+    @Test
+    public void testBlockchainFile() {
+        BlockchainArchiveConfiguration config = new BlockchainArchiveConfiguration();
+
+        try {
+            config.setBlockchainFile(randomStringA);
+            Assertions.assertThat(config.getBlockchainFile()).isEqualTo(randomStringA);
+        } catch (ImmutableFieldException e) {
+            Fail.fail("No exception is expected", e);
+        }
+        config.setImmutable();
+
+        Assertions.assertThatThrownBy(() -> config.setBlockchainFile(randomStringB)).isInstanceOf(ImmutableFieldException.class);
+        Assertions.assertThat(config.getBlockchainFile()).isEqualTo(randomStringA);
     }
 
     @Test
