@@ -20,7 +20,7 @@ dependencies {
 }
 
 test.useTestNG()
-test.outputs.upToDateWhen {false}
+test.outputs.upToDateWhen { false }
 
 //http://stackoverflow.com/a/36130467
 tasks.withType(Test) {
