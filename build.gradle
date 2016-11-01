@@ -21,12 +21,18 @@ dependencies {
 
 test.useTestNG()
 test.outputs.upToDateWhen { false }
+task prepareTestWorkingDir {
+    File outputDir = new File("$buildDir/test-output")
+    if (!outputDir.exists()) {
+        outputDir.mkdirs();
+    } else {
+        GFileUtils.cleanDirectory(outputDir)
+    }
+    test.workingDir = outputDir
+}
+test.dependsOn.add(prepareTestWorkingDir)
 
 tasks.withType(Test) {
-    File outputDir = new File("$buildDir/test-output")
-    outputDir.mkdir()
-    workingDir = outputDir
-
     testLogging {
         // set options for log level LIFECYCLE
         events "passed", "skipped", "failed", "standardOut"
