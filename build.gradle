@@ -37,6 +37,11 @@ task prepareTestWorkingDir {
 test.dependsOn.add(prepareTestWorkingDir)
 
 tasks.withType(Test) {
+    int time = 0;
+    afterTest { desc, result ->
+        time += result.getEndTime() - result.getStartTime()
+    }
+
     testLogging {
         // set options for log level LIFECYCLE
         events "passed", "skipped", "failed", "standardOut"
@@ -55,7 +60,8 @@ tasks.withType(Test) {
 
         afterSuite { desc, result ->
             if (!desc.parent) { // will match the outermost suite
-                def output = "Results: ${result.resultType} (${result.testCount} tests, ${result.successfulTestCount} successes, ${result.failedTestCount} failures, ${result.skippedTestCount} skipped)"
+                def output = "Results: ${result.resultType} (${result.testCount} tests, ${result.successfulTestCount} successes, ${result.failedTestCount} failures, ${result.skippedTestCount} skipped)" +
+                        " Time: " + time / 1000 + "secs "
                 def startItem = '|  ', endItem = '  |'
                 def repeatLength = startItem.length() + output.length() + endItem.length()
                 println('\n' + ('-' * repeatLength) + '\n' + startItem + output + endItem + '\n' + ('-' * repeatLength))
