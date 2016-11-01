@@ -43,6 +43,14 @@ public class BlockchainArchiveController {
     }
 
     /**
+     * @param hash Hex string representation of hash
+     * @see BlockchainArchiveController#delete(byte[])
+     */
+    public boolean delete(String hash) throws IOException {
+        return this.delete(DatatypeConverter.parseHexBinary(hash));
+    }
+
+    /**
      * Deletes block with given hash.
      * Notice: block is not actually deleted! Given index in index file is marked as invalid, though it
      * can be overwritten. Data in blockchain file is not deleted.

@@ -25,6 +25,22 @@ public class BlockchainArchiveControllerTests {
         dataFactory = new DataFactory();
     }
 
+    @Test
+    public void testStringWrapperMethods() throws IOException {
+        config.setHashLength(7);
+        BlockchainArchiveController controller = new BlockchainArchiveController(config);
+
+        byte[] hash = new byte[7];
+        random.nextBytes(hash);
+        String data = dataFactory.getRandomChars(10, 20);
+
+        controller.put(DatatypeConverter.printHexBinary(hash), data);
+        Assertions.assertThat(controller.get(hash)).isEqualTo(data);
+        Assertions.assertThat(controller.delete(hash)).isEqualTo(true);
+        Assertions.assertThat(controller.get(hash)).isEqualTo(null);
+        Assertions.assertThat(controller.delete(hash)).isEqualTo(false);
+    }
+
     @BeforeMethod
     public void prepareConfig(Method method) {
         config = new BlockchainArchiveConfiguration();
@@ -55,21 +71,6 @@ public class BlockchainArchiveControllerTests {
         controller.put(hash, data);
 
         String resultData = controller.get(hash);
-        Assertions.assertThat(resultData).isEqualTo(data);
-    }
-
-    @Test
-    public void testPutAndGetStringHash() throws IOException {
-        config.setHashLength(7);
-        BlockchainArchiveController controller = new BlockchainArchiveController(config);
-
-        byte[] hash = new byte[7];
-        random.nextBytes(hash);
-        String data = dataFactory.getRandomChars(5, 20);
-
-        controller.put(DatatypeConverter.printHexBinary(hash), data);
-
-        String resultData = controller.get(DatatypeConverter.printHexBinary(hash));
         Assertions.assertThat(resultData).isEqualTo(data);
     }
 
