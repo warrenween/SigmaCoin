@@ -27,10 +27,10 @@ public class BlockchainArchiveControllerTests {
 
     @Test
     public void testStringWrapperMethods() throws IOException {
-        config.setHashLength(7);
+        config.setHashLength(3);
         BlockchainArchiveController controller = new BlockchainArchiveController(config);
 
-        byte[] hash = new byte[7];
+        byte[] hash = new byte[3];
         random.nextBytes(hash);
         String data = dataFactory.getRandomChars(10, 20);
 
@@ -61,10 +61,10 @@ public class BlockchainArchiveControllerTests {
 
     @Test
     public void testPutAndGet() throws IOException {
-        config.setHashLength(7);
+        config.setHashLength(3);
         BlockchainArchiveController controller = new BlockchainArchiveController(config);
 
-        byte[] hash = new byte[7];
+        byte[] hash = new byte[3];
         random.nextBytes(hash);
         String data = dataFactory.getRandomChars(5, 20);
 
@@ -76,23 +76,23 @@ public class BlockchainArchiveControllerTests {
 
     @Test
     public void testPutAndGetMultipleBlocks() throws IOException {
-        config.setHashLength(7);
+        config.setHashLength(3);
         BlockchainArchiveController controller = new BlockchainArchiveController(config);
 
         //First block
-        byte[] hash1 = new byte[7];
+        byte[] hash1 = new byte[3];
         random.nextBytes(hash1);
         String data1 = dataFactory.getRandomChars(5, 20);
         controller.put(hash1, data1);
 
         //Second block
-        byte[] hash2 = new byte[7];
+        byte[] hash2 = new byte[3];
         random.nextBytes(hash2);
         String data2 = dataFactory.getRandomChars(5, 20);
         controller.put(hash2, data2);
 
         //Third block
-        byte[] hash3 = new byte[7];
+        byte[] hash3 = new byte[3];
         random.nextBytes(hash3);
         String data3 = dataFactory.getRandomChars(5, 20);
         controller.put(hash3, data3);
@@ -108,10 +108,10 @@ public class BlockchainArchiveControllerTests {
 
     @Test
     public void testDelete() throws IOException {
-        config.setHashLength(7);
+        config.setHashLength(3);
         BlockchainArchiveController controller = new BlockchainArchiveController(config);
 
-        byte[] hash = new byte[7];
+        byte[] hash = new byte[3];
         random.nextBytes(hash);
         String data = dataFactory.getRandomChars(10, 20);
         controller.put(hash, data);
@@ -123,10 +123,10 @@ public class BlockchainArchiveControllerTests {
 
     @Test
     public void testDeletingAndPutting() throws IOException {
-        config.setHashLength(7);
+        config.setHashLength(3);
         BlockchainArchiveController controller = new BlockchainArchiveController(config);
 
-        byte[] hash1 = new byte[7];
+        byte[] hash1 = new byte[3];
         random.nextBytes(hash1);
         String data = dataFactory.getRandomChars(10, 20);
         controller.put(hash1, data);
@@ -134,7 +134,7 @@ public class BlockchainArchiveControllerTests {
         Assertions.assertThat(controller.delete(hash1)).isEqualTo(true);
         Assertions.assertThat(controller.get(hash1)).isEqualTo(null);
 
-        byte[] hash2 = new byte[7];
+        byte[] hash2 = new byte[3];
         random.nextBytes(hash1);
         String data2 = dataFactory.getRandomChars(10, 20);
         controller.put(hash2, data2);
@@ -144,22 +144,22 @@ public class BlockchainArchiveControllerTests {
 
     @Test
     public void testPuttingDeletingAndGettingMultipleBlocks() throws IOException {
-        config.setHashLength(7);
+        config.setHashLength(3);
         BlockchainArchiveController controller = new BlockchainArchiveController(config);
 
-        byte[] hash1 = new byte[7];
+        byte[] hash1 = new byte[3];
         random.nextBytes(hash1);
         String data1 = dataFactory.getRandomChars(10, 20);
 
-        byte[] hash2 = new byte[7];
+        byte[] hash2 = new byte[3];
         random.nextBytes(hash2);
         String data2 = dataFactory.getRandomChars(10, 20);
 
-        byte[] hash3 = new byte[7];
+        byte[] hash3 = new byte[3];
         random.nextBytes(hash3);
         String data3 = dataFactory.getRandomChars(10, 20);
 
-        byte[] hash4 = new byte[7];
+        byte[] hash4 = new byte[3];
         random.nextBytes(hash4);
         String data4 = dataFactory.getRandomChars(10, 20);
 
@@ -187,22 +187,22 @@ public class BlockchainArchiveControllerTests {
 
     @Test
     public void testReindex() throws IOException {
-        config.setHashLength(7);
+        config.setHashLength(3);
         BlockchainArchiveController controller = new BlockchainArchiveController(config);
 
-        byte[] hash1 = new byte[7];
+        byte[] hash1 = new byte[3];
         random.nextBytes(hash1);
         String data1 = dataFactory.getRandomChars(10, 20);
 
-        byte[] hash2 = new byte[7];
+        byte[] hash2 = new byte[3];
         random.nextBytes(hash2);
         String data2 = dataFactory.getRandomChars(10, 20);
 
-        byte[] hash3 = new byte[7];
+        byte[] hash3 = new byte[3];
         random.nextBytes(hash3);
         String data3 = dataFactory.getRandomChars(10, 20);
 
-        byte[] hash4 = new byte[7];
+        byte[] hash4 = new byte[3];
         random.nextBytes(hash4);
         String data4 = dataFactory.getRandomChars(10, 20);
 
