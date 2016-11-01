@@ -55,7 +55,6 @@ public class BlockchainArchiveController {
      * Deletes block with given hash.
      * Notice: block is not actually deleted! Given index in index file is marked as invalid, though it
      * can be overwritten. Data in blockchain file is not deleted.
-     * TODO: clean blockchain file from deleted content
      *
      * @param hash
      * @return True if delete was successful, otherwise false
