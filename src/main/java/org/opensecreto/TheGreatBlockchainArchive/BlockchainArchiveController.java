@@ -25,7 +25,6 @@ public class BlockchainArchiveController {
     /**
      * @param hash String representing hex hash
      * @return String data if found or null if not found.
-     * @throws IOException
      */
     public String get(String hash) throws IOException {
         return this.get(DatatypeConverter.parseHexBinary(hash));
@@ -45,7 +44,6 @@ public class BlockchainArchiveController {
 
     /**
      * @param hash String representing hex hash
-     * @param data
      */
     public void put(String hash, String data) throws IOException {
         this.put(DatatypeConverter.parseHexBinary(hash), data);
@@ -70,7 +68,6 @@ public class BlockchainArchiveController {
     private BlockIndex findHash(byte[] hash) throws IOException {
         index.seek(0);
         byte[] tempHash = new byte[configuration.getHashLength()];
-        long line;
         while (index.getFilePointer() < index.length()) {
             index.read(tempHash);
             int offset = index.readInt();
