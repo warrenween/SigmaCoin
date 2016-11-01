@@ -52,11 +52,24 @@ public class BlockchainArchiveControllerTests {
         random.nextBytes(hash);
         String data = dataFactory.getRandomChars(5, 20);
 
-        System.out.println("Hash: " + DatatypeConverter.printHexBinary(hash));
-
         controller.put(hash, data);
 
         String resultData = controller.get(hash);
+        Assertions.assertThat(resultData).isEqualTo(data);
+    }
+
+    @Test
+    public void testPutAndGetStringHash() throws IOException {
+        config.setHashLength(4);
+        BlockchainArchiveController controller = new BlockchainArchiveController(config);
+
+        byte[] hash = new byte[4];
+        random.nextBytes(hash);
+        String data = dataFactory.getRandomChars(5, 20);
+
+        controller.put(DatatypeConverter.printHexBinary(hash), data);
+
+        String resultData = controller.get(DatatypeConverter.printHexBinary(hash));
         Assertions.assertThat(resultData).isEqualTo(data);
     }
 
