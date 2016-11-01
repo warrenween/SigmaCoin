@@ -5,6 +5,9 @@ import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.util.Arrays;
 
+/**
+ * Important: controller is NOT thread safe, also it is NOT protected from corrupted index and blockchain files
+ */
 public class BlockchainArchiveController {
 
     public BlockchainArchiveConfiguration configuration;
