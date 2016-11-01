@@ -1,6 +1,6 @@
 package org.opensecreto.TheGreatBlockchainArchive.exceptions;
 
-public class ImmutableFieldException extends Exception {
+public class ImmutableFieldException extends RuntimeException {
 
     public ImmutableFieldException() {
         super();
