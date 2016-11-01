@@ -43,6 +43,26 @@ public class BlockchainArchiveController {
     }
 
     /**
+     * Deletes block with given hash.
+     * Notice: block is not actually deleted! Given index in index file is marked as invalid, though it
+     * can be overwritten. Data in blockchain file is not deleted.
+     * TODO: clean blockchain file from deleted content
+     *
+     * @param hash
+     * @return True if delete was successful, otherwise false
+     */
+    public boolean delete(byte[] hash) throws IOException {
+        BlockIndex index = findHash(hash);
+        if (index == null) {
+            return false;
+        } else {
+            this.index.seek(index.indexOffset);
+            this.index.writeBoolean(false);
+            return true;
+        }
+    }
+
+    /**
      * @param hash String representing hex hash
      */
     public void put(String hash, String data) throws IOException {
@@ -55,13 +75,30 @@ public class BlockchainArchiveController {
                     "is not equal to configuration length " + configuration.getHashLength() + ".");
         }
 
-        blockchain.seek(blockchain.length());
-        int index = (int) blockchain.getFilePointer();
+        //searching for free space in index file
+        int indexOffset = (int) index.length();
+        index.seek(0);
+        boolean search = true;
+        while ((index.getFilePointer() < index.length()) && search) {
+            int currentOffset = (int) index.getFilePointer();
+            if (!index.readBoolean()) {
+                search = false;
+                //we read one byte with index.readBoolean() that's why we should do -1 indexGetFilePointer
+                indexOffset = currentOffset;
+            }
+            index.skipBytes(configuration.getHashLength());
+            //int offset and int length
+            index.skipBytes(Integer.BYTES * 2);
+        }
+
+        int blockchainOffset = (int) blockchain.length();
+        blockchain.seek(blockchainOffset);
         blockchain.write(data.getBytes());
 
-        this.index.seek(this.index.length());
+        this.index.seek(indexOffset);
+        this.index.writeBoolean(true);
         this.index.write(hash);
-        this.index.writeInt(index);
+        this.index.writeInt(blockchainOffset);
         this.index.writeInt(data.getBytes().length);
     }
 
@@ -69,12 +106,14 @@ public class BlockchainArchiveController {
         index.seek(0);
         byte[] tempHash = new byte[configuration.getHashLength()];
         while (index.getFilePointer() < index.length()) {
+            int indexOffset = (int) index.getFilePointer();
+            boolean valid = index.readBoolean();
             index.read(tempHash);
             int offset = index.readInt();
             int length = index.readInt();
 
-            if (Arrays.equals(tempHash, hash)) {
-                return new BlockIndex(hash, offset, length);
+            if (Arrays.equals(tempHash, hash) && valid) {
+                return new BlockIndex(hash, offset, length, indexOffset);
             }
         }
         return null;
@@ -84,11 +123,13 @@ public class BlockchainArchiveController {
         public final byte[] hash;
         public final int offset;
         public final int length;
+        public final int indexOffset;
 
-        public BlockIndex(byte[] hash, int offset, int length) {
+        public BlockIndex(byte[] hash, int offset, int length, int indexOffset) {
             this.hash = hash;
             this.offset = offset;
             this.length = length;
+            this.indexOffset = indexOffset;
         }
     }
 

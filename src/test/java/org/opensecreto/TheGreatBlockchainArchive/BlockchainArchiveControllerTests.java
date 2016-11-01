@@ -117,4 +117,83 @@ public class BlockchainArchiveControllerTests {
         Assertions.assertThat(resultData3).isEqualTo(data3);
     }
 
+    @Test
+    public void testDelete() throws IOException {
+        config.setHashLength(4);
+        BlockchainArchiveController controller = new BlockchainArchiveController(config);
+
+        byte[] hash = new byte[4];
+        random.nextBytes(hash);
+        String data = dataFactory.getRandomChars(10, 20);
+        controller.put(hash, data);
+
+        Assertions.assertThat(controller.delete(hash)).isEqualTo(true);
+
+        Assertions.assertThat(controller.get(hash)).isEqualTo(null);
+    }
+
+    @Test
+    public void testDeletingAndPutting() throws IOException {
+        config.setHashLength(4);
+        BlockchainArchiveController controller = new BlockchainArchiveController(config);
+
+        byte[] hash1 = new byte[4];
+        random.nextBytes(hash1);
+        String data = dataFactory.getRandomChars(10, 20);
+        controller.put(hash1, data);
+
+        Assertions.assertThat(controller.delete(hash1)).isEqualTo(true);
+        Assertions.assertThat(controller.get(hash1)).isEqualTo(null);
+
+        byte[] hash2 = new byte[4];
+        random.nextBytes(hash1);
+        String data2 = dataFactory.getRandomChars(10, 20);
+        controller.put(hash2, data2);
+
+        Assertions.assertThat(controller.get(hash2)).isEqualTo(data2);
+    }
+
+    @Test
+    public void testPuttingDeletingAndGettingMultipleBlocks() throws IOException {
+        config.setHashLength(7);
+        BlockchainArchiveController controller = new BlockchainArchiveController(config);
+
+        byte[] hash1 = new byte[7];
+        random.nextBytes(hash1);
+        String data1 = dataFactory.getRandomChars(10, 20);
+
+        byte[] hash2 = new byte[7];
+        random.nextBytes(hash2);
+        String data2 = dataFactory.getRandomChars(10, 20);
+
+        byte[] hash3 = new byte[7];
+        random.nextBytes(hash3);
+        String data3 = dataFactory.getRandomChars(10, 20);
+
+        byte[] hash4 = new byte[7];
+        random.nextBytes(hash4);
+        String data4 = dataFactory.getRandomChars(10, 20);
+
+        controller.put(hash1, data1);
+        controller.put(hash2, data2);
+        //controller.put(hash3, data3);
+        controller.put(hash4, data4);
+
+        Assertions.assertThat(controller.delete(hash2)).isEqualTo(true);
+
+        Assertions.assertThat(controller.get(hash1)).isEqualTo(data1);
+        Assertions.assertThat(controller.get(hash2)).isEqualTo(null);
+        Assertions.assertThat(controller.get(hash3)).isEqualTo(null);
+        Assertions.assertThat(controller.get(hash4)).isEqualTo(data4);
+
+        Assertions.assertThat(controller.delete(hash2)).isEqualTo(false);
+
+        controller.put(hash3, data3);
+
+        Assertions.assertThat(controller.get(hash1)).isEqualTo(data1);
+        Assertions.assertThat(controller.get(hash2)).isEqualTo(null);
+        Assertions.assertThat(controller.get(hash3)).isEqualTo(data3);
+        Assertions.assertThat(controller.get(hash4)).isEqualTo(data4);
+    }
+
 }
