@@ -1,5 +1,6 @@
 package org.opensecreto.TheGreatBlockchainArchive;
 
+import javafx.util.Pair;
 import org.assertj.core.api.Assertions;
 import org.assertj.core.api.Fail;
 import org.fluttercode.datafactory.impl.DataFactory;
@@ -11,6 +12,7 @@ import javax.xml.bind.DatatypeConverter;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.Random;
 
 public class BlockchainArchiveControllerTests {
@@ -18,11 +20,21 @@ public class BlockchainArchiveControllerTests {
     private Random random;
     private BlockchainArchiveConfiguration config;
     private DataFactory dataFactory;
+    private ArrayList<Pair<byte[], String>> benchmarkData;
+
+    private BlockchainArchiveController controllerForGetBenchmarks;
 
     @BeforeSuite
     public void prepare() {
         random = new Random();
         dataFactory = new DataFactory();
+
+        benchmarkData = new ArrayList<>(500);
+        for (int i = 0; i < 500; i++) {
+            byte[] hash = new byte[256];
+            random.nextBytes(hash);
+            benchmarkData.add(new Pair<>(hash, dataFactory.getRandomChars(8, 2048)));
+        }
     }
 
     @BeforeMethod
@@ -103,6 +115,97 @@ public class BlockchainArchiveControllerTests {
         Assertions.assertThat(resultData2).isEqualTo(data2);
         String resultData3 = controller.get(hash3);
         Assertions.assertThat(resultData3).isEqualTo(data3);
+    }
+
+    @Test(timeOut = 10 * 1000)
+    public void benchmarkPut() throws IOException {
+        config.setHashLength(256);
+        BlockchainArchiveController controller = new BlockchainArchiveController(config);
+
+        benchmarkData.forEach(data -> {
+            try {
+                controller.put(data.getKey(), data.getValue());
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        });
+    }
+
+    @Test(timeOut = 20 * 1000)
+    public void benchmarkPutAndGetLinear() throws IOException {
+        config.setHashLength(256);
+        BlockchainArchiveController controller = new BlockchainArchiveController(config);
+
+        benchmarkData.forEach(data -> {
+            try {
+                controller.put(data.getKey(), data.getValue());
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        });
+
+        benchmarkData.forEach(data -> {
+            try {
+                Assertions.assertThat(controller.get(data.getKey())).isEqualTo(data.getValue());
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        });
+    }
+
+    @Test(timeOut = 20 * 1000)
+    public void benchmarkPutAndGetRandom() throws IOException {
+        config.setHashLength(256);
+        BlockchainArchiveController controller = new BlockchainArchiveController(config);
+
+        benchmarkData.forEach(data -> {
+            try {
+                controller.put(data.getKey(), data.getValue());
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        });
+
+        for (int i = 0; i < 500; i++) {
+            int index = random.nextInt(500);
+            Assertions.assertThat(controller.get(benchmarkData.get(index).getKey()))
+                    .isEqualTo(benchmarkData.get(index).getValue());
+        }
+    }
+
+    @BeforeMethod
+    public void prepareGetData(Method method) throws IOException {
+        if (method.getName().equals("benchmarkGetLinear") || method.getName().equals("benchmarkGetRandom")) {
+            config.setHashLength(256);
+            controllerForGetBenchmarks = new BlockchainArchiveController(config);
+            benchmarkData.forEach(data -> {
+                try {
+                    controllerForGetBenchmarks.put(data.getKey(), data.getValue());
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            });
+        }
+    }
+
+    @Test(timeOut = 10 * 1000)
+    public void benchmarkGetLinear() throws IOException {
+        benchmarkData.forEach(data -> {
+            try {
+                Assertions.assertThat(controllerForGetBenchmarks.get(data.getKey())).isEqualTo(data.getValue());
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        });
+    }
+
+    @Test(timeOut = 10 * 1000)
+    public void benchmarkGetRandom() throws IOException {
+        for (int i = 0; i < 500; i++) {
+            int index = random.nextInt(500);
+            Assertions.assertThat(controllerForGetBenchmarks.get(benchmarkData.get(index).getKey()))
+                    .isEqualTo(benchmarkData.get(index).getValue());
+        }
     }
 
 }
