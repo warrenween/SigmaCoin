@@ -33,8 +33,9 @@ public class BlockchainArchiveController {
         if (index == null) {
             return null;
         } else {
+            blockchain.seek(index.offset);
             byte[] data = new byte[index.length];
-            blockchain.readFully(data, index.offset, index.length);
+            blockchain.read(data, 0, index.length);
             return new String(data);
         }
     }
@@ -53,14 +54,14 @@ public class BlockchainArchiveController {
                     "is not equal to configuration length " + configuration.getHashLength() + ".");
         }
 
-        blockchain.seek(blockchain.length() - 1);
+        blockchain.seek(blockchain.length());
         int index = (int) blockchain.getFilePointer();
         blockchain.write(data.getBytes());
 
-        this.index.seek(configuration.getHashLength() - 1);
+        this.index.seek(this.index.length());
         this.index.write(hash);
-        this.index.write(index);
-        this.index.write(data.getBytes().length);
+        this.index.writeInt(index);
+        this.index.writeInt(data.getBytes().length);
     }
 
     private BlockIndex findHash(byte[] hash) throws IOException {
@@ -73,8 +74,6 @@ public class BlockchainArchiveController {
             int length = index.readInt();
 
             if (Arrays.equals(tempHash, hash)) {
-                byte[] bytes = new byte[(int) length];
-                blockchain.readFully(bytes, (int) offset, (int) length);
                 return new BlockIndex(hash, offset, length);
             }
         }
