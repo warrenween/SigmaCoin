@@ -1,6 +1,5 @@
 package org.opensecreto.TheGreatBlockchainArchive;
 
-import javafx.util.Pair;
 import org.assertj.core.api.Assertions;
 import org.assertj.core.api.Fail;
 import org.fluttercode.datafactory.impl.DataFactory;
@@ -12,7 +11,6 @@ import javax.xml.bind.DatatypeConverter;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
 import java.util.Random;
 
 public class BlockchainArchiveControllerTests {
@@ -20,21 +18,11 @@ public class BlockchainArchiveControllerTests {
     private Random random;
     private BlockchainArchiveConfiguration config;
     private DataFactory dataFactory;
-    private ArrayList<Pair<byte[], String>> benchmarkData;
-
-    private BlockchainArchiveController controllerForGetBenchmarks;
 
     @BeforeSuite
     public void prepare() {
         random = new Random();
         dataFactory = new DataFactory();
-
-        benchmarkData = new ArrayList<>(500);
-        for (int i = 0; i < 500; i++) {
-            byte[] hash = new byte[256];
-            random.nextBytes(hash);
-            benchmarkData.add(new Pair<>(hash, dataFactory.getRandomChars(8, 2048)));
-        }
     }
 
     @BeforeMethod
