@@ -84,29 +84,27 @@ public class BlockchainArchiveController {
         }
 
         //searching for free space in index file
-        int indexOffset = (int) index.length();
+        long indexOffset = index.length();
         index.seek(0);
         boolean search = true;
         while ((index.getFilePointer() < index.length()) && search) {
-            int currentOffset = (int) index.getFilePointer();
+            long currentOffset = index.getFilePointer();
             if (!index.readBoolean()) {
                 search = false;
                 //we read one byte with index.readBoolean() that's why we should do -1 indexGetFilePointer
                 indexOffset = currentOffset;
             }
-            index.skipBytes(configuration.getHashLength());
-            //int offset and int length
-            index.skipBytes(Integer.BYTES * 2);
+            index.skipBytes(configuration.getHashLength() + Integer.BYTES + Long.BYTES);
         }
 
-        int blockchainOffset = (int) blockchain.length();
+        long blockchainOffset = blockchain.length();
         blockchain.seek(blockchainOffset);
         blockchain.write(data.getBytes());
 
         this.index.seek(indexOffset);
         this.index.writeBoolean(true);
         this.index.write(hash);
-        this.index.writeInt(blockchainOffset);
+        this.index.writeLong(blockchainOffset);
         this.index.writeInt(data.getBytes().length);
     }
 
@@ -114,10 +112,10 @@ public class BlockchainArchiveController {
         index.seek(0);
         byte[] tempHash = new byte[configuration.getHashLength()];
         while (index.getFilePointer() < index.length()) {
-            int indexOffset = (int) index.getFilePointer();
+            long indexOffset = index.getFilePointer();
             boolean valid = index.readBoolean();
             index.read(tempHash);
-            int offset = index.readInt();
+            long offset = index.readLong();
             int length = index.readInt();
 
             if (Arrays.equals(tempHash, hash) && valid) {
@@ -156,7 +154,7 @@ public class BlockchainArchiveController {
         while (oldIndexFileRAF.getFilePointer() < oldBlockchainRAF.length()) {
             boolean oldValid = oldIndexFileRAF.readBoolean();
             oldIndexFileRAF.read(hash);
-            int oldOffset = oldIndexFileRAF.readInt();
+            long oldOffset = oldIndexFileRAF.readLong();
             int oldLength = oldIndexFileRAF.readInt();
 
             if (oldValid) {
@@ -164,12 +162,12 @@ public class BlockchainArchiveController {
                 byte[] data = new byte[oldLength];
                 oldBlockchainRAF.seek(oldOffset);
                 oldBlockchainRAF.read(data, 0, oldLength);
-                int newOffset = (int) newBlockchainFileRAF.getFilePointer();
+                long newOffset = newBlockchainFileRAF.getFilePointer();
                 newBlockchainFileRAF.write(data);
 
                 newIndexFileRAF.writeBoolean(true);
                 newIndexFileRAF.write(hash);
-                newIndexFileRAF.writeInt(newOffset);
+                newIndexFileRAF.writeLong(newOffset);
                 newIndexFileRAF.writeInt(oldLength);
             }
         }
@@ -185,11 +183,11 @@ public class BlockchainArchiveController {
 
     private static class BlockIndex {
         public final byte[] hash;
-        public final int offset;
+        public final long offset;
         public final int length;
-        public final int indexOffset;
+        public final long indexOffset;
 
-        public BlockIndex(byte[] hash, int offset, int length, int indexOffset) {
+        public BlockIndex(byte[] hash, long offset, int length, long indexOffset) {
             this.hash = hash;
             this.offset = offset;
             this.length = length;
