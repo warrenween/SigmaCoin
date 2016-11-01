@@ -73,4 +73,36 @@ public class BlockchainArchiveControllerTests {
         Assertions.assertThat(resultData).isEqualTo(data);
     }
 
+    @Test
+    public void testPutAndGetMultipleBlocks() throws IOException {
+        config.setHashLength(4);
+        BlockchainArchiveController controller = new BlockchainArchiveController(config);
+
+        //First block
+        byte[] hash1 = new byte[4];
+        random.nextBytes(hash1);
+        String data1 = dataFactory.getRandomChars(5, 20);
+        controller.put(hash1, data1);
+
+        //Second block
+        byte[] hash2 = new byte[4];
+        random.nextBytes(hash2);
+        String data2 = dataFactory.getRandomChars(5, 20);
+        controller.put(hash2, data2);
+
+        //Third block
+        byte[] hash3 = new byte[4];
+        random.nextBytes(hash3);
+        String data3 = dataFactory.getRandomChars(5, 20);
+        controller.put(hash3, data3);
+
+        //Validating
+        String resultData1 = controller.get(hash1);
+        Assertions.assertThat(resultData1).isEqualTo(data1);
+        String resultData2 = controller.get(hash2);
+        Assertions.assertThat(resultData2).isEqualTo(data2);
+        String resultData3 = controller.get(hash3);
+        Assertions.assertThat(resultData3).isEqualTo(data3);
+    }
+
 }
