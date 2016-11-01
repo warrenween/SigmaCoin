@@ -1,6 +1,7 @@
 package org.opensecreto.TheGreatBlockchainArchive;
 
 import javax.xml.bind.DatatypeConverter;
+import java.io.File;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.util.Arrays;
@@ -125,6 +126,62 @@ public class BlockchainArchiveController {
             }
         }
         return null;
+    }
+
+    /**
+     * Removes junk data from blockchain file.
+     * Because {@link BlockchainArchiveController#delete(byte[])} only marks index entry as invalid
+     * and don't deletes data from blockchain file (it costs too much resources), you need call reindex periodically.
+     * <p>
+     * This will copy old index and blockchain files and move valid entries to new index and blockchain files.
+     */
+    public void reindex() throws IOException {
+        //close old files
+        index.close();
+        blockchain.close();
+
+        File oldIndexFile = new File(configuration.getIndexFile() + ".old");
+        File oldBlockchainFile = new File(configuration.getBlockchainFile() + ".old");
+        File newIndexFile = new File(configuration.getIndexFile());
+        File newBlockchainFile = new File(configuration.getBlockchainFile());
+
+        newIndexFile.renameTo(oldIndexFile);
+        newBlockchainFile.renameTo(oldBlockchainFile);
+
+        RandomAccessFile oldIndexFileRAF = new RandomAccessFile(oldIndexFile, "r");
+        RandomAccessFile oldBlockchainRAF = new RandomAccessFile(oldBlockchainFile, "r");
+        RandomAccessFile newIndexFileRAF = new RandomAccessFile(newIndexFile, "rwd");
+        RandomAccessFile newBlockchainFileRAF = new RandomAccessFile(newBlockchainFile, "rwd");
+
+        byte[] hash = new byte[configuration.getHashLength()];
+        while (oldIndexFileRAF.getFilePointer() < oldBlockchainRAF.length()) {
+            boolean oldValid = oldIndexFileRAF.readBoolean();
+            oldIndexFileRAF.read(hash);
+            int oldOffset = oldIndexFileRAF.readInt();
+            int oldLength = oldIndexFileRAF.readInt();
+
+            if (oldValid) {
+                //write data
+                byte[] data = new byte[oldLength];
+                oldBlockchainRAF.seek(oldOffset);
+                oldBlockchainRAF.read(data, 0, oldLength);
+                int newOffset = (int) newBlockchainFileRAF.getFilePointer();
+                newBlockchainFileRAF.write(data);
+
+                newIndexFileRAF.writeBoolean(true);
+                newIndexFileRAF.write(hash);
+                newIndexFileRAF.writeInt(newOffset);
+                newIndexFileRAF.writeInt(oldLength);
+            }
+        }
+
+        oldBlockchainRAF.close();
+        oldBlockchainFile.delete();
+        oldIndexFileRAF.close();
+        oldIndexFile.delete();
+
+        index = newIndexFileRAF;
+        blockchain = newBlockchainFileRAF;
     }
 
     private static class BlockIndex {

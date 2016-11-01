@@ -185,4 +185,46 @@ public class BlockchainArchiveControllerTests {
         Assertions.assertThat(controller.get(hash4)).isEqualTo(data4);
     }
 
+    @Test
+    public void testReindex() throws IOException {
+        config.setHashLength(7);
+        BlockchainArchiveController controller = new BlockchainArchiveController(config);
+
+        byte[] hash1 = new byte[7];
+        random.nextBytes(hash1);
+        String data1 = dataFactory.getRandomChars(10, 20);
+
+        byte[] hash2 = new byte[7];
+        random.nextBytes(hash2);
+        String data2 = dataFactory.getRandomChars(10, 20);
+
+        byte[] hash3 = new byte[7];
+        random.nextBytes(hash3);
+        String data3 = dataFactory.getRandomChars(10, 20);
+
+        byte[] hash4 = new byte[7];
+        random.nextBytes(hash4);
+        String data4 = dataFactory.getRandomChars(10, 20);
+
+        controller.put(hash1, data1);
+        controller.put(hash2, data2);
+        controller.put(hash3, data3);
+        controller.put(hash4, data4);
+
+        Assertions.assertThat(controller.delete(hash2)).isEqualTo(true);
+        Assertions.assertThat(controller.delete(hash3)).isEqualTo(true);
+
+        controller.reindex();
+
+        Assertions.assertThat(controller.get(hash1)).isEqualTo(data1);
+        Assertions.assertThat(controller.get(hash4)).isEqualTo(data4);
+
+        if (new File(config.getIndexFile() + ".old").exists()) {
+            Fail.fail("Old index file must be deleted");
+        }
+        if (new File(config.getBlockchainFile() + ".old").exists()) {
+            Fail.fail("Old blockchain file must be deleted");
+        }
+    }
+
 }
