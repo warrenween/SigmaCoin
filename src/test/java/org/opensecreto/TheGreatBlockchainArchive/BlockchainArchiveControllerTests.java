@@ -1,6 +1,5 @@
 package org.opensecreto.TheGreatBlockchainArchive;
 
-import javafx.util.Pair;
 import org.assertj.core.api.Assertions;
 import org.assertj.core.api.Fail;
 import org.fluttercode.datafactory.impl.DataFactory;
@@ -12,7 +11,6 @@ import javax.xml.bind.DatatypeConverter;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
 import java.util.Random;
 
 public class BlockchainArchiveControllerTests {
@@ -20,21 +18,27 @@ public class BlockchainArchiveControllerTests {
     private Random random;
     private BlockchainArchiveConfiguration config;
     private DataFactory dataFactory;
-    private ArrayList<Pair<byte[], String>> benchmarkData;
-
-    private BlockchainArchiveController controllerForGetBenchmarks;
 
     @BeforeSuite
     public void prepare() {
         random = new Random();
         dataFactory = new DataFactory();
+    }
 
-        benchmarkData = new ArrayList<>(500);
-        for (int i = 0; i < 500; i++) {
-            byte[] hash = new byte[256];
-            random.nextBytes(hash);
-            benchmarkData.add(new Pair<>(hash, dataFactory.getRandomChars(8, 2048)));
-        }
+    @Test
+    public void testStringWrapperMethods() throws IOException {
+        config.setHashLength(3);
+        BlockchainArchiveController controller = new BlockchainArchiveController(config);
+
+        byte[] hash = new byte[3];
+        random.nextBytes(hash);
+        String data = dataFactory.getRandomChars(10, 20);
+
+        controller.put(DatatypeConverter.printHexBinary(hash), data);
+        Assertions.assertThat(controller.get(hash)).isEqualTo(data);
+        Assertions.assertThat(controller.delete(hash)).isEqualTo(true);
+        Assertions.assertThat(controller.get(hash)).isEqualTo(null);
+        Assertions.assertThat(controller.delete(hash)).isEqualTo(false);
     }
 
     @BeforeMethod
@@ -57,10 +61,10 @@ public class BlockchainArchiveControllerTests {
 
     @Test
     public void testPutAndGet() throws IOException {
-        config.setHashLength(4);
+        config.setHashLength(3);
         BlockchainArchiveController controller = new BlockchainArchiveController(config);
 
-        byte[] hash = new byte[4];
+        byte[] hash = new byte[3];
         random.nextBytes(hash);
         String data = dataFactory.getRandomChars(5, 20);
 
@@ -71,39 +75,24 @@ public class BlockchainArchiveControllerTests {
     }
 
     @Test
-    public void testPutAndGetStringHash() throws IOException {
-        config.setHashLength(4);
-        BlockchainArchiveController controller = new BlockchainArchiveController(config);
-
-        byte[] hash = new byte[4];
-        random.nextBytes(hash);
-        String data = dataFactory.getRandomChars(5, 20);
-
-        controller.put(DatatypeConverter.printHexBinary(hash), data);
-
-        String resultData = controller.get(DatatypeConverter.printHexBinary(hash));
-        Assertions.assertThat(resultData).isEqualTo(data);
-    }
-
-    @Test
     public void testPutAndGetMultipleBlocks() throws IOException {
-        config.setHashLength(4);
+        config.setHashLength(3);
         BlockchainArchiveController controller = new BlockchainArchiveController(config);
 
         //First block
-        byte[] hash1 = new byte[4];
+        byte[] hash1 = new byte[3];
         random.nextBytes(hash1);
         String data1 = dataFactory.getRandomChars(5, 20);
         controller.put(hash1, data1);
 
         //Second block
-        byte[] hash2 = new byte[4];
+        byte[] hash2 = new byte[3];
         random.nextBytes(hash2);
         String data2 = dataFactory.getRandomChars(5, 20);
         controller.put(hash2, data2);
 
         //Third block
-        byte[] hash3 = new byte[4];
+        byte[] hash3 = new byte[3];
         random.nextBytes(hash3);
         String data3 = dataFactory.getRandomChars(5, 20);
         controller.put(hash3, data3);
@@ -117,94 +106,124 @@ public class BlockchainArchiveControllerTests {
         Assertions.assertThat(resultData3).isEqualTo(data3);
     }
 
-    @Test(timeOut = 10 * 1000)
-    public void benchmarkPut() throws IOException {
-        config.setHashLength(256);
+    @Test
+    public void testDelete() throws IOException {
+        config.setHashLength(3);
         BlockchainArchiveController controller = new BlockchainArchiveController(config);
 
-        benchmarkData.forEach(data -> {
-            try {
-                controller.put(data.getKey(), data.getValue());
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        });
+        byte[] hash = new byte[3];
+        random.nextBytes(hash);
+        String data = dataFactory.getRandomChars(10, 20);
+        controller.put(hash, data);
+
+        Assertions.assertThat(controller.delete(hash)).isEqualTo(true);
+
+        Assertions.assertThat(controller.get(hash)).isEqualTo(null);
     }
 
-    @Test(timeOut = 20 * 1000)
-    public void benchmarkPutAndGetLinear() throws IOException {
-        config.setHashLength(256);
+    @Test
+    public void testDeletingAndPutting() throws IOException {
+        config.setHashLength(3);
         BlockchainArchiveController controller = new BlockchainArchiveController(config);
 
-        benchmarkData.forEach(data -> {
-            try {
-                controller.put(data.getKey(), data.getValue());
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        });
+        byte[] hash1 = new byte[3];
+        random.nextBytes(hash1);
+        String data = dataFactory.getRandomChars(10, 20);
+        controller.put(hash1, data);
 
-        benchmarkData.forEach(data -> {
-            try {
-                Assertions.assertThat(controller.get(data.getKey())).isEqualTo(data.getValue());
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        });
+        Assertions.assertThat(controller.delete(hash1)).isEqualTo(true);
+        Assertions.assertThat(controller.get(hash1)).isEqualTo(null);
+
+        byte[] hash2 = new byte[3];
+        random.nextBytes(hash1);
+        String data2 = dataFactory.getRandomChars(10, 20);
+        controller.put(hash2, data2);
+
+        Assertions.assertThat(controller.get(hash2)).isEqualTo(data2);
     }
 
-    @Test(timeOut = 20 * 1000)
-    public void benchmarkPutAndGetRandom() throws IOException {
-        config.setHashLength(256);
+    @Test
+    public void testPuttingDeletingAndGettingMultipleBlocks() throws IOException {
+        config.setHashLength(3);
         BlockchainArchiveController controller = new BlockchainArchiveController(config);
 
-        benchmarkData.forEach(data -> {
-            try {
-                controller.put(data.getKey(), data.getValue());
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        });
+        byte[] hash1 = new byte[3];
+        random.nextBytes(hash1);
+        String data1 = dataFactory.getRandomChars(10, 20);
 
-        for (int i = 0; i < 500; i++) {
-            int index = random.nextInt(500);
-            Assertions.assertThat(controller.get(benchmarkData.get(index).getKey()))
-                    .isEqualTo(benchmarkData.get(index).getValue());
+        byte[] hash2 = new byte[3];
+        random.nextBytes(hash2);
+        String data2 = dataFactory.getRandomChars(10, 20);
+
+        byte[] hash3 = new byte[3];
+        random.nextBytes(hash3);
+        String data3 = dataFactory.getRandomChars(10, 20);
+
+        byte[] hash4 = new byte[3];
+        random.nextBytes(hash4);
+        String data4 = dataFactory.getRandomChars(10, 20);
+
+        controller.put(hash1, data1);
+        controller.put(hash2, data2);
+        //controller.put(hash3, data3);
+        controller.put(hash4, data4);
+
+        Assertions.assertThat(controller.delete(hash2)).isEqualTo(true);
+
+        Assertions.assertThat(controller.get(hash1)).isEqualTo(data1);
+        Assertions.assertThat(controller.get(hash2)).isEqualTo(null);
+        Assertions.assertThat(controller.get(hash3)).isEqualTo(null);
+        Assertions.assertThat(controller.get(hash4)).isEqualTo(data4);
+
+        Assertions.assertThat(controller.delete(hash2)).isEqualTo(false);
+
+        controller.put(hash3, data3);
+
+        Assertions.assertThat(controller.get(hash1)).isEqualTo(data1);
+        Assertions.assertThat(controller.get(hash2)).isEqualTo(null);
+        Assertions.assertThat(controller.get(hash3)).isEqualTo(data3);
+        Assertions.assertThat(controller.get(hash4)).isEqualTo(data4);
+    }
+
+    @Test
+    public void testReindex() throws IOException {
+        config.setHashLength(3);
+        BlockchainArchiveController controller = new BlockchainArchiveController(config);
+
+        byte[] hash1 = new byte[3];
+        random.nextBytes(hash1);
+        String data1 = dataFactory.getRandomChars(10, 20);
+
+        byte[] hash2 = new byte[3];
+        random.nextBytes(hash2);
+        String data2 = dataFactory.getRandomChars(10, 20);
+
+        byte[] hash3 = new byte[3];
+        random.nextBytes(hash3);
+        String data3 = dataFactory.getRandomChars(10, 20);
+
+        byte[] hash4 = new byte[3];
+        random.nextBytes(hash4);
+        String data4 = dataFactory.getRandomChars(10, 20);
+
+        controller.put(hash1, data1);
+        controller.put(hash2, data2);
+        controller.put(hash3, data3);
+        controller.put(hash4, data4);
+
+        Assertions.assertThat(controller.delete(hash2)).isEqualTo(true);
+        Assertions.assertThat(controller.delete(hash3)).isEqualTo(true);
+
+        controller.reindex();
+
+        Assertions.assertThat(controller.get(hash1)).isEqualTo(data1);
+        Assertions.assertThat(controller.get(hash4)).isEqualTo(data4);
+
+        if (new File(config.getIndexFile() + ".old").exists()) {
+            Fail.fail("Old index file must be deleted");
         }
-    }
-
-    @BeforeMethod
-    public void prepareGetData(Method method) throws IOException {
-        if (method.getName().equals("benchmarkGetLinear") || method.getName().equals("benchmarkGetRandom")) {
-            config.setHashLength(256);
-            controllerForGetBenchmarks = new BlockchainArchiveController(config);
-            benchmarkData.forEach(data -> {
-                try {
-                    controllerForGetBenchmarks.put(data.getKey(), data.getValue());
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
-            });
-        }
-    }
-
-    @Test(timeOut = 10 * 1000)
-    public void benchmarkGetLinear() throws IOException {
-        benchmarkData.forEach(data -> {
-            try {
-                Assertions.assertThat(controllerForGetBenchmarks.get(data.getKey())).isEqualTo(data.getValue());
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        });
-    }
-
-    @Test(timeOut = 10 * 1000)
-    public void benchmarkGetRandom() throws IOException {
-        for (int i = 0; i < 500; i++) {
-            int index = random.nextInt(500);
-            Assertions.assertThat(controllerForGetBenchmarks.get(benchmarkData.get(index).getKey()))
-                    .isEqualTo(benchmarkData.get(index).getValue());
+        if (new File(config.getBlockchainFile() + ".old").exists()) {
+            Fail.fail("Old blockchain file must be deleted");
         }
     }
 
