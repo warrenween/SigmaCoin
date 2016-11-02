@@ -74,4 +74,32 @@ public class PeerTest {
         Assertions.assertThat(constructedPeer.getLastSeen()).isEqualTo(9415631156L);
     }
 
+    @Test
+    public void testEqualsA() throws UnknownHostException {
+        Assertions.assertThat(generatePeer(true).equals(null)).isEqualTo(false);
+
+        Assertions.assertThat(generatePeer(false).equals(generatePeer(true)));
+        Assertions.assertThat(generatePeer(true).equals(generatePeer(false)));
+
+        Assertions.assertThat(
+                new Peer(new byte[]{18, 19, 20, 21}, 123456, 123456789)
+                        .equals(new Peer(new byte[]{18, 19, 20, 21}, 123456, 123456789))
+        ).isEqualTo(true);
+
+        Assertions.assertThat(
+                new Peer(new byte[]{1, 2, 3, 4}, 123456, 123456789)
+                        .equals(new Peer(new byte[]{0, 1, 2, 3}, 123456, 123456789))
+        ).isEqualTo(false);
+
+        Assertions.assertThat(
+                new Peer(new byte[]{5, 6, 7, 8}, 123, 123456789)
+                        .equals(new Peer(new byte[]{5, 6, 7, 8}, 123456, 123456789))
+        ).isEqualTo(false);
+
+        Assertions.assertThat(
+                new Peer(new byte[]{55, 66, 77, 88}, 987, 123)
+                        .equals(new Peer(new byte[]{55, 66, 77, 88}, 987, 103))
+        ).isEqualTo(false);
+    }
+
 }
