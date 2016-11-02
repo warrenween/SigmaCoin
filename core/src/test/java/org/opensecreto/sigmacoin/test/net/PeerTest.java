@@ -64,8 +64,8 @@ public class PeerTest {
 
     @Test
     public void testConstructionAndDeconstructionIpv6() throws UnknownHostException {
-        Peer scrPeer = new Peer(new byte[]{21, 40, 120, 31, 52, 48, 32, 89
-                , 33, 44, 120, 0, 48, 75, 99, 105}, 478565, 9415631156L);
+        Peer scrPeer = new Peer(new byte[]{21, 40, 120, 31, 52, 48, 32, 89,
+                33, 44, 120, 0, 48, 75, 99, 105}, 478565, 9415631156L);
 
         Peer constructedPeer = Peer.constructFromBytes(Peer.deconstructIntoBytes(scrPeer));
 
