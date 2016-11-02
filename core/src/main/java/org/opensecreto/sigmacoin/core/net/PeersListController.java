@@ -55,12 +55,13 @@ public class PeersListController implements Iterable<Peer> {
         private PeersListController controller;
 
         public PeerListIterator(PeersListController controller) {
+            this.controller = controller;
         }
 
         @Override
         public boolean hasNext() {
             try {
-                return index < (controller.peerCount() - 1);
+                return index < controller.peerCount();
             } catch (IOException e) {
                 return false;
             }
@@ -72,14 +73,9 @@ public class PeersListController implements Iterable<Peer> {
                 if (index >= controller.peerCount()) {
                     throw new NoSuchElementException();
                 }
-            } catch (IOException e) {
-                NoSuchElementException exception = new NoSuchElementException();
-                exception.initCause(e);
-                throw exception;
-            }
-            index++;
-            try {
-                return controller.getPeer(index);
+                Peer result = controller.getPeer(index);
+                index++;
+                return result;
             } catch (IOException e) {
                 NoSuchElementException exception = new NoSuchElementException();
                 exception.initCause(e);
