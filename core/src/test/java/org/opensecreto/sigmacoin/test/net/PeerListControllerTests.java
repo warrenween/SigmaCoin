@@ -10,7 +10,7 @@ import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Method;
 
-public class P2PListControllerTests {
+public class PeerListControllerTests {
 
     private File file;
 
