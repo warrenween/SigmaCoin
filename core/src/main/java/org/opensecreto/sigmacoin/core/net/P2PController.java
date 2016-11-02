@@ -16,13 +16,7 @@ public class P2PController {
      *                   Must not be modified!
      */
     public P2PController(File dataFolder) throws IOException {
-        File peersFile = new File(dataFolder.getPath() + "/peers.dat");
-        if (!peersFile.exists()) {
-            if (!peersFile.createNewFile()) {
-                throw new RuntimeException("Could not create file " + peersFile.getCanonicalPath());
-            }
-        }
-        peers = new RandomAccessFile(peersFile, "rwd");
+
     }
 
 }

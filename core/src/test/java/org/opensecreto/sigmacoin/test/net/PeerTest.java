@@ -5,9 +5,25 @@ import org.opensecreto.sigmacoin.core.net.Peer;
 import org.testng.annotations.Test;
 
 import java.net.UnknownHostException;
+import java.util.Random;
 
 public class PeerTest {
 
+    private static Random random = new Random(0);
+
+    public static Peer generatePeer(boolean ipv4) throws UnknownHostException {
+        random.setSeed(System.nanoTime());
+        byte[] address;
+        if (ipv4) {
+            address = new byte[4];
+        } else {
+            address = new byte[16];
+        }
+        random.nextBytes(address);
+        int port = random.nextInt();
+        long time = random.nextLong();
+        return new Peer(address, port, time);
+    }
 
     @Test
     public void testPort() throws UnknownHostException {

@@ -89,4 +89,17 @@ public class Peer {
         }
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (!(obj instanceof Peer)) {
+            return false;
+        }
+        Peer peer = (Peer) obj;
+        return (port == peer.port)
+                && (address.equals(peer.getAddress()))
+                && (lastSeen == peer.getLastSeen());
+    }
 }
