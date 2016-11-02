@@ -9,7 +9,6 @@ import org.testng.annotations.Test;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Method;
-import java.net.UnknownHostException;
 
 public class P2PListControllerTests {
 
@@ -22,7 +21,7 @@ public class P2PListControllerTests {
     }
 
     @Test
-    public void testAddingAndGetting() throws UnknownHostException, IOException {
+    public void testAddingAndGetting() throws IOException {
         PeersListController controller = new PeersListController(file);
 
         Peer peer1 = PeerTest.generatePeer(true);
