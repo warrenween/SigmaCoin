@@ -1,1 +1,12 @@
+apply plugin: 'application'
+
+mainClassName = 'com.mr_ramych.sigmacoin.desktopgui.Main'
+
+dependencies {
+    compile project(':core')
+
+    testCompile "org.assertj:assertj-core:$assertjVersion"
+    testCompile "org.assertj:assertj-swing-testng:$assertjSwingVersion"
+    testCompile "org.testng:testng:$testngVersion"
+}
 
