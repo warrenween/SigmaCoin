@@ -15,13 +15,17 @@ public class Peer {
     private InetAddress address;
     private long lastSeen;
 
-    public Peer(byte[] address, int port, long lastSeen) throws UnknownHostException {
-        this.address = InetAddress.getByAddress(address);
+    public Peer(byte[] address, int port, long lastSeen) {
+        try {
+            this.address = InetAddress.getByAddress(address);
+        } catch (UnknownHostException e) {
+            throw new IllegalArgumentException("Wrong address length " + address.length, e);
+        }
         this.port = port;
         this.lastSeen = lastSeen;
     }
 
-    public static Peer constructFromBytes(byte[] bytes) throws UnknownHostException {
+    public static Peer constructFromBytes(byte[] bytes) {
         if (bytes.length != 29) {
             throw new IllegalArgumentException("Wrong bytes length " + bytes.length + ". Length must be 29.");
         }
