@@ -1,6 +1,13 @@
 language: java
 before_install:
   - chmod +x gradlew
+instal:
+  - curl https://www.jpm4j.org/install/script | sh
+  - jpm install com.codacy:codacy-coverage-reporter:assembly
+script:
+  - ./gradlew coverage
+after_script:
+  - codacy-coverage-reporter -l Java -r build\reports\jacoco\jacocoTestReport.xml
 jdk:
   - oraclejdk8
   #- openjdk8

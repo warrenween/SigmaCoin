@@ -16,8 +16,9 @@ dependencies {
     testCompile 'org.testng:testng:6.9.12'
 }
 
-task coverage {}
 jacocoTestReport.dependsOn.add(test)
+jacocoTestReport.reports.xml.enabled = true
+task coverage {}
 coverage.dependsOn.add(jacocoTestReport)
 
 test.useTestNG()
@@ -66,3 +67,4 @@ tasks.withType(Test) {
         }
     }
 }
+
