@@ -2,7 +2,7 @@ language: java
 before_install:
   - chmod +x gradlew
 install:
-  - curl https://www.jpm4j.org/install/script | sh
+  - curl http://www.jpm4j.org/install/script | sh
   - jpm install com.codacy:codacy-coverage-reporter:assembly
 script:
   - ./gradlew coverage
