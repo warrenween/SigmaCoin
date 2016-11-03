@@ -25,6 +25,7 @@ dependencies {
 }
 
 task coverage {}
+jacocoTestReport.reports.xml.enabled = true
 jacocoTestReport.dependsOn.add(test)
 coverage.dependsOn.add(jacocoTestReport)
 
