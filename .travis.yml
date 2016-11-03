@@ -13,7 +13,7 @@ script:
   - ./gradlew coverage
 after_script:
 #  - codacy-coverage-reporter -l Java -r build\reports\jacoco\jacocoTestReport.xml
-  -   - mvn com.gavinmogan:codacy-maven-plugin:coverage -DcoverageReportFile=build\reports\jacoco\jacocoTestReport.xml -DprojectToken=%CODACY_PROJECT_TOKEN%
+  - mvn com.gavinmogan:codacy-maven-plugin:coverage -DcoverageReportFile=build\reports\jacoco\jacocoTestReport.xml -DprojectToken=%CODACY_PROJECT_TOKEN%
 jdk:
   - oraclejdk8
   #- openjdk8
