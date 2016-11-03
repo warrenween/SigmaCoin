@@ -79,7 +79,7 @@ task sendCoverageToCodacy(type: JavaExec, dependsOn: coverage) {
             "-l",
             "Java",
             "-r",
-            "${buildDir}\\reports\\jacoco\\jacocoTestReport.xml"
+            "${buildDir}/reports/jacoco/test/jacocoTestReport.xml"
     ]
 }
 
