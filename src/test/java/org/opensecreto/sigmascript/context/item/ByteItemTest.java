@@ -22,10 +22,10 @@ public class ByteItemTest {
         random.nextBytes(initBytes);
 
         ByteItem item = new ByteItem(initBytes[0]);
-        Assertions.assertThat(item.getByte()).isEqualTo(initBytes[0]);
+        Assertions.assertThat(item.getValue()).isEqualTo(initBytes[0]);
 
         item.setValue(initBytes[1]);
-        Assertions.assertThat(item.getByte()).isEqualTo(initBytes[1]);
+        Assertions.assertThat(item.getValue()).isEqualTo(initBytes[1]);
     }
 
 }

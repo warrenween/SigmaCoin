@@ -12,7 +12,7 @@ public class ByteItem implements ContextItem {
         this.value = value;
     }
 
-    public byte getByte() {
+    public byte getValue() {
         return value;
     }
 
