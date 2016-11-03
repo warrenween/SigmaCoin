@@ -20,7 +20,7 @@ dependencies {
     testCompile 'org.assertj:assertj-core:3.5.2'
     testCompile 'org.testng:testng:6.9.12'
     testCompile 'org.fluttercode.datafactory:datafactory:0.8'
-    
+
     codacy 'com.github.codacy:codacy-coverage-reporter:-SNAPSHOT'
 }
 
@@ -29,7 +29,6 @@ jacocoTestReport.dependsOn.add(test)
 coverage.dependsOn.add(jacocoTestReport)
 
 test.useTestNG()
-test.outputs.upToDateWhen { false }
 task prepareTestWorkingDir {
     File outputDir = new File("$buildDir/test-output")
     if (!outputDir.exists()) {
