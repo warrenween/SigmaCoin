@@ -18,7 +18,7 @@ dependencies {
     testCompile 'org.assertj:assertj-core:3.5.2'
     testCompile 'org.testng:testng:6.9.12'
 
-    codacy 'com.github.codacy:codacy-coverage-reporter:1.0.10'
+    codacy 'com.github.codacy:codacy-coverage-reporter:-SNAPSHOT'
 }
 
 jacocoTestReport.dependsOn.add(test)
