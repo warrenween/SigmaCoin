@@ -1,7 +1,6 @@
-apply plugin: 'eclipse'
-apply plugin: 'idea'
-
 allprojects {
+    apply plugin: 'jacoco'
+
     ext {
         guavaVersion = '19.0'
         bouncyCastleVersion = '1.55'
@@ -28,10 +27,9 @@ subprojects {
     apply plugin: 'java'
     apply plugin: 'jacoco'
 
-    task coverage {}
-    jacocoTestReport.reports.xml.enabled = true
-    jacocoTestReport.dependsOn.add(test)
-    coverage.dependsOn.add(jacocoTestReport)
+    task coverage(type: JacocoReport) {
+        dependsOn test
+    }
 
     test.useTestNG()
     task prepareTestWorkingDir {
@@ -81,26 +79,25 @@ subprojects {
 
 }
 
-apply plugin: 'java'
-apply plugin: 'jacoco'
+apply plugin: 'eclipse'
+apply plugin: 'idea'
 
 task jacocoMerge(type: JacocoMerge) {
     executionData project(':core').test, project(':desktopgui').test
 }
 
-jacocoTestReport.reports.xml.enabled = true
-jacocoTestReport.dependsOn.add(jacocoMerge)
-
-task coverage {}
-coverage.dependsOn.add(project(':core').coverage)
-coverage.dependsOn.add(project(':desktopgui').coverage)
-coverage.dependsOn.add(jacocoTestReport)
+task coverage(type: JacocoReport) {
+    onlyIf { true }
+    dependsOn jacocoMerge
+    reports.xml.enabled true
+}
 
 configurations { codacy }
 dependencies {
     codacy 'com.github.codacy:codacy-coverage-reporter:-SNAPSHOT'
 }
 task sendCoverageToCodacy(type: JavaExec) {
+    dependsOn coverage
     main = "com.codacy.CodacyCoverageReporter"
     classpath = configurations.codacy
     args = [
@@ -110,5 +107,3 @@ task sendCoverageToCodacy(type: JavaExec) {
             "${buildDir}/reports/jacoco/test/jacocoTestReport.xml"
     ]
 }
-
-sendCoverageToCodacy.dependsOn.add(coverage)
