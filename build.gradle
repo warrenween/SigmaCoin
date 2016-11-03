@@ -9,19 +9,24 @@ repositories {
     mavenCentral()
     maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
     maven { url "https://oss.sonatype.org/content/repositories/releases/" }
+    maven { url "https://jitpack.io" }
+    maven { url "http://dl.bintray.com/typesafe/maven-releases" }
 }
 
+configurations { codacy }
 dependencies {
     testCompile 'org.assertj:assertj-core:3.5.2'
     testCompile 'org.testng:testng:6.9.12'
+
+    codacy 'com.github.codacy:codacy-coverage-reporter:-SNAPSHOT'
 }
 
-task coverage {}
 jacocoTestReport.dependsOn.add(test)
+jacocoTestReport.reports.xml.enabled = true
+task coverage {}
 coverage.dependsOn.add(jacocoTestReport)
 
 test.useTestNG()
-test.outputs.upToDateWhen { false }
 task prepareTestWorkingDir {
     File outputDir = new File("$buildDir/test-output")
     if (!outputDir.exists()) {
@@ -66,3 +71,15 @@ tasks.withType(Test) {
         }
     }
 }
+
+task sendCoverageToCodacy(type: JavaExec, dependsOn: coverage) {
+    main = "com.codacy.CodacyCoverageReporter"
+    classpath = configurations.codacy
+    args = [
+            "-l",
+            "Java",
+            "-r",
+            "${buildDir}/reports/jacoco/test/jacocoTestReport.xml"
+    ]
+}
+
