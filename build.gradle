@@ -27,7 +27,6 @@ task coverage {}
 coverage.dependsOn.add(jacocoTestReport)
 
 test.useTestNG()
-test.outputs.upToDateWhen { false }
 task prepareTestWorkingDir {
     File outputDir = new File("$buildDir/test-output")
     if (!outputDir.exists()) {
