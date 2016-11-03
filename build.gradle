@@ -9,14 +9,19 @@ repositories {
     mavenCentral()
     maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
     maven { url "https://oss.sonatype.org/content/repositories/releases/" }
+    maven { url "https://jitpack.io" }
+    maven { url "http://dl.bintray.com/typesafe/maven-releases" }
 }
 
+configurations { codacy }
 dependencies {
     compile 'org.slf4j:slf4j-api:1.7.13'
 
     testCompile 'org.assertj:assertj-core:3.5.2'
     testCompile 'org.testng:testng:6.9.12'
     testCompile 'org.fluttercode.datafactory:datafactory:0.8'
+    
+    codacy 'com.github.codacy:codacy-coverage-reporter:-SNAPSHOT'
 }
 
 task coverage {}
@@ -69,3 +74,15 @@ tasks.withType(Test) {
         }
     }
 }
+
+task sendCoverageToCodacy(type: JavaExec, dependsOn: coverage) {
+    main = "com.codacy.CodacyCoverageReporter"
+    classpath = configurations.codacy
+    args = [
+            "-l",
+            "Java",
+            "-r",
+            "${buildDir}/reports/jacoco/test/jacocoTestReport.xml"
+    ]
+}
+
