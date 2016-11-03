@@ -15,7 +15,7 @@ subprojects {
         assertjSwingVersion = '3.4.0'
         testngVersion = '6.9.12'
     }
-
+    
     repositories {
         jcenter()
         mavenLocal()
@@ -74,6 +74,21 @@ subprojects {
                 }
             }
         }
+    }
+    
+    configurations { codacy }
+    dependencies {
+        codacy 'com.github.codacy:codacy-coverage-reporter:-SNAPSHOT'
+    }
+    task sendCoverageToCodacy(type: JavaExec, dependsOn: coverage) {
+        main = "com.codacy.CodacyCoverageReporter"
+        classpath = configurations.codacy
+        args = [
+            "-l",
+            "Java",
+            "-r",
+            "${buildDir}/reports/jacoco/test/jacocoTestReport.xml"
+        ]
     }
 
 }
