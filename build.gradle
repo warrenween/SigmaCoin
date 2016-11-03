@@ -9,11 +9,16 @@ repositories {
     mavenCentral()
     maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
     maven { url "https://oss.sonatype.org/content/repositories/releases/" }
+    maven { url "https://jitpack.io" }
+    maven { url "http://dl.bintray.com/typesafe/maven-releases" }
 }
 
+configurations { codacy }
 dependencies {
     testCompile 'org.assertj:assertj-core:3.5.2'
     testCompile 'org.testng:testng:6.9.12'
+
+    codacy 'com.github.codacy:codacy-coverage-reporter:1.0.10'
 }
 
 jacocoTestReport.dependsOn.add(test)
@@ -66,5 +71,16 @@ tasks.withType(Test) {
             }
         }
     }
+}
+
+task sendCoverageToCodacy(type: JavaExec, dependsOn: coverage) {
+    main = "com.codacy.CodacyCoverageReporter"
+    classpath = configurations.codacy
+    args = [
+            "-l",
+            "Java",
+            "-r",
+            "${buildDir}\\reports\\jacoco\\jacocoTestReport.xml"
+    ]
 }
 
