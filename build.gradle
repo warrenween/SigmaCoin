@@ -1,10 +1,7 @@
 apply plugin: 'eclipse'
 apply plugin: 'idea'
 
-subprojects {
-    apply plugin: 'java'
-    apply plugin: 'jacoco'
-
+allprojects {
     ext {
         guavaVersion = '19.0'
         bouncyCastleVersion = '1.55'
@@ -25,13 +22,18 @@ subprojects {
         maven { url "https://jitpack.io" }
         maven { url "http://dl.bintray.com/typesafe/maven-releases" }
     }
+}
+
+subprojects {
+    apply plugin: 'java'
+    apply plugin: 'jacoco'
 
     task coverage {}
+    jacocoTestReport.reports.xml.enabled = true
     jacocoTestReport.dependsOn.add(test)
     coverage.dependsOn.add(jacocoTestReport)
 
     test.useTestNG()
-    test.outputs.upToDateWhen { false }
     task prepareTestWorkingDir {
         File outputDir = new File("$buildDir/test-output")
         if (!outputDir.exists()) {
@@ -77,19 +79,36 @@ subprojects {
         }
     }
 
-    configurations { codacy }
-    dependencies {
-        codacy 'com.github.codacy:codacy-coverage-reporter:-SNAPSHOT'
-    }
-    task sendCoverageToCodacy(type: JavaExec, dependsOn: coverage) {
-        main = "com.codacy.CodacyCoverageReporter"
-        classpath = configurations.codacy
-        args = [
+}
+
+apply plugin: 'java'
+apply plugin: 'jacoco'
+
+task jacocoMerge(type: JacocoMerge) {
+    executionData project(':core').test, project(':desktopgui').test
+}
+
+jacocoTestReport.reports.xml.enabled = true
+jacocoTestReport.dependsOn.add(jacocoMerge)
+
+task coverage {}
+coverage.dependsOn.add(project(':core').coverage)
+coverage.dependsOn.add(project(':desktopgui').coverage)
+coverage.dependsOn.add(jacocoTestReport)
+
+configurations { codacy }
+dependencies {
+    codacy 'com.github.codacy:codacy-coverage-reporter:-SNAPSHOT'
+}
+task sendCoverageToCodacy(type: JavaExec) {
+    main = "com.codacy.CodacyCoverageReporter"
+    classpath = configurations.codacy
+    args = [
             "-l",
             "Java",
             "-r",
             "${buildDir}/reports/jacoco/test/jacocoTestReport.xml"
-        ]
-    }
-
+    ]
 }
+
+sendCoverageToCodacy.dependsOn.add(coverage)

@@ -1,4 +1,4 @@
-package com.mr_ramych.sigmacoin.desktopgui;
+package org.opensecreto.sigmacoin.desktopgui;
 
 public class Main {
 
