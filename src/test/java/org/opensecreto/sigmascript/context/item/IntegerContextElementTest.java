@@ -1,27 +1,27 @@
 package org.opensecreto.sigmascript.context.item;
 
 import org.assertj.core.api.Assertions;
-import org.opensecreto.sigmascipt.context.item.ContextItemType;
-import org.opensecreto.sigmascipt.context.item.ShortItem;
+import org.opensecreto.sigmascipt.context.item.ContextElementType;
+import org.opensecreto.sigmascipt.context.item.IntegerContextElement;
 import org.testng.annotations.Test;
 
 import java.util.Random;
 
-public class ShortItemTest {
+public class IntegerContextElementTest {
 
     private static Random random = new Random();
 
     @Test
     public void testType() {
-        Assertions.assertThat(new ShortItem().getType()).isEqualTo(ContextItemType.SHORT);
+        Assertions.assertThat(new IntegerContextElement().getType()).isEqualTo(ContextElementType.INTEGER);
     }
 
     @Test
     public void testSetAndGet() {
-        short a = (short) random.nextInt(Short.MAX_VALUE + 1);;
-        short b = (short) random.nextInt(Short.MAX_VALUE + 1);;
+        int a = random.nextInt();
+        int b = random.nextInt();
 
-        ShortItem item = new ShortItem(a);
+        IntegerContextElement item = new IntegerContextElement(a);
         Assertions.assertThat(item.getValue()).isEqualTo(a);
 
         item.setValue(b);

@@ -1,19 +1,19 @@
 package org.opensecreto.sigmascript.context.item;
 
 import org.assertj.core.api.Assertions;
-import org.opensecreto.sigmascipt.context.item.ContextItemType;
-import org.opensecreto.sigmascipt.context.item.LongItem;
+import org.opensecreto.sigmascipt.context.item.ContextElementType;
+import org.opensecreto.sigmascipt.context.item.LongContextElement;
 import org.testng.annotations.Test;
 
 import java.util.Random;
 
-public class LongItemTest {
+public class LongContextElementTest {
 
     private static Random random = new Random();
 
     @Test
     public void testType() {
-        Assertions.assertThat(new LongItem().getType()).isEqualTo(ContextItemType.LONG);
+        Assertions.assertThat(new LongContextElement().getType()).isEqualTo(ContextElementType.LONG);
     }
 
     @Test
@@ -21,7 +21,7 @@ public class LongItemTest {
         long a = random.nextInt();
         long b = random.nextInt();
 
-        LongItem item = new LongItem(a);
+        LongContextElement item = new LongContextElement(a);
         Assertions.assertThat(item.getValue()).isEqualTo(a);
 
         item.setValue(b);

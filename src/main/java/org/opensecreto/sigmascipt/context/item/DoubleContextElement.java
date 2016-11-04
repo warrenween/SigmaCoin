@@ -1,14 +1,14 @@
 package org.opensecreto.sigmascipt.context.item;
 
-public class DoubleItem implements ContextItem {
+public class DoubleContextElement implements ContextElement {
 
     private double value;
 
-    public DoubleItem() {
+    public DoubleContextElement() {
 
     }
 
-    public DoubleItem(double value) {
+    public DoubleContextElement(double value) {
         this.value = value;
     }
 
@@ -21,8 +21,8 @@ public class DoubleItem implements ContextItem {
     }
 
     @Override
-    public ContextItemType getType() {
-        return ContextItemType.DOUBLE;
+    public ContextElementType getType() {
+        return ContextElementType.DOUBLE;
     }
 
 }

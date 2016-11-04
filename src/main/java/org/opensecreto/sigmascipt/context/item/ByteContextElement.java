@@ -1,14 +1,14 @@
 package org.opensecreto.sigmascipt.context.item;
 
-public class ByteItem implements ContextItem {
+public class ByteContextElement implements ContextElement {
 
     private byte value;
 
-    public ByteItem() {
+    public ByteContextElement() {
 
     }
 
-    public ByteItem(byte value) {
+    public ByteContextElement(byte value) {
         this.value = value;
     }
 
@@ -21,7 +21,7 @@ public class ByteItem implements ContextItem {
     }
 
     @Override
-    public ContextItemType getType() {
-        return ContextItemType.BYTE;
+    public ContextElementType getType() {
+        return ContextElementType.BYTE;
     }
 }

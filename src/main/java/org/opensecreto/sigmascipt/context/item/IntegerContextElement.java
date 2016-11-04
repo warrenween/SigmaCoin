@@ -1,14 +1,14 @@
 package org.opensecreto.sigmascipt.context.item;
 
-public class IntegerItem implements ContextItem {
+public class IntegerContextElement implements ContextElement {
 
     private int value;
 
-    public IntegerItem() {
+    public IntegerContextElement() {
 
     }
 
-    public IntegerItem(int value) {
+    public IntegerContextElement(int value) {
         this.value = value;
     }
 
@@ -21,8 +21,8 @@ public class IntegerItem implements ContextItem {
     }
 
     @Override
-    public ContextItemType getType() {
-        return ContextItemType.INTEGER;
+    public ContextElementType getType() {
+        return ContextElementType.INTEGER;
     }
 
 }

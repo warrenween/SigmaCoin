@@ -1,14 +1,14 @@
 package org.opensecreto.sigmascipt.context.item;
 
-public class LongItem implements ContextItem {
+public class LongContextElement implements ContextElement {
 
     private long value;
 
-    public LongItem() {
+    public LongContextElement() {
 
     }
 
-    public LongItem(long value) {
+    public LongContextElement(long value) {
         this.value = value;
     }
 
@@ -21,8 +21,8 @@ public class LongItem implements ContextItem {
     }
 
     @Override
-    public ContextItemType getType() {
-        return ContextItemType.LONG;
+    public ContextElementType getType() {
+        return ContextElementType.LONG;
     }
 
 }

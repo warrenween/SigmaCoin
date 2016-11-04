@@ -1,19 +1,19 @@
 package org.opensecreto.sigmascript.context.item;
 
 import org.assertj.core.api.Assertions;
-import org.opensecreto.sigmascipt.context.item.ContextItemType;
-import org.opensecreto.sigmascipt.context.item.FloatItem;
+import org.opensecreto.sigmascipt.context.item.ContextElementType;
+import org.opensecreto.sigmascipt.context.item.FloatContextElement;
 import org.testng.annotations.Test;
 
 import java.util.Random;
 
-public class FloatItemTest {
+public class FloatContextElementTest {
 
     private static Random random = new Random();
 
     @Test
     public void testType() {
-        Assertions.assertThat(new FloatItem().getType()).isEqualTo(ContextItemType.FLOAT);
+        Assertions.assertThat(new FloatContextElement().getType()).isEqualTo(ContextElementType.FLOAT);
     }
 
     @Test
@@ -21,7 +21,7 @@ public class FloatItemTest {
         long a = random.nextLong();
         long b = random.nextLong();
 
-        FloatItem item = new FloatItem(a);
+        FloatContextElement item = new FloatContextElement(a);
         Assertions.assertThat(item.getValue()).isEqualTo(a);
 
         item.setValue(b);

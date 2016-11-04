@@ -1,14 +1,14 @@
 package org.opensecreto.sigmascipt.context.item;
 
-public class ShortItem implements ContextItem {
+public class ShortContextElement implements ContextElement {
 
     private short value;
 
-    public ShortItem() {
+    public ShortContextElement() {
 
     }
 
-    public ShortItem(short value) {
+    public ShortContextElement(short value) {
         this.value = value;
     }
 
@@ -21,8 +21,8 @@ public class ShortItem implements ContextItem {
     }
 
     @Override
-    public ContextItemType getType() {
-        return ContextItemType.SHORT;
+    public ContextElementType getType() {
+        return ContextElementType.SHORT;
     }
 
 }

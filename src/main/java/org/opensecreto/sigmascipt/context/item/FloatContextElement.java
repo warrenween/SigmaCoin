@@ -1,14 +1,14 @@
 package org.opensecreto.sigmascipt.context.item;
 
-public class FloatItem implements ContextItem {
+public class FloatContextElement implements ContextElement {
 
     private float value;
 
-    public FloatItem() {
+    public FloatContextElement() {
 
     }
 
-    public FloatItem(float value) {
+    public FloatContextElement(float value) {
         this.value = value;
     }
 
@@ -21,8 +21,8 @@ public class FloatItem implements ContextItem {
     }
 
     @Override
-    public ContextItemType getType() {
-        return ContextItemType.FLOAT;
+    public ContextElementType getType() {
+        return ContextElementType.FLOAT;
     }
 
 }
