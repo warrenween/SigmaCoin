@@ -1,4 +1,4 @@
-package org.opensecreto.TheGreatBlockchainArchive;
+package ru.opensecreto.TheGreatBlockchainArchive;
 
 import org.assertj.core.api.Assertions;
 import org.assertj.core.api.Fail;
@@ -6,6 +6,8 @@ import org.fluttercode.datafactory.impl.DataFactory;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.BeforeSuite;
 import org.testng.annotations.Test;
+import ru.opensecreto.TheGreatBlockchainArchive.BlockchainArchiveConfiguration;
+import ru.opensecreto.TheGreatBlockchainArchive.BlockchainArchiveController;
 
 import javax.xml.bind.DatatypeConverter;
 import java.io.File;
