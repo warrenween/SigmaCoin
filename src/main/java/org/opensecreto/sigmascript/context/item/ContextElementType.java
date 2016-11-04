@@ -1,6 +1,6 @@
-package org.opensecreto.sigmascipt.context.item;
+package org.opensecreto.sigmascript.context.item;
 
-import org.opensecreto.sigmascipt.exceptions.IllegalOperationException;
+import org.opensecreto.sigmascript.exceptions.IllegalOperationException;
 
 public enum ContextElementType {
     OBJECT, BYTE, SHORT, INTEGER, LONG, FLOAT, DOUBLE;

@@ -1,6 +1,6 @@
-package org.opensecreto.sigmascipt.context;
+package org.opensecreto.sigmascript.context;
 
-import org.opensecreto.sigmascipt.context.item.ContextElement;
+import org.opensecreto.sigmascript.context.item.ContextElement;
 
 import java.util.HashMap;
 

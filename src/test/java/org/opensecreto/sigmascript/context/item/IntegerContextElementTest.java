@@ -1,8 +1,6 @@
 package org.opensecreto.sigmascript.context.item;
 
 import org.assertj.core.api.Assertions;
-import org.opensecreto.sigmascipt.context.item.ContextElementType;
-import org.opensecreto.sigmascipt.context.item.IntegerContextElement;
 import org.testng.annotations.Test;
 
 import java.util.Random;

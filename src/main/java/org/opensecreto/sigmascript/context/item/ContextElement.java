@@ -1,4 +1,4 @@
-package org.opensecreto.sigmascipt.context.item;
+package org.opensecreto.sigmascript.context.item;
 
 public interface ContextElement {
 

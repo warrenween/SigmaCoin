@@ -1,4 +1,4 @@
-package org.opensecreto.sigmascipt.exceptions;
+package org.opensecreto.sigmascript.exceptions;
 
 public class IllegalOperationException extends BaseScriptException {
 

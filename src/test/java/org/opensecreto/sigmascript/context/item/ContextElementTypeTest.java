@@ -1,10 +1,10 @@
 package org.opensecreto.sigmascript.context.item;
 
 import org.assertj.core.api.Assertions;
-import org.opensecreto.sigmascipt.exceptions.IllegalOperationException;
+import org.opensecreto.sigmascript.exceptions.IllegalOperationException;
 import org.testng.annotations.Test;
 
-import static org.opensecreto.sigmascipt.context.item.ContextElementType.*;
+import static org.opensecreto.sigmascript.context.item.ContextElementType.*;
 
 public class ContextElementTypeTest {
 
