@@ -28,6 +28,7 @@ public class ContextElementTypeTest {
         Assertions.assertThat(normalize(BYTE, LONG)).isEqualTo(LONG);
         Assertions.assertThat(normalize(BYTE, FLOAT)).isEqualTo(FLOAT);
         Assertions.assertThat(normalize(BYTE, DOUBLE)).isEqualTo(DOUBLE);
+        Assertions.assertThat(normalize(BYTE, BOOLEAN)).isEqualTo(BOOLEAN);
 
         Assertions.assertThat(normalize(SHORT, BYTE)).isEqualTo(SHORT);
         Assertions.assertThat(normalize(SHORT, SHORT)).isEqualTo(SHORT);
@@ -35,6 +36,7 @@ public class ContextElementTypeTest {
         Assertions.assertThat(normalize(SHORT, LONG)).isEqualTo(LONG);
         Assertions.assertThat(normalize(SHORT, FLOAT)).isEqualTo(FLOAT);
         Assertions.assertThat(normalize(SHORT, DOUBLE)).isEqualTo(DOUBLE);
+        Assertions.assertThat(normalize(SHORT, BOOLEAN)).isEqualTo(BOOLEAN);
 
         Assertions.assertThat(normalize(INTEGER, BYTE)).isEqualTo(INTEGER);
         Assertions.assertThat(normalize(INTEGER, SHORT)).isEqualTo(INTEGER);
@@ -42,6 +44,7 @@ public class ContextElementTypeTest {
         Assertions.assertThat(normalize(INTEGER, LONG)).isEqualTo(LONG);
         Assertions.assertThat(normalize(INTEGER, FLOAT)).isEqualTo(FLOAT);
         Assertions.assertThat(normalize(INTEGER, DOUBLE)).isEqualTo(DOUBLE);
+        Assertions.assertThat(normalize(INTEGER, BOOLEAN)).isEqualTo(BOOLEAN);
 
         Assertions.assertThat(normalize(LONG, BYTE)).isEqualTo(LONG);
         Assertions.assertThat(normalize(LONG, SHORT)).isEqualTo(LONG);
@@ -49,6 +52,7 @@ public class ContextElementTypeTest {
         Assertions.assertThat(normalize(LONG, LONG)).isEqualTo(LONG);
         Assertions.assertThat(normalize(LONG, FLOAT)).isEqualTo(FLOAT);
         Assertions.assertThat(normalize(LONG, DOUBLE)).isEqualTo(DOUBLE);
+        Assertions.assertThat(normalize(LONG, BOOLEAN)).isEqualTo(BOOLEAN);
 
         Assertions.assertThat(normalize(FLOAT, BYTE)).isEqualTo(FLOAT);
         Assertions.assertThat(normalize(FLOAT, SHORT)).isEqualTo(FLOAT);
@@ -56,6 +60,7 @@ public class ContextElementTypeTest {
         Assertions.assertThat(normalize(FLOAT, LONG)).isEqualTo(FLOAT);
         Assertions.assertThat(normalize(FLOAT, FLOAT)).isEqualTo(FLOAT);
         Assertions.assertThat(normalize(FLOAT, DOUBLE)).isEqualTo(DOUBLE);
+        Assertions.assertThat(normalize(FLOAT, BOOLEAN)).isEqualTo(BOOLEAN);
 
         Assertions.assertThat(normalize(DOUBLE, BYTE)).isEqualTo(DOUBLE);
         Assertions.assertThat(normalize(DOUBLE, SHORT)).isEqualTo(DOUBLE);
@@ -63,6 +68,15 @@ public class ContextElementTypeTest {
         Assertions.assertThat(normalize(DOUBLE, LONG)).isEqualTo(DOUBLE);
         Assertions.assertThat(normalize(DOUBLE, FLOAT)).isEqualTo(DOUBLE);
         Assertions.assertThat(normalize(DOUBLE, DOUBLE)).isEqualTo(DOUBLE);
+        Assertions.assertThat(normalize(DOUBLE, BOOLEAN)).isEqualTo(BOOLEAN);
+
+        Assertions.assertThat(normalize(BOOLEAN, BYTE)).isEqualTo(BOOLEAN);
+        Assertions.assertThat(normalize(BOOLEAN, SHORT)).isEqualTo(BOOLEAN);
+        Assertions.assertThat(normalize(BOOLEAN, INTEGER)).isEqualTo(BOOLEAN);
+        Assertions.assertThat(normalize(BOOLEAN, LONG)).isEqualTo(BOOLEAN);
+        Assertions.assertThat(normalize(BOOLEAN, FLOAT)).isEqualTo(BOOLEAN);
+        Assertions.assertThat(normalize(BOOLEAN, DOUBLE)).isEqualTo(BOOLEAN);
+        Assertions.assertThat(normalize(BOOLEAN, BOOLEAN)).isEqualTo(BOOLEAN);
     }
 
 }

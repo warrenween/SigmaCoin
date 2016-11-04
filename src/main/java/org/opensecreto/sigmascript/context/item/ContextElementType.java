@@ -3,7 +3,7 @@ package org.opensecreto.sigmascript.context.item;
 import org.opensecreto.sigmascript.exceptions.IllegalOperationException;
 
 public enum ContextElementType {
-    OBJECT, BYTE, SHORT, INTEGER, LONG, FLOAT, DOUBLE;
+    OBJECT, BYTE, SHORT, INTEGER, LONG, FLOAT, DOUBLE, BOOLEAN;
 
     public static ContextElementType normalize(ContextElementType type1, ContextElementType type2)
             throws IllegalOperationException {
@@ -30,6 +30,8 @@ public enum ContextElementType {
                 return 4;
             case DOUBLE:
                 return 5;
+            case BOOLEAN:
+                return 6;
             default:
                 if (type == null) {
                     throw new NullPointerException("type is null");
@@ -54,9 +56,11 @@ public enum ContextElementType {
                 return FLOAT;
             case 5:
                 return DOUBLE;
+            case 6:
+                return BOOLEAN;
             default:
                 throw new IllegalArgumentException("Illegal ord: " + ord + ". " + "" +
-                        "Expected from -1 (inclusive) to 5(inclusive).");
+                        "Expected from -1 (inclusive) to 6(inclusive).");
         }
     }
 }
