@@ -6,6 +6,7 @@ import java.util.HashMap;
 
 public class Context {
 
+    public String namespace;
     private HashMap<String, ContextElement> context;
 
     public Context() {
