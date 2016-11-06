@@ -1,5 +1,5 @@
 dependencies {
-    compile 'com.github.OpenSecreto:TheGreatBlockchainArchive:v1.0'
+    compile 'com.github.OpenSecreto:TheGreatBlockchainArchive:v1.1'
     compile "com.google.guava:guava:$guavaVersion"
     compile "com.google.code.gson:gson:$gsonVersion"
 
