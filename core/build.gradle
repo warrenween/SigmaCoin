@@ -3,6 +3,8 @@ dependencies {
     compile "com.google.guava:guava:$guavaVersion"
     compile "com.google.code.gson:gson:$gsonVersion"
 
+    compile "org.codehaus.groovy:groovy-all:$groovyVersion"
+
     compile "org.bouncycastle:bcprov-jdk15on:$bouncyCastleVersion"
 
     testCompile "org.assertj:assertj-core:$assertjVersion"
