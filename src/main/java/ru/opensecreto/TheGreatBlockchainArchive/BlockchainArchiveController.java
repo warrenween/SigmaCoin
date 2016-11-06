@@ -1,4 +1,4 @@
-package org.opensecreto.TheGreatBlockchainArchive;
+package ru.opensecreto.TheGreatBlockchainArchive;
 
 import javax.xml.bind.DatatypeConverter;
 import java.io.File;
