@@ -1,6 +1,6 @@
 apply plugin: 'application'
 
-mainClassName = 'com.mr_ramych.sigmacoin.desktopgui.Main'
+mainClassName = 'com.mr_ramych.sigmacoin.desktopguitest.Main'
 
 dependencies {
     compile project(':core')

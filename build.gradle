@@ -7,7 +7,7 @@ allprojects {
         gsonVersion = '2.8.0'
         groovyVersion = '2.4.7'
 
-        //test libraries
+        //coretest libraries
         assertjVersion = '3.5.2'
         assertjSwingVersion = '3.4.0'
         testngVersion = '6.9.12'
@@ -34,7 +34,7 @@ subprojects {
 
     test.useTestNG()
     task prepareTestWorkingDir {
-        File outputDir = new File("$buildDir/test-output")
+        File outputDir = new File("$buildDir/coretest-output")
         if (!outputDir.exists()) {
             outputDir.mkdirs();
         } else {
@@ -84,7 +84,7 @@ apply plugin: 'eclipse'
 apply plugin: 'idea'
 
 task jacocoMerge(type: JacocoMerge) {
-    executionData project(':core').test, project(':desktopgui').test
+    executionData project(':core').test, project(':desktopguitest').test
 }
 
 task coverage(type: JacocoReport) {
@@ -105,6 +105,6 @@ task sendCoverageToCodacy(type: JavaExec) {
             "-l",
             "Java",
             "-r",
-            "${buildDir}/reports/jacoco/test/jacocoTestReport.xml"
+            "${buildDir}/reports/jacoco/coretest/jacocoTestReport.xml"
     ]
 }

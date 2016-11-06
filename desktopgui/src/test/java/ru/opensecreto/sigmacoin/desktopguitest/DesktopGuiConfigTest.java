@@ -1,4 +1,4 @@
-package ru.opensecreto.sigmacoin.desktopgui;
+package ru.opensecreto.sigmacoin.desktopguitest;
 
 import org.testng.annotations.Test;
 

@@ -1,4 +1,4 @@
-package ru.opensecreto.sigmacoin.test.net;
+package ru.opensecreto.sigmacoin.coretest.net;
 
 import org.assertj.core.api.Assertions;
 import ru.opensecreto.sigmacoin.core.net.Peer;
