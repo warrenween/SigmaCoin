@@ -1,15 +1,16 @@
 package org.opensecreto.sigmascript;
 
-import org.opensecreto.sigmascript.context.Context;
+import org.opensecreto.sigmascript.context.Package;
 
 import java.util.HashMap;
 
 public class ScriptController {
 
-    private HashMap<String, Context> namespace = new HashMap<>(16);
+    private HashMap<String, Package> globalPackages = new HashMap<>();
 
-    public void addContext(String namespace, Context context) {
+    public void parseScript(String data) {
 
     }
+
 
 }
