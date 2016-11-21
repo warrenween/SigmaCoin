@@ -1,4 +1,6 @@
 language: java
+addons:
+  srcclr: true
 before_install:
   - chmod +x gradlew
 after_script:
