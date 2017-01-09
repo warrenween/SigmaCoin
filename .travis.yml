@@ -1,18 +1,24 @@
 language: java
-before_install:
-  - chmod +x gradlew
+addons:
+  apt:
+    packages:
+      - oracle-java8-installer
+      - openjdk-8-jdk
+notifications:
+  email: false
+sudo: required
+dist: trusty
+before_cache:
+  - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
+  - rm -fr $HOME/.gradle/caches/*/plugin-resolution/
+cache:
+  directories:
+    - $HOME/.gradle/caches/
+    - $HOME/.gradle/wrapper/
 install:
-#  - curl -sL https://github.com/jpm4j/jpm4j.installers/raw/master/dist/biz.aQute.jpm.run.jar >jpm4j.jar
-#  - java -jar jpm4j.jar -u init
-#  - npm install jpm
-#  - curl -sL https://github.com/jpm4j/jpm4j.installers/raw/master/dist/biz.aQute.jpm.run.jar >t.jar
-#  - java -jar t.jar init
-#  - rm t.jar
-#  - sudo jpm install com.codacy:codacy-coverage-reporter:assembly
-after_script:
-#  - codacy-coverage-reporter -l Java -r build\reports\jacoco\jacocoTestReport.xml
-#  - mvn com.gavinmogan:codacy-maven-plugin:coverage -DcoverageReportFile=build\reports\jacoco\jacocoTestReport.xml -DprojectToken=%CODACY_PROJECT_TOKEN%
-  - ./gradlew sendCoverageToCodacy
+  - chmod +x gradlew
+  - java -version
+  - javac -version
 jdk:
   - oraclejdk8
-  #- openjdk8
+  - openjdk8
