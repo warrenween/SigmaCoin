@@ -13,19 +13,14 @@ repositories {
     maven { url "http://dl.bintray.com/typesafe/maven-releases" }
 }
 
-configurations { codacy }
 dependencies {
     compile 'org.apache.commons:commons-lang3:3.5'
 
-
     testCompile 'org.assertj:assertj-core:3.5.2'
     testCompile 'org.testng:testng:6.9.12'
-
-    codacy 'com.github.codacy:codacy-coverage-reporter:-SNAPSHOT'
 }
 
 jacocoTestReport.dependsOn.add(test)
-jacocoTestReport.reports.xml.enabled = true
 task coverage {}
 coverage.dependsOn.add(jacocoTestReport)
 
@@ -74,15 +69,3 @@ tasks.withType(Test) {
         }
     }
 }
-
-task sendCoverageToCodacy(type: JavaExec, dependsOn: coverage) {
-    main = "com.codacy.CodacyCoverageReporter"
-    classpath = configurations.codacy
-    args = [
-            "-l",
-            "Java",
-            "-r",
-            "${buildDir}/reports/jacoco/test/jacocoTestReport.xml"
-    ]
-}
-
