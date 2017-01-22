@@ -32,7 +32,7 @@ public class TestBytecodeExecutor {
         assertThat(executor.getStack()).containsExactly((byte) 57);
     }
 
-    public void testSwitchMode() {
+    public void testSwitchModeToMemory() {
         StorageManager storage = mock(StorageManager.class);
         when(storage.getByte(0)).thenReturn(OP_JUMP_M);
         executor.setStorage(storage);
