@@ -48,6 +48,16 @@ public class BytecodeExecutor {
             case OP_POP:
                 stackPop();
                 break;
+            case OP_MEM_PUT:
+                if (stackSize < 4) {
+                    throw new IllegalStateException("To perform OP_MEM_PUT at least stack must contain at least 4 bytes");
+                }
+                byte value = stack[stackSize - 1];
+                int index = ((stack[stackSize - 2] & 0xff) << 16) |
+                        ((stack[stackSize - 3] & 0xff) << 8) |
+                        (stack[stackSize - 4] & 0xff);
+                memory[index] = value;
+                break;
             case OP_RETURN:
                 if (stackSize == 0) {
                     exitCode = 0;
@@ -56,6 +66,7 @@ public class BytecodeExecutor {
                 }
                 run = false;
                 finished = true;
+                break;
             default:
                 throw new InvalidOpcodeException(
                         "Unknown opcode " + DatatypeConverter.printHexBinary(new byte[]{opcode})

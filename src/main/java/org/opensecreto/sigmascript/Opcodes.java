@@ -41,8 +41,10 @@ public final class Opcodes {
      * | <- байт, который будет отправлен в память<p>
      * | <- старший байт адреса<p>
      * |<p>
-     * |<p>
      * | <- младший бит адреса<p>
+     * Указатель смещается на 1 вперед.
+     * <p>
+     * <b>Внимание:</b> после этой операции байты из памяти <b>не удаляются</b>
      */
     public static final byte OP_MEM_PUT = 0x20;
 
@@ -59,6 +61,7 @@ public final class Opcodes {
             .put(OP_JUMP_S, "OP_JUMP_S")
             .put(OP_PUSH, "OP_PUSH")
             .put(OP_POP, "OP_POP")
+            .put(OP_MEM_PUT, "OP_MEM_PUT")
             .put(OP_RETURN, "OP_RETURN")
             .build();
 

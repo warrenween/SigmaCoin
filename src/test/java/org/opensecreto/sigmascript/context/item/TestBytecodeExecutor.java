@@ -56,4 +56,35 @@ public class TestBytecodeExecutor {
         assertThat(executor.getExitCode()).isEqualTo((byte) 27);
     }
 
+    public void testPop() {
+        StorageManager storage = mock(StorageManager.class);
+        when(storage.getByte(0)).thenReturn(OP_PUSH);
+        when(storage.getByte(1)).thenReturn((byte) 27);
+        when(storage.getByte(2)).thenReturn(OP_POP);
+        executor.setStorage(storage);
+
+        executor.execute();
+
+        assertThat(executor.getStack()).isEmpty();
+    }
+
+    public void testOP_MEM_PUT() {
+        StorageManager storage = mock(StorageManager.class);
+        when(storage.getByte(0)).thenReturn(OP_PUSH);
+        when(storage.getByte(1)).thenReturn((byte) 0xff);
+        when(storage.getByte(2)).thenReturn(OP_PUSH);
+        when(storage.getByte(3)).thenReturn((byte) 0xff);
+        when(storage.getByte(4)).thenReturn(OP_PUSH);
+        when(storage.getByte(5)).thenReturn((byte) 0xff);
+        when(storage.getByte(6)).thenReturn(OP_PUSH);
+        when(storage.getByte(7)).thenReturn((byte) 0x57);
+        when(storage.getByte(8)).thenReturn(OP_MEM_PUT);
+        executor.setStorage(storage);
+
+        executor.storageBreakpoints.add(9L);
+        executor.execute();
+
+        assertThat(executor.getMemory()[0xffffff]).isEqualTo((byte) 0x57);
+    }
+
 }
