@@ -12,5 +12,5 @@ public final class Config {
      * Max heap size in bytes.
      * Now 64 MiB
      */
-    public static final int MAX_HEAP = 64 * 1024 * 1024;
+    public static final int MAX_MEMORY = 64 * 1024 * 1024;
 }
