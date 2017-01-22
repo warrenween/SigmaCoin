@@ -100,8 +100,4 @@ public class BytecodeExecutor {
         modeMemory = memoryMode;
     }
 
-    private void notifyOpcodeExecuted() {
-
-    }
-
 }
