@@ -13,7 +13,7 @@ public class DebuggableBytecodeExecutor extends BytecodeExecutor {
         if (storage == null) {
             throw new NullPointerException("storage is null");
         }
-        while (run) {
+        while (run && !finished) {
             if (modeMemory) {
                 if (!memoryBreakpoints.contains(pointer)) {
                     process();
