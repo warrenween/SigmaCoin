@@ -2,7 +2,7 @@ package org.opensecreto.sigmascript;
 
 import javax.xml.bind.DatatypeConverter;
 
-import static org.opensecreto.sigmascript.Opcodes.OP_JUMP_M;
+import static org.opensecreto.sigmascript.Opcodes.*;
 
 public class BytecodeExecutor {
 
@@ -64,6 +64,18 @@ public class BytecodeExecutor {
                 case OP_JUMP_M:
                     switchMode(true);
                     break;
+                case OP_JUMP_S:
+                    switchMode(false);
+                    break;
+                case OP_PUSH:
+                    stackPush(next());
+                    next();
+                    break;
+                case OP_POP:
+                    stackPop();
+                    break;
+                case OP_RETURN:
+                    return next();
                 default:
                     throw new InvalidOpcodeException(
                             "Unknown opcode " + DatatypeConverter.printHexBinary(new byte[]{opcode})
