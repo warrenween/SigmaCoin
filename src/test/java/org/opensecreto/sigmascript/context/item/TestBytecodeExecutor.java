@@ -34,7 +34,7 @@ public class TestBytecodeExecutor {
 
     @Test(timeOut = 10 * 1000)
     public void testSwitchModeToMemory() {
-        when(storage.getByte(0)).thenReturn(OP_JUMP_M);
+        when(storage.getByte(0)).thenReturn(OP_MODE_M);
 
         executor.execute();
 

@@ -16,7 +16,7 @@ public final class Opcodes {
      * Режим устанавливается в режим выполнение кода из памяти.
      * Указатель устнавливается в ноль.
      */
-    public static final byte OP_JUMP_M = 0x01;
+    public static final byte OP_MODE_M = 0x01;
 
     /**
      * Переходит к выполнению данных из хранилища.
@@ -24,7 +24,7 @@ public final class Opcodes {
      * Режим устанавливается в режим выполнения данных из памяти.
      * Указатель устанавливается в ноль.
      */
-    public static final byte OP_JUMP_S = 0x02;
+    public static final byte OP_MODE_S = 0x02;
 
     /**
      * Следующий байт после OP_PUSH заносится в вершину стеку.
@@ -53,12 +53,12 @@ public final class Opcodes {
     public static final byte OP_MEM_PUT = 0x20;
 
     public static final BiMap<Byte, String> OPCODE_NAMES = new ImmutableBiMap.Builder<Byte, String>()
-            .put(OP_JUMP_M, "OP_JUMP_M")
-            .put(OP_JUMP_S, "OP_JUMP_S")
+            .put(OP_STOP, "OP_STOP")
+            .put(OP_MODE_M, "OP_MODE_M")
+            .put(OP_MODE_S, "OP_MODE_S")
             .put(OP_PUSH, "OP_PUSH")
             .put(OP_POP, "OP_POP")
             .put(OP_MEM_PUT, "OP_MEM_PUT")
-            .put(OP_STOP, "OP_STOP")
             .build();
 
 }

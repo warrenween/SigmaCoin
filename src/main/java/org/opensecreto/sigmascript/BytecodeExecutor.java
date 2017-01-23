@@ -38,10 +38,10 @@ public class BytecodeExecutor {
                 run = false;
                 finished = true;
                 break;
-            case OP_JUMP_M:
+            case OP_MODE_M:
                 switchMode(true);
                 break;
-            case OP_JUMP_S:
+            case OP_MODE_S:
                 switchMode(false);
                 break;
             case OP_PUSH:
