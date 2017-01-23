@@ -79,6 +79,8 @@ public class BytecodeExecutor {
         pointer = 0;
         stackSize = 0;
         modeMemory = false;
+        finished = false;
+        run = true;
         for (int i = 0; i < memory.length; i++) {
             memory[i] = 0;
         }

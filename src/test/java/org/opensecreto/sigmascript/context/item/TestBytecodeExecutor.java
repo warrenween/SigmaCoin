@@ -18,7 +18,7 @@ public class TestBytecodeExecutor {
     @BeforeMethod
     public void prepare() {
         executor.reset();
-        storage = mock(StorageManager.class, withSettings().defaultAnswer(invocation -> (byte) 0));
+        storage = mock(StorageManager.class);
         executor.setStorage(storage);
     }
 
@@ -63,7 +63,7 @@ public class TestBytecodeExecutor {
         when(storage.getByte(6)).thenReturn(OP_PUSH);
         when(storage.getByte(7)).thenReturn((byte) 0x57);
         when(storage.getByte(8)).thenReturn(OP_MEM_PUT);
-        
+
         executor.execute();
 
         assertThat(executor.getMemory()[0xffffff]).isEqualTo((byte) 0x57);
