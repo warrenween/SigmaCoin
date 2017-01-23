@@ -19,6 +19,7 @@ public class TestBytecodeExecutor {
     public void prepare() {
         executor.reset();
         storage = mock(StorageManager.class, withSettings().defaultAnswer(invocation -> (byte) 0));
+        executor.setStorage(storage);
     }
 
     @Test(timeOut = 10 * 1000)
