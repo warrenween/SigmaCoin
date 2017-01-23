@@ -78,6 +78,7 @@ public class BytecodeExecutor {
     public void reset() {
         pointer = 0;
         stackSize = 0;
+        modeMemory = false;
         for (int i = 0; i < memory.length; i++) {
             memory[i] = 0;
         }
