@@ -6,6 +6,7 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.opensecreto.sigmascript.Opcodes.*;
@@ -68,6 +69,12 @@ public class TestBytecodeExecutor {
         executor.execute();
 
         assertThat(executor.getMemory()[0xffffff]).isEqualTo((byte) 0x57);
+    }
+
+    public void testPoppingEmptyStack() {
+        when(storage.getByte(0)).thenReturn(OP_POP);
+
+        assertThatThrownBy(() -> executor.execute());
     }
 
 }

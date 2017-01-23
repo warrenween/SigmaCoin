@@ -116,6 +116,9 @@ public class BytecodeExecutor {
     }
 
     protected void stackPop() {
+        if (stackSize == 0) {
+            throw new IllegalStateException("Can not pop from empty stack");
+        }
         stackSize--;
     }
 
