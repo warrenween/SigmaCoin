@@ -20,6 +20,7 @@ public class TestBytecodeExecutor {
         executor.reset();
     }
 
+    @Test(timeOut = 10*1000)
     public void testStack() {
         StorageManager storage = mock(StorageManager.class);
         when(storage.getByte(0)).thenReturn(OP_PUSH);
@@ -31,6 +32,7 @@ public class TestBytecodeExecutor {
         assertThat(executor.getStack()).containsExactly((byte) 57);
     }
 
+    @Test(timeOut = 10*1000)
     public void testSwitchModeToMemory() {
         StorageManager storage = mock(StorageManager.class);
         when(storage.getByte(0)).thenReturn(OP_JUMP_M);
@@ -44,6 +46,7 @@ public class TestBytecodeExecutor {
         assertThat(executor.getMode()).isTrue();
     }
 
+    @Test(timeOut = 10*1000)
     public void testPop() {
         StorageManager storage = mock(StorageManager.class);
         when(storage.getByte(0)).thenReturn(OP_PUSH);
@@ -56,6 +59,7 @@ public class TestBytecodeExecutor {
         assertThat(executor.getStack()).isEmpty();
     }
 
+    @Test(timeOut = 10*1000)
     public void testOP_MEM_PUT() {
         StorageManager storage = mock(StorageManager.class);
         when(storage.getByte(0)).thenReturn(OP_PUSH);
