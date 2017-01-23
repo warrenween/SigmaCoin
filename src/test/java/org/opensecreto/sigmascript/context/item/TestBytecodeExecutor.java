@@ -6,7 +6,8 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 import static org.opensecreto.sigmascript.Opcodes.*;
 
 @Test
@@ -37,7 +38,7 @@ public class TestBytecodeExecutor {
 
         executor.execute();
 
-        assertThat(executor.getPointer()).isEqualTo(0L);
+        assertThat(executor.getMode()).isEqualTo(true);
         assertThat(executor.getMode()).isTrue();
     }
 
