@@ -44,18 +44,6 @@ public class TestBytecodeExecutor {
         assertThat(executor.getMode()).isTrue();
     }
 
-    public void testReturn() {
-        StorageManager storage = mock(StorageManager.class);
-        when(storage.getByte(0)).thenReturn(OP_PUSH);
-        when(storage.getByte(1)).thenReturn((byte) 27);
-        when(storage.getByte(2)).thenReturn(OP_RETURN);
-        executor.setStorage(storage);
-
-        executor.execute();
-
-        assertThat(executor.getExitCode()).isEqualTo((byte) 27);
-    }
-
     public void testPop() {
         StorageManager storage = mock(StorageManager.class);
         when(storage.getByte(0)).thenReturn(OP_PUSH);

@@ -6,12 +6,17 @@ import com.google.common.collect.ImmutableBiMap;
 public final class Opcodes {
 
     /**
+     * Останавливает выполнение.
+     */
+    public static final byte OP_STOP = (byte) 0x00;
+
+    /**
      * Перейти к выполнению данных из памяти.
      * <p>
      * Режим устанавливается в режим выполнение кода из памяти.
      * Указатель устнавливается в ноль.
      */
-    public static final byte OP_JUMP_M = 0x00;
+    public static final byte OP_JUMP_M = 0x01;
 
     /**
      * Переходит к выполнению данных из хранилища.
@@ -19,7 +24,7 @@ public final class Opcodes {
      * Режим устанавливается в режим выполнения данных из памяти.
      * Указатель устанавливается в ноль.
      */
-    public static final byte OP_JUMP_S = 0x01;
+    public static final byte OP_JUMP_S = 0x02;
 
     /**
      * Следующий байт после OP_PUSH заносится в вершину стеку.
@@ -47,21 +52,13 @@ public final class Opcodes {
      */
     public static final byte OP_MEM_PUT = 0x20;
 
-    /**
-     * Останавливает выполнение со статусом.
-     * <p>
-     * Если стек пустой, то статусом будет 0.
-     * Если стек непустой, то статусом будет первый байт из стека.
-     */
-    public static final byte OP_RETURN = (byte) 0xf0;
-
     public static final BiMap<Byte, String> OPCODE_NAMES = new ImmutableBiMap.Builder<Byte, String>()
             .put(OP_JUMP_M, "OP_JUMP_M")
             .put(OP_JUMP_S, "OP_JUMP_S")
             .put(OP_PUSH, "OP_PUSH")
             .put(OP_POP, "OP_POP")
             .put(OP_MEM_PUT, "OP_MEM_PUT")
-            .put(OP_RETURN, "OP_RETURN")
+            .put(OP_STOP, "OP_STOP")
             .build();
 
 }

@@ -13,8 +13,6 @@ public class BytecodeExecutor {
 
     protected boolean run = true;
     protected boolean finished = false;
-    protected byte exitCode;
-
 
     /**
      * false - executing bytecode in storage
@@ -36,6 +34,10 @@ public class BytecodeExecutor {
     protected final void process() {
         byte opcode = next();
         switch (opcode) {
+            case OP_STOP:
+                run = false;
+                finished = true;
+                break;
             case OP_JUMP_M:
                 switchMode(true);
                 break;
@@ -58,15 +60,6 @@ public class BytecodeExecutor {
                         (stack[stackSize - 4] & 0xff);
                 memory[index] = value;
                 break;
-            case OP_RETURN:
-                if (stackSize == 0) {
-                    exitCode = 0;
-                } else {
-                    exitCode = stack[stackSize - 1];
-                }
-                run = false;
-                finished = true;
-                break;
             default:
                 throw new InvalidOpcodeException(
                         "Unknown opcode " + DatatypeConverter.printHexBinary(new byte[]{opcode})
@@ -76,10 +69,6 @@ public class BytecodeExecutor {
 
     public boolean isFinished() {
         return finished;
-    }
-
-    public byte getExitCode() {
-        return exitCode;
     }
 
     public void setStorage(StorageManager storage) {
