@@ -1,8 +1,7 @@
 package org.opensecreto.sigmascript;
 
-import com.google.common.collect.ImmutableMap;
-
-import java.util.Map;
+import com.google.common.collect.BiMap;
+import com.google.common.collect.ImmutableBiMap;
 
 public final class Opcodes {
 
@@ -56,7 +55,7 @@ public final class Opcodes {
      */
     public static final byte OP_RETURN = (byte) 0xf0;
 
-    public static final Map<Byte, String> OPCODE_NAMES = new ImmutableMap.Builder<Byte, String>()
+    public static final BiMap<Byte, String> OPCODE_NAMES = new ImmutableBiMap.Builder<Byte, String>()
             .put(OP_JUMP_M, "OP_JUMP_M")
             .put(OP_JUMP_S, "OP_JUMP_S")
             .put(OP_PUSH, "OP_PUSH")
