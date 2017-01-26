@@ -50,6 +50,14 @@ public class BytecodeExecutor {
             case OP_POP:
                 stackPop();
                 break;
+            case OP_SET_POINTER:
+                if (stackSize < 4) {
+                    throw new ExecutionException("OP_SET_POINTER requires 4 byte address in stack. Now " + stackSize);
+                }
+                pointer = ((stack[stackSize - 2] & 0xff) << 16) |
+                        ((stack[stackSize - 3] & 0xff) << 8) |
+                        (stack[stackSize - 4] & 0xff);
+                break;
             case OP_MEM_PUT:
                 if (stackSize < 4) {
                     throw new IllegalStateException("To perform OP_MEM_PUT at least stack must contain at least 4 bytes");
