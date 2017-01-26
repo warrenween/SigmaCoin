@@ -53,9 +53,10 @@ public class BytecodeExecutor {
                 if (stack.getSize() < 4) {
                     throw new ExecutionException("OP_SET_POINTER requires 4 byte address in stack. Now " + stack.getSize());
                 }
-                pointer = ((stack.get(0) & 0xff) << 16) |
-                        ((stack.get(1) & 0xff) << 8) |
-                        (stack.get(2) & 0xff);
+                pointer = ((stack.get(0) & 0xffL) << 24) |
+                        ((stack.get(1) & 0xffL) << 16) |
+                        ((stack.get(0) & 0xffL) << 8) |
+                        (stack.get(2) & 0xffL);
                 break;
             case OP_MEM_PUT:
                 if (stack.getSize() < 4) {

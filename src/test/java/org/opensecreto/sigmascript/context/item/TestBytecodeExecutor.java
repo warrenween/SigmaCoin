@@ -77,4 +77,23 @@ public class TestBytecodeExecutor {
         assertThatThrownBy(() -> executor.execute());
     }
 
+    public void testOP_SET_POINTER() {
+        when(storage.getByte(0)).thenReturn(OP_PUSH);
+        when(storage.getByte(1)).thenReturn((byte) 0x24);
+        when(storage.getByte(2)).thenReturn(OP_PUSH);
+        when(storage.getByte(3)).thenReturn((byte) 0xda);
+        when(storage.getByte(4)).thenReturn(OP_PUSH);
+        when(storage.getByte(5)).thenReturn((byte) 0xc0);
+        when(storage.getByte(6)).thenReturn(OP_PUSH);
+        when(storage.getByte(7)).thenReturn((byte) 0x17);
+        when(storage.getByte(8)).thenReturn(OP_SET_POINTER);
+
+        when(storage.getByte(0x24dac017L)).thenReturn(OP_PUSH);
+        when(storage.getByte(0x24dac018L)).thenReturn((byte) 0x15);
+
+        executor.execute();
+
+        assertThat(executor.getStack()).containsExactly(new byte[]{0x24, (byte) 0xda, (byte) 0xc0, 0x17});
+    }
+
 }
