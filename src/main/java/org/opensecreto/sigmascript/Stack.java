@@ -53,4 +53,12 @@ public class Stack {
         System.arraycopy(stack, 0, result, 0, stackSize);
         return result;
     }
+
+    public void reset() {
+        stackSize = 0;
+    }
+
+    public int getSize() {
+        return stackSize;
+    }
 }
