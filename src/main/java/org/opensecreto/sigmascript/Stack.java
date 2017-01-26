@@ -35,7 +35,7 @@ public class Stack {
         if (index >= stackSize) {
             throw new IllegalArgumentException("Can not get byte. Index is too big,");
         }
-        return stack[index];
+        return stack[stackSize - 1 - index];
     }
 
     public void pop() {
