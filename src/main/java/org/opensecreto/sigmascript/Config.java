@@ -14,5 +14,5 @@ public final class Config {
      */
     public static final int MAX_MEMORY = 64 * 1024 * 1024;
 
-    public static final long STORAGE_MAX_SIZE = 0x00000000ffffffff;
+    public static final long STORAGE_MAX_SIZE = 0xffffffffL;
 }
