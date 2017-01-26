@@ -69,7 +69,7 @@ public class BytecodeExecutor {
                 memory[index] = value;
                 break;
             default:
-                throw new InvalidOpcodeException(
+                throw new ExecutionException(
                         "Unknown opcode " + DatatypeConverter.printHexBinary(new byte[]{opcode})
                 );
         }
