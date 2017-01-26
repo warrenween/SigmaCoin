@@ -45,7 +45,7 @@ public class StackTest {
         stack.push((byte) 4);
         stack.push((byte) 8);
         stack.pop();
-        assertThat(stack.getStack()).hasSize(1).containsExactly(new byte[]{8});
+        assertThat(stack.getStack()).hasSize(1).containsExactly(new byte[]{4});
     }
 
 }
