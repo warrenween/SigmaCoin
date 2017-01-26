@@ -94,30 +94,6 @@ public class BytecodeExecutor {
         }
     }
 
-    protected void jump(long newPointer) {
-        if (newPointer < 0) {
-            throw new IndexOutOfBoundsException("Pointer can not be negative");
-        }
-        if (modeMemory) {
-            if (newPointer > Config.MAX_MEMORY) {
-                throw new IndexOutOfBoundsException("New pointer " +
-                        newPointer +
-                        " is more than available memory " +
-                        Config.MAX_MEMORY);
-            }
-            pointer = newPointer;
-        } else {
-            if (newPointer > 4294967295L) {
-                throw new IndexOutOfBoundsException("New pointer is larger than max");
-            }
-            pointer = newPointer;
-        }
-    }
-
-    protected void jumpRel(long offset) {
-        jump(pointer + offset);
-    }
-
     public byte[] getStack() {
         return stack.getStack();
     }
