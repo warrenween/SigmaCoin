@@ -1,4 +1,4 @@
-package org.opensecreto.sigmascript;
+package org.opensecreto.sigmascript.bytecode;
 
 import java.nio.ByteBuffer;
 import java.util.HashMap;

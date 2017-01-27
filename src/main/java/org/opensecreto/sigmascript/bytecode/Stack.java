@@ -1,4 +1,4 @@
-package org.opensecreto.sigmascript;
+package org.opensecreto.sigmascript.bytecode;
 
 public class Stack {
 

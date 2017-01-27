@@ -1,6 +1,6 @@
 package org.opensecreto.sigmascript.context.item;
 
-import org.opensecreto.sigmascript.Stack;
+import org.opensecreto.sigmascript.bytecode.Stack;
 import org.testng.annotations.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;

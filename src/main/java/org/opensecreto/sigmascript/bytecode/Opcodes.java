@@ -1,4 +1,4 @@
-package org.opensecreto.sigmascript;
+package org.opensecreto.sigmascript.bytecode;
 
 import com.google.common.collect.BiMap;
 import com.google.common.collect.ImmutableBiMap;

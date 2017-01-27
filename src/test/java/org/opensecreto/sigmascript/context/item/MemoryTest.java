@@ -1,7 +1,7 @@
 package org.opensecreto.sigmascript.context.item;
 
 import org.assertj.core.api.Assertions;
-import org.opensecreto.sigmascript.Memory;
+import org.opensecreto.sigmascript.bytecode.Memory;
 import org.testng.annotations.Test;
 
 @Test
