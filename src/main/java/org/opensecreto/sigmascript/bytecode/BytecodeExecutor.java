@@ -6,7 +6,7 @@ import static org.opensecreto.sigmascript.bytecode.Opcodes.*;
 
 public class BytecodeExecutor {
 
-    protected Stack stack = new Stack(Config.MAX_STACK);
+    protected Stack stack = new Stack();
     protected Memory memory = new Memory();
     protected StorageManager storage;
 
