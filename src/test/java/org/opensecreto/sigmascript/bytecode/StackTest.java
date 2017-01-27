@@ -1,4 +1,4 @@
-package org.opensecreto.sigmascript.context.item;
+package org.opensecreto.sigmascript.bytecode;
 
 import org.opensecreto.sigmascript.bytecode.Stack;
 import org.testng.annotations.Test;

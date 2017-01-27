@@ -1,4 +1,4 @@
-package org.opensecreto.sigmascript.context.item;
+package org.opensecreto.sigmascript.bytecode;
 
 import org.assertj.core.api.Assertions;
 import org.opensecreto.sigmascript.bytecode.Memory;
