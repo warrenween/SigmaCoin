@@ -30,8 +30,7 @@ public class BytecodeExecutor {
     public BytecodeExecutor() {
     }
 
-    protected final void process() {
-        byte opcode = next();
+    protected final void processOpcode(byte opcode) {
         switch (opcode) {
             case OP_STOP:
                 run = false;
@@ -107,7 +106,7 @@ public class BytecodeExecutor {
             throw new NullPointerException("storage is null");
         }
         while (run && !finished) {
-            process();
+            processOpcode(next());
         }
     }
 

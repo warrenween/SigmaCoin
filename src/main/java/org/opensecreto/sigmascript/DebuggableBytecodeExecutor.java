@@ -16,13 +16,13 @@ public class DebuggableBytecodeExecutor extends BytecodeExecutor {
         while (run && !finished) {
             if (modeMemory) {
                 if (!memoryBreakpoints.contains(pointer)) {
-                    process();
+                    processOpcode(next());
                 } else {
                     return;
                 }
             } else {
                 if (!storageBreakpoints.contains(pointer)) {
-                    process();
+                    processOpcode(next());
                 } else {
                     return;
                 }
