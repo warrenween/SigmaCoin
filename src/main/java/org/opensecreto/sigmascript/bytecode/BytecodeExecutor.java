@@ -111,15 +111,13 @@ public class BytecodeExecutor {
     protected byte next() {
         byte result;
         if (modeMemory) {
-            if (pointer >= Config.MAX_MEMORY) {
-                throw new ExecutionException("Invalid memory address " + pointer + ". "
-                        + "Max " + (Config.MAX_MEMORY - 1) + ".");
+            if (pointer < 0) {
+                throw new ExecutionException("Pointer is negative");
             }
             result = memory.get(pointer);
         } else {
-            if (pointer >= Config.STORAGE_MAX_SIZE) {
-                throw new ExecutionException("Invalid storage address " + pointer + ". "
-                        + "Max " + (Config.STORAGE_MAX_SIZE - 1) + ".");
+            if (pointer < 0) {
+                throw new ExecutionException("Pointer is negative.");
             }
             result = storage.getByte(pointer);
         }
