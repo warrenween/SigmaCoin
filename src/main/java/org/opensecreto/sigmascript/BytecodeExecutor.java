@@ -7,7 +7,7 @@ import static org.opensecreto.sigmascript.Opcodes.*;
 public class BytecodeExecutor {
 
     protected Stack stack = new Stack(Config.MAX_STACK);
-    protected byte[] memory = new byte[Config.MAX_MEMORY];
+    protected Memory memory = new Memory();
     protected StorageManager storage;
 
     protected boolean run = true;
@@ -65,7 +65,7 @@ public class BytecodeExecutor {
                 int index = ((stack.get(1) & 0xff) << 16) |
                         ((stack.get(2) & 0xff) << 8) |
                         (stack.get(3) & 0xff);
-                memory[index] = value;
+                memory.put(index, value);
                 break;
             default:
                 throw new ExecutionException(
@@ -88,16 +88,14 @@ public class BytecodeExecutor {
         modeMemory = false;
         finished = false;
         run = true;
-        for (int i = 0; i < memory.length; i++) {
-            memory[i] = 0;
-        }
+        memory = new Memory();
     }
 
     public byte[] getStack() {
         return stack.getStack();
     }
 
-    public byte[] getMemory() {
+    public Memory getMemory() {
         return memory;
     }
 
@@ -117,7 +115,7 @@ public class BytecodeExecutor {
                 throw new ExecutionException("Invalid memory address " + pointer + ". "
                         + "Max " + (Config.MAX_MEMORY - 1) + ".");
             }
-            result = memory[(int) pointer];
+            result = memory.get(pointer);
         } else {
             if (pointer >= Config.STORAGE_MAX_SIZE) {
                 throw new ExecutionException("Invalid storage address " + pointer + ". "

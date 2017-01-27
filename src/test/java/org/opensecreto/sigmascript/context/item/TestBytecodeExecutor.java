@@ -68,7 +68,7 @@ public class TestBytecodeExecutor {
 
         executor.execute();
 
-        assertThat(executor.getMemory()[0xffffff]).isEqualTo((byte) 0x57);
+        assertThat(executor.getMemory().get(0xffffff)).isEqualTo((byte) 0x57);
     }
 
     public void testPoppingEmptyStack() {
