@@ -1,7 +1,5 @@
 package org.opensecreto.sigmascript.bytecode;
 
-import org.opensecreto.sigmascript.bytecode.DebuggableBytecodeExecutor;
-import org.opensecreto.sigmascript.bytecode.StorageManager;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
