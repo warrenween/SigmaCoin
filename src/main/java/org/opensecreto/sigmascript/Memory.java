@@ -31,7 +31,11 @@ public class Memory {
         if (index < 0) {
             throw new IllegalArgumentException("Index can not be negative");
         }
-        return memory.get(index);
+        try {
+            return memory.get(index);
+        } catch (NullPointerException e) {
+            return 0;
+        }
     }
 
     public byte[] disassemble() {
