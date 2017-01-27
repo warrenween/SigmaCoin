@@ -49,7 +49,9 @@ public class Stack {
      */
     public byte[] getStack() {
         byte[] result = new byte[stackSize];
-        stack.get(result, 0, stackSize);
+        for (int i = 0; i < stackSize; i++) {
+            result[i] = stack.get(i);
+        }
         return result;
     }
 
