@@ -44,4 +44,10 @@ public class StackTest {
         assertThat(stack.getStack()).hasSize(1).containsExactly(new byte[]{4});
     }
 
+    public void testGettingTooBigIndex() {
+        Stack stack = new Stack();
+        stack.push((byte) 2);
+        assertThatThrownBy(() -> stack.get(2));
+    }
+
 }

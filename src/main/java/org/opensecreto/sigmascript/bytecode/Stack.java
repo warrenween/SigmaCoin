@@ -29,7 +29,10 @@ public class Stack {
      */
     public byte get(int index) {
         if (index < 0) {
-            throw new IllegalArgumentException("index is negative.");
+            throw new IllegalArgumentException("Index is negative.");
+        }
+        if (stackSize - index < 1) {
+            throw new IllegalArgumentException("Index is too big.");
         }
         return stack.get(stackSize - 1 - index);
     }
