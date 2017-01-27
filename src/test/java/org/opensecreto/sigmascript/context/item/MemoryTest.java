@@ -13,7 +13,7 @@ public class MemoryTest {
         memory.put(48L, (byte) -21);
 
         Assertions.assertThat(memory.get(0L))
-                .as("Check if non set index returns 0").isEqualTo(0);
+                .as("Check if non set index returns 0").isEqualTo((byte) 0);
         Assertions.assertThat(memory.get(21L)).isEqualTo((byte) 41);
         Assertions.assertThat(memory.get(48L))
                 .as("Test getting negative bytes.").isEqualTo((byte) -21);
