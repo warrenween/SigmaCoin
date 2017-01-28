@@ -109,9 +109,10 @@ public class TestBytecodeExecutor {
 
         executor.execute();
 
-        assertThat(executor.getStack()).containsExactly((byte) 0x15,
+        assertThat(executor.getStack()).containsExactly(
+                (byte) 0x24, (byte) 0xda, (byte) 0xc0, (byte) 0x17,
                 (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00,
-                (byte) 0x17, (byte) 0xc0, (byte) 0xda, (byte) 0x24);
+                (byte) 0x15);
     }
 
 }
