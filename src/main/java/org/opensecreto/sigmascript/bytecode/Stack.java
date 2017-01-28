@@ -6,7 +6,7 @@ public class Stack {
 
     protected int stackSize = 0;
 
-    protected ByteBuffer stack = ByteBuffer.allocate(32);
+    protected ByteBuffer stack = ByteBuffer.allocateDirect(32);
 
     public void push(byte aByte) {
         stack.put(stackSize, aByte);
@@ -56,6 +56,7 @@ public class Stack {
     }
 
     public void reset() {
+        stack = ByteBuffer.allocateDirect(32);
         stackSize = 0;
     }
 
