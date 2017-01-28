@@ -104,12 +104,14 @@ public class TestBytecodeExecutor {
         when(storage.getByte(15)).thenReturn((byte) 0);
         when(storage.getByte(16)).thenReturn(OP_SET_POINTER);
 
-        when(storage.getByte(0x24dac017L)).thenReturn(OP_PUSH);
-        when(storage.getByte(0x24dac018L)).thenReturn((byte) 0x15);
+        when(storage.getByte(0x17c0da24L)).thenReturn(OP_PUSH);
+        when(storage.getByte(0x17c0da25L)).thenReturn((byte) 0x15);
 
         executor.execute();
 
-        assertThat(executor.getStack()).containsExactly(new byte[]{0x24, (byte) 0xda, (byte) 0xc0, 0x17});
+        assertThat(executor.getStack()).containsExactly((byte) 0x15,
+                (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00,
+                (byte) 0x17, (byte) 0xc0, (byte) 0xda, (byte) 0x24);
     }
 
 }
