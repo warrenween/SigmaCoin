@@ -70,9 +70,9 @@ public class TestBytecodeExecutor {
         when(storage.getByte(13)).thenReturn((byte) 0x25);
         when(storage.getByte(14)).thenReturn(OP_PUSH);
         when(storage.getByte(15)).thenReturn((byte) 0x35);
-        when(storage.getByte(14)).thenReturn(OP_PUSH);
-        when(storage.getByte(15)).thenReturn((byte) 0x87);
-        when(storage.getByte(16)).thenReturn(OP_MEM_PUT);
+        when(storage.getByte(16)).thenReturn(OP_PUSH);
+        when(storage.getByte(17)).thenReturn((byte) 0x87);
+        when(storage.getByte(18)).thenReturn(OP_MEM_PUT);
 
         executor.execute();
 
