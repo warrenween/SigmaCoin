@@ -69,12 +69,14 @@ public class TestBytecodeExecutor {
         when(storage.getByte(12)).thenReturn(OP_PUSH);
         when(storage.getByte(13)).thenReturn((byte) 0x25);
         when(storage.getByte(14)).thenReturn(OP_PUSH);
+        when(storage.getByte(15)).thenReturn((byte) 0x35);
+        when(storage.getByte(14)).thenReturn(OP_PUSH);
         when(storage.getByte(15)).thenReturn((byte) 0x87);
         when(storage.getByte(16)).thenReturn(OP_MEM_PUT);
 
         executor.execute();
 
-        assertThat(executor.getMemory().get(0x2517ff57ffffffL)).isEqualTo((byte) 0x57);
+        assertThat(executor.getMemory().get(0x352517ff57ffffffL)).isEqualTo((byte) 0x87);
     }
 
     public void testPoppingEmptyStack() {
