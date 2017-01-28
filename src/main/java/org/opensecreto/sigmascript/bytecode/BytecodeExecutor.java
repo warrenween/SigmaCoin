@@ -51,7 +51,7 @@ public class BytecodeExecutor {
                 stack.pop();
                 break;
             case OP_SET_POINTER:
-                if (stack.getSize() < 4) {
+                if (stack.getSize() < 8) {
                     throw new ExecutionException("OP_SET_POINTER requires 8 byte address in stack. Now " + stack.getSize());
                 }
                 pointer = Longs.fromBytes(stack.get(0), stack.get(1), stack.get(2), stack.get(3),
