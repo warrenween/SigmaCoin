@@ -19,11 +19,11 @@ public class BytecodeExecutor {
      * false - executing bytecode in storage
      * true - executing bytecode in memory.
      */
-    boolean modeMemory = false;
+    protected boolean modeMemory = false;
     /**
      * Указатель на команду, которая выполнится при <b>следующей</b> итерации.
      */
-    long pointer = 0;
+    protected long pointer = 0;
 
     public BytecodeExecutor(StorageManager storage) {
         this.storage = storage;
