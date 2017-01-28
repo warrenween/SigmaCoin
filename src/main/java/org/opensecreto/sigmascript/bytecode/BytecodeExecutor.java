@@ -1,5 +1,7 @@
 package org.opensecreto.sigmascript.bytecode;
 
+import com.google.common.primitives.Longs;
+
 import javax.xml.bind.DatatypeConverter;
 
 import static org.opensecreto.sigmascript.bytecode.Opcodes.*;
@@ -50,12 +52,10 @@ public class BytecodeExecutor {
                 break;
             case OP_SET_POINTER:
                 if (stack.getSize() < 4) {
-                    throw new ExecutionException("OP_SET_POINTER requires 4 byte address in stack. Now " + stack.getSize());
+                    throw new ExecutionException("OP_SET_POINTER requires 8 byte address in stack. Now " + stack.getSize());
                 }
-                pointer = ((stack.get(0) & 0xffL) << 24) |
-                        ((stack.get(1) & 0xffL) << 16) |
-                        ((stack.get(0) & 0xffL) << 8) |
-                        (stack.get(2) & 0xffL);
+                pointer = Longs.fromBytes(stack.get(0), stack.get(1), stack.get(2), stack.get(3),
+                        stack.get(4), stack.get(5), stack.get(6), stack.get(7));
                 break;
             case OP_MEM_PUT:
                 if (stack.getSize() < 4) {

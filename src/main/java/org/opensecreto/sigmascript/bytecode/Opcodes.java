@@ -33,7 +33,11 @@ public final class Opcodes {
      * | <- старший байт нового указателя<p>
      * |<p>
      * |<p>
-     * | <- младший байто овго указателя<p>
+     * |<p>
+     * |<p>
+     * |<p>
+     * |<p>
+     * | <- младший байто нового указателя<p>
      */
     public static final byte OP_SET_POINTER = 0x03;
 

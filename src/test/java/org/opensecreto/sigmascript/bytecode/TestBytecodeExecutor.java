@@ -84,7 +84,15 @@ public class TestBytecodeExecutor {
         when(storage.getByte(5)).thenReturn((byte) 0xc0);
         when(storage.getByte(6)).thenReturn(OP_PUSH);
         when(storage.getByte(7)).thenReturn((byte) 0x17);
-        when(storage.getByte(8)).thenReturn(OP_SET_POINTER);
+        when(storage.getByte(8)).thenReturn(OP_PUSH);
+        when(storage.getByte(9)).thenReturn((byte) 0);
+        when(storage.getByte(10)).thenReturn(OP_PUSH);
+        when(storage.getByte(11)).thenReturn((byte) 0);
+        when(storage.getByte(12)).thenReturn(OP_PUSH);
+        when(storage.getByte(13)).thenReturn((byte) 0);
+        when(storage.getByte(14)).thenReturn(OP_PUSH);
+        when(storage.getByte(15)).thenReturn((byte) 0);
+        when(storage.getByte(16)).thenReturn(OP_SET_POINTER);
 
         when(storage.getByte(0x24dac017L)).thenReturn(OP_PUSH);
         when(storage.getByte(0x24dac018L)).thenReturn((byte) 0x15);
