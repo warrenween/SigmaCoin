@@ -58,14 +58,14 @@ public class BytecodeExecutor {
                         stack.get(4), stack.get(5), stack.get(6), stack.get(7));
                 break;
             case OP_MEM_PUT:
-                if (stack.getSize() < 4) {
-                    throw new IllegalStateException("To perform OP_MEM_PUT at least stack must contain at least 4 bytes");
+                if (stack.getSize() < 9) {
+                    throw new IllegalStateException("To perform OP_MEM_PUT at least stack must contain at least 9 bytes");
                 }
                 byte value = stack.get(0);
-                int index = ((stack.get(1) & 0xff) << 16) |
-                        ((stack.get(2) & 0xff) << 8) |
-                        (stack.get(3) & 0xff);
-                memory.put(index, value);
+                memory.put(Longs.fromBytes(
+                        stack.get(1), stack.get(2), stack.get(3), stack.get(4),
+                        stack.get(5), stack.get(6), stack.get(7), stack.get(8)
+                ), value);
                 break;
             default:
                 throw new ExecutionException(
