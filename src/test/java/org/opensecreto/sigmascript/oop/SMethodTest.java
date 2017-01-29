@@ -65,8 +65,15 @@ public class SMethodTest {
         when(manager.getByte(startIndex + 47)).thenReturn(OP_MEM_PUT);
 
         SMethod method = new SMethod(manager, 65);
-        Stack stack = method.invoke(new Stack());
-        Assertions.assertThat(stack.getStack()).containsExactly((byte) 0x32);
+
+        Stack stack1 = method.invoke(new Stack());
+        Assertions.assertThat(stack1.getStack()).containsExactly((byte) 0x32);
+
+        Stack stack2 = method.invoke(new Stack());
+        Assertions.assertThat(stack2.getStack()).containsExactly((byte) 0x32);
+
+        Stack stack3 = method.invoke(new Stack());
+        Assertions.assertThat(stack3.getStack()).containsExactly((byte) 0x32);
     }
 
 }
