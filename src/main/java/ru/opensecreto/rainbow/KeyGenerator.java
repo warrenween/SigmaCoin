@@ -11,57 +11,57 @@ public class KeyGenerator {
 
     private final int[][] K;
 
-    private final int[] vi;
-    private final int[] oi;
+    private final int[] v;
+    private final int[] o;
     private final int u;
     private final int n;
     private final int[][] S;
 
 
-    public KeyGenerator(int Kdim, int[] vi) {
+    public KeyGenerator(int Kdim, int[] v) {
         K = new int[Kdim][Kdim];
 
-        if (vi[0] <= 0) {
+        if (v[0] <= 0) {
             throw new IllegalArgumentException("v1 must be greater than 0");
         }
         int v0 = 0;
-        for (int i = 0; i < vi.length; i++) {
-            if (vi[i] <= v0) {
+        for (int i = 0; i < v.length; i++) {
+            if (v[i] <= v0) {
                 throw new IllegalArgumentException("v" + i + " must be grater than v" + (i - 1));
             }
-            v0 = vi[i];
+            v0 = v[i];
         }
 
-        this.vi = vi;
-        u = vi.length;
-        n = vi[vi.length - 1];
+        this.v = v;
+        u = v.length;
+        n = v[v.length - 1];
 
         S = new int[u][n];
         for (int l = 0; l < S.length; l++) {
-            for (int i = 0; i < vi[l]; i++) {
+            for (int i = 0; i < v[l]; i++) {
                 S[l][i] = i + 1;
             }
         }
 
-        oi = new int[vi.length - 1];
-        for (int i = 0; i < oi.length; i++) {
-            oi[i] = vi[i + 1] - vi[i];
+        o = new int[v.length - 1];
+        for (int i = 0; i < o.length; i++) {
+            o[i] = v[i + 1] - v[i];
         }
     }
 
-    public int[] getVi() {
-        return vi;
+    public int[] getv() {
+        return v;
     }
 
-    public int[] getOi() {
-        return oi;
+    public int[] geto() {
+        return o;
     }
 
-    public int getU() {
+    public int getu() {
         return u;
     }
 
-    public int getN() {
+    public int getn() {
         return n;
     }
 
