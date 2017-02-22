@@ -18,7 +18,6 @@ public class Ed25519SHA512 implements BaseSigner {
      * Group order
      */
     private static BigInteger q = new BigInteger("7237005577332262213973186563042994240857116359379907606001950938285454250989");
-    private SHA512Digest digest = new SHA512Digest();
 
     private static byte[] sha512(byte[] s) {
         SHA512Digest digest = new SHA512Digest();
