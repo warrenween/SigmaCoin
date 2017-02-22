@@ -195,7 +195,8 @@ public class Ed25519SHA512 implements BaseSigner {
         public byte[] arr;
 
         public Secret(BigInteger a, byte[] h) {
-
+            this.v = a;
+            this.arr = h;
         }
     }
 }
