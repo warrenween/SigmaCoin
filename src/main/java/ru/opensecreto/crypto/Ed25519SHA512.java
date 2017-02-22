@@ -62,7 +62,7 @@ public class Ed25519SHA512 implements BaseSigner {
     private static byte[] sha512(byte[] s) {
         SHA512Digest digest = new SHA512Digest();
         digest.update(s, 0, 32);
-        byte[] out = new byte[32];
+        byte[] out = new byte[64];
         digest.doFinal(out, 0);
         return out;
     }
