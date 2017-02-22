@@ -19,6 +19,8 @@ public class Ed25519SHA512 implements BaseSigner {
      */
     private static BigInteger q = new BigInteger("7237005577332262213973186563042994240857116359379907606001950938285454250989");
 
+    private static BigInteger modp_sqrt_m1 = new BigInteger("19681161376707505956807079304988542015446066515923890162744021073123829784752");
+
     private static byte[] sha512(byte[] s) {
         SHA512Digest digest = new SHA512Digest();
         digest.update(s, 0, 32);
@@ -37,6 +39,33 @@ public class Ed25519SHA512 implements BaseSigner {
         a = a.and(new BigInteger("28948022309329048855892746252171976963317496166410141009864396001978282409976"));
         a = a.or(new BigInteger("28948022309329048855892746252171976963317496166410141009864396001978282409984"));
         return a;
+    }
+
+    /**
+     * Computes Q = s * Q
+     */
+    private static Point pointMultiply(BigInteger s, Point P) {
+        Point Q = new Point(BigInteger.ZERO, BigInteger.ONE, BigInteger.ONE, BigInteger.ZERO);
+        while (s.compareTo(BigInteger.ZERO) > 0) {
+            if (s.and(BigInteger.ONE).compareTo(BigInteger.ZERO) > 0) {
+                Q = pointAdd(Q, P);
+            }
+            P = pointAdd(P, P);
+            s = s.shiftRight(1);
+        }
+        return Q;
+    }
+
+    private static boolean pointEquals(Point P, Point Q) {
+        //P.x * Q.z - Q.x * P.z) % p != 0
+        if (P.x.multiply(Q.z).subtract(Q.x.multiply(P.z)).mod(p).compareTo(BigInteger.ZERO) != 0) {
+            return false;
+        }
+        //P.y * Q.z - Q.y * P.z) % p != 0
+        if (P.y.multiply(Q.z).subtract(Q.y.multiply(P.z)).mod(p).compareTo(BigInteger.ZERO) != 0) {
+            return false;
+        }
+        return true;
     }
 
     private static Point pointAdd(Point P, Point Q) {
