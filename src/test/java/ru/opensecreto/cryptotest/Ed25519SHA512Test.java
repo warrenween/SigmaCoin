@@ -1,13 +1,13 @@
 package ru.opensecreto.cryptotest;
 
 import org.assertj.core.api.Assertions;
-import ru.opensecreto.crypto.Ed25519KeyGenerator;
+import ru.opensecreto.crypto.Ed25519SHA512;
 
-public class Ed25519KeyGeneratorTest {
+public class Ed25519SHA512Test {
 
     public void testPubKeyGeneration() {
         Assertions.assertThat(
-                Ed25519KeyGenerator.getPublicKey(new byte[]{
+                Ed25519SHA512.getPublicKey(new byte[]{
                         (byte) 0x9d, (byte) 0x61, (byte) 0xb1, (byte) 0x9d, (byte) 0xef, (byte) 0xfd, (byte) 0x5a, (byte) 0x60,
                         (byte) 0xba, (byte) 0x84, (byte) 0x4a, (byte) 0xf4, (byte) 0x92, (byte) 0xec, (byte) 0x2c, (byte) 0xc4,
                         (byte) 0x44, (byte) 0x49, (byte) 0xc5, (byte) 0x69, (byte) 0x7b, (byte) 0x32, (byte) 0x69, (byte) 0x19,
