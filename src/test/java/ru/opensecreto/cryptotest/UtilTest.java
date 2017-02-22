@@ -9,9 +9,8 @@ public class UtilTest {
 
     @Test
     public void testBigToLittleEndianConversion() {
-        assertThat(Util.bigToLittleEndian(new byte[]{0b00000000, 0b00000010})).inBinary().containsExactly(new byte[]{
-                0b01000000, 0b00000000
-        });
+        assertThat(Util.bigToLittleEndian(new byte[]{(byte) 0xA1, (byte) 0xB2, (byte) 0xC3, (byte) 0xD4})).inHexadecimal()
+                .containsExactly((byte) 0xD4, (byte) 0xC3, (byte) 0xB2, (byte) 0xA1);
     }
 
 
