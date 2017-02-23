@@ -79,4 +79,13 @@ public class MathTest {
                 .containsExactly(DatatypeConverter.parseHexBinary("999e2334297c5e8b25e730487dbba0a71d4a30c36cc64dc5f0af6e7955910f40"));
 
     }
+
+    @Test
+    public void testSha512modq() {
+        assertThat(Ed25519Math.sha512_modq(
+                DatatypeConverter.parseHexBinary("1234567890abcdef")
+        )).inHexadecimal().isEqualTo(
+                new BigInteger("5803724176970883683641592880329783986223242669612705683448510055637970858590")
+        );
+    }
 }

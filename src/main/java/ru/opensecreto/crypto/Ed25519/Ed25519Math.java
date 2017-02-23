@@ -30,6 +30,10 @@ class Ed25519Math {
         return x.modPow(p.subtract(new BigInteger("2")), p);
     }
 
+    public static BigInteger sha512_modq(byte[] s) {
+        return new BigInteger(1, Util.bigToLittleEndian(sha512(s))).mod(q);
+    }
+
     public static byte[] pointCompress(Point P) {
         BigInteger zinv = modp_inv(P.z);
         BigInteger x = P.x.multiply(zinv).mod(p);
@@ -55,7 +59,7 @@ class Ed25519Math {
 
     public static byte[] sha512(byte[] s) {
         SHA512Digest digest = new SHA512Digest();
-        digest.update(s, 0, 32);
+        digest.update(s, 0, s.length);
         byte[] out = new byte[64];
         digest.doFinal(out, 0);
         return out;
