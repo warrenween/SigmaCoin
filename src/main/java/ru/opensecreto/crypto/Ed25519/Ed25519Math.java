@@ -109,7 +109,7 @@ class Ed25519Math {
         //C = 2 * P.t * Q.t * d % p
         BigInteger C = new BigInteger("2").multiply(P.t).multiply(Q.t).multiply(d).mod(p);
         //D = 2 * P.z * Q.z % p
-        BigInteger D = new BigInteger("2").max(P.z).multiply(Q.z).mod(p);
+        BigInteger D = new BigInteger("2").multiply(P.z).multiply(Q.z).mod(p);
         //E = B-A
         BigInteger E = B.subtract(A);
         //F = D-C
