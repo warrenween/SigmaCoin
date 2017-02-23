@@ -2,6 +2,7 @@ package ru.opensecreto.crypto.Ed25519;
 
 import org.testng.annotations.Test;
 
+import javax.xml.bind.DatatypeConverter;
 import java.math.BigInteger;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -66,4 +67,16 @@ public class MathTest {
         );
     }
 
+    @Test
+    public void testPointCompress() {
+        assertThat(Ed25519Math.pointCompress(
+                new Point(new BigInteger("123456"),
+                        new BigInteger("654321"),
+                        new BigInteger("145236"),
+                        new BigInteger("415263"))
+        ))
+                .inHexadecimal()
+                .containsExactly(DatatypeConverter.parseHexBinary("999e2334297c5e8b25e730487dbba0a71d4a30c36cc64dc5f0af6e7955910f40"));
+
+    }
 }
