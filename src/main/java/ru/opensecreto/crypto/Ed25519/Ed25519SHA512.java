@@ -1,6 +1,8 @@
-package ru.opensecreto.crypto;
+package ru.opensecreto.crypto.Ed25519;
 
 import org.bouncycastle.crypto.digests.SHA512Digest;
+import ru.opensecreto.crypto.BaseSigner;
+import ru.opensecreto.crypto.Util;
 
 import java.math.BigInteger;
 

@@ -1,7 +1,7 @@
-package ru.opensecreto.cryptotest;
+package ru.opensecreto.cryptotest.Ed25519;
 
 import org.testng.annotations.Test;
-import ru.opensecreto.crypto.Ed25519SHA512;
+import ru.opensecreto.crypto.Ed25519.Ed25519SHA512;
 
 import javax.xml.bind.DatatypeConverter;
 
