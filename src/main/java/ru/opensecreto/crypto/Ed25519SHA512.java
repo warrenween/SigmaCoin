@@ -186,6 +186,11 @@ public class Ed25519SHA512 implements BaseSigner {
             this.z = z;
             this.t = t;
         }
+
+        @Override
+        public String toString() {
+            return "(" + x + ", " + y + ", " + z + ", " + t + ")";
+        }
     }
 
     private static class Secret {
