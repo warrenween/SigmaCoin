@@ -1,7 +1,6 @@
-package ru.opensecreto.cryptotest;
+package ru.opensecreto.crypto;
 
 import org.testng.annotations.Test;
-import ru.opensecreto.crypto.Util;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
