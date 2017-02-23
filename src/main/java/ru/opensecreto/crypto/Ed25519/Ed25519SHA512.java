@@ -1,6 +1,7 @@
 package ru.opensecreto.crypto.Ed25519;
 
 import ru.opensecreto.crypto.BaseSigner;
+import ru.opensecreto.crypto.Util;
 
 import java.math.BigInteger;
 
@@ -23,7 +24,18 @@ public class Ed25519SHA512 implements BaseSigner {
 
     @Override
     public byte[] sign(byte[] message, byte[] privKey) {
-        return new byte[0];
+        Secret tmp = Ed25519Math.secretExpand(privKey);
+        //-------
+        BigInteger a = tmp.v;
+        byte[] prefix = tmp.arr;
+        byte[] A = Ed25519Math.pointCompress(Ed25519Math.pointMultiply(a, Ed25519Math.G));
+        BigInteger r = Ed25519Math.sha512_modq(Util.arrayConcat(prefix, message));
+        Point R = Ed25519Math.pointMultiply(r, Ed25519Math.G);
+        byte[] Rs = Ed25519Math.pointCompress(R);
+        BigInteger h = Ed25519Math.sha512_modq(Util.arrayConcat(Util.arrayConcat(Rs, A), message));
+        //s = (r + h * a) % q
+        BigInteger s = h.multiply(a).add(r).mod(Ed25519Math.q);
+        return Util.arrayConcat(Rs, Util.bigToLittleEndian(s.toByteArray()));
     }
 
     @Override

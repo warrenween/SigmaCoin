@@ -44,5 +44,20 @@ public class Ed25519SHA512Test {
                 );
     }
 
+    @Test
+    public void testSigning() {
+        assertThat(
+                new Ed25519SHA512()
+                        .sign(
+                                new byte[0],
+                                DatatypeConverter.parseHexBinary("9d61b19deffd5a60ba844af492ec2cc44449c5697b326919703bac031cae7f60")
+                        )
+        )
+                .inHexadecimal()
+                .containsExactly(
+                        DatatypeConverter.parseHexBinary("e5564300c360ac729086e2cc806e828a84877f1eb8e5d974d873e065224901555fb8821590a33bacc61e39701cf9b46bd25bf5f0595bbe24655141438e7a100b")
+                );
+    }
+
 
 }
