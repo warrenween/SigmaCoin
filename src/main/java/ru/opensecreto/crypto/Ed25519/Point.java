@@ -34,7 +34,7 @@ class Point {
 
     @Override
     public boolean equals(Object obj) {
-        return (obj != null) && (obj instanceof Point) && (this == obj) &&
+        return (obj != null) && (obj instanceof Point) &&
                 (((Point) obj).x.equals(x)) && (((Point) obj).y.equals(y)) &&
                 (((Point) obj).z.equals(z)) && (((Point) obj).t.equals(t));
     }
