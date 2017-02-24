@@ -108,4 +108,16 @@ public class MathTest {
                 DatatypeConverter.parseHexBinary("9b4f0afe280b746a778684e75442502057b7473a03f08f96f5a38e9287e01f8f")
         );
     }
+
+    @Test
+    public void testPointDecompress() {
+        assertThat(Ed25519Math.pointDecompress(
+                DatatypeConverter.parseHexBinary("d75a980182b10ab7d54bfed3c964073a0ee172f3daa62325af021a68f707511a")
+        )).isEqualTo(new Point(
+                new BigInteger("38815646466658113194383306759739515082307681141926459231621296960732224964046"),
+                new BigInteger("11903303657706407974989296177215005343713679411332034699907763981919547054807"),
+                new BigInteger("1"),
+                new BigInteger("31275909032640112889229532081174740659065478602231738919115306243253221725764")
+        ));
+    }
 }
