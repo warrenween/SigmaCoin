@@ -31,21 +31,21 @@ class Ed25519Math {
     }
 
     public static BigInteger sha512_modq(byte[] s) {
-        return new BigInteger(1, Util.bigToLittleEndian(sha512(s))).mod(q);
+        return new BigInteger(1, Util.switchEndianness(sha512(s))).mod(q);
     }
 
     public static byte[] pointCompress(Point P) {
         BigInteger zinv = modp_inv(P.z);
         BigInteger x = P.x.multiply(zinv).mod(p);
         BigInteger y = P.y.multiply(zinv).mod(p);
-        return Util.arrayLim(Util.bigToLittleEndian(y.or(x.and(BigInteger.ONE).shiftLeft(255)).toByteArray()), 32);
+        return Util.arrayLim(Util.switchEndianness(y.or(x.and(BigInteger.ONE).shiftLeft(255)).toByteArray()), 32);
     }
 
     public static Point pointDecompress(byte[] s) {
         if (s.length != 32) {
             throw new IllegalArgumentException("s length must be 32");
         }
-        BigInteger y = new BigInteger(Util.bigToLittleEndian(s));
+        BigInteger y = new BigInteger(Util.switchEndianness(s));
         BigInteger sign = y.shiftRight(255);
         y = y.and(new BigInteger("57896044618658097711785492504343953926634992332820282019728792003956564819967"));
 
@@ -75,7 +75,7 @@ class Ed25519Math {
         byte[] hr = new byte[32];
         System.arraycopy(hm, 32, hr, 0, 32);
 
-        BigInteger a = new BigInteger(1, Util.bigToLittleEndian(hl));
+        BigInteger a = new BigInteger(1, Util.switchEndianness(hl));
         a = a.and(new BigInteger("28948022309329048855892746252171976963317496166410141009864396001978282409976"));
         a = a.or(new BigInteger("28948022309329048855892746252171976963317496166410141009864396001978282409984"));
         return new Secret(a, hr);

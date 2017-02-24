@@ -10,7 +10,7 @@ public class UtilTest {
 
     @Test
     public void testBigToLittleEndianConversion() {
-        assertThat(Util.bigToLittleEndian(
+        assertThat(Util.switchEndianness(
                 DatatypeConverter.parseHexBinary("a1b2c3d4")
         )).inHexadecimal().containsExactly(
                 DatatypeConverter.parseHexBinary("d4c3b2a1")
