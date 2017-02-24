@@ -120,4 +120,14 @@ public class MathTest {
                 new BigInteger("31275909032640112889229532081174740659065478602231738919115306243253221725764")
         ));
     }
+
+    @Test
+    public void testRecoverX() {
+        assertThat(Ed25519Math.recoverX(
+                new BigInteger("11903303657706407974989296177215005343713679411332034699907763981919547054807"),
+                BigInteger.ZERO
+        )).isEqualTo(
+                new BigInteger("38815646466658113194383306759739515082307681141926459231621296960732224964046")
+        );
+    }
 }
