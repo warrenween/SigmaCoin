@@ -39,7 +39,7 @@ public class Ed25519SHA512 implements BaseSigner {
     }
 
     @Override
-    public boolean verify(byte[] message, byte[] signature, byte[] pubKey) {
+    public boolean verify(byte[] pubKey, byte[] message, byte[] signature) {
         if (pubKey.length != 32) {
             throw new IllegalArgumentException("Bad public key length");
         }
