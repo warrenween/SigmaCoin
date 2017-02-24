@@ -40,7 +40,34 @@ public class Ed25519SHA512 implements BaseSigner {
 
     @Override
     public boolean verify(byte[] message, byte[] signature, byte[] pubKey) {
-        return false;
+        if (pubKey.length != 32) {
+            throw new IllegalArgumentException("Bad public key length");
+        }
+        if (signature.length != 64) {
+            throw new IllegalArgumentException("Bad signature length");
+        }
+        Point A = Ed25519Math.pointDecompress(pubKey);
+        if (A == null) {
+            return false;
+        }
+        byte[] Rs = new byte[32];
+        System.arraycopy(signature, 0, Rs, 0, 32);
+
+        Point R = Ed25519Math.pointDecompress(Rs);
+        if (R == null) {
+            return false;
+        }
+
+        byte[] sigR = new byte[32];
+        System.arraycopy(signature, 32, sigR, 0, 32);
+
+        BigInteger s = new BigInteger(1, Util.bigToLittleEndian(sigR));
+        BigInteger h = Ed25519Math.sha512_modq(Util.arrayConcat(Util.arrayConcat(Rs, pubKey), message));
+
+        Point sB = Ed25519Math.pointMultiply(s, Ed25519Math.G);
+        Point hA = Ed25519Math.pointMultiply(h, A);
+
+        return Ed25519Math.pointEquals(sB, Ed25519Math.pointAdd(R, hA));
     }
 
 }
