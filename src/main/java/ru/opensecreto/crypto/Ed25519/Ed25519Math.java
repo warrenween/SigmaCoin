@@ -149,7 +149,7 @@ class Ed25519Math {
         }
 
         if (x.and(BigInteger.ONE).compareTo(sign) != 0) {
-            x = x.subtract(p);
+            x = p.subtract(x);
         }
         return x;
     }
