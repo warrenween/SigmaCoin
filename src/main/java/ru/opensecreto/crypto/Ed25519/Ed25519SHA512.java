@@ -35,7 +35,7 @@ public class Ed25519SHA512 implements BaseSigner {
         BigInteger h = Ed25519Math.sha512_modq(Util.arrayConcat(Util.arrayConcat(Rs, A), message));
         //s = (r + h * a) % q
         BigInteger s = h.multiply(a).add(r).mod(Ed25519Math.q);
-        return Util.arrayConcat(Rs, Util.bigToLittleEndian(s.toByteArray()));
+        return Util.arrayConcat(Rs, Util.arrayLim(Util.bigToLittleEndian(s.toByteArray()), 32));
     }
 
     @Override
