@@ -38,7 +38,7 @@ class Ed25519Math {
         BigInteger zinv = modp_inv(P.z);
         BigInteger x = P.x.multiply(zinv).mod(p);
         BigInteger y = P.y.multiply(zinv).mod(p);
-        return Util.bigToLittleEndian(y.or(x.and(BigInteger.ONE).shiftLeft(255)).toByteArray());
+        return Util.arrayLim(Util.bigToLittleEndian(y.or(x.and(BigInteger.ONE).shiftLeft(255)).toByteArray()), 32);
     }
 
     public static Point pointDecompress(byte[] s) {
