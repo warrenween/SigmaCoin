@@ -140,7 +140,7 @@ class Ed25519Math {
             }
         }
 
-        BigInteger x = x2.modPow(new BigInteger("57896044618658097711785492504343953926634992332820282019728792003956564819952"), p);
+        BigInteger x = x2.modPow(new BigInteger("7237005577332262213973186563042994240829374041602535252466099000494570602494"), p);
         if (x.multiply(x).subtract(x2).mod(p).compareTo(BigInteger.ZERO) != 0) {
             x = x.multiply(modp_sqrt_m1).mod(p);
         }
