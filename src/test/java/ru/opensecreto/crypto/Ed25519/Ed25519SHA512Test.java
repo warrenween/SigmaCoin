@@ -68,6 +68,17 @@ public class Ed25519SHA512Test {
                 .containsExactly(
                         DatatypeConverter.parseHexBinary("92a009a9f0d4cab8720e820b5f642540a2b27b5416503f8fb3762223ebdb69da085ac1e43e15996e458f3613d0f11d8c387b2eaeb4302aeeb00d291612bb0c00")
                 );
+        assertThat(
+                new Ed25519SHA512()
+                        .sign(
+                                DatatypeConverter.parseHexBinary("af82"),
+                                DatatypeConverter.parseHexBinary("c5aa8df43f9f837bedb7442f31dcb7b166d38535076f094b85ce3a2e0b4458f7")
+                        )
+        )
+                .inHexadecimal()
+                .containsExactly(
+                        DatatypeConverter.parseHexBinary("6291d657deec24024827e69c3abe01a30ce548a284743a445e3680d7db5ac3ac18ff9b538d16f290ae67f760984dc6594a7c15e9716ed28dc027beceea1ec40a")
+                );
     }
 
 
