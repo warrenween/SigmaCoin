@@ -88,4 +88,17 @@ public class MathTest {
                 new BigInteger("5803724176970883683641592880329783986223242669612705683448510055637970858590")
         );
     }
+
+    @Test
+    public void testSecretExpand() {
+        Secret s = Ed25519Math.secretExpand(
+                DatatypeConverter.parseHexBinary("9d61b19deffd5a60ba844af492ec2cc44449c5697b326919703bac031cae7f60")
+        );
+        assertThat(s.v).isEqualTo(
+                new BigInteger("36144925721603087658594284515452164870581325872720374094707712194495455132720")
+        );
+        assertThat(s.arr).inHexadecimal().containsExactly(
+                DatatypeConverter.parseHexBinary("9b4f0afe280b746a778684e75442502057b7473a03f08f96f5a38e9287e01f8f")
+        );
+    }
 }

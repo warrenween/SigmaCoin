@@ -70,12 +70,15 @@ class Ed25519Math {
             throw new IllegalArgumentException("secret must have length of 32");
         }
         byte[] hm = sha512(secret);
-        byte[] h = new byte[32];
-        System.arraycopy(hm, 32, h, 0, 32);
-        BigInteger a = new BigInteger(1, Util.bigToLittleEndian(h));
+        byte[] hl = new byte[32];
+        System.arraycopy(hm, 0, hl, 0, 32);
+        byte[] hr = new byte[32];
+        System.arraycopy(hm, 32, hr, 0, 32);
+
+        BigInteger a = new BigInteger(1, Util.bigToLittleEndian(hl));
         a = a.and(new BigInteger("28948022309329048855892746252171976963317496166410141009864396001978282409976"));
         a = a.or(new BigInteger("28948022309329048855892746252171976963317496166410141009864396001978282409984"));
-        return new Secret(a, h);
+        return new Secret(a, hr);
     }
 
     /**
