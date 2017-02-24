@@ -10,8 +10,11 @@ public class UtilTest {
 
     @Test
     public void testBigToLittleEndianConversion() {
-        assertThat(Util.bigToLittleEndian(new byte[]{(byte) 0xA1, (byte) 0xB2, (byte) 0xC3, (byte) 0xD4})).inHexadecimal()
-                .containsExactly((byte) 0xD4, (byte) 0xC3, (byte) 0xB2, (byte) 0xA1);
+        assertThat(Util.bigToLittleEndian(
+                DatatypeConverter.parseHexBinary("a1b2c3d4")
+        )).inHexadecimal().containsExactly(
+                DatatypeConverter.parseHexBinary("d4c3b2a1")
+        );
     }
 
     @Test
