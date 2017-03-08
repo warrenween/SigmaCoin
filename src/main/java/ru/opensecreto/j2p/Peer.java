@@ -13,17 +13,18 @@ import java.nio.ByteBuffer;
 class Peer {
 
     public static final Logger LOGGER = LoggerFactory.getLogger(Peer.class);
-    public final static int PEER_DATA_SIZE = 29;
-    public final InetAddress address;
-    public int id;
-    public long unbanTime;
-    public boolean corrupted;
+    public final static int PEER_DATA_SIZE = 37;
 
-    public Peer(int id, InetAddress address, long unbanTime, boolean corrupted) {
-        this.id = id;
+    public final InetAddress address;
+    public int port;
+    public long lastSeen;
+    public long unbanTime;
+
+    public Peer(InetAddress address, int port, long lastSeen, long unbanTime) {
         this.address = address;
+        this.port = port;
+        this.lastSeen = lastSeen;
         this.unbanTime = unbanTime;
-        this.corrupted = corrupted;
     }
 
     public static Peer deserialize(byte[] data) {
@@ -32,9 +33,7 @@ class Peer {
                     PEER_DATA_SIZE, data.length, DatatypeConverter.printHexBinary(data));
             throw new IllegalArgumentException();
         }
-        boolean corrupted = false;
         ByteBuffer buffer = ByteBuffer.wrap(data);
-        int id = buffer.getInt();
         byte addressType = buffer.get();
         InetAddress address = null;
         if (addressType == 4) {
@@ -44,8 +43,7 @@ class Peer {
             try {
                 address = InetAddress.getByAddress(addr);
             } catch (UnknownHostException e) {
-                LOGGER.warn("Could not deserialize peer address. ID: {}", id, e);
-                corrupted = true;
+                LOGGER.warn("Could not deserialize peer address.", e);
             }
         } else if (addressType == 6) {
             byte[] addr = new byte[16];
@@ -53,24 +51,25 @@ class Peer {
             try {
                 address = InetAddress.getByAddress(addr);
             } catch (UnknownHostException e) {
-                LOGGER.warn("Could not deserialize peer address. ID: {}", id, e);
-                corrupted = true;
+                LOGGER.warn("Could not deserialize peer address.", e);
             }
         }
+        int port = buffer.getInt();
+        long lastSeen = buffer.getLong();
         long unbanTime = buffer.getLong();
-        return new Peer(id, address, unbanTime, corrupted);
+        return new Peer(address, port, lastSeen, unbanTime);
     }
 
     /**
-     * Format
-     * 4 bytes - id
+     * Format:
      * 1 byte - address type
      * 16 bytes - ip address (compatible with ipv6)
+     * 4 bytes - port
+     * 8 bytes - last seen
      * 8 bytes - unban time
      */
     public byte[] serialize() {
         ByteBuffer buffer = ByteBuffer.allocate(PEER_DATA_SIZE);
-        buffer.putInt(id);
         if (address instanceof Inet4Address) {
             buffer.put((byte) 4);
             buffer.put(address.getAddress());
@@ -80,9 +79,11 @@ class Peer {
             buffer.put((byte) 6);
             buffer.put(address.getAddress());
         } else {
-            LOGGER.warn("Unknown type of InetAddress. Id: {}, Address: {}", id, address);
+            LOGGER.warn("Unknown type of InetAddress. Address: {}", address);
             buffer.put(new byte[16]);
         }
+        buffer.putInt(port);
+        buffer.putLong(lastSeen);
         buffer.putLong(unbanTime);
         return buffer.array();
     }
