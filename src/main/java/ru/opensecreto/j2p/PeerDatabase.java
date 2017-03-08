@@ -34,6 +34,20 @@ class PeerDatabase implements Cloneable {
         opened = true;
     }
 
+    public Peer getPeer(int id) throws IOException {
+        byte[] data = new byte[Peer.PEER_DATA_SIZE];
+        try {
+            synchronized (db) {
+                db.seek(id * Peer.PEER_DATA_SIZE);
+                db.read(data);
+            }
+            return Peer.deserialize(data);
+        } catch (IOException e) {
+            LOGGER.error("Could not load peer from database.", e);
+            throw e;
+        }
+    }
+
     public void addPeer(Peer peer) throws IOException {
         byte[] data = peer.serialize();
         checkOpen();
@@ -50,6 +64,17 @@ class PeerDatabase implements Cloneable {
 
     private void checkOpen() {
         if (!opened) throw new IllegalStateException("Peer database file is not opened");
+    }
+
+    public int getPeerCount() throws IOException {
+        synchronized (db) {
+            try {
+                return (int) (db.length() / Peer.PEER_DATA_SIZE);
+            } catch (IOException e) {
+                LOGGER.error("Could not get peer count.", e);
+                throw e;
+            }
+        }
     }
 
     public void close() throws IOException {
