@@ -18,10 +18,6 @@ class PeerDatabase implements Cloneable {
     public PeerDatabase(File dbFile) throws IOException {
         this.dbFile = dbFile;
         if (!dbFile.isFile()) {
-            LOGGER.error("Could not open peer database. {} is not file", dbFile);
-            throw new RuntimeException(dbFile + " is not file");
-        }
-        if (!dbFile.exists()) {
             try {
                 dbFile.createNewFile();
             } catch (IOException e) {
