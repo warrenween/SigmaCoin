@@ -1,32 +1,36 @@
 package ru.opensecreto.j2p;
 
-import org.mapdb.DB;
-import org.mapdb.DBMaker;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
+import java.io.IOException;
 
 public class Controller {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(Controller.class);
 
     private final File databaseFile;
-    private DB database;
+    private PeerDatabase database;
 
-    public Controller(File databaseFile) {
+    public Controller(File databaseFile) throws IOException {
         this.databaseFile = databaseFile;
-        openDatabase();
+        try {
+            database = new PeerDatabase(databaseFile);
+        } catch (IOException e) {
+            LOGGER.error("Could not initialize peer database.", e);
+            throw e;
+        }
     }
 
-    private void openDatabase() {
-        database = DBMaker.fileDB(databaseFile)
-                .closeOnJvmShutdown()
-                .transactionEnable()
-                .make();    }
 
-    private void close() {
-        database.close();
+    private void close() throws IOException {
+        try {
+            database.close();
+        } catch (IOException e) {
+            LOGGER.error("Error while closing peer database.", e);
+            throw e;
+        }
     }
 
 }
