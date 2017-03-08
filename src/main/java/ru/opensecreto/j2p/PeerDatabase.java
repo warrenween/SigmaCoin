@@ -11,18 +11,23 @@ class PeerDatabase implements Cloneable {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(PeerDatabase.class);
 
-    private RandomAccessFile db;
-    private File dbFile;
+    private final RandomAccessFile db;
+    private final File dbFile;
     private boolean opened;
 
-    public PeerDatabase(File dbFile) {
+    public PeerDatabase(File dbFile) throws IOException {
         this.dbFile = dbFile;
-    }
-
-    public void open() throws IOException {
         if (!dbFile.isFile()) {
             LOGGER.error("Could not open peer database. {} is not file", dbFile);
             throw new RuntimeException(dbFile + " is not file");
+        }
+        if (!dbFile.exists()) {
+            try {
+                dbFile.createNewFile();
+            } catch (IOException e) {
+                LOGGER.error("Could not create file {}", dbFile, e);
+                throw e;
+            }
         }
         try {
             db = new RandomAccessFile(dbFile, "rw");
@@ -33,10 +38,36 @@ class PeerDatabase implements Cloneable {
         opened = true;
     }
 
+    public void addPeer(Peer peer) throws IOException {
+        byte[] data = peer.serialize();
+        checkOpen();
+        synchronized (db) {
+            try {
+                long writePosition;
+                if (peer.id < 0) {
+                    db.seek(db.length() - 1);
+                    peer.id = (int) ((db.length() - 1) / Peer.PEER_DATA_SIZE);
+                } else {
+                    db.seek(peer.id * Peer.PEER_DATA_SIZE);
+                }
+                db.write(data);
+            } catch (IOException e) {
+                LOGGER.error("Error while reading from peer database file. {}", db, e);
+                throw e;
+            }
+        }
+    }
+
+    private void checkOpen() {
+        if (!opened) throw new IllegalStateException("Peer database file is not opened");
+    }
+
     public void close() throws IOException {
         opened = false;
         try {
-            db.close();
+            synchronized (db) {
+                db.close();
+            }
         } catch (IOException e) {
             LOGGER.error("Could not close peer databse file");
             throw e;

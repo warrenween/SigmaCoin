@@ -14,9 +14,8 @@ class Peer {
 
     public static final Logger LOGGER = LoggerFactory.getLogger(Peer.class);
     public final static int PEER_DATA_SIZE = 29;
-
-    public final int id;
     public final InetAddress address;
+    public int id;
     public long unbanTime;
     public boolean corrupted;
 
