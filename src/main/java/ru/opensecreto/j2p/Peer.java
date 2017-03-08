@@ -87,4 +87,10 @@ class Peer {
         buffer.putLong(unbanTime);
         return buffer.array();
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        return (obj != null) && (obj instanceof Peer) &&
+                (((Peer) obj).address.equals(address)) && (((Peer) obj).port == port);
+    }
 }
