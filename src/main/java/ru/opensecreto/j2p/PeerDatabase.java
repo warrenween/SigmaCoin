@@ -43,13 +43,7 @@ class PeerDatabase implements Cloneable {
         checkOpen();
         synchronized (db) {
             try {
-                long writePosition;
-                if (peer.id < 0) {
-                    db.seek(db.length() - 1);
-                    peer.id = (int) ((db.length() - 1) / Peer.PEER_DATA_SIZE);
-                } else {
-                    db.seek(peer.id * Peer.PEER_DATA_SIZE);
-                }
+                db.seek(db.length() - 1);
                 db.write(data);
             } catch (IOException e) {
                 LOGGER.error("Error while reading from peer database file. {}", db, e);
