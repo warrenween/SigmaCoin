@@ -7,7 +7,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 
-class PeerDatabase implements Cloneable {
+class PeerDatabase {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(PeerDatabase.class);
 
