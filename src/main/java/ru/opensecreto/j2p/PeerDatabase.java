@@ -6,16 +6,16 @@ import org.slf4j.LoggerFactory;
 import java.io.File;
 import java.io.IOException;
 import java.io.RandomAccessFile;
-import java.util.ArrayList;
 import java.util.Collections;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 class PeerDatabase {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(PeerDatabase.class);
 
     private final RandomAccessFile db;
-    private final List<Peer> peers = Collections.synchronizedList(new ArrayList<>());
+    private final Set<Peer> peers = Collections.synchronizedSet(new HashSet<>());
     private final File dbFile;
     private boolean opened;
 
@@ -98,9 +98,9 @@ class PeerDatabase {
     }
 
     /**
-     * @see Collections#synchronizedList(List)
+     * @see Collections#synchronizedSet(Set)
      */
-    public List<Peer> getPeers() {
+    public Set<Peer> getPeers() {
         return peers;
     }
 
