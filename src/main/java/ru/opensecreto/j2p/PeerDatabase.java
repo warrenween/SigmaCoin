@@ -38,7 +38,7 @@ class PeerDatabase {
         opened = true;
     }
 
-    public void loadPeers() {
+    public void loadPeers() throws IOException {
         try {
             synchronized (db) {
                 byte[] data = new byte[Peer.PEER_DATA_SIZE];
@@ -49,6 +49,7 @@ class PeerDatabase {
             }
         } catch (IOException e) {
             LOGGER.error("Error while loading peers.", e);
+            throw e;
         }
     }
 
@@ -74,7 +75,7 @@ class PeerDatabase {
         }
     }
 
-    public void save() {
+    public void save() throws IOException {
         byte[] data;
         synchronized (peers) {
             data = new byte[peers.size() * Peer.PEER_DATA_SIZE];
@@ -93,6 +94,7 @@ class PeerDatabase {
                 db.write(data);
             } catch (IOException e) {
                 LOGGER.error("Error while saving peere list.", e);
+                throw e;
             }
         }
     }
