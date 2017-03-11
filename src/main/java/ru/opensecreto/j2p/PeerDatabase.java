@@ -6,12 +6,16 @@ import org.slf4j.LoggerFactory;
 import java.io.File;
 import java.io.IOException;
 import java.io.RandomAccessFile;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 class PeerDatabase {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(PeerDatabase.class);
 
     private final RandomAccessFile db;
+    private final List<Peer> peers = Collections.synchronizedList(new ArrayList<>());
     private final File dbFile;
     private boolean opened;
 
@@ -87,6 +91,36 @@ class PeerDatabase {
             LOGGER.error("Could not close peer databse file");
             throw e;
         }
+    }
+
+    public void save() {
+        byte[] data;
+        synchronized (peers) {
+            data = new byte[peers.size() * Peer.PEER_DATA_SIZE];
+            final int[] offset = {0};
+            peers.forEach(peer -> {
+                byte[] temp = peer.serialize();
+                System.arraycopy(temp, 0, data, offset[0], Peer.PEER_DATA_SIZE);
+                offset[0] += Peer.PEER_DATA_SIZE;
+            });
+        }
+        synchronized (db) {
+            try {
+                checkOpen();
+                db.setLength(0);
+                db.seek(0);
+                db.write(data);
+            } catch (IOException e) {
+                LOGGER.error("Error while saving peere list.", e);
+            }
+        }
+    }
+
+    /**
+     * @see Collections#synchronizedList(List)
+     */
+    public List<Peer> getPeers() {
+        return peers;
     }
 
 }
