@@ -9,14 +9,16 @@ import java.io.IOException;
 public class Controller {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(Controller.class);
+    public static final int DEFAULT_PORT = 23456;
 
-    private final File databaseFile;
+    private final File peerDatabaseFile;
     private PeerDatabase database;
 
-    public Controller(File databaseFile) throws IOException {
-        this.databaseFile = databaseFile;
+    public Controller(File peerDatabaseFile) throws IOException {
+        this.peerDatabaseFile = peerDatabaseFile;
         try {
-            database = new PeerDatabase(databaseFile);
+            database = new PeerDatabase(peerDatabaseFile);
+            database.loadPeers();
         } catch (IOException e) {
             LOGGER.error("Could not initialize peer database.", e);
             throw e;
