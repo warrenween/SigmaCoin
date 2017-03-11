@@ -1,0 +1,24 @@
+apply plugin: 'java'
+
+repositories {
+    jcenter()
+    mavenLocal()
+    mavenCentral()
+    maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
+    maven { url "https://oss.sonatype.org/content/repositories/releases/" }
+    maven { url "https://jitpack.io" }
+    maven { url "http://dl.bintray.com/typesafe/maven-releases" }
+}
+
+dependencies {
+    compile parent
+    compile 'org.slf4j:slf4j-jdk14:1.7.24'
+}
+
+task run(type: JavaExec) {
+    if (project.hasProperty("args")) {
+        args project.property('args')
+    }
+    classpath sourceSets.main.runtimeClasspath
+    main 'Main'
+}

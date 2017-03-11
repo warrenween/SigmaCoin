@@ -13,6 +13,18 @@ repositories {
     maven { url "http://dl.bintray.com/typesafe/maven-releases" }
 }
 
+sourceSets {
+    integrationTest {
+        java {
+            srcDir 'src/sandbox/java'
+        }
+        resources {
+            srcDir 'src/sandbox/resources'
+        }
+        compileClasspath += sourceSets.main.runtimeClasspath
+    }
+}
+
 dependencies {
     compile "org.slf4j:slf4j-api:1.7.24"
     compile "ru.opensecreto:openutils:1.0"
