@@ -19,14 +19,13 @@ public class TestPeerDatabase {
 
         db.addPeer(peer1);
         db.addPeer(peer2);
+        db.save();
+        db.close();
 
-        Assertions.assertThat(db.getPeerCount()).isEqualTo(2);
+        PeerDatabase db2 = new PeerDatabase(dbFile);
+        db2.loadPeers();
 
-        Peer peerLoaded1 = db.getPeer(0);
-        Peer peerLoaded2 = db.getPeer(1);
-
-        Assertions.assertThat(peerLoaded1).isEqualTo(peer1);
-        Assertions.assertThat(peerLoaded2).isEqualTo(peer2);
+        Assertions.assertThat(db2.getPeers()).containsOnly(peer1, peer2);
     }
 
 }

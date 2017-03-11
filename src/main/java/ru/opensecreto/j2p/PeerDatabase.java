@@ -38,47 +38,28 @@ class PeerDatabase {
         opened = true;
     }
 
-    public Peer getPeer(int id) throws IOException {
-        byte[] data = new byte[Peer.PEER_DATA_SIZE];
+    public void loadPeers() {
         try {
             synchronized (db) {
-                db.seek(id * Peer.PEER_DATA_SIZE);
-                db.read(data);
+                byte[] data = new byte[Peer.PEER_DATA_SIZE];
+                while (db.length() - db.getFilePointer() >= Peer.PEER_DATA_SIZE) {
+                    db.read(data);
+                    peers.add(Peer.deserialize(data));
+                }
             }
-            return Peer.deserialize(data);
         } catch (IOException e) {
-            LOGGER.error("Could not load peer from database.", e);
-            throw e;
+            LOGGER.error("Error while loading peers.", e);
         }
     }
 
     public void addPeer(Peer peer) throws IOException {
-        byte[] data = peer.serialize();
-        checkOpen();
-        synchronized (db) {
-            try {
-                db.seek(db.length());
-                db.write(data);
-            } catch (IOException e) {
-                LOGGER.error("Error while reading from peer database file. {}", db, e);
-                throw e;
-            }
+        synchronized (peers) {
+            peers.add(peer);
         }
     }
 
     private void checkOpen() {
         if (!opened) throw new IllegalStateException("Peer database file is not opened");
-    }
-
-    public int getPeerCount() throws IOException {
-        synchronized (db) {
-            try {
-                return (int) (db.length() / Peer.PEER_DATA_SIZE);
-            } catch (IOException e) {
-                LOGGER.error("Could not get peer count.", e);
-                throw e;
-            }
-        }
     }
 
     public void close() throws IOException {
