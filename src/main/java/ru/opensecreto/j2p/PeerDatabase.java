@@ -88,7 +88,7 @@ class PeerDatabase {
                 db.close();
             }
         } catch (IOException e) {
-            LOGGER.error("Could not close peer databse file");
+            LOGGER.error("Could not close peer database file");
             throw e;
         }
     }
