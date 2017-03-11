@@ -93,7 +93,7 @@ class PeerDatabase {
                 db.seek(0);
                 db.write(data);
             } catch (IOException e) {
-                LOGGER.error("Error while saving peere list.", e);
+                LOGGER.error("Error while saving peer list.", e);
                 throw e;
             }
         }
