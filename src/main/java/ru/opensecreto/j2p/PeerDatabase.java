@@ -6,12 +6,16 @@ import org.slf4j.LoggerFactory;
 import java.io.File;
 import java.io.IOException;
 import java.io.RandomAccessFile;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 
 class PeerDatabase {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(PeerDatabase.class);
 
     private final RandomAccessFile db;
+    private final Set<Peer> peers = Collections.synchronizedSet(new HashSet<>());
     private final File dbFile;
     private boolean opened;
 
@@ -34,47 +38,28 @@ class PeerDatabase {
         opened = true;
     }
 
-    public Peer getPeer(int id) throws IOException {
-        byte[] data = new byte[Peer.PEER_DATA_SIZE];
+    public void loadPeers() {
         try {
             synchronized (db) {
-                db.seek(id * Peer.PEER_DATA_SIZE);
-                db.read(data);
+                byte[] data = new byte[Peer.PEER_DATA_SIZE];
+                while (db.length() - db.getFilePointer() >= Peer.PEER_DATA_SIZE) {
+                    db.read(data);
+                    peers.add(Peer.deserialize(data));
+                }
             }
-            return Peer.deserialize(data);
         } catch (IOException e) {
-            LOGGER.error("Could not load peer from database.", e);
-            throw e;
+            LOGGER.error("Error while loading peers.", e);
         }
     }
 
     public void addPeer(Peer peer) throws IOException {
-        byte[] data = peer.serialize();
-        checkOpen();
-        synchronized (db) {
-            try {
-                db.seek(db.length());
-                db.write(data);
-            } catch (IOException e) {
-                LOGGER.error("Error while reading from peer database file. {}", db, e);
-                throw e;
-            }
+        synchronized (peers) {
+            peers.add(peer);
         }
     }
 
     private void checkOpen() {
         if (!opened) throw new IllegalStateException("Peer database file is not opened");
-    }
-
-    public int getPeerCount() throws IOException {
-        synchronized (db) {
-            try {
-                return (int) (db.length() / Peer.PEER_DATA_SIZE);
-            } catch (IOException e) {
-                LOGGER.error("Could not get peer count.", e);
-                throw e;
-            }
-        }
     }
 
     public void close() throws IOException {
@@ -84,9 +69,39 @@ class PeerDatabase {
                 db.close();
             }
         } catch (IOException e) {
-            LOGGER.error("Could not close peer databse file");
+            LOGGER.error("Could not close peer database file");
             throw e;
         }
+    }
+
+    public void save() {
+        byte[] data;
+        synchronized (peers) {
+            data = new byte[peers.size() * Peer.PEER_DATA_SIZE];
+            final int[] offset = {0};
+            peers.forEach(peer -> {
+                byte[] temp = peer.serialize();
+                System.arraycopy(temp, 0, data, offset[0], Peer.PEER_DATA_SIZE);
+                offset[0] += Peer.PEER_DATA_SIZE;
+            });
+        }
+        synchronized (db) {
+            try {
+                checkOpen();
+                db.setLength(0);
+                db.seek(0);
+                db.write(data);
+            } catch (IOException e) {
+                LOGGER.error("Error while saving peere list.", e);
+            }
+        }
+    }
+
+    /**
+     * @see Collections#synchronizedSet(Set)
+     */
+    public Set<Peer> getPeers() {
+        return peers;
     }
 
 }
