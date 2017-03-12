@@ -22,21 +22,23 @@ public class WelcomeRunnable implements Runnable {
 
     @Override
     public void run() {
-        ThreadGroup connectionGroup = new ThreadGroup("peer connection");
-        ServerSocket serverSocket = null;
+        ServerSocket serverSocket;
         try {
-            serverSocket = new ServerSocket(welcomePort);
+            serverSocket = new ServerSocket(Controller.DEFAULT_PORT, 10);
         } catch (IOException e) {
-            LOGGER.error("Could not setup ServerSocket", e);
+            LOGGER.error("Could not setup ServerSocket. Accepting incoming connections is not possible.", e);
             Thread.currentThread().interrupt();
+            return;
         }
         while (!Thread.currentThread().isInterrupted()) {
             try {
                 Socket socket = serverSocket.accept();
+                LOGGER.debug("Accepted connection from {}.", socket.getInetAddress());
                 handler.handle(socket, controller);
             } catch (IOException e) {
                 LOGGER.error("Exception was thrown while waiting for connections.", e);
                 Thread.currentThread().interrupt();
+                return;
             }
         }
     }
