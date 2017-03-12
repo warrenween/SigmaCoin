@@ -28,7 +28,6 @@ public class WelcomeRunnable implements Runnable {
             serverSocket = new ServerSocket(welcomePort);
         } catch (IOException e) {
             LOGGER.error("Could not setup ServerSocket", e);
-        } finally {
             Thread.currentThread().interrupt();
         }
         while (!Thread.currentThread().isInterrupted()) {
@@ -37,7 +36,6 @@ public class WelcomeRunnable implements Runnable {
                 handler.handle(socket, controller);
             } catch (IOException e) {
                 LOGGER.error("Exception was thrown while waiting for connections.", e);
-            } finally {
                 Thread.currentThread().interrupt();
             }
         }
