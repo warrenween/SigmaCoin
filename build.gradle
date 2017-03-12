@@ -28,6 +28,7 @@ sourceSets {
 dependencies {
     compile "org.slf4j:slf4j-api:1.7.24"
     compile "ru.opensecreto:openutils:1.0"
+    compile 'org.bitlet:weupnp:0.1.4'
 
     testCompile 'org.assertj:assertj-core:3.5.2'
     testCompile 'org.testng:testng:6.9.12'
