@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.InetAddress;
 
 public class Controller {
 
@@ -13,6 +14,7 @@ public class Controller {
     private final File peerDatabaseFile;
     private final int port;
     private PeerDatabase database;
+    private InetAddress address;
 
     public Controller(File peerDatabaseFile, ConnectionHandler handler) throws IOException {
         this(peerDatabaseFile, DEFAULT_PORT, handler, true);
@@ -44,6 +46,10 @@ public class Controller {
             LOGGER.error("Error while closing peer database.", e);
             throw e;
         }
+    }
+
+    public void updateExternalAddress(InetAddress newAddress) {
+        this.address = newAddress;
     }
 
 }

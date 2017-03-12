@@ -1,4 +1,7 @@
 apply plugin: 'java'
+apply plugin: 'application'
+
+mainClassName = 'Main'
 
 repositories {
     jcenter()
@@ -13,13 +16,14 @@ repositories {
 dependencies {
     compile parent
     compile "org.slf4j:slf4j-api:1.7.24"
-    compile 'org.slf4j:slf4j-jdk14:1.7.24'
+    //compile 'org.slf4j:slf4j-jdk14:1.7.24'
+    compile 'org.slf4j:slf4j-simple:1.7.24'
+
 }
 
-task run(type: JavaExec) {
+run {
     if (project.hasProperty("args")) {
         args project.property('args')
     }
-    classpath sourceSets.main.runtimeClasspath
-    main 'Main'
+    workingDir "$buildDir"
 }
