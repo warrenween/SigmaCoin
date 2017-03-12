@@ -15,10 +15,10 @@ public class Controller {
     private PeerDatabase database;
 
     public Controller(File peerDatabaseFile, ConnectionHandler handler) throws IOException {
-        this(peerDatabaseFile, DEFAULT_PORT, handler);
+        this(peerDatabaseFile, DEFAULT_PORT, handler, true);
     }
 
-    public Controller(File peerDatabaseFile, int port, ConnectionHandler handler) throws IOException {
+    public Controller(File peerDatabaseFile, int port, ConnectionHandler handler, boolean daemon) throws IOException {
         this.peerDatabaseFile = peerDatabaseFile;
         try {
             database = new PeerDatabase(peerDatabaseFile);
@@ -31,7 +31,7 @@ public class Controller {
 
         WelcomeRunnable welcome = new WelcomeRunnable(port, this, handler);
         Thread welcomeThread = new Thread(welcome);
-        welcomeThread.setDaemon(true);
+        welcomeThread.setDaemon(daemon);
         welcomeThread.setName("PeersWelcomer");
         welcomeThread.start();
     }
