@@ -1,5 +1,6 @@
 import org.slf4j.LoggerFactory;
 import ru.opensecreto.j2p.Controller;
+import ru.opensecreto.j2p.WelcomeRunnable;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -11,7 +12,7 @@ public class ControllerTest {
     private static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(ControllerTest.class);
 
     public void run() throws IOException {
-        new Controller(new File("peers.db"), Controller.DEFAULT_PORT,
+        new Controller(new File("peers.db"), WelcomeRunnable.DEFAULT_PORT,
                 (socket, controller) -> {
                     Thread thread = new Thread(() -> {
                         System.out.println(socket.getLocalAddress());

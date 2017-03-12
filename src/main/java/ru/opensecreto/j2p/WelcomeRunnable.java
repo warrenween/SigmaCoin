@@ -9,6 +9,7 @@ import java.net.Socket;
 
 public class WelcomeRunnable implements Runnable {
 
+    public static final int DEFAULT_PORT = 23456;
     private final static Logger LOGGER = LoggerFactory.getLogger(WelcomeRunnable.class);
     private final int welcomePort;
     private final Controller controller;
@@ -24,7 +25,7 @@ public class WelcomeRunnable implements Runnable {
     public void run() {
         ServerSocket serverSocket;
         try {
-            serverSocket = new ServerSocket(Controller.DEFAULT_PORT, 10);
+            serverSocket = new ServerSocket(DEFAULT_PORT, 10);
         } catch (IOException e) {
             LOGGER.error("Could not setup ServerSocket. Accepting incoming connections is not possible.", e);
             Thread.currentThread().interrupt();
