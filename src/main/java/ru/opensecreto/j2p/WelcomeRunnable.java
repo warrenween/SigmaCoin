@@ -25,7 +25,7 @@ public class WelcomeRunnable implements Runnable {
     public void run() {
         ServerSocket serverSocket;
         try {
-            serverSocket = new ServerSocket(DEFAULT_PORT, 10);
+            serverSocket = new ServerSocket(welcomePort, 10);
         } catch (IOException e) {
             LOGGER.error("Could not setup ServerSocket. Accepting incoming connections is not possible.", e);
             Thread.currentThread().interrupt();
