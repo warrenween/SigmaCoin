@@ -1,13 +1,15 @@
-package org.opensecreto.sigmascript;
+package org.opensecreto.sigmascript.bytecode;
+
+import com.google.common.primitives.Longs;
 
 import javax.xml.bind.DatatypeConverter;
 
-import static org.opensecreto.sigmascript.Opcodes.*;
+import static org.opensecreto.sigmascript.bytecode.Opcodes.*;
 
 public class BytecodeExecutor {
 
-    protected Stack stack = new Stack(Config.MAX_STACK);
-    protected byte[] memory = new byte[Config.MAX_MEMORY];
+    protected Stack stack = new Stack();
+    protected Memory memory = new Memory();
     protected StorageManager storage;
 
     protected boolean run = true;
@@ -17,11 +19,11 @@ public class BytecodeExecutor {
      * false - executing bytecode in storage
      * true - executing bytecode in memory.
      */
-    boolean modeMemory = false;
+    protected boolean modeMemory = false;
     /**
      * Указатель на команду, которая выполнится при <b>следующей</b> итерации.
      */
-    long pointer = 0;
+    protected long pointer = 0;
 
     public BytecodeExecutor(StorageManager storage) {
         this.storage = storage;
@@ -49,23 +51,21 @@ public class BytecodeExecutor {
                 stack.pop();
                 break;
             case OP_SET_POINTER:
-                if (stack.getSize() < 4) {
-                    throw new ExecutionException("OP_SET_POINTER requires 4 byte address in stack. Now " + stack.getSize());
+                if (stack.getSize() < 8) {
+                    throw new ExecutionException("OP_SET_POINTER requires 8 byte address in stack. Now " + stack.getSize());
                 }
-                pointer = ((stack.get(0) & 0xffL) << 24) |
-                        ((stack.get(1) & 0xffL) << 16) |
-                        ((stack.get(0) & 0xffL) << 8) |
-                        (stack.get(2) & 0xffL);
+                pointer = Longs.fromBytes(stack.get(0), stack.get(1), stack.get(2), stack.get(3),
+                        stack.get(4), stack.get(5), stack.get(6), stack.get(7));
                 break;
             case OP_MEM_PUT:
-                if (stack.getSize() < 4) {
-                    throw new IllegalStateException("To perform OP_MEM_PUT at least stack must contain at least 4 bytes");
+                if (stack.getSize() < 9) {
+                    throw new IllegalStateException("To perform OP_MEM_PUT at least stack must contain at least 9 bytes");
                 }
                 byte value = stack.get(0);
-                int index = ((stack.get(1) & 0xff) << 16) |
-                        ((stack.get(2) & 0xff) << 8) |
-                        (stack.get(3) & 0xff);
-                memory[index] = value;
+                memory.put(Longs.fromBytes(
+                        stack.get(1), stack.get(2), stack.get(3), stack.get(4),
+                        stack.get(5), stack.get(6), stack.get(7), stack.get(8)
+                ), value);
                 break;
             default:
                 throw new ExecutionException(
@@ -88,16 +88,14 @@ public class BytecodeExecutor {
         modeMemory = false;
         finished = false;
         run = true;
-        for (int i = 0; i < memory.length; i++) {
-            memory[i] = 0;
-        }
+        memory = new Memory();
     }
 
     public byte[] getStack() {
         return stack.getStack();
     }
 
-    public byte[] getMemory() {
+    public Memory getMemory() {
         return memory;
     }
 
@@ -113,15 +111,13 @@ public class BytecodeExecutor {
     protected byte next() {
         byte result;
         if (modeMemory) {
-            if (pointer >= Config.MAX_MEMORY) {
-                throw new ExecutionException("Invalid memory address " + pointer + ". "
-                        + "Max " + (Config.MAX_MEMORY - 1) + ".");
+            if (pointer < 0) {
+                throw new ExecutionException("Pointer is negative");
             }
-            result = memory[(int) pointer];
+            result = memory.get(pointer);
         } else {
-            if (pointer >= Config.STORAGE_MAX_SIZE) {
-                throw new ExecutionException("Invalid storage address " + pointer + ". "
-                        + "Max " + (Config.STORAGE_MAX_SIZE - 1) + ".");
+            if (pointer < 0) {
+                throw new ExecutionException("Pointer is negative.");
             }
             result = storage.getByte(pointer);
         }

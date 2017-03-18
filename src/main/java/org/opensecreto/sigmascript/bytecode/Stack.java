@@ -1,19 +1,15 @@
-package org.opensecreto.sigmascript;
+package org.opensecreto.sigmascript.bytecode;
+
+import java.nio.ByteBuffer;
 
 public class Stack {
 
-    protected byte[] stack;
     protected int stackSize = 0;
 
-    public Stack(int size) {
-        stack = new byte[size];
-    }
+    protected ByteBuffer stack = ByteBuffer.allocateDirect(32);
 
     public void push(byte aByte) {
-        if (stackSize >= stack.length) {
-            throw new IllegalStateException("Can not push. Maximum size reached");
-        }
-        stack[stackSize] = aByte;
+        stack.put(stackSize, aByte);
         stackSize++;
     }
 
@@ -32,10 +28,13 @@ public class Stack {
      * @return байт с индексом
      */
     public byte get(int index) {
-        if (index >= stackSize) {
-            throw new IllegalArgumentException("Can not get byte. Index is too big,");
+        if (index < 0) {
+            throw new IllegalArgumentException("Index is negative.");
         }
-        return stack[stackSize - 1 - index];
+        if (stackSize - index < 1) {
+            throw new IllegalArgumentException("Index is too big.");
+        }
+        return stack.get(stackSize - 1 - index);
     }
 
     public void pop() {
@@ -50,11 +49,14 @@ public class Stack {
      */
     public byte[] getStack() {
         byte[] result = new byte[stackSize];
-        System.arraycopy(stack, 0, result, 0, stackSize);
+        for (int i = 0; i < stackSize; i++) {
+            result[i] = stack.get(i);
+        }
         return result;
     }
 
     public void reset() {
+        stack = ByteBuffer.allocateDirect(32);
         stackSize = 0;
     }
 
