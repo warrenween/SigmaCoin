@@ -24,6 +24,7 @@ ext {
     groovyVersion = '2.4.7'
     commonsLangVersion = '3.5'
     slf4jVersion = '1.7.24'
+    openUtilsVersion = '1.0'
 
     //test libraries
     assertjVersion = '3.5.2'
@@ -41,6 +42,7 @@ dependencies {
     compile "org.bouncycastle:bcprov-jdk15on:$bouncyCastleVersion"
     compile "org.apache.commons:commons-lang3:$commonsLangVersion"
     compile "org.slf4j:slf4j-api:$slf4jVersion"
+    compile "ru.opensecreto:openutils:$openUtilsVersion"
 
     testCompile "org.assertj:assertj-core:$assertjVersion"
     testCompile "org.testng:testng:$testngVersion"
