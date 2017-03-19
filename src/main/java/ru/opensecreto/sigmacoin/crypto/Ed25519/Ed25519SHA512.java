@@ -1,7 +1,7 @@
 package ru.opensecreto.sigmacoin.crypto.Ed25519;
 
-import ru.opensecreto.crypto.BaseSigner;
-import ru.opensecreto.crypto.Util;
+import ru.opensecreto.sigmacoin.crypto.BaseSigner;
+import ru.opensecreto.sigmacoin.crypto.Util;
 
 import java.math.BigInteger;
 
