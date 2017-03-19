@@ -1,4 +1,4 @@
-package ru.opensecreto.TheGreatBlockchainArchive;
+package ru.opensecreto.sigmacoin.TheGreatBlockchainArchive;
 
 import javax.xml.bind.DatatypeConverter;
 import java.io.File;

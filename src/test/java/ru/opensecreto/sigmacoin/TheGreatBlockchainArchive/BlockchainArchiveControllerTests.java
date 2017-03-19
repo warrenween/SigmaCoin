@@ -1,4 +1,4 @@
-package ru.opensecreto.TheGreatBlockchainArchive;
+package ru.opensecreto.sigmacoin.TheGreatBlockchainArchive;
 
 import org.assertj.core.api.Assertions;
 import org.assertj.core.api.Fail;

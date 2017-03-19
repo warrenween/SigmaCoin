@@ -1,6 +1,6 @@
-package ru.opensecreto.TheGreatBlockchainArchive;
+package ru.opensecreto.sigmacoin.TheGreatBlockchainArchive;
 
-import ru.opensecreto.TheGreatBlockchainArchive.exceptions.ImmutableFieldException;
+import ru.opensecreto.sigmacoin.TheGreatBlockchainArchive.exceptions.ImmutableFieldException;
 
 public class BlockchainArchiveConfiguration {
 
