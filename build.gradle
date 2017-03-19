@@ -1,84 +1,100 @@
-allprojects {
-    apply plugin: 'jacoco'
+apply plugin: 'java'
+apply plugin: 'jacoco'
 
-    ext {
-        guavaVersion = '19.0'
-        bouncyCastleVersion = '1.55'
-        gsonVersion = '2.8.0'
-        groovyVersion = '2.4.7'
+ext {
+    guavaVersion = '19.0'
+    bouncyCastleVersion = '1.55'
+    gsonVersion = '2.8.0'
+    groovyVersion = '2.4.7'
 
-        //coretest libraries
-        assertjVersion = '3.5.2'
-        assertjSwingVersion = '3.4.0'
-        testngVersion = '6.9.12'
-    }
-
-    repositories {
-        jcenter()
-        mavenLocal()
-        mavenCentral()
-        maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
-        maven { url "https://oss.sonatype.org/content/repositories/releases/" }
-        maven { url "https://jitpack.io" }
-        maven { url "http://dl.bintray.com/typesafe/maven-releases" }
-    }
+    //coretest libraries
+    assertjVersion = '3.5.2'
+    assertjSwingVersion = '3.4.0'
+    testngVersion = '6.9.12'
 }
 
-subprojects {
-    apply plugin: 'java'
-    apply plugin: 'jacoco'
+repositories {
+    jcenter()
+    mavenLocal()
+    mavenCentral()
+    maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
+    maven { url "https://oss.sonatype.org/content/repositories/releases/" }
+    maven { url "https://jitpack.io" }
+    maven { url "http://dl.bintray.com/typesafe/maven-releases" }
+}
 
-    task coverage(type: JacocoReport) {
-        dependsOn test
+dependencies {
+    compile 'com.github.OpenSecreto:TheGreatBlockchainArchive:v1.1'
+    compile "com.google.guava:guava:$guavaVersion"
+    compile "com.google.code.gson:gson:$gsonVersion"
+
+    compile "org.codehaus.groovy:groovy-all:$groovyVersion"
+
+    compile "org.bouncycastle:bcprov-jdk15on:$bouncyCastleVersion"
+
+    testCompile "org.assertj:assertj-core:$assertjVersion"
+    testCompile "org.testng:testng:$testngVersion"
+
+    compile 'org.apache.commons:commons-lang3:3.5'
+    compile "org.slf4j:slf4j-api:1.7.24"
+
+    testCompile "org.mockito:mockito-core:2.+"
+    testCompile "org.slf4j:slf4j-simple:1.7.24"
+}
+
+
+
+task coverage(type: JacocoReport) {
+    dependsOn test
+}
+
+test.useTestNG()
+task prepareTestWorkingDir {
+    File outputDir = new File("$buildDir/coretest-output")
+    if (!outputDir.exists()) {
+        outputDir.mkdirs();
+    } else {
+        GFileUtils.cleanDirectory(outputDir)
+    }
+    test.workingDir = outputDir
+}
+test.dependsOn.add(prepareTestWorkingDir)
+
+tasks.withType(Test) {
+    int time = 0;
+    afterTest { desc, result ->
+        time += result.getEndTime() - result.getStartTime()
     }
 
-    test.useTestNG()
-    task prepareTestWorkingDir {
-        File outputDir = new File("$buildDir/coretest-output")
-        if (!outputDir.exists()) {
-            outputDir.mkdirs();
-        } else {
-            GFileUtils.cleanDirectory(outputDir)
-        }
-        test.workingDir = outputDir
-    }
-    test.dependsOn.add(prepareTestWorkingDir)
+    testLogging {
+        // set options for log level LIFECYCLE
+        events "passed", "skipped", "failed", "standardOut"
+        showExceptions true
+        exceptionFormat "full"
+        showCauses true
+        showStackTraces true
 
-    tasks.withType(Test) {
-        int time = 0;
-        afterTest { desc, result ->
-            time += result.getEndTime() - result.getStartTime()
-        }
-
-        testLogging {
-            // set options for log level LIFECYCLE
-            events "passed", "skipped", "failed", "standardOut"
-            showExceptions true
+        // set options for log level DEBUG and INFO
+        debug {
+            events "started", "passed", "skipped", "failed", "standardOut", "standardError"
             exceptionFormat "full"
-            showCauses true
-            showStackTraces true
+        }
+        info.events = debug.events
+        info.exceptionFormat = debug.exceptionFormat
 
-            // set options for log level DEBUG and INFO
-            debug {
-                events "started", "passed", "skipped", "failed", "standardOut", "standardError"
-                exceptionFormat "full"
-            }
-            info.events = debug.events
-            info.exceptionFormat = debug.exceptionFormat
-
-            afterSuite { desc, result ->
-                if (!desc.parent) { // will match the outermost suite
-                    def output = "Results: ${result.resultType} (${result.testCount} tests, ${result.successfulTestCount} successes, ${result.failedTestCount} failures, ${result.skippedTestCount} skipped)" +
-                            " Time: " + time / 1000 + "secs "
-                    def startItem = '|  ', endItem = '  |'
-                    def repeatLength = startItem.length() + output.length() + endItem.length()
-                    println('\n' + ('-' * repeatLength) + '\n' + startItem + output + endItem + '\n' + ('-' * repeatLength))
-                }
+        afterSuite { desc, result ->
+            if (!desc.parent) { // will match the outermost suite
+                def output = "Results: ${result.resultType} (${result.testCount} tests, ${result.successfulTestCount} successes, ${result.failedTestCount} failures, ${result.skippedTestCount} skipped)" +
+                        " Time: " + time / 1000 + "secs "
+                def startItem = '|  ', endItem = '  |'
+                def repeatLength = startItem.length() + output.length() + endItem.length()
+                println('\n' + ('-' * repeatLength) + '\n' + startItem + output + endItem + '\n' + ('-' * repeatLength))
             }
         }
     }
-
 }
+
+
 
 apply plugin: 'eclipse'
 apply plugin: 'idea'
