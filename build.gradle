@@ -1,16 +1,21 @@
+apply plugin: 'eclipse'
+apply plugin: 'idea'
 apply plugin: 'java'
-apply plugin: 'jacoco'
 
 ext {
     guavaVersion = '19.0'
     bouncyCastleVersion = '1.55'
     gsonVersion = '2.8.0'
     groovyVersion = '2.4.7'
+    commonsLangVersion = '3.5'
+    slf4jVersion = '1.7.24'
 
-    //coretest libraries
+    //test libraries
     assertjVersion = '3.5.2'
     assertjSwingVersion = '3.4.0'
     testngVersion = '6.9.12'
+    mockitoCoreVersion = '2.+'
+    slf4jSimpleVersion = '1.7.24'
 }
 
 repositories {
@@ -27,25 +32,15 @@ dependencies {
     compile 'com.github.OpenSecreto:TheGreatBlockchainArchive:v1.1'
     compile "com.google.guava:guava:$guavaVersion"
     compile "com.google.code.gson:gson:$gsonVersion"
-
     compile "org.codehaus.groovy:groovy-all:$groovyVersion"
-
     compile "org.bouncycastle:bcprov-jdk15on:$bouncyCastleVersion"
+    compile "org.apache.commons:commons-lang3:$commonsLangVersion"
+    compile "org.slf4j:slf4j-api:$slf4jVersion"
 
     testCompile "org.assertj:assertj-core:$assertjVersion"
     testCompile "org.testng:testng:$testngVersion"
-
-    compile 'org.apache.commons:commons-lang3:3.5'
-    compile "org.slf4j:slf4j-api:1.7.24"
-
-    testCompile "org.mockito:mockito-core:2.+"
-    testCompile "org.slf4j:slf4j-simple:1.7.24"
-}
-
-
-
-task coverage(type: JacocoReport) {
-    dependsOn test
+    testCompile "org.mockito:mockito-core:$mockitoCoreVersion"
+    testCompile "org.slf4j:slf4j-simple:$slf4jSimpleVersion"
 }
 
 test.useTestNG()
@@ -92,35 +87,4 @@ tasks.withType(Test) {
             }
         }
     }
-}
-
-
-
-apply plugin: 'eclipse'
-apply plugin: 'idea'
-
-task jacocoMerge(type: JacocoMerge) {
-    executionData project(':core').test, project(':desktopguitest').test
-}
-
-task coverage(type: JacocoReport) {
-    onlyIf { true }
-    dependsOn jacocoMerge
-    reports.xml.enabled true
-}
-
-configurations { codacy }
-dependencies {
-    codacy 'com.github.codacy:codacy-coverage-reporter:-SNAPSHOT'
-}
-task sendCoverageToCodacy(type: JavaExec) {
-    dependsOn coverage
-    main = "com.codacy.CodacyCoverageReporter"
-    classpath = configurations.codacy
-    args = [
-            "-l",
-            "Java",
-            "-r",
-            "${buildDir}/reports/jacoco/coretest/jacocoTestReport.xml"
-    ]
 }
