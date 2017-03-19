@@ -1,6 +1,13 @@
+buildscript {
+    dependencies {
+        classpath files('gradle/gradle-witness.jar')
+    }
+}
+
 apply plugin: 'eclipse'
 apply plugin: 'idea'
 apply plugin: 'java'
+apply plugin: 'witness'
 
 repositories {
     jcenter()
@@ -40,6 +47,17 @@ dependencies {
     testCompile "org.mockito:mockito-core:$mockitoCoreVersion"
     testCompile "org.slf4j:slf4j-simple:$slf4jSimpleVersion"
     testCompile "org.fluttercode.datafactory:datafactory:$datafactoryVersion"
+}
+
+dependencyVerification {
+    verify = [
+            'com.google.guava:guava:58d4cc2e05ebb012bbac568b032f75623be1cb6fb096f3c60c72a86f7f057de4',
+            'com.google.code.gson:gson:c6221763bd79c4f1c3dc7f750b5f29a0bb38b367b81314c4f71896e340c40825',
+            'org.codehaus.groovy:groovy-all:688f42c55454bf48ff0f293cc6320ed703c0c861c8e5d903c35d3b3f85b0029e',
+            'org.bouncycastle:bcprov-jdk15on:c08450a176b55c7ef4847111550eb247e5912ad450c8c225fa2f7cab74ce608b',
+            'org.apache.commons:commons-lang3:8ac96fc686512d777fca85e144f196cd7cfe0c0aec23127229497d1a38ff651c',
+            'org.slf4j:slf4j-api:baf3c7fe15fefeaf9e5b000d94547379dc48370f22a8797e239c127e7d7756ec',
+    ]
 }
 
 test.useTestNG()
