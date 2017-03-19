@@ -16,10 +16,12 @@ repositories {
 dependencies {
     compile 'org.apache.commons:commons-lang3:3.5'
     compile 'com.google.guava:guava:21.0'
+    compile "org.slf4j:slf4j-api:1.7.24"
 
     testCompile 'org.assertj:assertj-core:3.5.2'
     testCompile 'org.testng:testng:6.9.12'
     testCompile "org.mockito:mockito-core:2.+"
+    testCompile "org.slf4j:slf4j-simple:1.7.24"
 }
 
 jacocoTestReport.dependsOn.add(test)
