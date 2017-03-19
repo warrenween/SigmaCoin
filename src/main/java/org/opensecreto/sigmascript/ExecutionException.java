@@ -1,4 +1,4 @@
-package org.opensecreto.sigmascript.bytecode;
+package org.opensecreto.sigmascript;
 
 public class ExecutionException extends RuntimeException {
 

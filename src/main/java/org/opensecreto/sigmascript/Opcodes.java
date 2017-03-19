@@ -1,4 +1,4 @@
-package org.opensecreto.sigmascript.bytecode;
+package org.opensecreto.sigmascript;
 
 import com.google.common.collect.BiMap;
 import com.google.common.collect.ImmutableBiMap;
@@ -33,11 +33,7 @@ public final class Opcodes {
      * | <- старший байт нового указателя<p>
      * |<p>
      * |<p>
-     * |<p>
-     * |<p>
-     * |<p>
-     * |<p>
-     * | <- младший байто нового указателя<p>
+     * | <- младший байто овго указателя<p>
      */
     public static final byte OP_SET_POINTER = 0x03;
 

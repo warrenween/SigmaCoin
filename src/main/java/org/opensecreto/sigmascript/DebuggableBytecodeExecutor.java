@@ -1,4 +1,4 @@
-package org.opensecreto.sigmascript.bytecode;
+package org.opensecreto.sigmascript;
 
 import java.util.ArrayList;
 import java.util.List;
