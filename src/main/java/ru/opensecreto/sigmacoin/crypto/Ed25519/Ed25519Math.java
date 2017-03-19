@@ -1,4 +1,4 @@
-package ru.opensecreto.crypto.Ed25519;
+package ru.opensecreto.sigmacoin.crypto.Ed25519;
 
 import org.bouncycastle.crypto.digests.SHA512Digest;
 import ru.opensecreto.crypto.Util;

@@ -1,4 +1,4 @@
-package ru.opensecreto.crypto.Ed25519;
+package ru.opensecreto.sigmacoin.crypto.Ed25519;
 
 import java.math.BigInteger;
 

@@ -1,4 +1,4 @@
-package ru.opensecreto.crypto;
+package ru.opensecreto.sigmacoin.crypto;
 
 public class Util {
 

@@ -1,4 +1,4 @@
-package ru.opensecreto.crypto;
+package ru.opensecreto.sigmacoin.crypto;
 
 import org.testng.annotations.Test;
 
