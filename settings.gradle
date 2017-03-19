@@ -1,1 +1,2 @@
-include 'core', 'desktopgui'
+include 'core', 'desktopguitest'
+rootProject.name = 'SigmaCoin'
