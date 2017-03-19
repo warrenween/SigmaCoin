@@ -1,8 +1,8 @@
-package org.opensecreto.sigmascript;
+package ru.opensecreto.sigmacoin.sigmascript;
 
 import javax.xml.bind.DatatypeConverter;
 
-import static org.opensecreto.sigmascript.Opcodes.*;
+import static ru.opensecreto.sigmacoin.sigmascript.Opcodes.*;
 
 public class BytecodeExecutor {
 

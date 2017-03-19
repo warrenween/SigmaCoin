@@ -1,4 +1,4 @@
-package org.opensecreto.sigmascript;
+package ru.opensecreto.sigmacoin.sigmascript;
 
 public final class Config {
 

@@ -1,4 +1,4 @@
-package org.opensecreto.sigmascript;
+package ru.opensecreto.sigmacoin.sigmascript;
 
 import java.util.ArrayList;
 import java.util.List;

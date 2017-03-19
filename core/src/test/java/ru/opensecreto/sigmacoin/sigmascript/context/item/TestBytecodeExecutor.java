@@ -1,4 +1,4 @@
-package org.opensecreto.sigmascript.context.item;
+package ru.opensecreto.sigmacoin.sigmascript.context.item;
 
 import org.opensecreto.sigmascript.DebuggableBytecodeExecutor;
 import org.opensecreto.sigmascript.StorageManager;
