@@ -1,7 +1,7 @@
 package ru.opensecreto.sigmacoin.sigmascript.context.item;
 
-import org.opensecreto.sigmascript.DebuggableBytecodeExecutor;
-import org.opensecreto.sigmascript.StorageManager;
+import ru.opensecreto.sigmacoin.sigmascript.DebuggableBytecodeExecutor;
+import ru.opensecreto.sigmacoin.sigmascript.StorageManager;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
@@ -9,7 +9,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-import static org.opensecreto.sigmascript.Opcodes.*;
+import static ru.opensecreto.sigmacoin.sigmascript.Opcodes.*;
 
 @Test
 public class TestBytecodeExecutor {
