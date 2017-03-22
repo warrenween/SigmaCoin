@@ -17,5 +17,7 @@ public class MessageType {
             {0b0000_0001, 0b0001_0000};
     public static final byte[] INDICATION =
             {0b0000_0000, 0b0001_0000};
+    public static final byte[] MASK =
+            {0b0000_0001, 0b0001_0000};
 
 }
