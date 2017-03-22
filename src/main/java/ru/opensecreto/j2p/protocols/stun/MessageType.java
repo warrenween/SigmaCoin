@@ -3,7 +3,7 @@ package ru.opensecreto.j2p.protocols.stun;
 /**
  * Defined by RFC5389, p 10-11
  * <p>
- * Values are already encoded to structure of header.
+ * Values are already encoded to structure of message.
  */
 public class MessageType {
 
