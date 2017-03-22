@@ -5,7 +5,7 @@ package ru.opensecreto.j2p.protocols.stun;
  * <p>
  * Values are already encoded to structure of message.
  */
-public class MessageType {
+public class MessageClass {
 
     //type bits
     //                 *       *
