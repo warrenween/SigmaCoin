@@ -28,7 +28,6 @@ sourceSets {
 dependencies {
     compile "org.slf4j:slf4j-api:1.7.24"
     compile "ru.opensecreto:openutils:1.0"
-    compile files('libs/jstun-0.7.3.jar')
 
     testCompile 'org.assertj:assertj-core:3.5.2'
     testCompile 'org.testng:testng:6.9.12'
