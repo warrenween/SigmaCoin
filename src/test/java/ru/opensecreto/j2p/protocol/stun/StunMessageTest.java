@@ -16,11 +16,11 @@ public class StunMessageTest {
                 MessageClass.REQUEST,
                 MessageMethod.BINDING,
                 DatatypeConverter.parseHexBinary("64744968693676426f393366"),
-                DatatypeConverter.parseHexBinary("802f0016687474703a2f2f6c6f" +
-                        "6f63616c686f73743a333030302f00")
+                DatatypeConverter.parseHexBinary("802f0016687474703a2f2f6c" +
+                        "6f63616c686f73743a333030302f0000")
         ).getStunMessage()).inHexadecimal().containsExactly(
                 DatatypeConverter.parseHexBinary("0001001c2112a4426474496869367642" +
-                        "6f393366802f0016687474703a2f2f6c6f6f63616c686f73743a333030302f00")
+                        "6f393366802f0016687474703a2f2f6c6f63616c686f73743a333030302f0000")
         );
     }
 
