@@ -10,6 +10,10 @@ public class StunMessage {
 
     private final byte[] stunMessage;
 
+    public StunMessage(byte[] message) {
+        this.stunMessage = Util.cloneArray(message);
+    }
+
     public StunMessage(byte[] messageClass, byte[] messageMethod, byte[] id, byte[] message) throws IllegalArgumentException {
         if (messageClass == null) throw new NullPointerException("messageClass is null");
         if (messageMethod == null) throw new NullPointerException("messageMethod is null");
@@ -44,5 +48,4 @@ public class StunMessage {
     public byte[] getStunMessage() {
         return Util.cloneArray(stunMessage);
     }
-
 }
