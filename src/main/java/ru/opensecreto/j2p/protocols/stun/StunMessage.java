@@ -14,6 +14,10 @@ public class StunMessage {
         this.stunMessage = Util.cloneArray(message);
     }
 
+    public StunMessage(MessageClass messageClass, MessageMethod messageMethod, byte[] id, byte[] message) {
+        this(MessageClass.convert(messageClass), MessageMethod.convert(messageMethod), id, message);
+    }
+
     public StunMessage(byte[] messageClass, byte[] messageMethod, byte[] id, byte[] message) throws IllegalArgumentException {
         if (messageClass == null) throw new NullPointerException("messageClass is null");
         if (messageMethod == null) throw new NullPointerException("messageMethod is null");
@@ -21,10 +25,10 @@ public class StunMessage {
         if (message == null) throw new NullPointerException("message is null");
 
         if (messageClass.length != 2) throw new IllegalArgumentException("wrong messageClass length");
-        if (!(Arrays.equals(messageClass, MessageClass.REQUEST)) ||
-                Arrays.equals(messageClass, MessageClass.SUCCESS) ||
-                Arrays.equals(messageClass, MessageClass.FAILURE) ||
-                Arrays.equals(messageClass, MessageClass.INDICATION))
+        if (!(Arrays.equals(messageClass, MessageClass.REQUEST_BYTES)) ||
+                Arrays.equals(messageClass, MessageClass.SUCCESS_BYTES) ||
+                Arrays.equals(messageClass, MessageClass.FAILURE_BYTES) ||
+                Arrays.equals(messageClass, MessageClass.INDICATION_BYTES))
             throw new IllegalArgumentException("bad messageClass");
         if (messageMethod.length != 2) throw new IllegalArgumentException("bad messageMethod");
         if (id.length != 12) throw new IllegalArgumentException("bad id length");
