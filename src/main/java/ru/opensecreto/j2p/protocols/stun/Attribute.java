@@ -33,4 +33,15 @@ public class Attribute {
         return buf.array();
     }
 
+    public void encode(byte[] out, int offset) {
+        if (data.length > 65536) {
+            throw new IllegalStateException("data array is too big");
+        }
+        ByteBuffer buf = ByteBuffer.wrap(out,offset, getSize());
+
+        buf.putShort(type);
+        buf.putShort((short) data.length);
+        buf.put(data);
+    }
+
 }
