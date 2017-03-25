@@ -1,5 +1,7 @@
 package ru.opensecreto.j2p.protocols.stun;
 
+import java.util.Arrays;
+
 /**
  * Defined by RFC5389, p 10-11
  * <p>
@@ -28,6 +30,14 @@ public enum MessageClass {
         else if (messageClass == MessageClass.FAILURE) return MessageClass.FAILURE_BYTES;
         else if (messageClass == MessageClass.INDICATION) return MessageClass.INDICATION_BYTES;
         else throw new IllegalArgumentException("bad messageClass");
+    }
+
+    public static MessageClass convert(byte[] classData) {
+        if (Arrays.equals(classData , MessageClass.REQUEST_BYTES)) return MessageClass.REQUEST;
+        else if (Arrays.equals(classData , MessageClass.SUCCESS_BYTES)) return MessageClass.SUCCESS;
+        else if (Arrays.equals(classData , MessageClass.FAILURE_BYTES)) return MessageClass.FAILURE;
+        else if (Arrays.equals(classData , MessageClass.INDICATION_BYTES)) return MessageClass.INDICATION;
+        else throw new IllegalArgumentException("bad classData");
     }
 
 }

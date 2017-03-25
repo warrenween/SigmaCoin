@@ -52,4 +52,12 @@ public class StunMessage {
     public byte[] getStunMessage() {
         return Util.cloneArray(stunMessage);
     }
+
+    public MessageClass getMessageClass() {
+        byte[] classData = new byte[2];
+        classData[0] = (byte) (stunMessage[0] & MessageClass.MASK[0]);
+        classData[1] = (byte) (stunMessage[1] & MessageClass.MASK[1]);
+        return MessageClass.convert(classData);
+    }
+
 }
