@@ -1,15 +1,24 @@
 package ru.opensecreto.j2p.protocols.stun;
 
 import java.nio.ByteBuffer;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class Attribute {
 
     public static final short MAPPED_ADDRESS = 0x0001;
+    public static final short USERNAME = 0x00060;
 
     public byte[] data;
     public final short type;
 
     public Attribute(short type) {
+        this.type = type;
+    }
+
+    public Attribute(short type, byte[] data) {
+        this.data = data;
         this.type = type;
     }
 
@@ -31,6 +40,11 @@ public class Attribute {
         buf.putShort((short) data.length);
         buf.put(data);
         return buf.array();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        return (obj != null) && (obj instanceof Attribute) && Arrays.equals(((Attribute) obj).data, data);
     }
 
     public void encode(byte[] out, int offset) {
@@ -57,6 +71,26 @@ public class Attribute {
             offset += attribute.getSize();
         }
         return data;
+    }
+
+    public static List<Attribute> decode(byte[] data) {
+        ByteBuffer buf = ByteBuffer.wrap(data);
+        List<Attribute> attributes = new ArrayList<>();
+        while (buf.hasRemaining()) {
+            short type = buf.getShort();
+            int length = buf.getShort();
+            byte[] attrData = new byte[length];
+            buf.get(attrData);
+
+            if (buf.position() % 4 != 0) {
+                buf.position(4 - (buf.position() % 4));
+            }
+
+            Attribute attribute = new Attribute(type);
+            attribute.data = attrData;
+            attributes.add(attribute);
+        }
+        return attributes;
     }
 
 }

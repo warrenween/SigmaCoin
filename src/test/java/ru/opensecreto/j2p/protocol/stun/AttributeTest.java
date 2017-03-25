@@ -4,6 +4,10 @@ import org.assertj.core.api.Assertions;
 import org.testng.annotations.Test;
 import ru.opensecreto.j2p.protocols.stun.Attribute;
 
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+
 public class AttributeTest {
 
     @Test
@@ -23,4 +27,13 @@ public class AttributeTest {
         Assertions.assertThat(attribute.encode()).hasSize(8);
     }
 
+    @Test
+    public void testEncoding() {
+        List<Attribute> attributes = Arrays.asList(
+                new Attribute(Attribute.MAPPED_ADDRESS, new byte[]{16, 28}),
+                new Attribute(Attribute.USERNAME, new byte[]{9, 8, 7, 11, 13})
+        );
+
+        Assertions.assertThat(Attribute.decode(Attribute.encodeAll(attributes))).containsExactlyElementsOf(attributes);
+    }
 }
