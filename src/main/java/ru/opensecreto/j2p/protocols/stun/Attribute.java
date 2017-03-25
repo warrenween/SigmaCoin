@@ -37,11 +37,26 @@ public class Attribute {
         if (data.length > 65536) {
             throw new IllegalStateException("data array is too big");
         }
-        ByteBuffer buf = ByteBuffer.wrap(out,offset, getSize());
+        ByteBuffer buf = ByteBuffer.wrap(out, offset, getSize());
 
         buf.putShort(type);
         buf.putShort((short) data.length);
         buf.put(data);
+    }
+
+    public static byte[] encodeAll(Iterable<Attribute> attributes) {
+        int dataSize = 0;
+        for (Attribute attribute : attributes) {
+            dataSize += attribute.getSize();
+        }
+
+        int offset = 0;
+        byte[] data = new byte[dataSize];
+        for (Attribute attribute : attributes) {
+            attribute.encode(data, offset);
+            offset += attribute.getSize();
+        }
+        return data;
     }
 
 }

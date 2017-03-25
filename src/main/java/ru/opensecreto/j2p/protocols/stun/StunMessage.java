@@ -23,6 +23,10 @@ public class StunMessage {
         this(MessageClass.convert(messageClass), MessageMethod.convert(messageMethod), id, message);
     }
 
+    public StunMessage(MessageClass messageClass, MessageMethod messageMethod, byte[] id, Iterable<Attribute> attributes) {
+        this(MessageClass.convert(messageClass), MessageMethod.convert(messageMethod), id, Attribute.encodeAll(attributes));
+    }
+
     public StunMessage(byte[] messageClass, byte[] messageMethod, byte[] id, byte[] message) throws IllegalArgumentException {
         if (messageClass == null) throw new NullPointerException("messageClass is null");
         if (messageMethod == null) throw new NullPointerException("messageMethod is null");
