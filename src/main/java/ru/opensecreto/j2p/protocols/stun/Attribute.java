@@ -83,7 +83,7 @@ public class Attribute {
             buf.get(attrData);
 
             if (buf.position() % 4 != 0) {
-                buf.position(4 - (buf.position() % 4));
+                buf.position(buf.position() + 4 - (buf.position() % 4));
             }
 
             Attribute attribute = new Attribute(type);
