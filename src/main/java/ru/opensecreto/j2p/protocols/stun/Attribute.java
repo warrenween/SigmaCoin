@@ -13,16 +13,19 @@ public class Attribute {
         this.type = type;
     }
 
+    public int getSize() {
+        if (data.length % 4 == 0) {
+            return 4 + data.length;
+        } else {
+            return 4 + data.length + (4 - data.length % 4);
+        }
+    }
+
     public byte[] encode() {
         if (data.length > 65536) {
             throw new IllegalStateException("data array is too big");
         }
-        ByteBuffer buf;
-        if (data.length % 4 == 0) {
-            buf = ByteBuffer.allocate(4 + data.length);
-        } else {
-            buf = ByteBuffer.allocate(4 + data.length + (4 - data.length % 4));
-        }
+        ByteBuffer buf = ByteBuffer.allocate(getSize());
 
         buf.putShort(type);
         buf.putShort((short) data.length);
