@@ -11,7 +11,12 @@ public class StunMessage {
     private final byte[] stunMessage;
 
     public StunMessage(byte[] message) {
-        this.stunMessage = Util.cloneArray(message);
+        this(message, 0, message.length);
+    }
+
+    public StunMessage(byte[] message, int offset, int length) {
+        this.stunMessage = new byte[length];
+        System.arraycopy(message, offset, stunMessage, 0, length);
     }
 
     public StunMessage(MessageClass messageClass, MessageMethod messageMethod, byte[] id, byte[] message) {
