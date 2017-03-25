@@ -80,7 +80,7 @@ public class StunMessage {
 
     public byte[] getID() {
         byte[] id = new byte[12];
-        System.arraycopy(stunMessage, 8, stunMessage, 0, id.length);
+        System.arraycopy(stunMessage, 8, id, 0, id.length);
         return id;
     }
 }
