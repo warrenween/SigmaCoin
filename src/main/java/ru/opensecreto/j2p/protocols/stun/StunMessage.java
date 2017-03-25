@@ -67,4 +67,9 @@ public class StunMessage {
         return MessageMethod.convert(methodData);
     }
 
+    public byte[] getData() {
+        byte[] result = new byte[stunMessage.length - 20];
+        System.arraycopy(stunMessage, 20, result, 0, result.length);
+        return result;
+    }
 }

@@ -51,6 +51,11 @@ public class StunMessageTest {
         Assertions.assertThat(new StunMessage(DatatypeConverter.parseHexBinary(
                 "0001001c2112a44264744968693676426f393366802f0016687474703a2f2f6c6f63616c686f73743a333030302f0000"
         )).getMessageMethod()).isEqualTo(MessageMethod.BINDING);
+        Assertions.assertThat(new StunMessage(DatatypeConverter.parseHexBinary(
+                "0001001c2112a44264744968693676426f393366802f0016687474703a2f2f6c6f63616c686f73743a333030302f0000"
+        )).getData()).isEqualTo(DatatypeConverter.parseHexBinary(
+                "802f0016687474703a2f2f6c6f63616c686f73743a333030302f0000"
+        ));
     }
 
 }
