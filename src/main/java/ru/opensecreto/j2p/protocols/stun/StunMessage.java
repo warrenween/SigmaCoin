@@ -60,4 +60,11 @@ public class StunMessage {
         return MessageClass.convert(classData);
     }
 
+    public MessageMethod getMessageMethod() {
+        byte[] methodData = new byte[2];
+        methodData[0] = (byte) (stunMessage[0] & MessageMethod.MASK[0]);
+        methodData[1] = (byte) (stunMessage[1] & MessageMethod.MASK[1]);
+        return MessageMethod.convert(methodData);
+    }
+
 }

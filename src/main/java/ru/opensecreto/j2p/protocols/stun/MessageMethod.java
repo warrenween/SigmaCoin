@@ -1,5 +1,7 @@
 package ru.opensecreto.j2p.protocols.stun;
 
+import java.util.Arrays;
+
 public enum MessageMethod {
 
     BINDING;
@@ -15,4 +17,8 @@ public enum MessageMethod {
         else throw new IllegalArgumentException("bad messageMethod");
     }
 
+    public static MessageMethod convert(byte[] methodData) {
+        if (Arrays.equals(methodData, MessageMethod.BINDING_BYTES)) return MessageMethod.BINDING;
+        else throw new IllegalArgumentException("bad methodData");
+    }
 }
