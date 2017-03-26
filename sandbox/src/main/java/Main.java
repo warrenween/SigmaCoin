@@ -13,13 +13,16 @@ public class Main {
         LOGGER = LoggerFactory.getLogger(Main.class);
     }
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws IOException, InterruptedException {
         switch (args[0]) {
             case "localAddress":
                 new TestAddress().run();
                 break;
             case "controllerTest":
                 new ControllerTest().run();
+                break;
+            case "stunIP":
+                new TestGettingIpFromStun().run();
                 break;
             default:
                 System.out.println("Unknown: " + args[0]);
