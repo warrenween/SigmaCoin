@@ -16,6 +16,8 @@ public class Attribute {
     public static final short NONCE = 0x0015;
     public static final short XOR_MAPPED_ADDRESS = 0x0020;
     public static final short SOFTWARE = (short) 0x8022;
+    public static final short ALTERNATE_SERVER = (short) 0x8023;
+    public static final short FINGERPRINT = (short) 0x8028;
 
     public byte[] data;
     public final short type;
