@@ -6,10 +6,7 @@ import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.UnknownHostException;
 import java.security.SecureRandom;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 import java.util.concurrent.*;
 
 public class TestGettingIpFromStun {
@@ -40,10 +37,12 @@ public class TestGettingIpFromStun {
                 executorService.shutdownNow();
                 return;
             } else {
-                messages.forEach(stunMessageFuture -> {
+                Iterator<Future<StunMessage>> iterator = messages.iterator();
+                while (iterator.hasNext()) {
+                    Future<StunMessage> item = iterator.next();
                     try {
-                        if (stunMessageFuture.isDone() && stunMessageFuture.get() != null) {
-                            StunMessage message = stunMessageFuture.get();
+                        if (item.isDone() && item.get() != null) {
+                            StunMessage message = item.get();
                             List<Attribute> attributes = Attribute.decode(message.getData());
                             attributes.forEach(attribute -> {
                                 try {
@@ -56,12 +55,13 @@ public class TestGettingIpFromStun {
                                     LOGGER.error("Could not parse ip", e);
                                 }
                             });
-                            messages.remove(stunMessageFuture);
+                            iterator.remove();
                         }
                     } catch (Throwable e) {
                         LOGGER.error("Could not finish task", e);
+                        iterator.remove();
                     }
-                });
+                }
             }
         }
         executorService.shutdownNow();
