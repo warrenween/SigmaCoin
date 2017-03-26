@@ -19,7 +19,7 @@ public class Servers {
     public static final List<InetSocketAddress> servers = Collections.unmodifiableList(new ArrayList<InetSocketAddress>() {{
         Scanner in = null;
         try {
-            in = new Scanner(new File("stun-servers.txt"));
+            in = new Scanner(getClass().getClassLoader().getResourceAsStream("stun-servers.txt"));
             while (in.hasNextLine()) {
                 String line = in.nextLine();
                 String[] data = line.split(":");
@@ -29,8 +29,6 @@ public class Servers {
                     LOGGER.warn("Error while parsing stun servers. \"{}\"", line, e);
                 }
             }
-        } catch (FileNotFoundException e) {
-            LOGGER.warn("Error while loading stun servers.");
         } finally {
             try {
                 if (in != null) in.close();
