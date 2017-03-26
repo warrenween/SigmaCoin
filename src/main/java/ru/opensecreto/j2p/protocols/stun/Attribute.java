@@ -15,6 +15,7 @@ public class Attribute {
     public static final short REALM = 0x0014;
     public static final short NONCE = 0x0015;
     public static final short XOR_MAPPED_ADDRESS = 0x0020;
+    public static final short SOFTWARE = (short) 0x8022;
 
     public byte[] data;
     public final short type;
