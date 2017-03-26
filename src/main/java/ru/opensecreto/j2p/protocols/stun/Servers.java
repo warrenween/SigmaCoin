@@ -16,7 +16,7 @@ public class Servers {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(Servers.class);
 
-    public static final Set<InetSocketAddress> servers = Collections.unmodifiableSet(new HashSet<InetSocketAddress>() {{
+    public static final List<InetSocketAddress> servers = Collections.unmodifiableList(new ArrayList<InetSocketAddress>() {{
         Scanner in = null;
         try {
             in = new Scanner(new File("stun-servers.txt"));
