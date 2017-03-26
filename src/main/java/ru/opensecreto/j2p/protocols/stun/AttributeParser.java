@@ -15,7 +15,7 @@ public class AttributeParser {
         ByteBuffer buf = ByteBuffer.wrap(attribute.data);
         buf.position(1);
         byte family = buf.get();
-        short port = buf.getShort();
+        int port = buf.getShort() & 0xffff;
         InetAddress address;
         if (family == 0x01) {
             byte[] addressBytes = new byte[4];
