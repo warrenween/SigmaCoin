@@ -46,6 +46,8 @@ public class StunAgent implements Callable<StunMessage> {
                 try {
                     socket.receive(result);
                     LOGGER.trace("Received packet from {}.", socket.getRemoteSocketAddress());
+
+                    return new StunMessage(result.getData(), result.getOffset(), result.getLength());
                 } catch (SocketTimeoutException e) {
                     count++;
                     LOGGER.warn("Could not receive STUN response", e);
