@@ -45,7 +45,7 @@ public class StunAgent implements Callable<StunMessage> {
             while (count <= retryCount) {
                 try {
                     socket.receive(result);
-                    LOGGER.trace("Received packet from", socket.getRemoteSocketAddress());
+                    LOGGER.trace("Received packet from {}.", socket.getRemoteSocketAddress());
                 } catch (SocketTimeoutException e) {
                     count++;
                     LOGGER.warn("Could not receive STUN response", e);
