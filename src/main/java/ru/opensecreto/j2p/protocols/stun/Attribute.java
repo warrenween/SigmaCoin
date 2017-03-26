@@ -8,7 +8,7 @@ import java.util.List;
 public class Attribute {
 
     public static final short MAPPED_ADDRESS = 0x0001;
-    public static final short USERNAME = 0x00060;
+    public static final short USERNAME = 0x0006;
 
     public byte[] data;
     public final short type;
