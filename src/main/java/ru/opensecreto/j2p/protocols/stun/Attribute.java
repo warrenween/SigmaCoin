@@ -9,6 +9,12 @@ public class Attribute {
 
     public static final short MAPPED_ADDRESS = 0x0001;
     public static final short USERNAME = 0x0006;
+    public static final short MESSAGE_INTEGRITY = 0x0008;
+    public static final short ERROR_CODE = 0x0009;
+    public static final short UNKNOWN_ATTRIBUTES = 0x000A;
+    public static final short REALM = 0x0014;
+    public static final short NONCE = 0x0015;
+    public static final short XOR_MAPPED_ADDRESS = 0x0020;
 
     public byte[] data;
     public final short type;
