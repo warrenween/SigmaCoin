@@ -16,6 +16,9 @@ public class AttributeParserTest {
         Assertions.assertThat(AttributeParser.parseMAPPED_ADDRESS(new Attribute(
                 Attribute.MAPPED_ADDRESS, DatatypeConverter.parseHexBinary("000104d27b00ff20")
         ))).isEqualTo(new InetSocketAddress("123.0.255.32", 1234));
+        Assertions.assertThat(AttributeParser.parseMAPPED_ADDRESS(new Attribute(
+                Attribute.MAPPED_ADDRESS, DatatypeConverter.parseHexBinary("000204d220010db885a3000000008a2e03707334")
+        ))).isEqualTo(new InetSocketAddress("2001:0db8:85a3:0000:0000:8a2e:0370:7334", 1234));
     }
 
 }
