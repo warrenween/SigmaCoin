@@ -58,7 +58,7 @@ public class StunAgent implements Callable<StunMessage> {
 
             }
         } catch (Exception e) {
-            LOGGER.error("Error while sending stun message.");
+            LOGGER.error("Error while sending stun message.", e);
         } finally {
             if (socket != null) socket.close();
         }
