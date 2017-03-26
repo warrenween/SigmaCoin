@@ -5,6 +5,7 @@ import ru.opensecreto.j2p.protocols.stun.*;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.UnknownHostException;
+import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -16,7 +17,7 @@ public class TestGettingIpFromStun {
     private static final Logger LOGGER = LoggerFactory.getLogger(TestGettingIpFromStun.class);
 
     private InetSocketAddress getRandomServer() {
-        return Servers.servers.get(new Random().nextInt(Servers.servers.size()));
+        return Servers.servers.get(new SecureRandom().nextInt(Servers.servers.size()));
     }
 
     public void run() throws InterruptedException, UnknownHostException {
