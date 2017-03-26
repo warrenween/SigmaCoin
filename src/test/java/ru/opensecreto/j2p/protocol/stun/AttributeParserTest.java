@@ -4,6 +4,7 @@ import org.assertj.core.api.Assertions;
 import org.testng.annotations.Test;
 import ru.opensecreto.j2p.protocols.stun.Attribute;
 import ru.opensecreto.j2p.protocols.stun.AttributeParser;
+import ru.opensecreto.j2p.protocols.stun.StunMessage;
 
 import javax.xml.bind.DatatypeConverter;
 import java.net.InetSocketAddress;
@@ -19,6 +20,16 @@ public class AttributeParserTest {
         Assertions.assertThat(AttributeParser.parseMAPPED_ADDRESS(new Attribute(
                 Attribute.MAPPED_ADDRESS, DatatypeConverter.parseHexBinary("000204d220010db885a3000000008a2e03707334")
         ))).isEqualTo(new InetSocketAddress("2001:0db8:85a3:0000:0000:8a2e:0370:7334", 1234));
+    }
+
+    @Test
+    public void testXOR_MAPPED_ADDRESS() throws UnknownHostException {
+        Assertions.assertThat(AttributeParser.parseXOR_MAPPED_ADDRESS(
+                new Attribute(
+                        Attribute.XOR_MAPPED_ADDRESS, DatatypeConverter.parseHexBinary("0001DD707EA5E1A5")
+                ),
+                DatatypeConverter.parseHexBinary("000000000000000000000000")
+        )).isEqualTo(new InetSocketAddress("95.183.69.231", 64610));
     }
 
 }
