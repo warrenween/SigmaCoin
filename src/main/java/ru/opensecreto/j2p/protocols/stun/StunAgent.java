@@ -33,7 +33,7 @@ public class StunAgent implements Callable<StunMessage> {
             socket = new DatagramSocket();
             socket.setSoTimeout(10000);
 
-            byte[] mData = message.getData();
+            byte[] mData = message.getStunMessage();
             DatagramPacket packet = new DatagramPacket(mData, mData.length, address);
 
             socket.send(packet);
