@@ -6,6 +6,7 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.net.*;
 import java.util.concurrent.Callable;
+import java.util.concurrent.TimeUnit;
 
 public class StunAgent implements Callable<StunMessage> {
 
@@ -31,12 +32,12 @@ public class StunAgent implements Callable<StunMessage> {
         try {
             socket = new DatagramSocket();
             socket.setSoTimeout(10000);
-            socket.connect(address);
 
-            byte[] mData = message.getData();
-            DatagramPacket packet = new DatagramPacket(mData, mData.length);
+            byte[] mData = message.getStunMessage();
+            DatagramPacket packet = new DatagramPacket(mData, mData.length, address);
 
             socket.send(packet);
+            LOGGER.trace("Send packet to {}.", address);
 
             DatagramPacket result = new DatagramPacket(new byte[576], 576);
 
@@ -44,18 +45,20 @@ public class StunAgent implements Callable<StunMessage> {
             while (count <= retryCount) {
                 try {
                     socket.receive(result);
+                    LOGGER.trace("Received packet from {}.", socket.getRemoteSocketAddress());
                 } catch (SocketTimeoutException e) {
                     count++;
-                    LOGGER.warn("Could not recieve STUN response", e);
+                    LOGGER.warn("Could not receive STUN response", e);
                     if (count >= retryCount) {
                         LOGGER.error("Retry count exceeded.");
                         return null;
                     }
+                    TimeUnit.SECONDS.sleep(5);
                 }
 
             }
         } catch (Exception e) {
-            LOGGER.error("Error while sending stun message.");
+            LOGGER.error("Error while sending stun message.", e);
         } finally {
             if (socket != null) socket.close();
         }
