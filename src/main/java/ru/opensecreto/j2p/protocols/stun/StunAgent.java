@@ -6,6 +6,7 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.net.*;
 import java.util.concurrent.Callable;
+import java.util.concurrent.TimeUnit;
 
 public class StunAgent implements Callable<StunMessage> {
 
@@ -48,6 +49,7 @@ public class StunAgent implements Callable<StunMessage> {
                 } catch (SocketTimeoutException e) {
                     count++;
                     LOGGER.warn("Could not receive STUN response", e);
+                    TimeUnit.SECONDS.sleep(5);
                     if (count >= retryCount) {
                         LOGGER.error("Retry count exceeded.");
                         return null;
