@@ -23,7 +23,7 @@ public class TestGettingIpFromStun {
     public void run() throws InterruptedException, UnknownHostException {
         List<Future<StunMessage>> messages = new ArrayList<>(5);
         ExecutorService executorService = Executors.newCachedThreadPool();
-        for (int i = 0; i < 20; i++) {
+        for (int i = 0; i < 10; i++) {
             StunAgent agent = new StunAgent(getRandomServer(), new StunMessage(
                     MessageClass.REQUEST,
                     MessageMethod.BINDING,
