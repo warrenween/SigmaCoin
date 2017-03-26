@@ -42,7 +42,7 @@ test.useTestNG()
 task prepareTestWorkingDir {
     File outputDir = new File("$buildDir/test-output")
     if (!outputDir.exists()) {
-        outputDir.mkdirs();
+        outputDir.mkdirs()
     } else {
         GFileUtils.cleanDirectory(outputDir)
     }
@@ -51,7 +51,7 @@ task prepareTestWorkingDir {
 test.dependsOn.add(prepareTestWorkingDir)
 
 tasks.withType(Test) {
-    int time = 0;
+    int time = 0
     afterTest { desc, result ->
         time += result.getEndTime() - result.getStartTime()
     }
