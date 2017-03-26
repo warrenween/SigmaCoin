@@ -49,11 +49,11 @@ public class StunAgent implements Callable<StunMessage> {
                 } catch (SocketTimeoutException e) {
                     count++;
                     LOGGER.warn("Could not receive STUN response", e);
-                    TimeUnit.SECONDS.sleep(5);
                     if (count >= retryCount) {
                         LOGGER.error("Retry count exceeded.");
                         return null;
                     }
+                    TimeUnit.SECONDS.sleep(5);
                 }
 
             }
