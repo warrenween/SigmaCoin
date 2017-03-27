@@ -6,6 +6,9 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 public class WelcomeRunnable implements Runnable {
 
@@ -31,16 +34,27 @@ public class WelcomeRunnable implements Runnable {
             Thread.currentThread().interrupt();
             return;
         }
+        ExecutorService executorService = Executors.newCachedThreadPool();
         while (!Thread.currentThread().isInterrupted()) {
             try {
                 Socket socket = serverSocket.accept();
                 LOGGER.debug("Accepted connection from {}.", socket.getInetAddress());
-                handler.handle(socket, controller);
+                executorService.submit(new ConnectionHandler(socket, controller));
             } catch (IOException e) {
                 LOGGER.error("Exception was thrown while waiting for connections.", e);
                 Thread.currentThread().interrupt();
                 return;
             }
+        }
+
+        LOGGER.debug("Shutting down executor service.");
+        executorService.shutdown();
+
+        try {
+            LOGGER.debug("Closing server socket");
+            serverSocket.close();
+        } catch (IOException e) {
+            LOGGER.error("Could not close serverSocket");
         }
     }
 

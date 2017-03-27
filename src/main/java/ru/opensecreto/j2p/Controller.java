@@ -6,14 +6,21 @@ import org.slf4j.LoggerFactory;
 import java.io.File;
 import java.io.IOException;
 import java.net.InetAddress;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.RunnableFuture;
 
 public class Controller {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(Controller.class);
+
     private final File peerDatabaseFile;
     private final int port;
     private PeerDatabase database;
     private InetAddress address;
+    private final ExecutorService executorService;
+    private Future peerWelcomerFuture;
 
     public Controller(File peerDatabaseFile, ConnectionHandler handler) throws IOException {
         this(peerDatabaseFile, WelcomeRunnable.DEFAULT_PORT, handler, true);
@@ -30,11 +37,8 @@ public class Controller {
         }
         this.port = port;
 
-        WelcomeRunnable welcome = new WelcomeRunnable(port, this, handler);
-        Thread welcomeThread = new Thread(welcome);
-        welcomeThread.setDaemon(daemon);
-        welcomeThread.setName("PeersWelcomer");
-        welcomeThread.start();
+        executorService = Executors.newSingleThreadExecutor();
+        peerWelcomerFuture = executorService.submit(new WelcomeRunnable(port, this, handler));
     }
 
 
@@ -45,6 +49,7 @@ public class Controller {
             LOGGER.error("Error while closing peer database.", e);
             throw e;
         }
+        executorService.shutdown();
     }
 
     public void updateExternalAddress(InetAddress newAddress) {
