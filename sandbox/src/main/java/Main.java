@@ -14,6 +14,10 @@ public class Main {
     }
 
     public static void main(String[] args) throws IOException, InterruptedException {
+        if (args.length == 0) {
+            LOGGER.warn("no args");
+        }
+        LOGGER.info("executing {}", args[0]);
         switch (args[0]) {
             case "localAddress":
                 new TestAddress().run();
