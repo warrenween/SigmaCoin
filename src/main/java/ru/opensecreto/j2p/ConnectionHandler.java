@@ -4,9 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.opensecreto.j2p.commandhandlers.ConnectionInterruptHandler;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.*;
 import java.net.Socket;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -15,8 +13,8 @@ import java.util.Map;
 
 public class ConnectionHandler implements Runnable {
 
-    private static final Map<Short, CommandHandler> COMMAND_HANDLER_LIST = new HashMap<Short, CommandHandler>() {{
-        put((short) 0, new ConnectionInterruptHandler());
+    private static final Map<Byte, CommandHandler> COMMAND_HANDLER_LIST = new HashMap<Byte, CommandHandler>() {{
+        put((byte) 0, new ConnectionInterruptHandler());
     }};
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ConnectionHandler.class);
@@ -31,8 +29,8 @@ public class ConnectionHandler implements Runnable {
 
     @Override
     public void run() {
-        InputStream in;
-        OutputStream out;
+        InputStream in = null;
+        OutputStream out = null;
         try {
             in = socket.getInputStream();
             out = socket.getOutputStream();
@@ -45,8 +43,36 @@ public class ConnectionHandler implements Runnable {
             }
             Thread.currentThread().interrupt();
         }
-        while (!Thread.currentThread().isInterrupted() && socket.isConnected() && !socket.isClosed()) {
+        try {
+            while (!Thread.currentThread().isInterrupted() && socket.isConnected() && !socket.isClosed()
+                    && in != null && out != null) {
+                int val = -1;
+                while (val == -1) {
+                    val = in.read();
+                }
 
+                //peer must send valid commands
+                //if no, we will disconnect
+                if (!COMMAND_HANDLER_LIST.containsKey(((byte) val))) {
+                    LOGGER.warn("Peer {} sent incorrect command. Disconnecting.", socket.getRemoteSocketAddress());
+                    socket.close();
+
+                    Thread.currentThread().interrupt();
+                    return;
+                } else {
+                    COMMAND_HANDLER_LIST.get(((byte) val)).handle(socket, in, out, controller);
+                }
+            }
+        } catch (IOException e) {
+            LOGGER.warn("Error while operating with socket", e);
+            Thread.currentThread().interrupt();
+            return;
+        } finally {
+            try {
+                socket.close();
+            } catch (IOException e) {
+                LOGGER.error("Could not close socket.", e);
+            }
         }
     }
 }
