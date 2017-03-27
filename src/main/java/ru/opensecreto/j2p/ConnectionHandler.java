@@ -2,13 +2,22 @@ package ru.opensecreto.j2p;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import ru.opensecreto.j2p.commandhandlers.ConnectionInterruptHandler;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
 public class ConnectionHandler implements Runnable {
+
+    private static final Map<Short, CommandHandler> COMMAND_HANDLER_LIST = new HashMap<Short, CommandHandler>() {{
+        put((short) 0, new ConnectionInterruptHandler());
+    }};
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ConnectionHandler.class);
 
@@ -37,7 +46,7 @@ public class ConnectionHandler implements Runnable {
             Thread.currentThread().interrupt();
         }
         while (!Thread.currentThread().isInterrupted() && socket.isConnected() && !socket.isClosed()) {
-            
+
         }
     }
 }

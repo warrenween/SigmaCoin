@@ -22,11 +22,11 @@ public class Controller {
     private final ExecutorService executorService;
     private Future peerWelcomerFuture;
 
-    public Controller(File peerDatabaseFile, ConnectionHandler handler) throws IOException {
-        this(peerDatabaseFile, WelcomeRunnable.DEFAULT_PORT, handler, true);
+    public Controller(File peerDatabaseFile) throws IOException {
+        this(peerDatabaseFile, WelcomeRunnable.DEFAULT_PORT);
     }
 
-    public Controller(File peerDatabaseFile, int port, ConnectionHandler handler, boolean daemon) throws IOException {
+    public Controller(File peerDatabaseFile, int port) throws IOException {
         this.peerDatabaseFile = peerDatabaseFile;
         try {
             database = new PeerDatabase(peerDatabaseFile);
@@ -38,7 +38,7 @@ public class Controller {
         this.port = port;
 
         executorService = Executors.newSingleThreadExecutor();
-        peerWelcomerFuture = executorService.submit(new WelcomeRunnable(port, this, handler));
+        peerWelcomerFuture = executorService.submit(new WelcomeRunnable(port, this));
     }
 
 

@@ -16,12 +16,10 @@ public class WelcomeRunnable implements Runnable {
     private final static Logger LOGGER = LoggerFactory.getLogger(WelcomeRunnable.class);
     private final int welcomePort;
     private final Controller controller;
-    private final ConnectionHandler handler;
 
-    public WelcomeRunnable(int welcomePort, Controller controller, ConnectionHandler handler) {
+    public WelcomeRunnable(int welcomePort, Controller controller) {
         this.welcomePort = welcomePort;
         this.controller = controller;
-        this.handler = handler;
     }
 
     @Override
