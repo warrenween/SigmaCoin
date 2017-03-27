@@ -3,6 +3,7 @@ package ru.opensecreto.j2p;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.opensecreto.j2p.commandhandlers.ConnectionInterruptHandler;
+import ru.opensecreto.j2p.commandhandlers.PeerInfoHandler;
 
 import java.io.*;
 import java.net.Socket;
@@ -15,6 +16,7 @@ public class ConnectionHandler implements Runnable {
 
     private static final Map<Byte, CommandHandler> COMMAND_HANDLER_LIST = new HashMap<Byte, CommandHandler>() {{
         put((byte) 0, new ConnectionInterruptHandler());
+        put((byte) 1, new PeerInfoHandler());
     }};
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ConnectionHandler.class);

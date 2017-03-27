@@ -22,11 +22,17 @@ public class Controller {
     private final ExecutorService executorService;
     private Future peerWelcomerFuture;
 
-    public Controller(File peerDatabaseFile) throws IOException {
-        this(peerDatabaseFile, WelcomeRunnable.DEFAULT_PORT);
+    public final String software;
+    public final int version;
+
+    public Controller(File peerDatabaseFile, String software, int version) throws IOException {
+        this(peerDatabaseFile, WelcomeRunnable.DEFAULT_PORT, software, version);
     }
 
-    public Controller(File peerDatabaseFile, int port) throws IOException {
+    public Controller(File peerDatabaseFile, int port, String software, int version) throws IOException {
+        this.software = software;
+        this.version = version;
+
         this.peerDatabaseFile = peerDatabaseFile;
         try {
             database = new PeerDatabase(peerDatabaseFile);

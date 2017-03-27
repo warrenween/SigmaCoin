@@ -12,7 +12,7 @@ public class ControllerTest {
     private static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(ControllerTest.class);
 
     public void run() throws IOException {
-        Controller controller = new Controller(new File("peers.db"));
+        Controller controller = new Controller(new File("peers.db"), "j2p sandbox", 1);
     }
 
 }
