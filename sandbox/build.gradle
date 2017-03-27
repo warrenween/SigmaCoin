@@ -19,9 +19,28 @@ dependencies {
     compile 'org.slf4j:slf4j-simple:1.7.24'
 }
 
+jar {
+    dependsOn classes
+    from files(sourceSets.main.output.classesDir)
+    from files(sourceSets.main.output.resourcesDir)
+    from { configurations.compile.collect { zipTree(it) } }
+
+    manifest {
+        attributes 'Main-Class': 'Main'
+    }
+}
+
+task runJar(dependsOn: jar, type: JavaExec) {
+    main '-jar'
+    args = ["$buildDir/libs/sandbox.jar",
+            project.property('case')]
+
+}
+
 run {
     if (project.hasProperty("args")) {
         args project.property('args')
     }
+    dependsOn jar
     workingDir "$buildDir"
 }
