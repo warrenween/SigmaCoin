@@ -31,6 +31,7 @@ jar {
 }
 
 task runJar(dependsOn: jar, type: JavaExec) {
+    workingDir = "$buildDir"
     main '-jar'
     args = ["$buildDir/libs/sandbox.jar",
             project.property('case')]
