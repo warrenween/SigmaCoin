@@ -48,7 +48,7 @@ public class Controller {
     }
 
 
-    private void close() throws IOException {
+    public void stop() throws IOException {
         try {
             database.close();
         } catch (IOException e) {
