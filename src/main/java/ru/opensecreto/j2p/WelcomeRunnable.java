@@ -36,7 +36,7 @@ public class WelcomeRunnable implements Runnable {
         while (!Thread.currentThread().isInterrupted()) {
             try {
                 Socket socket = serverSocket.accept();
-                LOGGER.debug("Accepted connection from {}.", socket.getInetAddress());
+                LOGGER.debug("Accepted connection from {}", socket.getRemoteSocketAddress());
                 executorService.submit(new ConnectionHandler(socket, controller));
             } catch (IOException e) {
                 LOGGER.error("Exception was thrown while waiting for connections.", e);
