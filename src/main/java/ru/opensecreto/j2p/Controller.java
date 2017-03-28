@@ -6,6 +6,7 @@ import org.slf4j.LoggerFactory;
 import java.io.File;
 import java.io.IOException;
 import java.net.InetAddress;
+import java.net.InetSocketAddress;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
@@ -57,6 +58,14 @@ public class Controller {
             LOGGER.error("Error while closing peer database.", e);
         }
         executorService.shutdownNow();
+    }
+
+    public void registerPeer(Peer peer) {
+        try {
+            database.addPeer(peer);
+        } catch (IOException e) {
+            LOGGER.warn("Could not add peer to database.", e);
+        }
     }
 
     public void updateExternalAddress(InetAddress newAddress) {
