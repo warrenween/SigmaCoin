@@ -34,8 +34,8 @@ public class WelcomeRunnable implements Runnable {
             return;
         }
         ExecutorService executorService = Executors.newCachedThreadPool();
-        while (!Thread.currentThread().isInterrupted()) {
-            try {
+        try {
+            while (!Thread.currentThread().isInterrupted()) {
                 Socket socket = serverSocket.accept();
                 LOGGER.debug("Accepted connection from {}", socket.getRemoteSocketAddress());
                 controller.registerPeer(new Peer(
@@ -45,11 +45,9 @@ public class WelcomeRunnable implements Runnable {
                         0
                 ));
                 executorService.submit(new ConnectionHandler(socket, controller));
-            } catch (IOException e) {
-                LOGGER.error("Exception was thrown while waiting for connections.", e);
-                Thread.currentThread().interrupt();
-                return;
             }
+        } catch (IOException e) {
+            LOGGER.error("Exception was thrown while waiting for connections.", e);
         }
 
         LOGGER.debug("Shutting down executor service.");
