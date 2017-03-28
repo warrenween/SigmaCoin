@@ -37,19 +37,19 @@ public class ConnectionHandler implements Runnable {
             DataOutputStream out = new DataOutputStream(socket.getOutputStream());
 
             while (!Thread.currentThread().isInterrupted() && socket.isConnected() && !socket.isClosed()) {
-                while (in.available() == 0 && !Thread.currentThread().isInterrupted()) {
-                    TimeUnit.MILLISECONDS.sleep(500);
+                while (in.available() > 0) {
+                    byte val = in.readByte();
+                    if (!COMMAND_HANDLER_LIST.containsKey(val)) {
+                        //peer must send valid commands
+                        //if no, we will disconnect
+                        LOGGER.warn("Peer {} sent incorrect command. Disconnecting.", socket.getRemoteSocketAddress());
+                        socket.close();
+                        Thread.currentThread().interrupt();
+                    } else {
+                        COMMAND_HANDLER_LIST.get(val).handle(socket, in, out, controller);
+                    }
                 }
-                byte val = in.readByte();
-                if (!COMMAND_HANDLER_LIST.containsKey(val)) {
-                    //peer must send valid commands
-                    //if no, we will disconnect
-                    LOGGER.warn("Peer {} sent incorrect command. Disconnecting.", socket.getRemoteSocketAddress());
-                    socket.close();
-                    Thread.currentThread().interrupt();
-                } else {
-                    COMMAND_HANDLER_LIST.get(val).handle(socket, in, out, controller);
-                }
+                TimeUnit.MILLISECONDS.sleep(500);
             }
         } catch (EOFException e) {
             LOGGER.warn("Reached end of stream. Disconnecting from {}.", socket.getRemoteSocketAddress(), e);
