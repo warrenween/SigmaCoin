@@ -32,23 +32,11 @@ public class ConnectionHandler implements Runnable {
 
     @Override
     public void run() {
-        DataInputStream in = null;
-        DataOutputStream out = null;
         try {
-            in = new DataInputStream(socket.getInputStream());
-            out = new DataOutputStream(socket.getOutputStream());
-        } catch (IOException e) {
-            LOGGER.error("Could not create streams", e);
-            try {
-                socket.close();
-            } catch (IOException e1) {
-                LOGGER.error("Could not close socket.", e);
-            }
-            Thread.currentThread().interrupt();
-        }
-        try {
-            while (!Thread.currentThread().isInterrupted() && socket.isConnected() && !socket.isClosed()
-                    && in != null && out != null) {
+            DataInputStream in = new DataInputStream(socket.getInputStream());
+            DataOutputStream out = new DataOutputStream(socket.getOutputStream());
+
+            while (!Thread.currentThread().isInterrupted() && socket.isConnected() && !socket.isClosed()) {
                 while (in.available() == 0 && !Thread.currentThread().isInterrupted()) {
                     TimeUnit.MILLISECONDS.sleep(500);
                 }
@@ -72,8 +60,9 @@ public class ConnectionHandler implements Runnable {
         } finally {
             try {
                 socket.close();
+                LOGGER.debug("Closed socket {}.", socket);
             } catch (IOException e) {
-                LOGGER.error("Could not close socket.", e);
+                LOGGER.warn("Could not close socket.", e);
             }
         }
     }
