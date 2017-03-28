@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.concurrent.ExecutorService;
@@ -37,6 +38,12 @@ public class WelcomeRunnable implements Runnable {
             try {
                 Socket socket = serverSocket.accept();
                 LOGGER.debug("Accepted connection from {}", socket.getRemoteSocketAddress());
+                controller.registerPeer(new Peer(
+                        ((InetSocketAddress) socket.getRemoteSocketAddress()).getAddress(),
+                        ((InetSocketAddress) socket.getRemoteSocketAddress()).getPort(),
+                        System.currentTimeMillis(),
+                        0
+                ));
                 executorService.submit(new ConnectionHandler(socket, controller));
             } catch (IOException e) {
                 LOGGER.error("Exception was thrown while waiting for connections.", e);
