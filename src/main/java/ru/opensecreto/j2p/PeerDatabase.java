@@ -36,6 +36,7 @@ class PeerDatabase {
             throw e;
         }
         opened = true;
+        LOGGER.debug("Successfully initialized peers database.");
     }
 
     public void loadPeers() throws IOException {
@@ -56,6 +57,7 @@ class PeerDatabase {
     public void addPeer(Peer peer) throws IOException {
         synchronized (peers) {
             peers.add(peer);
+            LOGGER.debug("Added peer {}", peer);
         }
     }
 
@@ -73,6 +75,7 @@ class PeerDatabase {
             LOGGER.error("Could not close peer database file");
             throw e;
         }
+        LOGGER.debug("Closed peers database successfully");
     }
 
     public void save() throws IOException {
@@ -97,6 +100,7 @@ class PeerDatabase {
                 throw e;
             }
         }
+        LOGGER.debug("Saved peers database successfully.");
     }
 
     /**
