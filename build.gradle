@@ -107,3 +107,23 @@ tasks.withType(Test) {
         }
     }
 }
+
+jar {
+    dependsOn classes
+    from files(sourceSets.main.output.classesDir)
+    from files(sourceSets.main.output.resourcesDir)
+    from { configurations.compile.collect { zipTree(it) } }
+
+    manifest {
+        attributes 'Main-Class': 'ru.opensecreto.sigmacoin.Main'
+    }
+}
+
+task runJar(dependsOn: jar, type: JavaExec) {
+    workingDir = "$buildDir"
+    main '-jar'
+    if (project.hasProperty('case')) {
+        args = ["$buildDir/libs/sandbox.jar",
+                project.property('case')]
+    }
+}
