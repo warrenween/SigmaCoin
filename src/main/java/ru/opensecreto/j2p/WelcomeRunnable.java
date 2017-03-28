@@ -46,7 +46,7 @@ public class WelcomeRunnable implements Runnable {
         }
 
         LOGGER.debug("Shutting down executor service.");
-        executorService.shutdown();
+        executorService.shutdownNow();
 
         try {
             LOGGER.debug("Closing server socket");

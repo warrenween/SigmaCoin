@@ -48,14 +48,14 @@ public class Controller {
     }
 
 
-    public void stop() throws IOException {
+    public void stop() {
+        LOGGER.info("Stopping controller.");
         try {
             database.close();
         } catch (IOException e) {
             LOGGER.error("Error while closing peer database.", e);
-            throw e;
         }
-        executorService.shutdown();
+        executorService.shutdownNow();
     }
 
     public void updateExternalAddress(InetAddress newAddress) {
