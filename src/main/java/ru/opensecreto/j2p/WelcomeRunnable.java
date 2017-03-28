@@ -25,16 +25,11 @@ public class WelcomeRunnable implements Runnable {
 
     @Override
     public void run() {
-        ServerSocket serverSocket;
+        ExecutorService executorService = Executors.newCachedThreadPool();
+        ServerSocket serverSocket = null;
         try {
             serverSocket = new ServerSocket(welcomePort, 10);
-        } catch (IOException e) {
-            LOGGER.error("Could not setup ServerSocket. Accepting incoming connections is not possible.", e);
-            Thread.currentThread().interrupt();
-            return;
-        }
-        ExecutorService executorService = Executors.newCachedThreadPool();
-        try {
+
             while (!Thread.currentThread().isInterrupted()) {
                 Socket socket = serverSocket.accept();
                 LOGGER.debug("Accepted connection from {}", socket.getRemoteSocketAddress());
@@ -48,17 +43,17 @@ public class WelcomeRunnable implements Runnable {
             }
         } catch (IOException e) {
             LOGGER.error("Exception was thrown while waiting for connections.", e);
+        } finally {
+            try {
+                LOGGER.debug("Closing server socket");
+                if (serverSocket != null) serverSocket.close();
+            } catch (IOException e) {
+                LOGGER.error("Could not close serverSocket");
+            }
         }
 
-        LOGGER.debug("Shutting down executor service.");
         executorService.shutdownNow();
-
-        try {
-            LOGGER.debug("Closing server socket");
-            serverSocket.close();
-        } catch (IOException e) {
-            LOGGER.error("Could not close serverSocket");
-        }
+        LOGGER.debug("Executor service was shut down successfully.");
     }
 
 }
