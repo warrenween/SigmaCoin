@@ -51,6 +51,7 @@ public class Controller {
     public void stop() {
         LOGGER.info("Stopping controller.");
         try {
+            database.save();
             database.close();
         } catch (IOException e) {
             LOGGER.error("Error while closing peer database.", e);
