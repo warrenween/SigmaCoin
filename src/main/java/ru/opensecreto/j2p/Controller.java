@@ -68,6 +68,10 @@ public class Controller {
         }
     }
 
+    public PeerDatabase getPeersDatabase() {
+        return database;
+    }
+
     public void updateExternalAddress(InetAddress newAddress) {
         this.address = newAddress;
     }

@@ -10,7 +10,7 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.nio.ByteBuffer;
 
-class Peer {
+public class Peer {
 
     public static final Logger LOGGER = LoggerFactory.getLogger(Peer.class);
     public final static int PEER_DATA_SIZE = 37;

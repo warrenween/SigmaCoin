@@ -10,7 +10,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
-class PeerDatabase {
+public class PeerDatabase {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(PeerDatabase.class);
 
@@ -78,7 +78,7 @@ class PeerDatabase {
         LOGGER.debug("Closed peers database successfully");
     }
 
-    public void save() throws IOException {
+    public byte[] encodePeersList() {
         byte[] data;
         synchronized (peers) {
             data = new byte[peers.size() * Peer.PEER_DATA_SIZE];
@@ -89,6 +89,11 @@ class PeerDatabase {
                 offset[0] += Peer.PEER_DATA_SIZE;
             });
         }
+        return data;
+    }
+
+    public void save() throws IOException {
+        byte[] data = encodePeersList();
         synchronized (db) {
             try {
                 checkOpen();
