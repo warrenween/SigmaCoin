@@ -64,7 +64,7 @@ public class ConnectionHandler implements Runnable {
                 }
             }
         } catch (EOFException e) {
-            LOGGER.warn("Reached end of stream. Disconnecting from {}.", socket.getRemoteSocketAddress());
+            LOGGER.warn("Reached end of stream. Disconnecting from {}.", socket.getRemoteSocketAddress(), e);
         } catch (IOException e) {
             LOGGER.warn("Error while operating with socket.", e);
         } catch (InterruptedException e) {
