@@ -5,11 +5,11 @@ import org.slf4j.LoggerFactory;
 import ru.opensecreto.j2p.commandhandlers.ConnectionInterruptHandler;
 import ru.opensecreto.j2p.commandhandlers.PeerInfoHandler;
 
-import java.io.*;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.Socket;
 import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
 
 public class ConnectionHandler implements Runnable {
@@ -48,10 +48,7 @@ public class ConnectionHandler implements Runnable {
         try {
             while (!Thread.currentThread().isInterrupted() && socket.isConnected() && !socket.isClosed()
                     && in != null && out != null) {
-                int val = -1;
-                while (val == -1) {
-                    val = in.read();
-                }
+                int val = in.read();
 
                 //peer must send valid commands
                 //if no, we will disconnect
@@ -64,11 +61,11 @@ public class ConnectionHandler implements Runnable {
                 } else {
                     COMMAND_HANDLER_LIST.get(((byte) val)).handle(socket, in, out, controller);
                 }
+
             }
         } catch (IOException e) {
             LOGGER.warn("Error while operating with socket", e);
             Thread.currentThread().interrupt();
-            return;
         } finally {
             try {
                 socket.close();
