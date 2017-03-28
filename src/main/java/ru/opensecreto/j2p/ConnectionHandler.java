@@ -10,6 +10,7 @@ import java.io.*;
 import java.net.Socket;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 public class ConnectionHandler implements Runnable {
 
@@ -48,25 +49,26 @@ public class ConnectionHandler implements Runnable {
         try {
             while (!Thread.currentThread().isInterrupted() && socket.isConnected() && !socket.isClosed()
                     && in != null && out != null) {
-                int val = in.read();
-
-                if (val == -1) {
-                    LOGGER.warn("Reached end of input stream. Disconnecting from {}.", socket.getRemoteSocketAddress());
-                    socket.close();
-                    Thread.currentThread().interrupt();
-                } else if (!COMMAND_HANDLER_LIST.containsKey(((byte) val))) {
+                while (in.available() == 0 && !Thread.currentThread().isInterrupted()) {
+                    TimeUnit.MILLISECONDS.sleep(500);
+                }
+                byte val = in.readByte();
+                if (!COMMAND_HANDLER_LIST.containsKey(val)) {
                     //peer must send valid commands
                     //if no, we will disconnect
                     LOGGER.warn("Peer {} sent incorrect command. Disconnecting.", socket.getRemoteSocketAddress());
                     socket.close();
                     Thread.currentThread().interrupt();
                 } else {
-                    COMMAND_HANDLER_LIST.get(((byte) val)).handle(socket, in, out, controller);
+                    COMMAND_HANDLER_LIST.get(val).handle(socket, in, out, controller);
                 }
             }
+        } catch (EOFException e) {
+            LOGGER.warn("Reached end of stream. Disconnecting from {}.", socket.getRemoteSocketAddress());
         } catch (IOException e) {
-            LOGGER.warn("Error while operating with socket", e);
-            Thread.currentThread().interrupt();
+            LOGGER.warn("Error while operating with socket.", e);
+        } catch (InterruptedException e) {
+            LOGGER.warn("Thread was interrupted", e);
         } finally {
             try {
                 socket.close();
