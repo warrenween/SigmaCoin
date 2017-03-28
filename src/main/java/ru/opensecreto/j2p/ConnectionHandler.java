@@ -42,7 +42,7 @@ public class ConnectionHandler implements Runnable {
                     if (!COMMAND_HANDLER_LIST.containsKey(val)) {
                         //peer must send valid commands
                         //if no, we will disconnect
-                        LOGGER.warn("Peer {} sent incorrect command. Disconnecting socket {}.", socket);
+                        LOGGER.warn("Remote peer sent incorrect command. Disconnecting socket {}.", socket);
                         socket.close();
                         Thread.currentThread().interrupt();
                     } else {

@@ -45,8 +45,8 @@ public class WelcomeRunnable implements Runnable {
             LOGGER.error("Exception was thrown while waiting for connections.", e);
         } finally {
             try {
-                LOGGER.debug("Closing server socket");
                 if (serverSocket != null) serverSocket.close();
+                LOGGER.debug("Successfully closed server socket {}.", serverSocket);
             } catch (IOException e) {
                 LOGGER.error("Could not close serverSocket");
             }
