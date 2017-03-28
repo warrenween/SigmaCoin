@@ -10,7 +10,7 @@ import java.nio.ByteBuffer;
 public class GetPeersCommandHandler implements CommandHandler {
 
     @Override
-    public void handle(Socket socket, InputStream in, OutputStream out, Controller controller) throws IOException {
+    public void handle(Socket socket, DataInputStream in, DataOutputStream out, Controller controller) throws IOException {
         DataOutputStream dataOut = new DataOutputStream(out);
         dataOut.writeInt(controller.getPeersDatabase().getPeers().size());
         dataOut.write(controller.getPeersDatabase().encodePeersList());

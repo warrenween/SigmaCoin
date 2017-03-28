@@ -6,9 +6,7 @@ import ru.opensecreto.j2p.commandhandlers.ConnectionInterruptHandler;
 import ru.opensecreto.j2p.commandhandlers.GetPeersCommandHandler;
 import ru.opensecreto.j2p.commandhandlers.PeerInfoHandler;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.*;
 import java.net.Socket;
 import java.util.HashMap;
 import java.util.Map;
@@ -33,11 +31,11 @@ public class ConnectionHandler implements Runnable {
 
     @Override
     public void run() {
-        InputStream in = null;
-        OutputStream out = null;
+        DataInputStream in = null;
+        DataOutputStream out = null;
         try {
-            in = socket.getInputStream();
-            out = socket.getOutputStream();
+            in = new DataInputStream(socket.getInputStream());
+            out = new DataOutputStream(socket.getOutputStream());
         } catch (IOException e) {
             LOGGER.error("Could not create streams", e);
             try {
