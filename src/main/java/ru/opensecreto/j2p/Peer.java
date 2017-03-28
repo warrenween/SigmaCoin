@@ -93,4 +93,9 @@ class Peer {
         return (obj != null) && (obj instanceof Peer) &&
                 (((Peer) obj).address.equals(address)) && (((Peer) obj).port == port);
     }
+
+    @Override
+    public String toString() {
+        return new StringBuilder().append(address.toString()).append(':').append(port).toString();
+    }
 }
