@@ -42,7 +42,7 @@ public class ConnectionHandler implements Runnable {
                     if (!COMMAND_HANDLER_LIST.containsKey(val)) {
                         //peer must send valid commands
                         //if no, we will disconnect
-                        LOGGER.warn("Peer {} sent incorrect command. Disconnecting.", socket.getRemoteSocketAddress());
+                        LOGGER.warn("Peer {} sent incorrect command. Disconnecting socket {}.", socket);
                         socket.close();
                         Thread.currentThread().interrupt();
                     } else {
@@ -52,9 +52,9 @@ public class ConnectionHandler implements Runnable {
                 TimeUnit.MILLISECONDS.sleep(500);
             }
         } catch (EOFException e) {
-            LOGGER.warn("Reached end of stream. Disconnecting from {}.", socket.getRemoteSocketAddress(), e);
+            LOGGER.warn("Reached end of stream. Disconnecting socket {}.", socket, e);
         } catch (IOException e) {
-            LOGGER.warn("Error while operating with socket.", e);
+            LOGGER.warn("Error while operating with socket {}.", socket, e);
         } catch (InterruptedException e) {
             LOGGER.warn("Thread was interrupted", e);
         } finally {
@@ -62,7 +62,7 @@ public class ConnectionHandler implements Runnable {
                 socket.close();
                 LOGGER.debug("Closed socket {}.", socket);
             } catch (IOException e) {
-                LOGGER.warn("Could not close socket.", e);
+                LOGGER.warn("Could not close socket {}.", socket, e);
             }
         }
     }
