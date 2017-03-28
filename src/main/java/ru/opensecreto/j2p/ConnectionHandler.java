@@ -50,18 +50,19 @@ public class ConnectionHandler implements Runnable {
                     && in != null && out != null) {
                 int val = in.read();
 
-                //peer must send valid commands
-                //if no, we will disconnect
-                if (!COMMAND_HANDLER_LIST.containsKey(((byte) val))) {
+                if (val == -1) {
+                    LOGGER.warn("Reached end of input stream. Disconnecting from {}.", socket.getRemoteSocketAddress());
+                    socket.close();
+                    Thread.currentThread().interrupt();
+                } else if (!COMMAND_HANDLER_LIST.containsKey(((byte) val))) {
+                    //peer must send valid commands
+                    //if no, we will disconnect
                     LOGGER.warn("Peer {} sent incorrect command. Disconnecting.", socket.getRemoteSocketAddress());
                     socket.close();
-
                     Thread.currentThread().interrupt();
-                    return;
                 } else {
                     COMMAND_HANDLER_LIST.get(((byte) val)).handle(socket, in, out, controller);
                 }
-
             }
         } catch (IOException e) {
             LOGGER.warn("Error while operating with socket", e);
