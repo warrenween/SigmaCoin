@@ -67,15 +67,8 @@ dependencyVerification {
 }
 
 test.useTestNG()
-task prepareTestWorkingDir {
-    File outputDir = new File("$buildDir/coretest-output")
-    if (!outputDir.exists()) {
-        outputDir.mkdirs();
-    } else {
-        GFileUtils.cleanDirectory(outputDir)
-    }
-    test.workingDir = outputDir
-}
+test.workingDir = "$buildDir"
+
 test.dependsOn.add(prepareTestWorkingDir)
 
 tasks.withType(Test) {
