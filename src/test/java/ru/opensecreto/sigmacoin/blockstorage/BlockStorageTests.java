@@ -9,16 +9,16 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Random;
 
-public class BlockchainControllerTests {
+public class BlockStorageTests {
 
     private Random random = new Random(new Random().nextLong());
 
     @Test
     public void testPutAndGet() throws IOException {
-        BlockchainConfiguration config = new BlockchainConfiguration(
+        BlockStorageConfiguration config = new BlockStorageConfiguration(
                 "testPutAndGet.index", "testPutAndGet.dat", 3
         );
-        BlockchainController controller = new BlockchainController(config);
+        BlockStorage controller = new BlockStorage(config);
 
         byte[] hash = TestUtils.getFixedArray(3);
         byte[] data = TestUtils.getRandomArray(20);
@@ -30,10 +30,10 @@ public class BlockchainControllerTests {
 
     @Test
     public void testPutAndGetMultipleBlocks() throws IOException {
-        BlockchainConfiguration config = new BlockchainConfiguration(
+        BlockStorageConfiguration config = new BlockStorageConfiguration(
                 "testPutAndGetMultiple.index", "testPutAndGetMultiple.dat", 3
         );
-        BlockchainController controller = new BlockchainController(config);
+        BlockStorage controller = new BlockStorage(config);
 
         //First block
         byte[] hash1 = TestUtils.getFixedArray(3);
@@ -59,10 +59,10 @@ public class BlockchainControllerTests {
 
     @Test
     public void testDelete() throws IOException {
-        BlockchainConfiguration config = new BlockchainConfiguration(
+        BlockStorageConfiguration config = new BlockStorageConfiguration(
                 "testDelete.index", "testDelete.dat", 3
         );
-        BlockchainController controller = new BlockchainController(config);
+        BlockStorage controller = new BlockStorage(config);
 
         byte[] hash = TestUtils.getFixedArray(3);
         byte[] data = TestUtils.getRandomArray(20);
@@ -75,10 +75,10 @@ public class BlockchainControllerTests {
 
     @Test
     public void testDeletingAndPutting() throws IOException {
-        BlockchainConfiguration config = new BlockchainConfiguration(
+        BlockStorageConfiguration config = new BlockStorageConfiguration(
                 "testDeleteAndPut.index", "testDeleteAndPut.dat", 3
         );
-        BlockchainController controller = new BlockchainController(config);
+        BlockStorage controller = new BlockStorage(config);
 
         byte[] hash1 = TestUtils.getFixedArray(3);
         byte[] data = TestUtils.getRandomArray(20);
@@ -95,10 +95,10 @@ public class BlockchainControllerTests {
 
     @Test
     public void testPuttingDeletingAndGettingMultipleBlocks() throws IOException {
-        BlockchainConfiguration config = new BlockchainConfiguration(
+        BlockStorageConfiguration config = new BlockStorageConfiguration(
                 "testPutDeleteAndGetMultiple.index", "testPutDeleteAndGetMultiple.dat", 3
         );
-        BlockchainController controller = new BlockchainController(config);
+        BlockStorage controller = new BlockStorage(config);
 
         byte[] hash1 = TestUtils.getFixedArray(3);
         byte[] data1 = TestUtils.getRandomArray(20);
@@ -136,10 +136,10 @@ public class BlockchainControllerTests {
 
     @Test
     public void testReindex() throws IOException {
-        BlockchainConfiguration config = new BlockchainConfiguration(
+        BlockStorageConfiguration config = new BlockStorageConfiguration(
                 "testReindex.index", "testReindex.dat", 3
         );
-        BlockchainController controller = new BlockchainController(config);
+        BlockStorage controller = new BlockStorage(config);
 
         byte[] hash1 = TestUtils.getFixedArray(3);
         byte[] data1 = TestUtils.getRandomArray(20);

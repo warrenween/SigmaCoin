@@ -14,7 +14,7 @@ public class BlockchainConfigurationTests {
         String blockchain = "cba";
         int hash = new Random().nextInt();
 
-        BlockchainConfiguration config = new BlockchainConfiguration(index, blockchain, hash);
+        BlockStorageConfiguration config = new BlockStorageConfiguration(index, blockchain, hash);
 
         Assertions.assertThat(config.indexFile).isEqualTo(index);
         Assertions.assertThat(config.blockchainFile).isEqualTo(blockchain);

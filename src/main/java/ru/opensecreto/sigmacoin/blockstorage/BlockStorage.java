@@ -6,12 +6,12 @@ import java.io.RandomAccessFile;
 /**
  * Important: controller is NOT thread safe, also it is NOT protected from corrupted index and blockstorage files
  */
-public class BlockchainController {
+public class BlockStorage {
 
-    public BlockchainConfiguration configuration;
+    public BlockStorageConfiguration configuration;
     private RandomAccessFile index;
 
-    public BlockchainController(BlockchainConfiguration configuration) throws IOException {
+    public BlockStorage(BlockStorageConfiguration configuration) throws IOException {
         this.configuration = configuration;
     }
 
