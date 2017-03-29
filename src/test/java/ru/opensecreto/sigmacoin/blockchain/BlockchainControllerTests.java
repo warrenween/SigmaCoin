@@ -17,25 +17,7 @@ public class BlockchainControllerTests {
 
     private Random random = new Random(new Random().nextLong());
     private DataFactory dataFactory = new DataFactory();
-
-    @Test
-    public void testStringWrapperMethods() throws IOException {
-        BlockchainConfiguration config = new BlockchainConfiguration(
-                "testWrapperMethods.index", "testWrapperMethods.dat", 3);
-        BlockchainController controller = new BlockchainController(config);
-
-        byte[] hash = new byte[3];
-        random.nextBytes(hash);
-        String data = dataFactory.getRandomChars(10, 20);
-
-        controller.put(DatatypeConverter.printHexBinary(hash), data);
-        Assertions.assertThat(controller.get(hash)).isEqualTo(data);
-        Assertions.assertThat(controller.delete(hash)).isEqualTo(true);
-        Assertions.assertThat(controller.get(hash)).isEqualTo(null);
-        Assertions.assertThat(controller.delete(hash)).isEqualTo(false);
-    }
-
-
+    
     @Test
     public void testPutAndGet() throws IOException {
         BlockchainConfiguration config = new BlockchainConfiguration(

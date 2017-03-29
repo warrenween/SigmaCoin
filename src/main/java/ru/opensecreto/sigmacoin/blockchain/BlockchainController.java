@@ -22,14 +22,6 @@ public class BlockchainController {
         blockchain = new RandomAccessFile(configuration.blockchainFile, "rwd");
     }
 
-    /**
-     * @param hash String representing hex hash
-     * @return String data if found or null if not found.
-     */
-    public String get(String hash) throws IOException {
-        return this.get(DatatypeConverter.parseHexBinary(hash));
-    }
-
     public String get(byte[] hash) throws IOException {
         BlockIndex index = findHash(hash);
         if (index == null) {
@@ -40,14 +32,6 @@ public class BlockchainController {
             blockchain.read(data, 0, index.length);
             return new String(data);
         }
-    }
-
-    /**
-     * @param hash Hex string representation of hash
-     * @see BlockchainController#delete(byte[])
-     */
-    public boolean delete(String hash) throws IOException {
-        return this.delete(DatatypeConverter.parseHexBinary(hash));
     }
 
     /**
@@ -67,13 +51,6 @@ public class BlockchainController {
             this.index.writeBoolean(false);
             return true;
         }
-    }
-
-    /**
-     * @param hash String representing hex hash
-     */
-    public void put(String hash, String data) throws IOException {
-        this.put(DatatypeConverter.parseHexBinary(hash), data);
     }
 
     public void put(byte[] hash, String data) throws IOException {
