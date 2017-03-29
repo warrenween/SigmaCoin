@@ -1,13 +1,10 @@
-package ru.opensecreto.sigmacoin.blockchain;
+package ru.opensecreto.sigmacoin.blockstorage;
 
-import javax.xml.bind.DatatypeConverter;
-import java.io.File;
 import java.io.IOException;
 import java.io.RandomAccessFile;
-import java.util.Arrays;
 
 /**
- * Important: controller is NOT thread safe, also it is NOT protected from corrupted index and blockchain files
+ * Important: controller is NOT thread safe, also it is NOT protected from corrupted index and blockstorage files
  */
 public class BlockchainController {
 

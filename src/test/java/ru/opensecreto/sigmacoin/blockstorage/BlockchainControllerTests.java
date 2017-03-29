@@ -1,17 +1,12 @@
-package ru.opensecreto.sigmacoin.blockchain;
+package ru.opensecreto.sigmacoin.blockstorage;
 
 import org.assertj.core.api.Assertions;
 import org.assertj.core.api.Fail;
-import org.fluttercode.datafactory.impl.DataFactory;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.BeforeSuite;
 import org.testng.annotations.Test;
 import ru.opensecreto.TestUtils;
 
-import javax.xml.bind.DatatypeConverter;
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.Method;
 import java.util.Random;
 
 public class BlockchainControllerTests {
@@ -175,7 +170,7 @@ public class BlockchainControllerTests {
             Fail.fail("Old index file must be deleted");
         }
         if (new File(config.blockchainFile + ".old").exists()) {
-            Fail.fail("Old blockchain file must be deleted");
+            Fail.fail("Old blockstorage file must be deleted");
         }
     }
 

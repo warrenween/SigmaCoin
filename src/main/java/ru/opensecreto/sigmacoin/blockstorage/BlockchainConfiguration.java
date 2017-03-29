@@ -1,4 +1,4 @@
-package ru.opensecreto.sigmacoin.blockchain;
+package ru.opensecreto.sigmacoin.blockstorage;
 
 import java.io.File;
 

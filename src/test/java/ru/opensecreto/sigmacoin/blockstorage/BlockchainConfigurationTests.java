@@ -1,4 +1,4 @@
-package ru.opensecreto.sigmacoin.blockchain;
+package ru.opensecreto.sigmacoin.blockstorage;
 
 import org.assertj.core.api.Assertions;
 import org.testng.annotations.BeforeTest;
