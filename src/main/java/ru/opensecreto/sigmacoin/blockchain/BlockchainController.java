@@ -22,7 +22,7 @@ public class BlockchainController {
         blockchain = new RandomAccessFile(configuration.blockchainFile, "rwd");
     }
 
-    public String get(byte[] hash) throws IOException {
+    public byte[] get(byte[] hash) throws IOException {
         BlockIndex index = findHash(hash);
         if (index == null) {
             return null;
@@ -30,7 +30,7 @@ public class BlockchainController {
             blockchain.seek(index.offset);
             byte[] data = new byte[index.length];
             blockchain.read(data, 0, index.length);
-            return new String(data);
+            return data;
         }
     }
 
@@ -53,7 +53,7 @@ public class BlockchainController {
         }
     }
 
-    public void put(byte[] hash, String data) throws IOException {
+    public void put(byte[] hash, byte[] data) throws IOException {
         if (hash.length != configuration.hashLength) {
             throw new IllegalArgumentException("Given hash length " + hash.length + " " +
                     "is not equal to configuration length " + configuration.hashLength + ".");
@@ -75,13 +75,13 @@ public class BlockchainController {
 
         long blockchainOffset = blockchain.length();
         blockchain.seek(blockchainOffset);
-        blockchain.write(data.getBytes());
+        blockchain.write(data);
 
         this.index.seek(indexOffset);
         this.index.writeBoolean(true);
         this.index.write(hash);
         this.index.writeLong(blockchainOffset);
-        this.index.writeInt(data.getBytes().length);
+        this.index.writeInt(data.length);
     }
 
     private BlockIndex findHash(byte[] hash) throws IOException {

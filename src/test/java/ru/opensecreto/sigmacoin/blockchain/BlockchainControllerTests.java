@@ -17,7 +17,7 @@ public class BlockchainControllerTests {
 
     private Random random = new Random(new Random().nextLong());
     private DataFactory dataFactory = new DataFactory();
-    
+
     @Test
     public void testPutAndGet() throws IOException {
         BlockchainConfiguration config = new BlockchainConfiguration(
@@ -27,12 +27,12 @@ public class BlockchainControllerTests {
 
         byte[] hash = new byte[3];
         random.nextBytes(hash);
-        String data = dataFactory.getRandomChars(5, 20);
+        byte[] data = new byte[random.nextInt(20)];
+        random.nextBytes(data);
 
         controller.put(hash, data);
 
-        String resultData = controller.get(hash);
-        Assertions.assertThat(resultData).isEqualTo(data);
+        Assertions.assertThat(controller.get(hash)).containsExactly(data);
     }
 
     @Test
@@ -45,28 +45,28 @@ public class BlockchainControllerTests {
         //First block
         byte[] hash1 = new byte[3];
         random.nextBytes(hash1);
-        String data1 = dataFactory.getRandomChars(5, 20);
+        byte[] data1 = new byte[random.nextInt(20)];
+        random.nextBytes(data1);
         controller.put(hash1, data1);
 
         //Second block
         byte[] hash2 = new byte[3];
         random.nextBytes(hash2);
-        String data2 = dataFactory.getRandomChars(5, 20);
+        byte[] data2 = new byte[random.nextInt(20)];
+        random.nextBytes(data2);
         controller.put(hash2, data2);
 
         //Third block
         byte[] hash3 = new byte[3];
         random.nextBytes(hash3);
-        String data3 = dataFactory.getRandomChars(5, 20);
+        byte[] data3 = new byte[random.nextInt(20)];
         controller.put(hash3, data3);
 
         //Validating
-        String resultData1 = controller.get(hash1);
-        Assertions.assertThat(resultData1).isEqualTo(data1);
-        String resultData2 = controller.get(hash2);
-        Assertions.assertThat(resultData2).isEqualTo(data2);
-        String resultData3 = controller.get(hash3);
-        Assertions.assertThat(resultData3).isEqualTo(data3);
+        controller.get(hash1);
+        Assertions.assertThat(controller.get(hash1)).containsExactly(data1);
+        Assertions.assertThat(controller.get(hash2)).containsExactly(data2);
+        Assertions.assertThat(controller.get(hash3)).containsExactly(data3);
     }
 
     @Test
@@ -78,7 +78,8 @@ public class BlockchainControllerTests {
 
         byte[] hash = new byte[3];
         random.nextBytes(hash);
-        String data = dataFactory.getRandomChars(10, 20);
+        byte[] data = new byte[random.nextInt(20)];
+        random.nextBytes(data);
         controller.put(hash, data);
 
         Assertions.assertThat(controller.delete(hash)).isEqualTo(true);
@@ -95,7 +96,8 @@ public class BlockchainControllerTests {
 
         byte[] hash1 = new byte[3];
         random.nextBytes(hash1);
-        String data = dataFactory.getRandomChars(10, 20);
+        byte[] data = new byte[random.nextInt(20)];
+        random.nextBytes(data);
         controller.put(hash1, data);
 
         Assertions.assertThat(controller.delete(hash1)).isEqualTo(true);
@@ -103,10 +105,10 @@ public class BlockchainControllerTests {
 
         byte[] hash2 = new byte[3];
         random.nextBytes(hash1);
-        String data2 = dataFactory.getRandomChars(10, 20);
+        byte[] data2 = new byte[random.nextInt(20)];
         controller.put(hash2, data2);
 
-        Assertions.assertThat(controller.get(hash2)).isEqualTo(data2);
+        Assertions.assertThat(controller.get(hash2)).containsExactly(data2);
     }
 
     @Test
@@ -118,19 +120,23 @@ public class BlockchainControllerTests {
 
         byte[] hash1 = new byte[3];
         random.nextBytes(hash1);
-        String data1 = dataFactory.getRandomChars(10, 20);
+        byte[] data1 = new byte[random.nextInt(20)];
+        random.nextBytes(data1);
 
         byte[] hash2 = new byte[3];
         random.nextBytes(hash2);
-        String data2 = dataFactory.getRandomChars(10, 20);
+        byte[] data2 = new byte[random.nextInt(20)];
+        random.nextBytes(data2);
 
         byte[] hash3 = new byte[3];
         random.nextBytes(hash3);
-        String data3 = dataFactory.getRandomChars(10, 20);
+        byte[] data3 = new byte[random.nextInt(20)];
+        random.nextBytes(data3);
 
         byte[] hash4 = new byte[3];
         random.nextBytes(hash4);
-        String data4 = dataFactory.getRandomChars(10, 20);
+        byte[] data4 = new byte[random.nextInt(20)];
+        random.nextBytes(data4);
 
         controller.put(hash1, data1);
         controller.put(hash2, data2);
@@ -139,19 +145,19 @@ public class BlockchainControllerTests {
 
         Assertions.assertThat(controller.delete(hash2)).isEqualTo(true);
 
-        Assertions.assertThat(controller.get(hash1)).isEqualTo(data1);
-        Assertions.assertThat(controller.get(hash2)).isEqualTo(null);
-        Assertions.assertThat(controller.get(hash3)).isEqualTo(null);
-        Assertions.assertThat(controller.get(hash4)).isEqualTo(data4);
+        Assertions.assertThat(controller.get(hash1)).containsExactly(data1);
+        Assertions.assertThat(controller.get(hash2)).containsExactly();
+        Assertions.assertThat(controller.get(hash3)).containsExactly();
+        Assertions.assertThat(controller.get(hash4)).containsExactly(data4);
 
         Assertions.assertThat(controller.delete(hash2)).isEqualTo(false);
 
         controller.put(hash3, data3);
 
-        Assertions.assertThat(controller.get(hash1)).isEqualTo(data1);
-        Assertions.assertThat(controller.get(hash2)).isEqualTo(null);
-        Assertions.assertThat(controller.get(hash3)).isEqualTo(data3);
-        Assertions.assertThat(controller.get(hash4)).isEqualTo(data4);
+        Assertions.assertThat(controller.get(hash1)).containsExactly(data1);
+        Assertions.assertThat(controller.get(hash2)).containsExactly();
+        Assertions.assertThat(controller.get(hash3)).containsExactly(data3);
+        Assertions.assertThat(controller.get(hash4)).containsExactly(data4);
     }
 
     @Test
@@ -163,19 +169,23 @@ public class BlockchainControllerTests {
 
         byte[] hash1 = new byte[3];
         random.nextBytes(hash1);
-        String data1 = dataFactory.getRandomChars(10, 20);
+        byte[] data1 = new byte[random.nextInt(20)];
+        random.nextBytes(data1);
 
         byte[] hash2 = new byte[3];
         random.nextBytes(hash2);
-        String data2 = dataFactory.getRandomChars(10, 20);
+        byte[] data2 = new byte[random.nextInt(20)];
+        random.nextBytes(data2);
 
         byte[] hash3 = new byte[3];
         random.nextBytes(hash3);
-        String data3 = dataFactory.getRandomChars(10, 20);
+        byte[] data3 = new byte[random.nextInt(20)];
+        random.nextBytes(data3);
 
         byte[] hash4 = new byte[3];
         random.nextBytes(hash4);
-        String data4 = dataFactory.getRandomChars(10, 20);
+        byte[] data4 = new byte[random.nextInt(20)];
+        random.nextBytes(data4);
 
         controller.put(hash1, data1);
         controller.put(hash2, data2);
