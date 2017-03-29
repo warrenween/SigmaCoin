@@ -15,19 +15,13 @@ import java.util.Random;
 
 public class BlockchainControllerTests {
 
-    private Random random;
-    private BlockchainConfiguration config;
-    private DataFactory dataFactory;
-
-    @BeforeSuite
-    public void prepare() {
-        random = new Random();
-        dataFactory = new DataFactory();
-    }
+    private Random random = new Random(new Random().nextLong());
+    private DataFactory dataFactory = new DataFactory();
 
     @Test
     public void testStringWrapperMethods() throws IOException {
-        config.setHashLength(3);
+        BlockchainConfiguration config = new BlockchainConfiguration(
+                "testWrapperMethods.index", "testWrapperMethods.dat", 3);
         BlockchainController controller = new BlockchainController(config);
 
         byte[] hash = new byte[3];
@@ -41,27 +35,12 @@ public class BlockchainControllerTests {
         Assertions.assertThat(controller.delete(hash)).isEqualTo(false);
     }
 
-    @BeforeMethod
-    public void prepareConfig(Method method) {
-        config = new BlockchainConfiguration();
-        config.setIndexFile(method.getName() + "-index.dat");
-        config.setBlockchainFile(method.getName() + "-blockchain.dat");
-    }
-
-    @Test
-    public void testCreation() throws IOException {
-        BlockchainController controller = new BlockchainController(config);
-        if (!new File(config.getIndexFile()).exists()) {
-            Fail.fail("Index file must exist");
-        }
-        if (!new File(config.getBlockchainFile()).exists()) {
-            Fail.fail("Blockchain file must exist");
-        }
-    }
 
     @Test
     public void testPutAndGet() throws IOException {
-        config.setHashLength(3);
+        BlockchainConfiguration config = new BlockchainConfiguration(
+                "testPutAndGet.index", "testPutAndGet.dat", 3
+        );
         BlockchainController controller = new BlockchainController(config);
 
         byte[] hash = new byte[3];
@@ -76,7 +55,9 @@ public class BlockchainControllerTests {
 
     @Test
     public void testPutAndGetMultipleBlocks() throws IOException {
-        config.setHashLength(3);
+        BlockchainConfiguration config = new BlockchainConfiguration(
+                "testPutAndGetMultiple.index", "testPutAndGetMultiple.dat", 3
+        );
         BlockchainController controller = new BlockchainController(config);
 
         //First block
@@ -108,7 +89,9 @@ public class BlockchainControllerTests {
 
     @Test
     public void testDelete() throws IOException {
-        config.setHashLength(3);
+        BlockchainConfiguration config = new BlockchainConfiguration(
+                "testDelete.index", "testDelete.dat", 3
+        );
         BlockchainController controller = new BlockchainController(config);
 
         byte[] hash = new byte[3];
@@ -123,7 +106,9 @@ public class BlockchainControllerTests {
 
     @Test
     public void testDeletingAndPutting() throws IOException {
-        config.setHashLength(3);
+        BlockchainConfiguration config = new BlockchainConfiguration(
+                "testDeleteAndPut.index", "testDeleteAndPut.dat", 3
+        );
         BlockchainController controller = new BlockchainController(config);
 
         byte[] hash1 = new byte[3];
@@ -144,7 +129,9 @@ public class BlockchainControllerTests {
 
     @Test
     public void testPuttingDeletingAndGettingMultipleBlocks() throws IOException {
-        config.setHashLength(3);
+        BlockchainConfiguration config = new BlockchainConfiguration(
+                "testPutDeleteAndGetMultiple.index", "testPutDeleteAndGetMultiple.dat", 3
+        );
         BlockchainController controller = new BlockchainController(config);
 
         byte[] hash1 = new byte[3];
@@ -187,7 +174,9 @@ public class BlockchainControllerTests {
 
     @Test
     public void testReindex() throws IOException {
-        config.setHashLength(3);
+        BlockchainConfiguration config = new BlockchainConfiguration(
+                "testReindex.index", "testReindex.dat", 3
+        );
         BlockchainController controller = new BlockchainController(config);
 
         byte[] hash1 = new byte[3];
@@ -219,10 +208,10 @@ public class BlockchainControllerTests {
         Assertions.assertThat(controller.get(hash1)).isEqualTo(data1);
         Assertions.assertThat(controller.get(hash4)).isEqualTo(data4);
 
-        if (new File(config.getIndexFile() + ".old").exists()) {
+        if (new File(config.indexFile + ".old").exists()) {
             Fail.fail("Old index file must be deleted");
         }
-        if (new File(config.getBlockchainFile() + ".old").exists()) {
+        if (new File(config.blockchainFile + ".old").exists()) {
             Fail.fail("Old blockchain file must be deleted");
         }
     }

@@ -1,54 +1,15 @@
 package ru.opensecreto.sigmacoin.blockchain;
 
-import ru.opensecreto.sigmacoin.blockchain.exceptions.ImmutableFieldException;
-
 public class BlockchainConfiguration {
 
-    private boolean immutable;
+    public final String indexFile;
+    public final String blockchainFile;
+    public final int hashLength;
 
-    private String indexFile;
-    private String blockchainFile;
-    private int hashLength;
-
-    public String getIndexFile() {
-        return indexFile;
-    }
-
-    public void setIndexFile(String indexFile) throws ImmutableFieldException {
-        failImmutable();
+    public BlockchainConfiguration(String indexFile, String blockchainFile, int hashLength) {
         this.indexFile = indexFile;
-    }
-
-    public String getBlockchainFile() throws ImmutableFieldException {
-        return blockchainFile;
-    }
-
-    public void setBlockchainFile(String blockchainFile) {
-        failImmutable();
         this.blockchainFile = blockchainFile;
-    }
-
-    public int getHashLength() {
-        return hashLength;
-    }
-
-    public void setHashLength(int hashLength) throws ImmutableFieldException {
-        failImmutable();
         this.hashLength = hashLength;
-    }
-
-    public void setImmutable() {
-        immutable = true;
-    }
-
-    public boolean isImmutable() {
-        return immutable;
-    }
-
-    private void failImmutable() {
-        if (immutable) {
-            throw new ImmutableFieldException("Can not change fields of immutable object.");
-        }
     }
 
 }

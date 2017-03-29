@@ -17,10 +17,9 @@ public class BlockchainController {
 
     public BlockchainController(BlockchainConfiguration configuration) throws IOException {
         this.configuration = configuration;
-        configuration.setImmutable();
 
-        index = new RandomAccessFile(configuration.getIndexFile(), "rwd");
-        blockchain = new RandomAccessFile(configuration.getBlockchainFile(), "rwd");
+        index = new RandomAccessFile(configuration.indexFile, "rwd");
+        blockchain = new RandomAccessFile(configuration.blockchainFile, "rwd");
     }
 
     /**
@@ -78,9 +77,9 @@ public class BlockchainController {
     }
 
     public void put(byte[] hash, String data) throws IOException {
-        if (hash.length != configuration.getHashLength()) {
+        if (hash.length != configuration.hashLength) {
             throw new IllegalArgumentException("Given hash length " + hash.length + " " +
-                    "is not equal to configuration length " + configuration.getHashLength() + ".");
+                    "is not equal to configuration length " + configuration.hashLength + ".");
         }
 
         //searching for free space in index file
@@ -94,7 +93,7 @@ public class BlockchainController {
                 //we read one byte with index.readBoolean() that's why we should do -1 indexGetFilePointer
                 indexOffset = currentOffset;
             }
-            index.skipBytes(configuration.getHashLength() + Integer.BYTES + Long.BYTES);
+            index.skipBytes(configuration.hashLength + Integer.BYTES + Long.BYTES);
         }
 
         long blockchainOffset = blockchain.length();
@@ -110,7 +109,7 @@ public class BlockchainController {
 
     private BlockIndex findHash(byte[] hash) throws IOException {
         index.seek(0);
-        byte[] tempHash = new byte[configuration.getHashLength()];
+        byte[] tempHash = new byte[configuration.hashLength];
         while (index.getFilePointer() < index.length()) {
             long indexOffset = index.getFilePointer();
             boolean valid = index.readBoolean();
@@ -137,10 +136,10 @@ public class BlockchainController {
         index.close();
         blockchain.close();
 
-        File oldIndexFile = new File(configuration.getIndexFile() + ".old");
-        File oldBlockchainFile = new File(configuration.getBlockchainFile() + ".old");
-        File newIndexFile = new File(configuration.getIndexFile());
-        File newBlockchainFile = new File(configuration.getBlockchainFile());
+        File oldIndexFile = new File(configuration.indexFile + ".old");
+        File oldBlockchainFile = new File(configuration.blockchainFile + ".old");
+        File newIndexFile = new File(configuration.indexFile);
+        File newBlockchainFile = new File(configuration.blockchainFile);
 
         newIndexFile.renameTo(oldIndexFile);
         newBlockchainFile.renameTo(oldBlockchainFile);
@@ -150,7 +149,7 @@ public class BlockchainController {
         RandomAccessFile newIndexFileRAF = new RandomAccessFile(newIndexFile, "rwd");
         RandomAccessFile newBlockchainFileRAF = new RandomAccessFile(newBlockchainFile, "rwd");
 
-        byte[] hash = new byte[configuration.getHashLength()];
+        byte[] hash = new byte[configuration.hashLength];
         while (oldIndexFileRAF.getFilePointer() < oldBlockchainRAF.length()) {
             boolean oldValid = oldIndexFileRAF.readBoolean();
             oldIndexFileRAF.read(hash);
