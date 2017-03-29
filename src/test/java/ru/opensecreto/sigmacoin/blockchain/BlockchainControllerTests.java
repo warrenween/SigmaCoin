@@ -6,6 +6,7 @@ import org.fluttercode.datafactory.impl.DataFactory;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.BeforeSuite;
 import org.testng.annotations.Test;
+import ru.opensecreto.TestUtils;
 
 import javax.xml.bind.DatatypeConverter;
 import java.io.File;
@@ -16,7 +17,6 @@ import java.util.Random;
 public class BlockchainControllerTests {
 
     private Random random = new Random(new Random().nextLong());
-    private DataFactory dataFactory = new DataFactory();
 
     @Test
     public void testPutAndGet() throws IOException {
@@ -25,10 +25,8 @@ public class BlockchainControllerTests {
         );
         BlockchainController controller = new BlockchainController(config);
 
-        byte[] hash = new byte[3];
-        random.nextBytes(hash);
-        byte[] data = new byte[random.nextInt(20)];
-        random.nextBytes(data);
+        byte[] hash = TestUtils.getFixedArray(3);
+        byte[] data = TestUtils.getRandomArray(20);
 
         controller.put(hash, data);
 
@@ -43,23 +41,18 @@ public class BlockchainControllerTests {
         BlockchainController controller = new BlockchainController(config);
 
         //First block
-        byte[] hash1 = new byte[3];
-        random.nextBytes(hash1);
-        byte[] data1 = new byte[random.nextInt(20)];
-        random.nextBytes(data1);
+        byte[] hash1 = TestUtils.getFixedArray(3);
+        byte[] data1 = TestUtils.getRandomArray(20);
         controller.put(hash1, data1);
 
         //Second block
-        byte[] hash2 = new byte[3];
-        random.nextBytes(hash2);
-        byte[] data2 = new byte[random.nextInt(20)];
-        random.nextBytes(data2);
+        byte[] hash2 = TestUtils.getFixedArray(3);
+        byte[] data2 = TestUtils.getRandomArray(20);
         controller.put(hash2, data2);
 
         //Third block
-        byte[] hash3 = new byte[3];
-        random.nextBytes(hash3);
-        byte[] data3 = new byte[random.nextInt(20)];
+        byte[] hash3 = TestUtils.getFixedArray(3);
+        byte[] data3 = TestUtils.getRandomArray(20);
         controller.put(hash3, data3);
 
         //Validating
@@ -76,10 +69,8 @@ public class BlockchainControllerTests {
         );
         BlockchainController controller = new BlockchainController(config);
 
-        byte[] hash = new byte[3];
-        random.nextBytes(hash);
-        byte[] data = new byte[random.nextInt(20)];
-        random.nextBytes(data);
+        byte[] hash = TestUtils.getFixedArray(3);
+        byte[] data = TestUtils.getRandomArray(20);
         controller.put(hash, data);
 
         Assertions.assertThat(controller.delete(hash)).isEqualTo(true);
@@ -94,19 +85,15 @@ public class BlockchainControllerTests {
         );
         BlockchainController controller = new BlockchainController(config);
 
-        byte[] hash1 = new byte[3];
-        random.nextBytes(hash1);
-        byte[] data = new byte[random.nextInt(20)];
-        random.nextBytes(data);
+        byte[] hash1 = TestUtils.getFixedArray(3);
+        byte[] data = TestUtils.getRandomArray(20);
         controller.put(hash1, data);
 
         Assertions.assertThat(controller.delete(hash1)).isEqualTo(true);
         Assertions.assertThat(controller.get(hash1)).isEqualTo(null);
 
-        byte[] hash2 = new byte[3];
-        random.nextBytes(hash1);
-        byte[] data2 = new byte[random.nextInt(20)];
-        controller.put(hash2, data2);
+        byte[] hash2 = TestUtils.getFixedArray(3);
+        byte[] data2 = TestUtils.getRandomArray(20);
 
         Assertions.assertThat(controller.get(hash2)).containsExactly(data2);
     }
@@ -118,25 +105,17 @@ public class BlockchainControllerTests {
         );
         BlockchainController controller = new BlockchainController(config);
 
-        byte[] hash1 = new byte[3];
-        random.nextBytes(hash1);
-        byte[] data1 = new byte[random.nextInt(20)];
-        random.nextBytes(data1);
+        byte[] hash1 = TestUtils.getFixedArray(3);
+        byte[] data1 = TestUtils.getRandomArray(20);
 
-        byte[] hash2 = new byte[3];
-        random.nextBytes(hash2);
-        byte[] data2 = new byte[random.nextInt(20)];
-        random.nextBytes(data2);
+        byte[] hash2 = TestUtils.getFixedArray(3);
+        byte[] data2 = TestUtils.getRandomArray(20);
 
-        byte[] hash3 = new byte[3];
-        random.nextBytes(hash3);
-        byte[] data3 = new byte[random.nextInt(20)];
-        random.nextBytes(data3);
+        byte[] hash3 = TestUtils.getFixedArray(3);
+        byte[] data3 = TestUtils.getRandomArray(20);
 
-        byte[] hash4 = new byte[3];
-        random.nextBytes(hash4);
-        byte[] data4 = new byte[random.nextInt(20)];
-        random.nextBytes(data4);
+        byte[] hash4 = TestUtils.getFixedArray(3);
+        byte[] data4 = TestUtils.getRandomArray(20);
 
         controller.put(hash1, data1);
         controller.put(hash2, data2);
@@ -167,25 +146,17 @@ public class BlockchainControllerTests {
         );
         BlockchainController controller = new BlockchainController(config);
 
-        byte[] hash1 = new byte[3];
-        random.nextBytes(hash1);
-        byte[] data1 = new byte[random.nextInt(20)];
-        random.nextBytes(data1);
+        byte[] hash1 = TestUtils.getFixedArray(3);
+        byte[] data1 = TestUtils.getRandomArray(20);
 
-        byte[] hash2 = new byte[3];
-        random.nextBytes(hash2);
-        byte[] data2 = new byte[random.nextInt(20)];
-        random.nextBytes(data2);
+        byte[] hash2 = TestUtils.getFixedArray(3);
+        byte[] data2 = TestUtils.getRandomArray(20);
 
-        byte[] hash3 = new byte[3];
-        random.nextBytes(hash3);
-        byte[] data3 = new byte[random.nextInt(20)];
-        random.nextBytes(data3);
+        byte[] hash3 = TestUtils.getFixedArray(3);
+        byte[] data3 = TestUtils.getRandomArray(20);
 
-        byte[] hash4 = new byte[3];
-        random.nextBytes(hash4);
-        byte[] data4 = new byte[random.nextInt(20)];
-        random.nextBytes(data4);
+        byte[] hash4 = TestUtils.getFixedArray(3);
+        byte[] data4 = TestUtils.getRandomArray(20);
 
         controller.put(hash1, data1);
         controller.put(hash2, data2);
