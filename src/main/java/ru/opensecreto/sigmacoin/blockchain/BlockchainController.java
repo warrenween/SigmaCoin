@@ -9,13 +9,13 @@ import java.util.Arrays;
 /**
  * Important: controller is NOT thread safe, also it is NOT protected from corrupted index and blockchain files
  */
-public class BlockchainArchiveController {
+public class BlockchainController {
 
-    public BlockchainArchiveConfiguration configuration;
+    public BlockchainConfiguration configuration;
     private RandomAccessFile index;
     private RandomAccessFile blockchain;
 
-    public BlockchainArchiveController(BlockchainArchiveConfiguration configuration) throws IOException {
+    public BlockchainController(BlockchainConfiguration configuration) throws IOException {
         this.configuration = configuration;
         configuration.setImmutable();
 
@@ -45,7 +45,7 @@ public class BlockchainArchiveController {
 
     /**
      * @param hash Hex string representation of hash
-     * @see BlockchainArchiveController#delete(byte[])
+     * @see BlockchainController#delete(byte[])
      */
     public boolean delete(String hash) throws IOException {
         return this.delete(DatatypeConverter.parseHexBinary(hash));
@@ -127,7 +127,7 @@ public class BlockchainArchiveController {
 
     /**
      * Removes junk data from blockchain file.
-     * Because {@link BlockchainArchiveController#delete(byte[])} only marks index entry as invalid
+     * Because {@link BlockchainController#delete(byte[])} only marks index entry as invalid
      * and don't deletes data from blockchain file (it costs too much resources), you need call reindex periodically.
      * <p>
      * This will copy old index and blockchain files and move valid entries to new index and blockchain files.

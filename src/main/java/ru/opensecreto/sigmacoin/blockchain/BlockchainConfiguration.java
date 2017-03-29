@@ -2,7 +2,7 @@ package ru.opensecreto.sigmacoin.blockchain;
 
 import ru.opensecreto.sigmacoin.blockchain.exceptions.ImmutableFieldException;
 
-public class BlockchainArchiveConfiguration {
+public class BlockchainConfiguration {
 
     private boolean immutable;
 

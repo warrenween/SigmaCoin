@@ -7,7 +7,7 @@ import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 import ru.opensecreto.sigmacoin.blockchain.exceptions.ImmutableFieldException;
 
-public class BlockchainArchiveConfigurationTests {
+public class BlockchainConfigurationTests {
 
     private String randomStringA;
     private String randomStringB;
@@ -25,7 +25,7 @@ public class BlockchainArchiveConfigurationTests {
 
     @Test
     public void testIndexFile() {
-        BlockchainArchiveConfiguration config = new BlockchainArchiveConfiguration();
+        BlockchainConfiguration config = new BlockchainConfiguration();
 
         try {
             config.setIndexFile(randomStringA);
@@ -41,7 +41,7 @@ public class BlockchainArchiveConfigurationTests {
 
     @Test
     public void testBlockchainFile() {
-        BlockchainArchiveConfiguration config = new BlockchainArchiveConfiguration();
+        BlockchainConfiguration config = new BlockchainConfiguration();
 
         try {
             config.setBlockchainFile(randomStringA);
@@ -57,7 +57,7 @@ public class BlockchainArchiveConfigurationTests {
 
     @Test
     public void testHashLength() {
-        BlockchainArchiveConfiguration config = new BlockchainArchiveConfiguration();
+        BlockchainConfiguration config = new BlockchainConfiguration();
 
         try {
             config.setHashLength(randomIntA);
@@ -73,7 +73,7 @@ public class BlockchainArchiveConfigurationTests {
 
     @Test
     public void testImmutable() {
-        BlockchainArchiveConfiguration config = new BlockchainArchiveConfiguration();
+        BlockchainConfiguration config = new BlockchainConfiguration();
 
         Assertions.assertThat(config.isImmutable()).isEqualTo(false);
         config.setImmutable();

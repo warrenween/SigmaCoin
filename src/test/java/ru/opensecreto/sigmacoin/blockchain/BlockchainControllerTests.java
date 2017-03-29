@@ -13,10 +13,10 @@ import java.io.IOException;
 import java.lang.reflect.Method;
 import java.util.Random;
 
-public class BlockchainArchiveControllerTests {
+public class BlockchainControllerTests {
 
     private Random random;
-    private BlockchainArchiveConfiguration config;
+    private BlockchainConfiguration config;
     private DataFactory dataFactory;
 
     @BeforeSuite
@@ -28,7 +28,7 @@ public class BlockchainArchiveControllerTests {
     @Test
     public void testStringWrapperMethods() throws IOException {
         config.setHashLength(3);
-        BlockchainArchiveController controller = new BlockchainArchiveController(config);
+        BlockchainController controller = new BlockchainController(config);
 
         byte[] hash = new byte[3];
         random.nextBytes(hash);
@@ -43,14 +43,14 @@ public class BlockchainArchiveControllerTests {
 
     @BeforeMethod
     public void prepareConfig(Method method) {
-        config = new BlockchainArchiveConfiguration();
+        config = new BlockchainConfiguration();
         config.setIndexFile(method.getName() + "-index.dat");
         config.setBlockchainFile(method.getName() + "-blockchain.dat");
     }
 
     @Test
     public void testCreation() throws IOException {
-        BlockchainArchiveController controller = new BlockchainArchiveController(config);
+        BlockchainController controller = new BlockchainController(config);
         if (!new File(config.getIndexFile()).exists()) {
             Fail.fail("Index file must exist");
         }
@@ -62,7 +62,7 @@ public class BlockchainArchiveControllerTests {
     @Test
     public void testPutAndGet() throws IOException {
         config.setHashLength(3);
-        BlockchainArchiveController controller = new BlockchainArchiveController(config);
+        BlockchainController controller = new BlockchainController(config);
 
         byte[] hash = new byte[3];
         random.nextBytes(hash);
@@ -77,7 +77,7 @@ public class BlockchainArchiveControllerTests {
     @Test
     public void testPutAndGetMultipleBlocks() throws IOException {
         config.setHashLength(3);
-        BlockchainArchiveController controller = new BlockchainArchiveController(config);
+        BlockchainController controller = new BlockchainController(config);
 
         //First block
         byte[] hash1 = new byte[3];
@@ -109,7 +109,7 @@ public class BlockchainArchiveControllerTests {
     @Test
     public void testDelete() throws IOException {
         config.setHashLength(3);
-        BlockchainArchiveController controller = new BlockchainArchiveController(config);
+        BlockchainController controller = new BlockchainController(config);
 
         byte[] hash = new byte[3];
         random.nextBytes(hash);
@@ -124,7 +124,7 @@ public class BlockchainArchiveControllerTests {
     @Test
     public void testDeletingAndPutting() throws IOException {
         config.setHashLength(3);
-        BlockchainArchiveController controller = new BlockchainArchiveController(config);
+        BlockchainController controller = new BlockchainController(config);
 
         byte[] hash1 = new byte[3];
         random.nextBytes(hash1);
@@ -145,7 +145,7 @@ public class BlockchainArchiveControllerTests {
     @Test
     public void testPuttingDeletingAndGettingMultipleBlocks() throws IOException {
         config.setHashLength(3);
-        BlockchainArchiveController controller = new BlockchainArchiveController(config);
+        BlockchainController controller = new BlockchainController(config);
 
         byte[] hash1 = new byte[3];
         random.nextBytes(hash1);
@@ -188,7 +188,7 @@ public class BlockchainArchiveControllerTests {
     @Test
     public void testReindex() throws IOException {
         config.setHashLength(3);
-        BlockchainArchiveController controller = new BlockchainArchiveController(config);
+        BlockchainController controller = new BlockchainController(config);
 
         byte[] hash1 = new byte[3];
         random.nextBytes(hash1);
