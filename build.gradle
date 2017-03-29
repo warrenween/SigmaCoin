@@ -69,8 +69,6 @@ dependencyVerification {
 test.useTestNG()
 test.workingDir = "$buildDir"
 
-test.dependsOn.add(prepareTestWorkingDir)
-
 tasks.withType(Test) {
     int time = 0;
     afterTest { desc, result ->
