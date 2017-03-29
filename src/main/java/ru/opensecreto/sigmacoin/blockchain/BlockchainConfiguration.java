@@ -1,15 +1,18 @@
 package ru.opensecreto.sigmacoin.blockchain;
 
+import java.io.File;
+
 public class BlockchainConfiguration {
 
-    public final String indexFile;
-    public final String blockchainFile;
+    public final File blockchainFoler;
     public final int hashLength;
+    public final int blockMaxSize;
+    public final int maxBlocksPerFile;
 
-    public BlockchainConfiguration(String indexFile, String blockchainFile, int hashLength) {
-        this.indexFile = indexFile;
-        this.blockchainFile = blockchainFile;
+    public BlockchainConfiguration(File blockchainFoler, int hashLength, int blockMaxSize, int maxBlocksPerFile) {
+        this.blockchainFoler = blockchainFoler;
         this.hashLength = hashLength;
+        this.blockMaxSize = blockMaxSize;
+        this.maxBlocksPerFile = maxBlocksPerFile;
     }
-
 }
