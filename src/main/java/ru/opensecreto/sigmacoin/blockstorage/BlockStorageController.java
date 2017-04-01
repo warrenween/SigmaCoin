@@ -24,9 +24,15 @@ public class BlockStorageController {
         this.hashSize = hashSize;
         this.maxBlockSize = maxBlockSize;
 
-        db = DBMaker.fileDB(file).transactionEnable().closeOnJvmShutdown().make();
+        db = DBMaker.fileDB(file)
+                .transactionEnable()
+                .closeOnJvmShutdown()
+                .allocateStartSize(134217728)//128 mib
+                .allocateIncrement(67108864) //64 mib
+                .make();
         blocks = db.hashMap("blocks", Serializer.BYTE_ARRAY, Serializer.BYTE_ARRAY)
-                .counterEnable().createOrOpen();
+                .counterEnable()
+                .createOrOpen();
     }
 
     public boolean addBlock(byte[] hash, byte[] data) {
