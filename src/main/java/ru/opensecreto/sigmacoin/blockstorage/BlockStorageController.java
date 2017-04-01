@@ -27,8 +27,8 @@ public class BlockStorageController {
         db = DBMaker.fileDB(file)
                 .transactionEnable()
                 .closeOnJvmShutdown()
-                .allocateStartSize(134217728)//128 mib
-                .allocateIncrement(67108864) //64 mib
+                .allocateStartSize(BlockStorageConfigurator.START_SIZE)
+                .allocateIncrement(BlockStorageConfigurator.ALLOCATE_SIZE)
                 .make();
         blocks = db.hashMap("blocks", Serializer.BYTE_ARRAY, Serializer.BYTE_ARRAY)
                 .counterEnable()
