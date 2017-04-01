@@ -34,7 +34,7 @@ public class BlockStorageConfigurator {
 
         int ALLOCATE_SIZE_TEMP;
         if (System.getProperty("blockstorage.allocatesize") == null) {
-            LOGGER.info("'blockstorage.allocatesize' property is not defined. Setting to default {}.", DEFAULT_START_SIZE);
+            LOGGER.info("'blockstorage.allocatesize' property is not defined. Setting to default {}.", DEFAULT_ALLOCATE_SIZE);
             ALLOCATE_SIZE_TEMP = DEFAULT_ALLOCATE_SIZE;
         } else {
             try {
