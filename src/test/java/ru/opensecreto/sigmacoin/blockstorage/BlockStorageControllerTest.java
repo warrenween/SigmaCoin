@@ -43,14 +43,14 @@ public class BlockStorageControllerTest {
 
         //check reading block do not changes it
         assertThat(controller.hasBlock(new byte[]{1, 2})).isTrue();
-        assertThat(controller.getBlock(new byte[]{1, 2})).containsExactly(new byte[]{1, 2});
+        assertThat(controller.getBlock(new byte[]{1, 2})).containsExactly(new byte[]{3, 4});
         assertThat(controller.hasBlock(new byte[]{1, 2})).isTrue();
-        assertThat(controller.getBlock(new byte[]{1, 2})).containsExactly(new byte[]{1, 2});
+        assertThat(controller.getBlock(new byte[]{1, 2})).containsExactly(new byte[]{3, 4});
 
         //check adding block with same hash rejected and original block is not changed
         assertThat(controller.addBlock(new byte[]{1, 2}, new byte[]{5, 6})).isTrue();
         assertThat(controller.hasBlock(new byte[]{1, 2})).isTrue();
-        assertThat(controller.getBlock(new byte[]{1, 2})).containsExactly(new byte[]{1, 2});
+        assertThat(controller.getBlock(new byte[]{1, 2})).containsExactly(new byte[]{3, 4});
 
         //testing loading database
         controller.close();
@@ -60,14 +60,14 @@ public class BlockStorageControllerTest {
 
         //check reading block do not changes it
         assertThat(controller.hasBlock(new byte[]{1, 2})).isTrue();
-        assertThat(controller.getBlock(new byte[]{1, 2})).containsExactly(new byte[]{1, 2});
+        assertThat(controller.getBlock(new byte[]{1, 2})).containsExactly(new byte[]{3, 4});
         assertThat(controller.hasBlock(new byte[]{1, 2})).isTrue();
-        assertThat(controller.getBlock(new byte[]{1, 2})).containsExactly(new byte[]{1, 2});
+        assertThat(controller.getBlock(new byte[]{1, 2})).containsExactly(new byte[]{3, 4});
 
         //check adding block with same hash rejected and original block is not changed
         assertThat(controller.addBlock(new byte[]{1, 2}, new byte[]{5, 6})).isTrue();
         assertThat(controller.hasBlock(new byte[]{1, 2})).isTrue();
-        assertThat(controller.getBlock(new byte[]{1, 2})).containsExactly(new byte[]{1, 2});
+        assertThat(controller.getBlock(new byte[]{1, 2})).containsExactly(new byte[]{3, 4});
     }
 
 }
