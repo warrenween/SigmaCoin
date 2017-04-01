@@ -51,6 +51,23 @@ public class BlockStorageControllerTest {
         assertThat(controller.addBlock(new byte[]{1, 2}, new byte[]{5, 6})).isTrue();
         assertThat(controller.hasBlock(new byte[]{1, 2})).isTrue();
         assertThat(controller.getBlock(new byte[]{1, 2})).containsExactly(new byte[]{1, 2});
+
+        //testing loading database
+        controller.close();
+        BlockStorageController controllerNew = new BlockStorageController(
+                new File("test.db"), 2, 2
+        );
+
+        //check reading block do not changes it
+        assertThat(controller.hasBlock(new byte[]{1, 2})).isTrue();
+        assertThat(controller.getBlock(new byte[]{1, 2})).containsExactly(new byte[]{1, 2});
+        assertThat(controller.hasBlock(new byte[]{1, 2})).isTrue();
+        assertThat(controller.getBlock(new byte[]{1, 2})).containsExactly(new byte[]{1, 2});
+
+        //check adding block with same hash rejected and original block is not changed
+        assertThat(controller.addBlock(new byte[]{1, 2}, new byte[]{5, 6})).isTrue();
+        assertThat(controller.hasBlock(new byte[]{1, 2})).isTrue();
+        assertThat(controller.getBlock(new byte[]{1, 2})).containsExactly(new byte[]{1, 2});
     }
 
 }
