@@ -10,4 +10,9 @@ public class CoinConfig {
      */
     public static final int MAX_BLOCK_SIZE = 16 * 1024 * 1024;
 
+    /**
+     * Digits after dot.
+     */
+    public static final int PRECISION = 15;
+
 }
