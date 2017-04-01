@@ -34,6 +34,7 @@ public class BlockStorageController {
         checkBlock(data);
         if (!blocks.containsKey(hash)) {
             blocks.put(hash, data);
+            db.commit();
             return true;
         }
         return false;
