@@ -68,8 +68,11 @@ dependencyVerification {
     ]
 }
 
-test.useTestNG()
-test.workingDir = "$buildDir"
+test {
+    useTestNG()
+    workingDir = "$buildDir"
+    systemProperty 'org.slf4j.simpleLogger.defaultLogLevel', 'trace'
+}
 
 tasks.withType(Test) {
     int time = 0;
