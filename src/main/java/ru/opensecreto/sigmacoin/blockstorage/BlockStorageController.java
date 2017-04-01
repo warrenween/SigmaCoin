@@ -61,4 +61,9 @@ public class BlockStorageController {
         );
     }
 
+    public void close() {
+        blocks.close();
+        db.close();
+    }
+
 }
