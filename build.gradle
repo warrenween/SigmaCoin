@@ -68,8 +68,11 @@ dependencyVerification {
     ]
 }
 
-test.useTestNG()
-test.workingDir = "$buildDir"
+test {
+    useTestNG()
+    workingDir = "$buildDir"
+    systemProperty 'org.slf4j.simpleLogger.defaultLogLevel', 'trace'
+}
 
 tasks.withType(Test) {
     int time = 0;
@@ -79,7 +82,7 @@ tasks.withType(Test) {
 
     testLogging {
         // set options for log level LIFECYCLE
-        events "passed", "skipped", "failed", "standardOut"
+        events "passed", "skipped", "failed", "standardOut", "standardError"
         showExceptions true
         exceptionFormat "full"
         showCauses true
