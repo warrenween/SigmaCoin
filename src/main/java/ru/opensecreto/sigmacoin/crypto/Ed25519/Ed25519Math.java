@@ -102,10 +102,7 @@ class Ed25519Math {
             return false;
         }
         //P.y * Q.z - Q.y * P.z) % p != 0
-        if (P.y.multiply(Q.z).subtract(Q.y.multiply(P.z)).mod(p).compareTo(BigInteger.ZERO) != 0) {
-            return false;
-        }
-        return true;
+        return P.y.multiply(Q.z).subtract(Q.y.multiply(P.z)).mod(p).compareTo(BigInteger.ZERO) == 0;
     }
 
     public static Point pointAdd(Point P, Point Q) {

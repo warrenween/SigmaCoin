@@ -89,7 +89,7 @@ test {
 }
 
 tasks.withType(Test) {
-    int time = 0;
+    int time = 0
     afterTest { desc, result ->
         time += result.getEndTime() - result.getStartTime()
     }
