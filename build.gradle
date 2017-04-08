@@ -32,6 +32,7 @@ ext {
     openUtilsVersion = '1.0'
     jcommandsVersion = '1.3'
     mapdbVersion = '3.0.3'
+    nd4jVersion = '0.8.0'
 
     //test libraries
     assertjVersion = '3.6.2'
@@ -51,6 +52,7 @@ dependencies {
     compile "ru.opensecreto:openutils:$openUtilsVersion"
     compile "ru.opensecreto:jcommands:$jcommandsVersion"
     compile "org.mapdb:mapdb:$mapdbVersion"
+    compile "org.nd4j:nd4j-common:$nd4jVersion"
 
     testCompile "org.assertj:assertj-core:$assertjVersion"
     testCompile "org.testng:testng:$testngVersion"
