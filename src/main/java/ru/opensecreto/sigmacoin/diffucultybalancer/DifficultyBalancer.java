@@ -1,6 +1,5 @@
 package ru.opensecreto.sigmacoin.diffucultybalancer;
 
-import com.google.common.math.BigIntegerMath;
 import org.nd4j.linalg.util.BigDecimalMath;
 
 import java.math.BigDecimal;
