@@ -27,4 +27,16 @@ public class DifficultyBalancerTest {
         )).isEqualByComparingTo(BigInteger.valueOf(200));
     }
 
+    @Test
+    public void testArguments() {
+        new DifficultyBalancer(BigInteger.TEN, BigDecimal.ZERO);
+
+        Assertions.assertThatThrownBy(() -> new DifficultyBalancer(BigInteger.ZERO, new BigDecimal("0.5")));
+        Assertions.assertThatThrownBy(() -> new DifficultyBalancer(BigInteger.TEN, BigDecimal.ONE));
+
+        Assertions.assertThatThrownBy(() -> new DifficultyBalancer(BigInteger.TEN.negate(), new BigDecimal("0.5")));
+        Assertions.assertThatThrownBy(() -> new DifficultyBalancer(BigInteger.TEN, new BigDecimal("-0.5")));
+        Assertions.assertThatThrownBy(() -> new DifficultyBalancer(BigInteger.TEN, new BigDecimal("1.5")));
+    }
+
 }
