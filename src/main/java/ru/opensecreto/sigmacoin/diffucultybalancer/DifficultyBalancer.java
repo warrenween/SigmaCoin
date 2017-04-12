@@ -11,7 +11,7 @@ public class DifficultyBalancer {
 
     private final BigInteger target_time;
     /**
-     * 0 < smooth_k < 1
+     * 0 <= smooth_k < 1
      */
     private final BigDecimal smooth_k;
 
