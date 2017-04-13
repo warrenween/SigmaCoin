@@ -16,6 +16,9 @@ public class DifficultyBalancer {
     private final BigDecimal smooth_k;
 
     public DifficultyBalancer(BigInteger target_time, BigDecimal smooth_k) {
+        if (target_time.compareTo(BigInteger.ZERO) <= 0) {
+            throw new IllegalArgumentException("target_time must be larger than 0");
+        }
         this.target_time = target_time;
 
         if (smooth_k.compareTo(BigDecimal.ZERO) < 0)
