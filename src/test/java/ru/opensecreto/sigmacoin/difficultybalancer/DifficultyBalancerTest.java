@@ -45,7 +45,8 @@ public class DifficultyBalancerTest {
     @Test
     public void test() {
         //test fractions
-        new DifficultyBalancer(BigInteger.TEN, BigDecimal.ZERO).getNewDifficulty(BigInteger.ONE, BigInteger.valueOf(6));
+        new DifficultyBalancer(BigInteger.valueOf(7), BigDecimal.ZERO)
+                .getNewDifficulty(BigInteger.ONE, BigInteger.valueOf(2));
 
     }
 
