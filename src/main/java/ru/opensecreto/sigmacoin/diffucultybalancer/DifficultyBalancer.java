@@ -47,6 +47,6 @@ public class DifficultyBalancer {
             return new BigDecimal(lastDiffuculty).multiply(k).round(new MathContext(2, RoundingMode.CEILING)).toBigInteger();
         }
 
-        throw new IllegalStateException("unexcpected error");
+        throw new IllegalStateException("unexpected error");
     }
 }
