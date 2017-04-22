@@ -9,17 +9,17 @@ import java.math.RoundingMode;
 
 public class DifficultyBalancer {
 
-    private final BigInteger target_time;
+    private final BigInteger targetTime;
     /**
      * 0 <= smoothRate < 1
      */
     private final BigDecimal smoothRate;
 
-    public DifficultyBalancer(BigInteger target_time, BigDecimal smoothRate) {
-        if (target_time.compareTo(BigInteger.ZERO) <= 0) {
-            throw new IllegalArgumentException("target_time must be larger than 0");
+    public DifficultyBalancer(BigInteger targetTime, BigDecimal smoothRate) {
+        if (targetTime.compareTo(BigInteger.ZERO) <= 0) {
+            throw new IllegalArgumentException("targetTime must be larger than 0");
         }
-        this.target_time = target_time;
+        this.targetTime = targetTime;
 
         if (smoothRate.compareTo(BigDecimal.ZERO) < 0)
             throw new IllegalArgumentException("smoothRate must be grater or equal to 0");
@@ -30,20 +30,20 @@ public class DifficultyBalancer {
 
     public final BigInteger getNewDifficulty(BigInteger lastDiffuculty, BigInteger lastTime) {
         BigDecimal k;
-        if (lastTime.compareTo(target_time) == 0) {
+        if (lastTime.compareTo(targetTime) == 0) {
             return lastDiffuculty;
         }
 
-        k = BigDecimalMath.pow(new BigDecimal(lastTime).divide(new BigDecimal(target_time)),
+        k = BigDecimalMath.pow(new BigDecimal(lastTime).divide(new BigDecimal(targetTime)),
                 BigDecimal.ONE.subtract(smoothRate));
 
         //last time is bigger than target
-        if (lastTime.compareTo(target_time) > 0) {
+        if (lastTime.compareTo(targetTime) > 0) {
             return new BigDecimal(lastDiffuculty).multiply(k).round(new MathContext(2, RoundingMode.FLOOR)).toBigInteger();
         }
 
         //last time is lower than target
-        if (lastTime.compareTo(target_time) < 0) {
+        if (lastTime.compareTo(targetTime) < 0) {
             return new BigDecimal(lastDiffuculty).multiply(k).round(new MathContext(2, RoundingMode.CEILING)).toBigInteger();
         }
 
