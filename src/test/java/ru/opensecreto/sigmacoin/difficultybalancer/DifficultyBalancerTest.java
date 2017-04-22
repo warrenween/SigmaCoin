@@ -6,6 +6,7 @@ import ru.opensecreto.sigmacoin.diffucultybalancer.DifficultyBalancer;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.math.MathContext;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -45,6 +46,7 @@ public class DifficultyBalancerTest {
     @Test
     public void test() {
         //test fractions
+        //this wil do 2/7 which can lead to exception
         new DifficultyBalancer(BigInteger.valueOf(7), BigDecimal.ZERO)
                 .getNewDifficulty(BigInteger.ONE, BigInteger.valueOf(2));
 
