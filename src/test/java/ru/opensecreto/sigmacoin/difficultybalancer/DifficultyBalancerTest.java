@@ -50,6 +50,9 @@ public class DifficultyBalancerTest {
         new DifficultyBalancer(BigInteger.valueOf(7), BigDecimal.ZERO)
                 .getNewDifficulty(BigInteger.ONE, BigInteger.valueOf(2));
 
+        new DifficultyBalancer(BigInteger.valueOf(7), BigDecimal.valueOf(0.137))
+                .getNewDifficulty(BigInteger.ONE, BigInteger.valueOf(2));
+
     }
 
 }
