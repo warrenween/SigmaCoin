@@ -17,7 +17,8 @@ public class DifficultyBalancerTest {
     public void testDifficultyChangesInCorrectDirection() {
         DifficultyBalancer balancer = new DifficultyBalancer(
                 BigInteger.valueOf(100),
-                BigDecimal.ZERO
+                BigDecimal.ZERO,
+                5
         );
 
         assertThat(balancer.getNewDifficulty(
@@ -33,24 +34,24 @@ public class DifficultyBalancerTest {
 
     @Test
     public void testArguments() {
-        new DifficultyBalancer(BigInteger.TEN, BigDecimal.ZERO);
+        new DifficultyBalancer(BigInteger.TEN, BigDecimal.ZERO, 5);
 
-        assertThatThrownBy(() -> new DifficultyBalancer(BigInteger.ZERO, new BigDecimal("0.5")));
-        assertThatThrownBy(() -> new DifficultyBalancer(BigInteger.TEN, BigDecimal.ONE));
+        assertThatThrownBy(() -> new DifficultyBalancer(BigInteger.ZERO, new BigDecimal("0.5"), 5));
+        assertThatThrownBy(() -> new DifficultyBalancer(BigInteger.TEN, BigDecimal.ONE,5));
 
-        assertThatThrownBy(() -> new DifficultyBalancer(BigInteger.TEN.negate(), new BigDecimal("0.5")));
-        assertThatThrownBy(() -> new DifficultyBalancer(BigInteger.TEN, new BigDecimal("-0.5")));
-        assertThatThrownBy(() -> new DifficultyBalancer(BigInteger.TEN, new BigDecimal("1.5")));
+        assertThatThrownBy(() -> new DifficultyBalancer(BigInteger.TEN.negate(), new BigDecimal("0.5"), 5));
+        assertThatThrownBy(() -> new DifficultyBalancer(BigInteger.TEN, new BigDecimal("-0.5"), 5));
+        assertThatThrownBy(() -> new DifficultyBalancer(BigInteger.TEN, new BigDecimal("1.5"), 5));
     }
 
     @Test
     public void test() {
         //test fractions
         //this wil do 2/7 which can lead to exception
-        new DifficultyBalancer(BigInteger.valueOf(7), BigDecimal.ZERO)
+        new DifficultyBalancer(BigInteger.valueOf(7), BigDecimal.ZERO,5)
                 .getNewDifficulty(BigInteger.ONE, BigInteger.valueOf(2));
 
-        new DifficultyBalancer(BigInteger.valueOf(7), BigDecimal.valueOf(0.137))
+        new DifficultyBalancer(BigInteger.valueOf(7), BigDecimal.valueOf(0.137),5)
                 .getNewDifficulty(BigInteger.ONE, BigInteger.valueOf(2));
 
     }
