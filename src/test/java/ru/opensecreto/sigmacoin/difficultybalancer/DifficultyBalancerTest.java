@@ -37,21 +37,25 @@ public class DifficultyBalancerTest {
         new DifficultyBalancer(BigInteger.TEN, BigDecimal.ZERO, 5);
 
         assertThatThrownBy(() -> new DifficultyBalancer(BigInteger.ZERO, new BigDecimal("0.5"), 5));
-        assertThatThrownBy(() -> new DifficultyBalancer(BigInteger.TEN, BigDecimal.ONE,5));
+        assertThatThrownBy(() -> new DifficultyBalancer(BigInteger.TEN, BigDecimal.ONE, 5));
 
         assertThatThrownBy(() -> new DifficultyBalancer(BigInteger.TEN.negate(), new BigDecimal("0.5"), 5));
         assertThatThrownBy(() -> new DifficultyBalancer(BigInteger.TEN, new BigDecimal("-0.5"), 5));
         assertThatThrownBy(() -> new DifficultyBalancer(BigInteger.TEN, new BigDecimal("1.5"), 5));
+
+        assertThatThrownBy(() -> new DifficultyBalancer(BigInteger.TEN, BigDecimal.ZERO, 5).getNewDifficulty(
+                BigInteger.ONE, new BigInteger("-10")
+        ));
     }
 
     @Test
     public void test() {
         //test fractions
         //this wil do 2/7 which can lead to exception
-        new DifficultyBalancer(BigInteger.valueOf(7), BigDecimal.ZERO,5)
+        new DifficultyBalancer(BigInteger.valueOf(7), BigDecimal.ZERO, 5)
                 .getNewDifficulty(BigInteger.ONE, BigInteger.valueOf(2));
 
-        new DifficultyBalancer(BigInteger.valueOf(7), BigDecimal.valueOf(0.137),5)
+        new DifficultyBalancer(BigInteger.valueOf(7), BigDecimal.valueOf(0.137), 5)
                 .getNewDifficulty(BigInteger.ONE, BigInteger.valueOf(2));
 
     }

@@ -38,6 +38,11 @@ public class DifficultyBalancer {
     }
 
     public final BigInteger getNewDifficulty(BigInteger lastDiffuculty, BigInteger lastTime) {
+        //timestamp of current block is less than timestamp of previous block
+        if (lastTime.compareTo(BigInteger.ZERO) <= 0) {
+            throw new IllegalArgumentException("lastTime is less or equal to zero");
+        }
+
         if (lastTime.compareTo(targetTime) == 0) {
             return lastDiffuculty;
         }
