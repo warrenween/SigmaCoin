@@ -11,21 +11,21 @@ public class DifficultyBalancer {
 
     private final BigInteger target_time;
     /**
-     * 0 <= smooth_k < 1
+     * 0 <= smoothRate < 1
      */
-    private final BigDecimal smooth_k;
+    private final BigDecimal smoothRate;
 
-    public DifficultyBalancer(BigInteger target_time, BigDecimal smooth_k) {
+    public DifficultyBalancer(BigInteger target_time, BigDecimal smoothRate) {
         if (target_time.compareTo(BigInteger.ZERO) <= 0) {
             throw new IllegalArgumentException("target_time must be larger than 0");
         }
         this.target_time = target_time;
 
-        if (smooth_k.compareTo(BigDecimal.ZERO) < 0)
-            throw new IllegalArgumentException("smooth_k must be grater or equal to 0");
-        if (smooth_k.compareTo(BigDecimal.ONE) >= 0)
-            throw new IllegalArgumentException("smooth_k must be less than 1");
-        this.smooth_k = smooth_k;
+        if (smoothRate.compareTo(BigDecimal.ZERO) < 0)
+            throw new IllegalArgumentException("smoothRate must be grater or equal to 0");
+        if (smoothRate.compareTo(BigDecimal.ONE) >= 0)
+            throw new IllegalArgumentException("smoothRate must be less than 1");
+        this.smoothRate = smoothRate;
     }
 
     public final BigInteger getNewDifficulty(BigInteger lastDiffuculty, BigInteger lastTime) {
@@ -35,7 +35,7 @@ public class DifficultyBalancer {
         }
 
         k = BigDecimalMath.pow(new BigDecimal(lastTime).divide(new BigDecimal(target_time)),
-                BigDecimal.ONE.subtract(smooth_k));
+                BigDecimal.ONE.subtract(smoothRate));
 
         //last time is bigger than target
         if (lastTime.compareTo(target_time) > 0) {
