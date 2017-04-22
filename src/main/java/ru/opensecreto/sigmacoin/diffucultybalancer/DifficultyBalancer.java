@@ -34,6 +34,7 @@ public class DifficultyBalancer {
             return lastDiffuculty;
         }
 
+        //k = (lastTime/targetTime)^(1-smoothRate)
         k = BigDecimalMath.pow(new BigDecimal(lastTime).divide(new BigDecimal(targetTime)),
                 BigDecimal.ONE.subtract(smoothRate));
 
