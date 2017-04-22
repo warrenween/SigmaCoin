@@ -42,4 +42,11 @@ public class DifficultyBalancerTest {
         assertThatThrownBy(() -> new DifficultyBalancer(BigInteger.TEN, new BigDecimal("1.5")));
     }
 
+    @Test
+    public void test() {
+        //test fractions
+        new DifficultyBalancer(BigInteger.TEN, BigDecimal.ZERO).getNewDifficulty(BigInteger.ONE, BigInteger.valueOf(6));
+
+    }
+
 }
