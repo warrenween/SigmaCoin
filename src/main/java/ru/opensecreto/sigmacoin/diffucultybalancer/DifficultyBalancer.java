@@ -15,7 +15,7 @@ public class DifficultyBalancer {
      */
     private final BigDecimal smoothRate;
 
-    private final MathContext contextNoRound;
+    private final MathContext contextHalfUp;
     private final MathContext contextCeil;
     private final MathContext contextFloor;
 
@@ -32,7 +32,7 @@ public class DifficultyBalancer {
             throw new IllegalArgumentException("smoothRate must be less than 1");
         this.smoothRate = smoothRate;
 
-        contextNoRound = new MathContext(precision, RoundingMode.UNNECESSARY);
+        contextHalfUp = new MathContext(precision, RoundingMode.HALF_UP);
         contextCeil = new MathContext(precision, RoundingMode.CEILING);
         contextFloor = new MathContext(precision, RoundingMode.FLOOR);
     }
@@ -43,7 +43,7 @@ public class DifficultyBalancer {
         }
 
         //k = (lastTime/targetTime)^(1-smoothRate)
-        BigDecimal k = BigDecimalMath.pow(new BigDecimal(lastTime).divide(new BigDecimal(targetTime), contextNoRound),
+        BigDecimal k = BigDecimalMath.pow(new BigDecimal(lastTime).divide(new BigDecimal(targetTime), contextHalfUp),
                 BigDecimal.ONE.subtract(smoothRate));
 
         //last time is bigger than target
