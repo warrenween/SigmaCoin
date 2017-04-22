@@ -22,7 +22,7 @@ public class DifficultyBalancer {
         this.targetTime = targetTime;
 
         if (smoothRate.compareTo(BigDecimal.ZERO) < 0)
-            throw new IllegalArgumentException("smoothRate must be grater or equal to 0");
+            throw new IllegalArgumentException("smoothRate must be greater or equal to 0");
         if (smoothRate.compareTo(BigDecimal.ONE) >= 0)
             throw new IllegalArgumentException("smoothRate must be less than 1");
         this.smoothRate = smoothRate;
