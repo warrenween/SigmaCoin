@@ -1,6 +1,5 @@
 package ru.opensecreto.sigmacoin.diffucultybalancer;
 
-import com.google.common.math.BigIntegerMath;
 import org.nd4j.linalg.util.BigDecimalMath;
 
 import java.math.BigDecimal;
@@ -10,41 +9,58 @@ import java.math.RoundingMode;
 
 public class DifficultyBalancer {
 
-    private final BigInteger target_time;
+    private final BigInteger targetTime;
     /**
-     * 0 < smooth_k < 1
+     * 0 <= smoothRate < 1
      */
-    private final BigDecimal smooth_k;
+    private final BigDecimal smoothRate;
 
-    public DifficultyBalancer(BigInteger target_time, BigDecimal smooth_k) {
-        this.target_time = target_time;
+    private final MathContext contextHalfUp;
+    private final MathContext contextCeil;
+    private final MathContext contextFloor;
 
-        if (smooth_k.compareTo(BigDecimal.ZERO) < 0)
-            throw new IllegalArgumentException("smooth_k must be grater or equal to 0");
-        if (smooth_k.compareTo(BigDecimal.ONE) >= 0)
-            throw new IllegalArgumentException("smooth_k must be less than 1");
-        this.smooth_k = smooth_k;
+
+    public DifficultyBalancer(BigInteger targetTime, BigDecimal smoothRate, int precision) {
+        if (targetTime.compareTo(BigInteger.ZERO) <= 0) {
+            throw new IllegalArgumentException("targetTime must be larger than 0");
+        }
+        this.targetTime = targetTime;
+
+        if (smoothRate.compareTo(BigDecimal.ZERO) < 0)
+            throw new IllegalArgumentException("smoothRate must be greater or equal to 0");
+        if (smoothRate.compareTo(BigDecimal.ONE) >= 0)
+            throw new IllegalArgumentException("smoothRate must be less than 1");
+        this.smoothRate = smoothRate;
+
+        contextHalfUp = new MathContext(precision, RoundingMode.HALF_UP);
+        contextCeil = new MathContext(precision, RoundingMode.CEILING);
+        contextFloor = new MathContext(precision, RoundingMode.FLOOR);
     }
 
     public final BigInteger getNewDifficulty(BigInteger lastDiffuculty, BigInteger lastTime) {
-        BigDecimal k;
-        if (lastTime.compareTo(target_time) == 0) {
+        //timestamp of current block is less than timestamp of previous block
+        if (lastTime.compareTo(BigInteger.ZERO) <= 0) {
+            throw new IllegalArgumentException("lastTime is less or equal to zero");
+        }
+
+        if (lastTime.compareTo(targetTime) == 0) {
             return lastDiffuculty;
         }
 
-        k = BigDecimalMath.pow(new BigDecimal(lastTime).divide(new BigDecimal(target_time)),
-                BigDecimal.ONE.subtract(smooth_k));
+        //k = (lastTime/targetTime)^(1-smoothRate)
+        BigDecimal k = BigDecimalMath.pow(new BigDecimal(lastTime).divide(new BigDecimal(targetTime), contextHalfUp),
+                BigDecimal.ONE.subtract(smoothRate));
 
         //last time is bigger than target
-        if (lastTime.compareTo(target_time) > 0) {
-            return new BigDecimal(lastDiffuculty).multiply(k).round(new MathContext(2, RoundingMode.FLOOR)).toBigInteger();
+        if (lastTime.compareTo(targetTime) > 0) {
+            return new BigDecimal(lastDiffuculty).multiply(k).round(contextFloor).toBigInteger();
         }
 
         //last time is lower than target
-        if (lastTime.compareTo(target_time) < 0) {
-            return new BigDecimal(lastDiffuculty).multiply(k).round(new MathContext(2, RoundingMode.CEILING)).toBigInteger();
+        if (lastTime.compareTo(targetTime) < 0) {
+            return new BigDecimal(lastDiffuculty).multiply(k).round(contextCeil).toBigInteger();
         }
 
-        throw new IllegalStateException("unexcpected error");
+        throw new IllegalStateException("unexpected error");
     }
 }
