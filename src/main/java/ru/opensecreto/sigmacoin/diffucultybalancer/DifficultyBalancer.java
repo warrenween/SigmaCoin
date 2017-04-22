@@ -29,13 +29,12 @@ public class DifficultyBalancer {
     }
 
     public final BigInteger getNewDifficulty(BigInteger lastDiffuculty, BigInteger lastTime) {
-        BigDecimal k;
         if (lastTime.compareTo(targetTime) == 0) {
             return lastDiffuculty;
         }
 
         //k = (lastTime/targetTime)^(1-smoothRate)
-        k = BigDecimalMath.pow(new BigDecimal(lastTime).divide(new BigDecimal(targetTime)),
+        BigDecimal k = BigDecimalMath.pow(new BigDecimal(lastTime).divide(new BigDecimal(targetTime)),
                 BigDecimal.ONE.subtract(smoothRate));
 
         //last time is bigger than target
