@@ -9,6 +9,7 @@ public class TimeSyncronizer {
     private final static Logger LOGGER = LoggerFactory.getLogger(TimeSyncronizer.class);
 
     private final Time time;
+    private final NTPUDPClient ntpClient = new NTPUDPClient();
 
     public TimeSyncronizer(Time time) {
         this.time = time;
