@@ -8,10 +8,12 @@ public class TimeSyncronizer {
 
     private final static Logger LOGGER = LoggerFactory.getLogger(TimeSyncronizer.class);
     private final static int defaultNTPport = 123;
+    private final static int NTPport;
 
     private final int port;
+    private final Time time;
 
-    {
+    static {
         int tempPort;
         if (System.getProperty("time.ntpport") == null) {
             LOGGER.info("System property 'time.ntpport' is not defined. Using default {}.", defaultNTPport);
@@ -24,7 +26,11 @@ public class TimeSyncronizer {
                 tempPort = defaultNTPport;
             }
         }
-        port = tempPort;
+        NTPport = tempPort;
     }
 
+    public TimeSyncronizer(int port, Time time) {
+        this.port = port;
+        this.time = time;
+    }
 }
