@@ -1,16 +1,15 @@
 package ru.opensecreto.sigmacoin.time;
 
 import org.apache.commons.net.ntp.NTPUDPClient;
+import org.apache.commons.net.ntp.TimeInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.UnknownHostException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
 public class TimeSyncronizer {
 
@@ -47,4 +46,11 @@ public class TimeSyncronizer {
     public TimeSyncronizer(Time time) {
         this.time = time;
     }
+
+    public void update() throws IOException {
+        TimeInfo timeInfo = ntpClient.getTime(servers.get(new Random().nextInt(servers.size())));
+        timeInfo.computeDetails();
+        time.setOffset(timeInfo.getOffset());
+    }
+
 }
