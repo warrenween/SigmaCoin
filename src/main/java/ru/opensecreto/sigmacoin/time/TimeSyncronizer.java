@@ -15,7 +15,7 @@ public class TimeSyncronizer {
 
     private final static Logger LOGGER = LoggerFactory.getLogger(TimeSyncronizer.class);
 
-    public static final List<InetAddress> servers = Collections.unmodifiableList(new ArrayList<InetAddress>() {{
+    public static final List<InetAddress> servers = new ArrayList<InetAddress>() {{
         Scanner in = null;
         try {
             in = new Scanner(
@@ -38,7 +38,7 @@ public class TimeSyncronizer {
                 LOGGER.error("Error while closing scanner.", e);
             }
         }
-    }});
+    }};
 
     private final Time time;
     private final NTPUDPClient ntpClient = new NTPUDPClient();
