@@ -41,16 +41,28 @@ public class TimeSyncronizer {
     }};
 
     private final Time time;
-    private final NTPUDPClient ntpClient = new NTPUDPClient();
+    private final NTPUDPClient ntpClient;
 
     public TimeSyncronizer(Time time) {
         this.time = time;
+
+        ntpClient = new NTPUDPClient();
     }
 
     public void update() throws IOException {
-        TimeInfo timeInfo = ntpClient.getTime(servers.get(new Random().nextInt(servers.size())));
+        if (servers.size() == 0) {
+            LOGGER.warn("Can not synchronize time - NTP servers list is empty.");
+            return;
+        }
+
+        InetAddress server = servers.get(new Random().nextInt(servers.size()));
+
+        TimeInfo timeInfo = ntpClient.getTime(server);
         timeInfo.computeDetails();
         time.setOffset(timeInfo.getOffset());
+
+        LOGGER.info("Synchronized time with {}. Delay: {}ms. Offset: {}ms. Messages: {}.",
+                server.getHostAddress(), timeInfo.getDelay(), timeInfo.getOffset(), timeInfo.getComments());
     }
 
 }
