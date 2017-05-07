@@ -1,7 +1,5 @@
 package ru.opensecreto.sigmacoin.time;
 
-import com.sun.scenario.effect.Offset;
-
 /**
  * Class for handling timestamps.
  * Timestamp - number of milliseconds since 01-01-1970T00:00Z
