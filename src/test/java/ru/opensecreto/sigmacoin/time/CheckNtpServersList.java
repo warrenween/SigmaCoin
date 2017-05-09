@@ -10,7 +10,7 @@ public class CheckNtpServersList {
 
     @Test
     public void checkNtpServers() {
-        TimeSyncronizer syncronizer = new TimeSyncronizer(new Time());
+        TimeSyncronizer syncronizer = new TimeSyncronizer(new Time(), 10000);
         TimeSyncronizer.servers.forEach(address -> {
             try {
                 syncronizer.update(address);
