@@ -16,6 +16,7 @@ import java.util.Scanner;
 public class TimeSyncronizer {
 
     private final static Logger LOGGER = LoggerFactory.getLogger(TimeSyncronizer.class);
+    public static final int DEFAULT_TIMEOUT = 60000;
 
     public static final List<InetAddress> servers = new ArrayList<InetAddress>() {{
         Scanner in = null;
@@ -46,9 +47,7 @@ public class TimeSyncronizer {
     private final NTPUDPClient ntpClient;
 
     public TimeSyncronizer(Time time) {
-        this.time = time;
-
-        ntpClient = new NTPUDPClient();
+        this(time, DEFAULT_TIMEOUT);
     }
 
     public TimeSyncronizer(Time time, int timeout) {
