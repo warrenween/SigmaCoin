@@ -57,8 +57,10 @@ public class TimeSyncronizer {
             return;
         }
 
-        InetAddress server = servers.get(new Random().nextInt(servers.size()));
+        update(servers.get(new Random().nextInt(servers.size())));
+    }
 
+    public void update(InetAddress server) throws IOException {
         TimeInfo timeInfo = ntpClient.getTime(server);
         timeInfo.computeDetails();
         time.setOffset(timeInfo.getOffset());
