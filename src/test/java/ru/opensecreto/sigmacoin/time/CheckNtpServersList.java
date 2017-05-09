@@ -15,7 +15,7 @@ public class CheckNtpServersList {
             try {
                 syncronizer.update(address);
             } catch (Exception e) {
-                LOGGER.error("Error while synchronizing time.", e);
+                LOGGER.error("Error while synchronizing time with {}", address.getHostAddress(), e);
             }
         });
     }
