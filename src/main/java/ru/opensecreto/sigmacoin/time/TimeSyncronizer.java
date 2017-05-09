@@ -7,13 +7,16 @@ import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.net.InetAddress;
-import java.net.InetSocketAddress;
 import java.net.UnknownHostException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+import java.util.Scanner;
 
 public class TimeSyncronizer {
 
     private final static Logger LOGGER = LoggerFactory.getLogger(TimeSyncronizer.class);
+    public static final int DEFAULT_TIMEOUT = 60000;
 
     public static final List<InetAddress> servers = new ArrayList<InetAddress>() {{
         Scanner in = null;
@@ -44,9 +47,14 @@ public class TimeSyncronizer {
     private final NTPUDPClient ntpClient;
 
     public TimeSyncronizer(Time time) {
+        this(time, DEFAULT_TIMEOUT);
+    }
+
+    public TimeSyncronizer(Time time, int timeout) {
         this.time = time;
 
         ntpClient = new NTPUDPClient();
+        ntpClient.setDefaultTimeout(timeout);
     }
 
     public void update() throws IOException {
@@ -55,8 +63,10 @@ public class TimeSyncronizer {
             return;
         }
 
-        InetAddress server = servers.get(new Random().nextInt(servers.size()));
+        update(servers.get(new Random().nextInt(servers.size())));
+    }
 
+    public void update(InetAddress server) throws IOException {
         TimeInfo timeInfo = ntpClient.getTime(server);
         timeInfo.computeDetails();
         time.setOffset(timeInfo.getOffset());

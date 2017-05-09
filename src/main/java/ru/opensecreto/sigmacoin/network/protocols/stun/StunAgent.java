@@ -3,16 +3,19 @@ package ru.opensecreto.sigmacoin.network.protocols.stun;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.net.*;
+import java.net.DatagramPacket;
+import java.net.DatagramSocket;
+import java.net.InetSocketAddress;
+import java.net.SocketTimeoutException;
 import java.util.concurrent.Callable;
 import java.util.concurrent.TimeUnit;
 
 public class StunAgent implements Callable<StunMessage> {
 
+    public static final int DEFAULT_RETRY = 5;
     private final static Logger LOGGER = LoggerFactory.getLogger(StunAgent.class);
     private final InetSocketAddress address;
     private final StunMessage message;
-    public static final int DEFAULT_RETRY = 5;
     private final int retryCount;
 
     public StunAgent(InetSocketAddress address, StunMessage message) {

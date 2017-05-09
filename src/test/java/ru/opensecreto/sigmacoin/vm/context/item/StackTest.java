@@ -1,7 +1,7 @@
 package ru.opensecreto.sigmacoin.vm.context.item;
 
-import ru.opensecreto.sigmacoin.vm.Stack;
 import org.testng.annotations.Test;
+import ru.opensecreto.sigmacoin.vm.Stack;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;

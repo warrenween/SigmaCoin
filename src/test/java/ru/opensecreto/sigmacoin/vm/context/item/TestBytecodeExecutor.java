@@ -1,9 +1,9 @@
 package ru.opensecreto.sigmacoin.vm.context.item;
 
-import ru.opensecreto.sigmacoin.vm.DebuggableBytecodeExecutor;
-import ru.opensecreto.sigmacoin.vm.StorageManager;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
+import ru.opensecreto.sigmacoin.vm.DebuggableBytecodeExecutor;
+import ru.opensecreto.sigmacoin.vm.StorageManager;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;

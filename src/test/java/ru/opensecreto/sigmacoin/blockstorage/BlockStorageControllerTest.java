@@ -1,11 +1,11 @@
 package ru.opensecreto.sigmacoin.blockstorage;
 
-import org.assertj.core.api.Assertions;
 import org.testng.annotations.Test;
 
 import java.io.File;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 public class BlockStorageControllerTest {
 

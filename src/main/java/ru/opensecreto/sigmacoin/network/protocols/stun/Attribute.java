@@ -18,9 +18,8 @@ public class Attribute {
     public static final short SOFTWARE = (short) 0x8022;
     public static final short ALTERNATE_SERVER = (short) 0x8023;
     public static final short FINGERPRINT = (short) 0x8028;
-
-    public byte[] data;
     public final short type;
+    public byte[] data;
 
     public Attribute(short type) {
         this.type = type;
@@ -29,6 +28,41 @@ public class Attribute {
     public Attribute(short type, byte[] data) {
         this.data = data;
         this.type = type;
+    }
+
+    public static byte[] encodeAll(Iterable<Attribute> attributes) {
+        int dataSize = 0;
+        for (Attribute attribute : attributes) {
+            dataSize += attribute.getSize();
+        }
+
+        int offset = 0;
+        byte[] data = new byte[dataSize];
+        for (Attribute attribute : attributes) {
+            attribute.encode(data, offset);
+            offset += attribute.getSize();
+        }
+        return data;
+    }
+
+    public static List<Attribute> decode(byte[] data) {
+        ByteBuffer buf = ByteBuffer.wrap(data);
+        List<Attribute> attributes = new ArrayList<>();
+        while (buf.hasRemaining()) {
+            short type = buf.getShort();
+            int length = buf.getShort();
+            byte[] attrData = new byte[length];
+            buf.get(attrData);
+
+            if (buf.position() % 4 != 0) {
+                buf.position(buf.position() + 4 - (buf.position() % 4));
+            }
+
+            Attribute attribute = new Attribute(type);
+            attribute.data = attrData;
+            attributes.add(attribute);
+        }
+        return attributes;
     }
 
     public int getSize() {
@@ -65,41 +99,6 @@ public class Attribute {
         buf.putShort(type);
         buf.putShort((short) data.length);
         buf.put(data);
-    }
-
-    public static byte[] encodeAll(Iterable<Attribute> attributes) {
-        int dataSize = 0;
-        for (Attribute attribute : attributes) {
-            dataSize += attribute.getSize();
-        }
-
-        int offset = 0;
-        byte[] data = new byte[dataSize];
-        for (Attribute attribute : attributes) {
-            attribute.encode(data, offset);
-            offset += attribute.getSize();
-        }
-        return data;
-    }
-
-    public static List<Attribute> decode(byte[] data) {
-        ByteBuffer buf = ByteBuffer.wrap(data);
-        List<Attribute> attributes = new ArrayList<>();
-        while (buf.hasRemaining()) {
-            short type = buf.getShort();
-            int length = buf.getShort();
-            byte[] attrData = new byte[length];
-            buf.get(attrData);
-
-            if (buf.position() % 4 != 0) {
-                buf.position(buf.position() + 4 - (buf.position() % 4));
-            }
-
-            Attribute attribute = new Attribute(type);
-            attribute.data = attrData;
-            attributes.add(attribute);
-        }
-        return attributes;
     }
 
 }
