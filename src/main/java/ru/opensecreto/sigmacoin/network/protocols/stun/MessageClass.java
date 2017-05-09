@@ -33,10 +33,10 @@ public enum MessageClass {
     }
 
     public static MessageClass convert(byte[] classData) {
-        if (Arrays.equals(classData , MessageClass.REQUEST_BYTES)) return MessageClass.REQUEST;
-        else if (Arrays.equals(classData , MessageClass.SUCCESS_BYTES)) return MessageClass.SUCCESS;
-        else if (Arrays.equals(classData , MessageClass.FAILURE_BYTES)) return MessageClass.FAILURE;
-        else if (Arrays.equals(classData , MessageClass.INDICATION_BYTES)) return MessageClass.INDICATION;
+        if (Arrays.equals(classData, MessageClass.REQUEST_BYTES)) return MessageClass.REQUEST;
+        else if (Arrays.equals(classData, MessageClass.SUCCESS_BYTES)) return MessageClass.SUCCESS;
+        else if (Arrays.equals(classData, MessageClass.FAILURE_BYTES)) return MessageClass.FAILURE;
+        else if (Arrays.equals(classData, MessageClass.INDICATION_BYTES)) return MessageClass.INDICATION;
         else throw new IllegalArgumentException("bad classData");
     }
 

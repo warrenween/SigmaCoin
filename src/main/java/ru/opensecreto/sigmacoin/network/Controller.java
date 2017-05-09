@@ -13,16 +13,14 @@ import java.util.concurrent.Future;
 public class Controller {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(Controller.class);
-
-    private final File peerDatabaseFile;
-    private final int port;
-    private PeerDatabase database;
-    private InetAddress address;
-    private final ExecutorService executorService;
-    private Future peerWelcomerFuture;
-
     public final String software;
     public final int version;
+    private final File peerDatabaseFile;
+    private final int port;
+    private final ExecutorService executorService;
+    private PeerDatabase database;
+    private InetAddress address;
+    private Future peerWelcomerFuture;
 
     public Controller(File peerDatabaseFile, String software, int version) throws IOException {
         this(peerDatabaseFile, WelcomeRunnable.DEFAULT_PORT, software, version);

@@ -5,16 +5,14 @@ import org.slf4j.LoggerFactory;
 
 public class BlockStorageConfigurator {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(BlockStorageConfigurator.class);
-
     /**
      * 128 mib
      */
     public static final int DEFAULT_START_SIZE = 134217728;
     public static final int START_SIZE;
-
     public static final int DEFAULT_ALLOCATE_SIZE = 67108864;
     public static final int ALLOCATE_SIZE;
+    private static final Logger LOGGER = LoggerFactory.getLogger(BlockStorageConfigurator.class);
 
     static {
         int START_SIZE_TEMP;
