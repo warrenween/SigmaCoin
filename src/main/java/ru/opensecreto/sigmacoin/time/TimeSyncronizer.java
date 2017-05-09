@@ -51,6 +51,13 @@ public class TimeSyncronizer {
         ntpClient = new NTPUDPClient();
     }
 
+    public TimeSyncronizer(Time time, int timeout) {
+        this.time = time;
+
+        ntpClient = new NTPUDPClient();
+        ntpClient.setDefaultTimeout(timeout);
+    }
+
     public void update() throws IOException {
         if (servers.size() == 0) {
             LOGGER.warn("Can not synchronize time - NTP servers list is empty.");
