@@ -1,8 +1,10 @@
 package ru.opensecreto.sigmacoin.crypto.Ed25519;
 
+import ru.opensecreto.sigmacoin.crypto.PublicKey;
+
 import java.util.Arrays;
 
-public class Ed25519PublicKey {
+public class Ed25519PublicKey implements PublicKey {
 
     private final byte[] key;
 
