@@ -63,24 +63,26 @@ public class Ed25519SHA512Test {
     @Test
     public void testVerify() {
         assertThat(new Ed25519SHA512().verify(
-                DatatypeConverter.parseHexBinary("d75a980182b10ab7d54bfed3c964073a0ee172f3daa62325af021a68f707511a"),
                 new byte[0],
-                new Ed25519PublicKey(DatatypeConverter.parseHexBinary("e5564300c360ac729086e2cc806e828a84877f1eb8e5d974d873e065224901555fb8821590a33bacc61e39701cf9b46bd25bf5f0595bbe24655141438e7a100b"))
+
+                DatatypeConverter.parseHexBinary("e5564300c360ac729086e2cc806e828a84877f1eb8e5d974d873e065224901555fb8821590a33bacc61e39701cf9b46bd25bf5f0595bbe24655141438e7a100b"),
+                new Ed25519PublicKey(DatatypeConverter.parseHexBinary("d75a980182b10ab7d54bfed3c964073a0ee172f3daa62325af021a68f707511a"))
         )).isTrue();
         assertThat(new Ed25519SHA512().verify(
-                DatatypeConverter.parseHexBinary("d75a980182b11ab7d54bfed3c964073a0ee172f3daa62325af021a68f707511a"),
                 new byte[0],
-                new Ed25519PublicKey(DatatypeConverter.parseHexBinary("e5564300c360ac729086e2cc806e828a84877f1eb8e5d974d873e065224901555fb8821590a33bacc61e39701cf9b46bd25bf5f0595bbe24655141438e7a100b"))
+
+                DatatypeConverter.parseHexBinary("e5564300c360ac729086e2cc806e828a84877f1eb8e5d974d873e065224901555fb8821590a33bacc61e39701cf9b46bd25bf5f0595bbe24655141438e7a100b"),
+                new Ed25519PublicKey(DatatypeConverter.parseHexBinary("d75a980182b11ab7d54bfed3c964073a0ee172f3daa62325af021a68f707511a"))
         )).isFalse();
         assertThat(new Ed25519SHA512().verify(
-                DatatypeConverter.parseHexBinary("d75a980182b11ab7d54bfed3c964073a0ee172f3daa62325af021a68f707511a"),
                 new byte[0],
-                new Ed25519PublicKey(DatatypeConverter.parseHexBinary("e5564300c360ac729086e2cc806e828a84877f1eb8e5d974d873e06522490b555fb8821590a33bacc61e39701cf9b46bd25bf5f0595bbe24655141438e7a100b"))
+                DatatypeConverter.parseHexBinary("e5564300c360ac729086e2cc806e828a84877f1eb8e5d974d873e06522490b555fb8821590a33bacc61e39701cf9b46bd25bf5f0595bbe24655141438e7a100b"),
+                new Ed25519PublicKey(DatatypeConverter.parseHexBinary("d75a980182b11ab7d54bfed3c964073a0ee172f3daa62325af021a68f707511a"))
         )).isFalse();
         assertThat(new Ed25519SHA512().verify(
-                DatatypeConverter.parseHexBinary("d75a980182b11ab7d54bfed3c964073a0ee172f3daa62325af021a68f707511a"),
                 new byte[0],
-                new Ed25519PublicKey(DatatypeConverter.parseHexBinary("e5564300c360ac729086e2cc806e828a84877f1eb8e5d974d873e06522490b555fb8821590a33bacc61e39701cf9b46bd25bf5f0595bbe24655141438e7a1000"))
+                DatatypeConverter.parseHexBinary("e5564300c360ac729086e2cc806e828a84877f1eb8e5d974d873e06522490b555fb8821590a33bacc61e39701cf9b46bd25bf5f0595bbe24655141438e7a1000"),
+                new Ed25519PublicKey(DatatypeConverter.parseHexBinary("d75a980182b11ab7d54bfed3c964073a0ee172f3daa62325af021a68f707511a"))
         )).isFalse();
         //----------------------------------
         //----------------------------------
