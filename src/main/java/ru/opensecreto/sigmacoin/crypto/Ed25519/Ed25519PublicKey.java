@@ -16,4 +16,10 @@ public class Ed25519PublicKey {
     public byte[] getPublicKey() {
         return Arrays.copyOf(key, 32);
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        return (obj != null) && (obj instanceof Ed25519PublicKey) &&
+                (Arrays.equals(((Ed25519PublicKey) obj).key, key));
+    }
 }

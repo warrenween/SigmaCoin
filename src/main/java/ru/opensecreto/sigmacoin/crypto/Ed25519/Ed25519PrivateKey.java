@@ -16,4 +16,10 @@ public class Ed25519PrivateKey {
     public byte[] getPrivateKey() {
         return Arrays.copyOf(key, 32);
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        return (obj != null) && (obj instanceof Ed25519PrivateKey) &&
+                (Arrays.equals(((Ed25519PrivateKey) obj).key, key));
+    }
 }
