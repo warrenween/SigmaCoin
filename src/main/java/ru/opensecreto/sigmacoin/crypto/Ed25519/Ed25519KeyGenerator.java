@@ -8,6 +8,7 @@ public class Ed25519KeyGenerator {
     private final SecureRandom secureRandom;
 
     public Ed25519KeyGenerator(SecureRandom secureRandom) {
+        if (secureRandom==null) throw new IllegalArgumentException("SecureRandom can not be null");
         this.secureRandom = secureRandom;
     }
 
