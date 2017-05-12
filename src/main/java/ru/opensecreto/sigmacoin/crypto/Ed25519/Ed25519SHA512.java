@@ -5,15 +5,16 @@ import ru.opensecreto.sigmacoin.crypto.Util;
 
 import java.math.BigInteger;
 
+/**
+ * See: EdDSA and Ed25519 draft-josefsson-eddsa-ed25519-03
+ * <p>
+ * https://tools.ietf.org/html/draft-josefsson-eddsa-ed25519-03
+ */
 public class Ed25519SHA512 implements BaseSigner {
 
     /**
      * Generate public key from 32 bytes of private key.
-     * <p>
-     * See: EdDSA and Ed25519 draft-josefsson-eddsa-ed25519-03
-     * <p>
-     * https://tools.ietf.org/html/draft-josefsson-eddsa-ed25519-03
-     *
+     * 
      * @param secret private key of 32 bytes
      * @return public key for this key
      */
