@@ -10,7 +10,7 @@ public class Ed25519PrivateKey implements PrivateKey {
 
     public Ed25519PrivateKey(byte[] key) {
         if (key == null) throw new IllegalArgumentException("key is null");
-        if (key.length != 32) throw new IllegalArgumentException("key must have length 32");
+        if (key.length != 32) throw new IllegalArgumentException(String.format("Key length 32. Given {}.", key.length));
 
         this.key = Arrays.copyOf(key, 32);
     }
