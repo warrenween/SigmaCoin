@@ -10,7 +10,7 @@ public class Ed25519PublicKey implements PublicKey {
 
     public Ed25519PublicKey(byte[] key) {
         if (key == null) throw new IllegalArgumentException("key is null");
-        if (key.length != 32) throw new IllegalArgumentException(String.format("Key length 32. Given {0}.", key.length));
+        if (key.length != 32) throw new IllegalArgumentException(String.format("Key length 32. Given %d.", key.length));
 
         this.key = Arrays.copyOf(key, 32);
     }
