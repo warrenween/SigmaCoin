@@ -25,4 +25,6 @@ public class CoinConfig {
 
     public DigestProvider POW_DIGEST = () -> new SHA3Digest(512);
 
+    public final static int POW_N = 3;
+
 }
