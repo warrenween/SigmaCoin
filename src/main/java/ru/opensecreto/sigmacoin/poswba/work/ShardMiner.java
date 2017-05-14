@@ -61,7 +61,7 @@ public class ShardMiner implements Callable<Shard> {
         int[] ids = new int[n];
         byte[] result = new byte[digestLength];
 
-        LOGGER.trace("Started mining.");
+        LOGGER.info("Started mining.");
         long stepCounter = 0;
         long attemptsDone = 0;
 
