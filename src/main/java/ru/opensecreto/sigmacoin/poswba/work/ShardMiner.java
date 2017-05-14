@@ -2,6 +2,8 @@ package ru.opensecreto.sigmacoin.poswba.work;
 
 import com.google.common.primitives.Longs;
 import org.bouncycastle.crypto.Digest;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import ru.opensecreto.sigmacoin.core.DigestProvider;
 import ru.opensecreto.sigmacoin.crypto.Ed25519.Ed25519PublicKey;
 import ru.opensecreto.sigmacoin.poswba.storage.Shard;
@@ -10,6 +12,8 @@ import java.util.Random;
 import java.util.concurrent.Callable;
 
 public class ShardMiner implements Callable<Shard> {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(ShardMiner.class);
 
     private final byte[] seed = new byte[64];
     private final Ed25519PublicKey publicKey;
