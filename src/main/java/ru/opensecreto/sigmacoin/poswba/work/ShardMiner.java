@@ -67,7 +67,7 @@ public class ShardMiner implements Callable<Shard> {
 
         //check id of last of next chunks is less than 8 bit
         while (chunksGenerated < (Long.MAX_VALUE - maxChunkCount)) {
-            LOGGER.trace("Started mining step {}.", stepCounter);
+            LOGGER.debug("Started mining step {}.", stepCounter);
 
             for (int i = 0; i < n; i++) {
                 ids[i] = i;
@@ -134,7 +134,7 @@ public class ShardMiner implements Callable<Shard> {
                 }
             }
 
-            LOGGER.warn("Step {} was not lucky. Chunks processed {}. Attempts done {}",
+            LOGGER.debug("Step {} was not lucky. Chunks processed {}. Attempts done {}",
                     stepCounter, chunksGenerated += maxChunkCount, attemptsDone);
             chunksGenerated += maxChunkCount;
             stepCounter++;
