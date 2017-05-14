@@ -109,6 +109,7 @@ public class ShardMiner implements Callable<Shard> {
                     for (int j = 0; j < result.length; j++) {
                         isValid &= result[j] == 0;
                     }
+                    attemptsDone++;
 
                     //submitting solution
                     if (isValid) {
@@ -137,8 +138,6 @@ public class ShardMiner implements Callable<Shard> {
                         }
                     }
 
-                    //updating counters
-                    attemptsDone++;
                 }
             }
 
