@@ -19,7 +19,7 @@ public class ShardMinerTest {
         DigestProvider provider = () -> new ShortenedDigest(new MD2Digest(), 2);
         Ed25519PublicKey publicKey = (Ed25519PublicKey) new Ed25519KeyGenerator().generateKeypair().getPublicKey();
 
-        ShardMiner miner = new ShardMiner(publicKey, 1000000, provider, 3);
+        ShardMiner miner = new ShardMiner(publicKey, 1000000, provider, 2);
 
         Shard shard = miner.call();
 
