@@ -86,8 +86,8 @@ public class ShardMiner implements Callable<Shard> {
                 digest.update(publicKey.getPublicKey(), 0, publicKey.getPublicKey().length);
 
                 digest.doFinal(chunks[i], 0);
-                chunksGenerated++;
             }
+
             long chunkElapsedNano = System.nanoTime() - chunkStart;
             LOGGER.trace("Generated {} chunks. Total {}sec. Time per one {}ms.",
                     maxChunkCount, TimeUnit.NANOSECONDS.toSeconds(chunkElapsedNano),
@@ -120,7 +120,7 @@ public class ShardMiner implements Callable<Shard> {
                     //submitting solution
                     if (isValid) {
                         LOGGER.info("Found valid shard. Yay!!! Attempts done {}. Chunks generated {}.",
-                                attemptsDone + 1, chunksGenerated);
+                                attemptsDone + 1, chunksGenerated + maxChunkCount);
                         long[] finalIds = new long[n];
                         for (int j = 0; j < ids.length; j++) {
                             finalIds[j] = ids[j] + chunksGenerated;
@@ -148,7 +148,8 @@ public class ShardMiner implements Callable<Shard> {
             }
 
             LOGGER.debug("Step {} was not lucky. Chunks processed {}. Attempts done {}",
-                    stepCounter, chunksGenerated, attemptsDone);
+                    stepCounter, chunksGenerated += maxChunkCount, attemptsDone);
+            chunksGenerated += maxChunkCount;
             stepCounter++;
         }
         throw new Exception("Unable to compute result.");
