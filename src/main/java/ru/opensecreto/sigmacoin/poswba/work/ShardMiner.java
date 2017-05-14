@@ -59,7 +59,7 @@ public class ShardMiner implements Callable<Shard> {
 
         //check id of last of next chunks is less than 8 bit
         while (chunksGenerated < (Long.MAX_VALUE - maxChunkCount)) {
-            for (int i = 0; i < maxChunkCount; i++) {
+            for (int i = 0; i < n; i++) {
                 ids[i] = i;
             }
 
