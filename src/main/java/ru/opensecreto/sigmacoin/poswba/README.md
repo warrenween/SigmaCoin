@@ -6,7 +6,7 @@ Algorithm is based on 4 problems:
 * **Proof of work** - miner has to solve computationally hard problem.
 * **Proof of storage** - miner has to store solution from PoW stage.
 * **Proof of burn** - coin holders have to burn their coins to get chance to take part in PoA stage.
-Burned coins can not be send.
+Burned coins can not be send anymore.
 * **Proof of activity** - every burned coin is unique.
 To make block become full-fledged, each block must be signed with unique set of burned coins.
 
@@ -19,7 +19,7 @@ If result is less than target then block is mined
 #### Step 2 (optional)
 
 0. Miner transmits header of found block all over the network.
-1. Moneyholders burn their coins.
+1. Money holders burn their coins.
 Each burned coin is gived unique id and tied to address that burned it.
 2. Using special algorithm N ids of burned coins selected.
 Owner of each selected coin signs block header. When each owner signs block block is found.
@@ -39,7 +39,7 @@ Owner of each selected coin signs block header. When each owner signs block bloc
 1. Generate lot of `hash(id # seed # publicKey)`. `id` is increased with each hash. `#` means concatenation.
 2. Choose `N` hashes. Xor each hash `result = hash1 ^ hash2 ^ ... ^ hashN`.
 3. If `result` array contains only zeroes, then shard is mined, else repeat step 2 with different `id`.
-Shard contatins information about all `id`s, `seed`, and `publicKey`.
+Shard contains information about all `id`s, `seed`, and `publicKey`.
 4. Store shard for PoS step
 
 
