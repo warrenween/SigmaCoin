@@ -103,9 +103,9 @@ public class ShardMiner implements Callable<Shard> {
                     }
 
                     //generating solution
-                    System.arraycopy(chunks[ids[0]], 0, result, 0, chunks[ids[0]].length);
+                    System.arraycopy(chunks[ids[0]], 0, result, 0, digestLength);
                     for (int j = 1; j < ids.length; j++) {
-                        for (int k = 0; k < chunks[ids[j]].length; k++) {
+                        for (int k = 0; k < digestLength; k++) {
                             result[k] ^= chunks[ids[j]][k];
                         }
                     }
