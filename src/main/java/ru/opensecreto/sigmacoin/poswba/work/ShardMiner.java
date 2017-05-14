@@ -89,9 +89,9 @@ public class ShardMiner implements Callable<Shard> {
             }
 
             long chunkElapsedNano = System.nanoTime() - chunkStart;
-            LOGGER.trace("Generated {} chunks. Total {}sec. Time per one {}ms.",
+            LOGGER.trace("Generated {} chunks. Total {}sec. Time per one {}ns.",
                     maxChunkCount, TimeUnit.NANOSECONDS.toSeconds(chunkElapsedNano),
-                    TimeUnit.NANOSECONDS.toMillis(chunkElapsedNano) / chunksGenerated);
+                    chunkElapsedNano / chunksGenerated);
 
             //solving
             for (int i = ids.length - 1; i >= 0; i--) {
