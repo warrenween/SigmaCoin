@@ -125,7 +125,6 @@ public class ShardMiner implements Callable<Shard> {
                     } else if (ids[i] == (ids[i + 1] - 1)) {
                         mine = false;
                     } else {
-                        mine = false;
                         ids[i]++;
                     }
 
