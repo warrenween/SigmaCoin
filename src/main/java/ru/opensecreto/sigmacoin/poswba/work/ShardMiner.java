@@ -121,13 +121,17 @@ public class ShardMiner implements Callable<Shard> {
 
                     //updating ids for next solution
                     if (i == (n - 1)) {
-                        if (ids[i] == (ids[i + 1] - 1)) {
+                        if (ids[i] == (maxChunkCount - 1)) {
                             mine = false;
                         } else {
                             ids[i]++;
                         }
                     } else {
-                        ids[i]++;
+                        if (ids[i] == (ids[i + 1] - 1)) {
+                            mine = false;
+                        } else {
+                            ids[i]++;
+                        }
                     }
 
                     //updating counters
