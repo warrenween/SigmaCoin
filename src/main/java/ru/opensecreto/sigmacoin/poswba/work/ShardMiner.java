@@ -61,8 +61,14 @@ public class ShardMiner implements Callable<Shard> {
         int[] ids = new int[n];
         byte[] result = new byte[digestLength];
 
+        LOGGER.trace("Started mining.");
+        long stepCounter = 0;
+        long attemptsDone = 0;
+
         //check id of last of next chunks is less than 8 bit
         while (chunksGenerated < (Long.MAX_VALUE - maxChunkCount)) {
+            LOGGER.trace("Started mining step {}.", stepCounter);
+
             for (int i = 0; i < n; i++) {
                 ids[i] = i;
             }
@@ -122,11 +128,16 @@ public class ShardMiner implements Callable<Shard> {
                         mine = false;
                         ids[i]++;
                     }
+
+                    //updating counters
+                    attemptsDone++;
                 }
             }
 
-
+            LOGGER.warn("Step {} was not lucky. Chunks processed {}. Attempts done {}",
+                    stepCounter, chunksGenerated += maxChunkCount, attemptsDone);
             chunksGenerated += maxChunkCount;
+            stepCounter++;
         }
         throw new Exception("Unable to compute result.");
     }
