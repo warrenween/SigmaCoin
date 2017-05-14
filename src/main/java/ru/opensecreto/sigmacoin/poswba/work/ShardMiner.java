@@ -10,6 +10,7 @@ import ru.opensecreto.sigmacoin.poswba.storage.Shard;
 
 import java.util.Random;
 import java.util.concurrent.Callable;
+import java.util.concurrent.TimeUnit;
 
 public class ShardMiner implements Callable<Shard> {
 
@@ -74,6 +75,7 @@ public class ShardMiner implements Callable<Shard> {
             }
 
             //generating chunk
+            long chunkStart = System.nanoTime();
             for (int i = 0; i < maxChunkCount; i++) {
                 digest.reset();
 
@@ -86,6 +88,10 @@ public class ShardMiner implements Callable<Shard> {
                 digest.doFinal(chunks[i], 0);
                 chunksGenerated++;
             }
+            long chunkElapsedNano = System.nanoTime() - chunkStart;
+            LOGGER.trace("Generated {} chunks. Total {}sec. Time per one {}ms.",
+                    maxChunkCount, TimeUnit.NANOSECONDS.toSeconds(chunkElapsedNano),
+                    TimeUnit.NANOSECONDS.toMillis(chunkElapsedNano) / chunksGenerated);
 
             //solving
             for (int i = ids.length - 1; i >= 0; i--) {
