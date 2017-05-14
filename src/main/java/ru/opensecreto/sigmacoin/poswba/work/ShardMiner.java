@@ -84,6 +84,7 @@ public class ShardMiner implements Callable<Shard> {
                 digest.update(publicKey.getPublicKey(), 0, publicKey.getPublicKey().length);
 
                 digest.doFinal(chunks[i], 0);
+                chunksGenerated++;
             }
 
             //solving
@@ -112,7 +113,7 @@ public class ShardMiner implements Callable<Shard> {
                     //submitting solution
                     if (isValid) {
                         LOGGER.info("Found valid shard. Yay!!! Attempts done {}. Chunks generated {}.",
-                                attemptsDone + 1, chunksGenerated + maxChunkCount);
+                                attemptsDone + 1, chunksGenerated);
                         long[] finalIds = new long[n];
                         for (int j = 0; j < ids.length; j++) {
                             finalIds[j] = ids[j] + chunksGenerated;
@@ -142,8 +143,7 @@ public class ShardMiner implements Callable<Shard> {
             }
 
             LOGGER.debug("Step {} was not lucky. Chunks processed {}. Attempts done {}",
-                    stepCounter, chunksGenerated += maxChunkCount, attemptsDone);
-            chunksGenerated += maxChunkCount;
+                    stepCounter, chunksGenerated, attemptsDone);
             stepCounter++;
         }
         throw new Exception("Unable to compute result.");
