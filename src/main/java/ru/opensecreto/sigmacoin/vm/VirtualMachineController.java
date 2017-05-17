@@ -15,8 +15,11 @@ public class VirtualMachineController {
         this.stackSize = stackSize;
     }
 
-    public void execute(ContractID contractID) {
+    public void execute(byte[] invocationData, ContractID contractID) {
         Stack stack = new Stack(stackSize);
+        for (int i = 0; i < invocationData.length; i++) {
+            stack.push(invocationData[i]);
+        }
         invoke(stack, contractID);
     }
 
