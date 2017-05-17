@@ -22,4 +22,10 @@ Execution data is simple array of bytes.
 First byte will be in bottom of stack, last byte will be on top of stack.
 3. Contract with given `contractId` is invoked with stack from step 2.
 
+### Opcodes
+
+Name | Opcode | Description
+--- | --- | ---
+`STOP_BAD` | `0x00` | Stops execution of current contract. `0x01` byte is pushed to stack which means that contract stopped unseccessfully. Stack is returned to parent frame.
+`STOP_GOOD` | `0x01` | Stops execution of current contract. `0x00` byte is pushed to stack which means that contract stopped seccessfully. Stack is returned to parent frame.
 
