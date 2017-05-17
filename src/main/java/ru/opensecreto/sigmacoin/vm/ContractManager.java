@@ -5,9 +5,9 @@ public interface ContractManager {
     /**
      * Get contract by it's id.
      *
-     * @param id contract id
+     * @param contractID contract id
      * @return contract memory for requested id.
      */
-    public Memory getContract(byte[] id);
+    public Memory getContract(ContractID contractID);
 
 }
