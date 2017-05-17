@@ -1,6 +1,13 @@
 package ru.opensecreto.sigmacoin.vm;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import javax.xml.bind.DatatypeConverter;
+
 public class BytecodeExecutor {
+
+    public static final Logger LOGGER = LoggerFactory.getLogger(BytecodeExecutor.class);
 
     private final Frame frame;
     private long pointer = 0;
@@ -28,6 +35,8 @@ public class BytecodeExecutor {
                 default:
                     run = false;
                     success = false;
+                    LOGGER.warn("Error while executing {} - unexpected bytecode 0x{} at {}.",
+                            frame.contractID, DatatypeConverter.printHexBinary(new byte[]{frame.memory.get(pointer)}), pointer);
             }
         }
 
