@@ -32,6 +32,10 @@ public class BytecodeExecutor {
                     break;
 
 
+                case Opcodes.INVOKE:
+
+
+
                 default:
                     run = false;
                     success = false;

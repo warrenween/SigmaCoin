@@ -9,4 +9,6 @@ public class Opcodes {
 
     public static final byte STOP_GOOD = 0x01;
 
+    public static final byte INVOKE = 0x02;
+
 }
