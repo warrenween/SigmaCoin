@@ -14,4 +14,12 @@
 Frames are used to divide subroutines from main thread.
 When some code is invoked, new frame is created and code is executed in it's own frame.
 
+### Execution process
+
+1. User or other contract creates transaction with **execution data** and `contractId`.
+Execution data is simple array of bytes.
+2. **Execution data** is pushed to a new stack.
+First byte will be in bottom of stack, last byte will be on top of stack.
+3. Contract with given `contractId` is invoked with stack from step 2.
+
 
