@@ -24,6 +24,11 @@ public class VirtualMachineController {
     }
 
     public Stack invoke(Stack stack, ContractID contractID) {
+        if (!contractManager.contractExists(contractID)) {
+            stack.push((byte) 0x01);
+            return stack;
+        }
+
         Frame frame = new Frame(contractManager.getContract(contractID), stack, contractID);
 
         BytecodeExecutor executor = new BytecodeExecutor(frame, this);

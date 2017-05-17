@@ -10,4 +10,12 @@ public interface ContractManager {
      */
     public Memory getContract(ContractID contractID);
 
+    /**
+     * Check if contract with given contractID exists.
+     *
+     * @param contractID contract id to check
+     * @return true if contract with given contractID exists, false otherwise
+     */
+    public boolean contractExists(ContractID contractID);
+
 }
