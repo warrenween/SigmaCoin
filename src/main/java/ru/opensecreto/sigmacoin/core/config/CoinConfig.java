@@ -31,4 +31,9 @@ public class CoinConfig {
 
     public static final long SVM_MEMORY_SIZE = 16384;
 
+    /**
+     * Length of contract id in bytes.
+     */
+    public static final int CONTRACT_ID_LENGTH = 32;
+
 }
