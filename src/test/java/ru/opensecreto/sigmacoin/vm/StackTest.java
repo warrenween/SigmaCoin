@@ -66,4 +66,11 @@ public class StackTest {
 
         assertThat(stack.popCustom(3)).containsExactly((byte) 4, (byte) 3, (byte) 1);
     }
+
+    @Test
+    public void testPushCustom() {
+        Stack stack = new Stack(4);
+        stack.pushCustom(new byte[]{0x78, 0x56, 0x34, 0x12});
+        assertThat(stack.popInt()).inHexadecimal().isEqualTo(0x12345678);
+    }
 }

@@ -86,4 +86,11 @@ public class Stack {
         }
         return data;
     }
+
+    public void pushCustom(byte[] data) {
+        for (int i = data.length - 1; i >= 0; i--) {
+            push(data[i]);
+        }
+    }
+
 }
