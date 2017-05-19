@@ -10,6 +10,7 @@ public class BytecodeExecutor {
     public static final Logger LOGGER = LoggerFactory.getLogger(BytecodeExecutor.class);
 
     private final VMConfiguration configuration;
+    private final VirtualMachineController controller;
 
     private final Frame frame;
     private long pointer = 0;
@@ -17,6 +18,7 @@ public class BytecodeExecutor {
     public BytecodeExecutor(VMConfiguration configuration, Frame frame, VirtualMachineController controller) {
         this.frame = frame;
         this.configuration = configuration;
+        this.controller = controller;
     }
 
     public Stack run() {
@@ -36,6 +38,27 @@ public class BytecodeExecutor {
 
 
                 case Opcodes.INVOKE:
+                    if (frame.stack.getSize() < (configuration.contractIdLength + Short.BYTES)) {
+                        LOGGER.warn("Error while executing contract {} at {}. " +
+                                        "Can not invoke - stack size is less than required minimum {} bytes.",
+                                pointer, configuration.contractIdLength + Short.BYTES);
+                        run = false;
+                        success = false;
+                    }
+                    int dataSize = frame.stack.popShort();
+                    if (frame.stack.getSize() < (configuration.contractIdLength + Short.BYTES + dataSize)) {
+                        LOGGER.warn("Error while executing contract {} at {}. " +
+                                        "Can not invoke - stack size is less than {} bytes.",
+                                pointer, configuration.contractIdLength + Short.BYTES + dataSize);
+                        run = false;
+                        success = false;
+                    }
+                    ContractID contractId = new ContractID(frame.stack.popCustom(configuration.contractIdLength));
+                    Stack stackInvoke = new Stack(configuration.frameMaxStackSize);
+
+                    Stack result = controller.invoke(stackInvoke, contractId);
+                    frame.stack.pushCustom(result.getStack());
+                    break;
 
 
                 default:
