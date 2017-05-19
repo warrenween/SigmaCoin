@@ -43,8 +43,8 @@ public class StackTest {
     public void testShort() {
         Stack stack = new Stack(2);
         stack.pushShort((short) 0x1234);
-        Assertions.assertThat(stack.popInt()).inHexadecimal().isEqualTo(((short) 0x1234));
-        Assertions.assertThatThrownBy(stack::popInt).isInstanceOf(IllegalStateException.class);
+        Assertions.assertThat(stack.popShort()).inHexadecimal().isEqualTo(((short) 0x1234));
+        Assertions.assertThatThrownBy(stack::popShort).isInstanceOf(IllegalStateException.class);
     }
 
     @Test
@@ -52,6 +52,6 @@ public class StackTest {
         Stack stack = new Stack(8);
         stack.pushLong(0x123456789abcdef1L);
         Assertions.assertThat(stack.popLong()).inHexadecimal().isEqualTo(0x123456789abcdef1L);
-        Assertions.assertThatThrownBy(stack::popInt).isInstanceOf(IllegalStateException.class);
+        Assertions.assertThatThrownBy(stack::popLong).isInstanceOf(IllegalStateException.class);
     }
 }
