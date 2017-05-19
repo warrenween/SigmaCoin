@@ -36,4 +36,6 @@ public class CoinConfig {
      */
     public static final int CONTRACT_ID_LENGTH = 32;
 
+    public static final int SVM_MAX_CALL_STACK_DEPTH = 10;
+
 }
