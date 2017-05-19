@@ -9,6 +9,8 @@ public class VirtualMachineController {
     private final ContractManager contractManager;
     private final VMConfiguration configuration;
 
+    private int currentCallStackDepth;
+
     public VirtualMachineController(Memory mainContract, ContractManager contractManager, VMConfiguration configuration) {
         this.mainContract = mainContract;
         this.contractManager = contractManager;
@@ -32,6 +34,15 @@ public class VirtualMachineController {
         Frame frame = new Frame(contractManager.getContract(contractID), stack, contractID);
 
         BytecodeExecutor executor = new BytecodeExecutor(configuration, frame, this);
-        return executor.run();
+        currentCallStackDepth++;
+
+        if (currentCallStackDepth == configuration.maxCallDepth) {
+            stack.push((byte) 0x01);
+            return stack;
+        } else {
+            Stack result = executor.run();
+            currentCallStackDepth--;
+            return result;
+        }
     }
 }
