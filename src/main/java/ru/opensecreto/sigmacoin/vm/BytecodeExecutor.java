@@ -68,6 +68,12 @@ public class BytecodeExecutor {
                     break;
 
 
+                case Opcodes.POP:
+                    frame.stack.pop();
+                    pointer++;
+                    break;
+
+
                 default:
                     run = false;
                     success = false;
