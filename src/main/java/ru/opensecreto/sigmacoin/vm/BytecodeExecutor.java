@@ -62,6 +62,12 @@ public class BytecodeExecutor {
                     break;
 
 
+                case Opcodes.PUSH:
+                    frame.stack.push(frame.memory.get(pointer + 1));
+                    pointer += 2;
+                    break;
+
+
                 default:
                     run = false;
                     success = false;

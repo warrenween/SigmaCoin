@@ -29,4 +29,10 @@ public class Opcodes {
      */
     public static final byte INVOKE = 0x02;
 
+    /**
+     * Push next byte to stack. Pointer is moved forward by 2.
+     */
+    public static final byte PUSH = 0x10;
+
+
 }
