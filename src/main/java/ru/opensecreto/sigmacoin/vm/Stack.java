@@ -19,7 +19,8 @@ public class Stack {
 
     public byte pop() {
         if (size == 0) throw new IllegalStateException("Nothing to pop. Stack is empty.");
-        return stack[size - 1];
+        size--;
+        return stack[size];
     }
 
     public int getSize() {
