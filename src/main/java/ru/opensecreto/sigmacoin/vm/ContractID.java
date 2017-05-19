@@ -3,6 +3,9 @@ package ru.opensecreto.sigmacoin.vm;
 import javax.xml.bind.DatatypeConverter;
 import java.util.Arrays;
 
+/**
+ * Most significant byte is in the begining of array, least significant is at the end of array.
+ */
 public class ContractID {
 
     private final byte[] id;
