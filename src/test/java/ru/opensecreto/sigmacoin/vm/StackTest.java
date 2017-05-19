@@ -1,6 +1,5 @@
 package ru.opensecreto.sigmacoin.vm;
 
-import org.assertj.core.api.Assertions;
 import org.testng.annotations.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -56,5 +55,15 @@ public class StackTest {
         stack.pushLong(0x123456789abcdef1L);
         assertThat(stack.popLong()).inHexadecimal().isEqualTo(0x123456789abcdef1L);
         assertThatThrownBy(stack::popLong).isInstanceOf(IllegalStateException.class);
+    }
+
+    @Test
+    public void testPopCustom() {
+        Stack stack = new Stack(3);
+        stack.push((byte) 1);
+        stack.push((byte) 3);
+        stack.push((byte) 4);
+
+        assertThat(stack.popCustom(3)).containsExactly((byte) 4, (byte) 3, (byte) 1);
     }
 }

@@ -76,4 +76,14 @@ public class Stack {
                     "Can not pop long - not enough bytes. Available " + getSize() + " bytes, required 8 bytes");
         return Longs.fromBytes(pop(), pop(), pop(), pop(), pop(), pop(), pop(), pop());
     }
+
+    public byte[] popCustom(int size) {
+        if (getSize() < size) throw new IllegalStateException("Can not pop long - not enough bytes. " + "" +
+                "Available " + getSize() + " bytes, required " + size + " bytes");
+        byte[] data = new byte[size];
+        for (int i = 0; i < data.length; i++) {
+            data[i] = pop();
+        }
+        return data;
+    }
 }
