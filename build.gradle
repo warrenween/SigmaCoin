@@ -24,7 +24,7 @@ repositories {
 
 ext {
     guavaVersion = '21.0'
-    bouncyCastleVersion = '1.56'
+    bouncyCastleVersion = '1.57'
     gsonVersion = '2.8.0'
     groovyVersion = '2.4.7'
     commonsLangVersion = '3.5'
@@ -36,7 +36,7 @@ ext {
     commonsnetVersion= '3.6'
 
     //test libraries
-    assertjVersion = '3.6.2'
+    assertjVersion = '3.7.0'
     assertjSwingVersion = '3.4.0'
     testngVersion = '6.11'
     mockitoCoreVersion = '2.+'
@@ -67,7 +67,7 @@ dependencyVerification {
     verify = [
             'com.google.guava:guava:972139718abc8a4893fa78cba8cf7b2c903f35c97aaf44fa3031b0669948b480',
             'com.google.code.gson:gson:c6221763bd79c4f1c3dc7f750b5f29a0bb38b367b81314c4f71896e340c40825',
-            'org.bouncycastle:bcprov-jdk15on:963e1ee14f808ffb99897d848ddcdb28fa91ddda867eb18d303e82728f878349',
+            'org.bouncycastle:bcprov-jdk15on:4c7fb5f7fb043fedc4b7e7af88871050f61af8dea7aaade87f8ebd60e509cd89',
             'org.apache.commons:commons-lang3:8ac96fc686512d777fca85e144f196cd7cfe0c0aec23127229497d1a38ff651c',
             'org.slf4j:slf4j-api:18c4a0095d5c1da6b817592e767bb23d29dd2f560ad74df75ff3961dbde25b79',
             'ru.opensecreto:openutils:f7c9b91230ddec9ecf294679638f32165fea2495b8e99e6d53d69ee02341ba50',
