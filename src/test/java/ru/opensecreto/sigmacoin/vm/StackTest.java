@@ -39,4 +39,11 @@ public class StackTest {
                 .containsOnly((byte) 0x12, (byte) 0x34, (byte) 0x56, (byte) 0x78);
     }
 
+    @Test
+    public void testShort() {
+        Stack stack = new Stack(2);
+        stack.pushShort((short) 0x1234);
+        Assertions.assertThat(stack.popInt()).inHexadecimal().isEqualTo(((short) 0x1234));
+        Assertions.assertThatThrownBy(stack::popInt).isInstanceOf(IllegalStateException.class);
+    }
 }
