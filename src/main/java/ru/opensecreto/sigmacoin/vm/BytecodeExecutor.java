@@ -70,6 +70,8 @@ public class BytecodeExecutor {
             }
         }
 
+        frame.stack.pushShort((short) frame.stack.getSize());
+
         if (success) {
             frame.stack.push((byte) 0x00);
         } else {
