@@ -46,4 +46,12 @@ public class StackTest {
         Assertions.assertThat(stack.popInt()).inHexadecimal().isEqualTo(((short) 0x1234));
         Assertions.assertThatThrownBy(stack::popInt).isInstanceOf(IllegalStateException.class);
     }
+
+    @Test
+    public void testLong() {
+        Stack stack = new Stack(8);
+        stack.pushLong(0x123456789abcdef1L);
+        Assertions.assertThat(stack.popLong()).inHexadecimal().isEqualTo(0x123456789abcdef1L);
+        Assertions.assertThatThrownBy(stack::popInt).isInstanceOf(IllegalStateException.class);
+    }
 }

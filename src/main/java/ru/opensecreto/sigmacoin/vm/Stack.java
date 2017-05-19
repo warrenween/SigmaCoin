@@ -1,6 +1,7 @@
 package ru.opensecreto.sigmacoin.vm;
 
 import com.google.common.primitives.Ints;
+import com.google.common.primitives.Longs;
 import com.google.common.primitives.Shorts;
 
 import java.util.Arrays;
@@ -60,5 +61,19 @@ public class Stack {
             throw new IllegalStateException(
                     "Can not pop short - not enough bytes. Available " + getSize() + " bytes, required 2 bytes");
         return Shorts.fromBytes(pop(), pop());
+    }
+
+    public void pushLong(long value) {
+        byte[] data = Longs.toByteArray(value);
+        for (int i = data.length - 1; i >= 0; i--) {
+            push(data[i]);
+        }
+    }
+
+    public long popLong() {
+        if (getSize() < 8)
+            throw new IllegalStateException(
+                    "Can not pop long - not enough bytes. Available " + getSize() + " bytes, required 8 bytes");
+        return Longs.fromBytes(pop(), pop(), pop(), pop(), pop(), pop(), pop(), pop());
     }
 }
