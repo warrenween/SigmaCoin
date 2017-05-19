@@ -7,16 +7,16 @@ public class VirtualMachineController {
 
     private final Memory mainContract;
     private final ContractManager contractManager;
-    private final int stackSize;
+    private final VMConfiguration configuration;
 
-    public VirtualMachineController(Memory mainContract, ContractManager contractManager, int stackSize) {
+    public VirtualMachineController(Memory mainContract, ContractManager contractManager, VMConfiguration configuration) {
         this.mainContract = mainContract;
         this.contractManager = contractManager;
-        this.stackSize = stackSize;
+        this.configuration = configuration;
     }
 
     public void execute(byte[] invocationData, ContractID contractID) {
-        Stack stack = new Stack(stackSize);
+        Stack stack = new Stack(configuration.frameMaxStackSize);
         for (int i = 0; i < invocationData.length; i++) {
             stack.push(invocationData[i]);
         }
@@ -31,7 +31,7 @@ public class VirtualMachineController {
 
         Frame frame = new Frame(contractManager.getContract(contractID), stack, contractID);
 
-        BytecodeExecutor executor = new BytecodeExecutor(frame, this);
+        BytecodeExecutor executor = new BytecodeExecutor(configuration, frame, this);
         return executor.run();
     }
 }

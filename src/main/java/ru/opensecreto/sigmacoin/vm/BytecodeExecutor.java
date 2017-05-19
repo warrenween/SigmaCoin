@@ -9,11 +9,14 @@ public class BytecodeExecutor {
 
     public static final Logger LOGGER = LoggerFactory.getLogger(BytecodeExecutor.class);
 
+    private final VMConfiguration configuration;
+
     private final Frame frame;
     private long pointer = 0;
 
-    public BytecodeExecutor(Frame frame, VirtualMachineController controller) {
+    public BytecodeExecutor(VMConfiguration configuration, Frame frame, VirtualMachineController controller) {
         this.frame = frame;
+        this.configuration = configuration;
     }
 
     public Stack run() {
@@ -33,7 +36,6 @@ public class BytecodeExecutor {
 
 
                 case Opcodes.INVOKE:
-
 
 
                 default:
