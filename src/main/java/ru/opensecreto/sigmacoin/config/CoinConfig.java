@@ -1,4 +1,4 @@
-package ru.opensecreto.sigmacoin.core.config;
+package ru.opensecreto.sigmacoin.config;
 
 import org.bouncycastle.crypto.digests.SHA3Digest;
 import ru.opensecreto.sigmacoin.core.DigestProvider;
