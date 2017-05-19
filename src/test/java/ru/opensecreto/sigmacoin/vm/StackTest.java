@@ -70,7 +70,7 @@ public class StackTest {
     @Test
     public void testPushCustom() {
         Stack stack = new Stack(4);
-        stack.pushCustom(new byte[]{0x78, 0x56, 0x34, 0x12});
+        stack.pushCustom(new byte[]{0x12, 0x34, 0x56,0x78 });
         assertThat(stack.popInt()).inHexadecimal().isEqualTo(0x12345678);
     }
 }
