@@ -23,4 +23,12 @@ public class StackTest {
                 .isInstanceOf(IllegalStateException.class);
     }
 
+    @Test
+    public void testInt() {
+        Stack stack = new Stack(4);
+        stack.pushInt(0x12345678);
+        Assertions.assertThat(stack.popInt()).isEqualTo(0x12345678);
+        Assertions.assertThatThrownBy(stack::popInt).isInstanceOf(IllegalStateException.class);
+    }
+
 }
