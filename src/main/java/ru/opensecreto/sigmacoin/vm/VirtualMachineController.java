@@ -40,7 +40,7 @@ public class VirtualMachineController {
             Stack resultStack = new Stack(configuration.frameMaxStackSize);
             stack.pushShort((short) 0);
             stack.push((byte) 0x01);
-            return stack;
+            return resultStack;
         } else {
             Stack result = executor.run();
             currentCallStackDepth--;
