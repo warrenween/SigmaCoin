@@ -31,4 +31,12 @@ public class StackTest {
         Assertions.assertThatThrownBy(stack::popInt).isInstanceOf(IllegalStateException.class);
     }
 
+    @Test
+    public void testGetStack() {
+        Stack stack = new Stack(8);
+        stack.pushInt(0x12345678);
+        Assertions.assertThat(stack.getStack()).inHexadecimal().hasSize(4)
+                .containsOnly((byte) 0x12, (byte) 0x34, (byte) 0x56, (byte) 0x78);
+    }
+
 }

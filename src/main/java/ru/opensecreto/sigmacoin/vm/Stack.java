@@ -2,6 +2,8 @@ package ru.opensecreto.sigmacoin.vm;
 
 import com.google.common.primitives.Ints;
 
+import java.util.Arrays;
+
 public class Stack {
 
     private final byte[] stack;
@@ -39,5 +41,9 @@ public class Stack {
             throw new IllegalStateException(
                     "Can not pop int - not enough bytes. Available " + getSize() + " bytes, required 4 bytes");
         return Ints.fromBytes(pop(), pop(), pop(), pop());
+    }
+
+    public byte[] getStack() {
+        return Arrays.copyOf(stack, size);
     }
 }
