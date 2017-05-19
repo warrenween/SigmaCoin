@@ -58,6 +58,7 @@ public class BytecodeExecutor {
 
                     Stack result = controller.invoke(stackInvoke, contractId);
                     frame.stack.pushCustom(result.getStack());
+                    pointer++;
                     break;
 
 
