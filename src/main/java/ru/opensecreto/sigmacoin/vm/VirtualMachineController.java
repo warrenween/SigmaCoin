@@ -37,6 +37,7 @@ public class VirtualMachineController {
         currentCallStackDepth++;
 
         if (currentCallStackDepth == configuration.maxCallDepth) {
+            Stack resultStack = new Stack(configuration.frameMaxStackSize);
             stack.push((byte) 0x01);
             return stack;
         } else {
