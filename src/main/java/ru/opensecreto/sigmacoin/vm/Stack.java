@@ -1,64 +1,96 @@
 package ru.opensecreto.sigmacoin.vm;
 
+import com.google.common.primitives.Ints;
+import com.google.common.primitives.Longs;
+import com.google.common.primitives.Shorts;
+
+import java.util.Arrays;
+
 public class Stack {
 
-    protected byte[] stack;
-    protected int stackSize = 0;
+    private final byte[] stack;
+    private int size = 0;
 
-    public Stack(int size) {
-        stack = new byte[size];
+    public Stack(int stackSize) {
+        this.stack = new byte[stackSize];
     }
 
-    public void push(byte aByte) {
-        if (stackSize >= stack.length) {
-            throw new IllegalStateException("Can not push. Maximum size reached");
-        }
-        stack[stackSize] = aByte;
-        stackSize++;
+    public void push(byte value) {
+        if (size == stack.length) throw new IllegalStateException("Can not push. Stack is full.");
+        stack[size] = value;
+        size++;
     }
 
-
-    /**
-     * Получить байт с индексом.
-     * <p>
-     * ^ <- вершина стека<p>
-     * | <- get(0);<p>
-     * |<p>
-     * | <- get(2);<p>
-     * |<p>
-     * ...
-     *
-     * @param index номер байта считая от вершины
-     * @return байт с индексом
-     */
-    public byte get(int index) {
-        if (index >= stackSize) {
-            throw new IllegalArgumentException("Can not get byte. Index is too big,");
-        }
-        return stack[stackSize - 1 - index];
-    }
-
-    public void pop() {
-        if (stackSize == 0) {
-            throw new IllegalStateException("Can not pop from empty stack");
-        }
-        stackSize--;
-    }
-
-    /**
-     * @return массив значений стека. Вершина стека находится в конце массива.
-     */
-    public byte[] getStack() {
-        byte[] result = new byte[stackSize];
-        System.arraycopy(stack, 0, result, 0, stackSize);
-        return result;
-    }
-
-    public void reset() {
-        stackSize = 0;
+    public byte pop() {
+        if (size == 0) throw new IllegalStateException("Nothing to pop. Stack is empty.");
+        size--;
+        return stack[size];
     }
 
     public int getSize() {
-        return stackSize;
+        return size;
     }
+
+    public void pushInt(int value) {
+        byte[] data = Ints.toByteArray(value);
+        for (int i = data.length - 1; i >= 0; i--) {
+            push(data[i]);
+        }
+    }
+
+    public int popInt() {
+        if (getSize() < 4)
+            throw new IllegalStateException(
+                    "Can not pop int - not enough bytes. Available " + getSize() + " bytes, required 4 bytes");
+        return Ints.fromBytes(pop(), pop(), pop(), pop());
+    }
+
+    public byte[] getStack() {
+        return Arrays.copyOf(stack, size);
+    }
+
+    public void pushShort(short value) {
+        byte[] data = Shorts.toByteArray(value);
+        for (int i = data.length - 1; i >= 0; i--) {
+            push(data[i]);
+        }
+    }
+
+    public short popShort() {
+        if (getSize() < 2)
+            throw new IllegalStateException(
+                    "Can not pop short - not enough bytes. Available " + getSize() + " bytes, required 2 bytes");
+        return Shorts.fromBytes(pop(), pop());
+    }
+
+    public void pushLong(long value) {
+        byte[] data = Longs.toByteArray(value);
+        for (int i = data.length - 1; i >= 0; i--) {
+            push(data[i]);
+        }
+    }
+
+    public long popLong() {
+        if (getSize() < 8)
+            throw new IllegalStateException(
+                    "Can not pop long - not enough bytes. Available " + getSize() + " bytes, required 8 bytes");
+        return Longs.fromBytes(pop(), pop(), pop(), pop(), pop(), pop(), pop(), pop());
+    }
+
+    public byte[] popCustom(int size) {
+        if (getSize() < size) throw new IllegalStateException("Can not pop long - not enough bytes. " + "" +
+                "Available " + getSize() + " bytes, required " + size + " bytes");
+        byte[] data = new byte[size];
+        for (int i = 0; i < data.length; i++) {
+            data[i] = pop();
+        }
+        return data;
+    }
+
+    public void pushCustom(byte[] data) {
+        for (int i = data.length - 1; i >= 0; i--) {
+            push(data[i]);
+        }
+    }
+
 }

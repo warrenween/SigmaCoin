@@ -1,137 +1,89 @@
 package ru.opensecreto.sigmacoin.vm;
 
-import javax.xml.bind.DatatypeConverter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import static ru.opensecreto.sigmacoin.vm.Opcodes.*;
+import javax.xml.bind.DatatypeConverter;
 
 public class BytecodeExecutor {
 
-    protected Stack stack = new Stack(Config.MAX_STACK);
-    protected byte[] memory = new byte[Config.MAX_MEMORY];
-    protected StorageManager storage;
+    public static final Logger LOGGER = LoggerFactory.getLogger(BytecodeExecutor.class);
 
-    protected boolean run = true;
-    protected boolean finished = false;
+    private final VMConfiguration configuration;
+    private final VirtualMachineController controller;
 
-    /**
-     * false - executing bytecode in storage
-     * true - executing bytecode in memory.
-     */
-    boolean modeMemory = false;
-    /**
-     * Указатель на команду, которая выполнится при <b>следующей</b> итерации.
-     */
-    long pointer = 0;
+    private final Frame frame;
+    private long pointer = 0;
 
-    public BytecodeExecutor(StorageManager storage) {
-        this.storage = storage;
+    public BytecodeExecutor(VMConfiguration configuration, Frame frame, VirtualMachineController controller) {
+        this.frame = frame;
+        this.configuration = configuration;
+        this.controller = controller;
     }
 
-    public BytecodeExecutor() {
-    }
+    public Stack run() {
+        boolean run = true;
+        boolean success = true;
+        while (run) {
+            switch (frame.memory.get(pointer)) {
+                case Opcodes.STOP_BAD:
+                    run = false;
+                    success = false;
+                    break;
 
-    protected final void processOpcode(byte opcode) {
-        switch (opcode) {
-            case OP_STOP:
-                run = false;
-                finished = true;
-                break;
-            case OP_MODE_M:
-                switchMode(true);
-                break;
-            case OP_MODE_S:
-                switchMode(false);
-                break;
-            case OP_PUSH:
-                stack.push(next());
-                break;
-            case OP_POP:
-                stack.pop();
-                break;
-            case OP_SET_POINTER:
-                if (stack.getSize() < 4) {
-                    throw new ExecutionException("OP_SET_POINTER requires 4 byte address in stack. Now " + stack.getSize());
-                }
-                pointer = ((stack.get(0) & 0xffL) << 24) |
-                        ((stack.get(1) & 0xffL) << 16) |
-                        ((stack.get(0) & 0xffL) << 8) |
-                        (stack.get(2) & 0xffL);
-                break;
-            case OP_MEM_PUT:
-                if (stack.getSize() < 4) {
-                    throw new IllegalStateException("To perform OP_MEM_PUT at least stack must contain at least 4 bytes");
-                }
-                byte value = stack.get(0);
-                int index = ((stack.get(1) & 0xff) << 16) |
-                        ((stack.get(2) & 0xff) << 8) |
-                        (stack.get(3) & 0xff);
-                memory[index] = value;
-                break;
-            default:
-                throw new ExecutionException(
-                        "Unknown opcode " + DatatypeConverter.printHexBinary(new byte[]{opcode})
-                );
-        }
-    }
 
-    public boolean isFinished() {
-        return finished;
-    }
+                case Opcodes.STOP_GOOD:
+                    run = false;
+                    break;
 
-    public void setStorage(StorageManager storage) {
-        this.storage = storage;
-    }
 
-    public void reset() {
-        stack.reset();
-        pointer = 0;
-        modeMemory = false;
-        finished = false;
-        run = true;
-        for (int i = 0; i < memory.length; i++) {
-            memory[i] = 0;
-        }
-    }
+                case Opcodes.INVOKE:
+                    if (frame.stack.getSize() < (configuration.contractIdLength + Short.BYTES)) {
+                        LOGGER.warn("Error while executing contract {} at {}. " +
+                                        "Can not invoke - stack size is less than required minimum {} bytes.",
+                                pointer, configuration.contractIdLength + Short.BYTES);
+                        run = false;
+                        success = false;
+                    }
+                    int dataSize = frame.stack.popShort();
+                    if (frame.stack.getSize() < (configuration.contractIdLength + Short.BYTES + dataSize)) {
+                        LOGGER.warn("Error while executing contract {} at {}. " +
+                                        "Can not invoke - stack size is less than {} bytes.",
+                                pointer, configuration.contractIdLength + Short.BYTES + dataSize);
+                        run = false;
+                        success = false;
+                    }
+                    ContractID contractId = new ContractID(frame.stack.popCustom(configuration.contractIdLength));
+                    Stack stackInvoke = new Stack(configuration.frameMaxStackSize);
 
-    public byte[] getStack() {
-        return stack.getStack();
-    }
+                    Stack result = controller.invoke(stackInvoke, contractId);
+                    frame.stack.pushCustom(result.getStack());
+                    pointer++;
+                    break;
 
-    public byte[] getMemory() {
-        return memory;
-    }
 
-    public void execute() {
-        if (storage == null) {
-            throw new NullPointerException("storage is null");
-        }
-        while (run && !finished) {
-            processOpcode(next());
-        }
-    }
+                case Opcodes.PUSH:
+                    frame.stack.push(frame.memory.get(pointer + 1));
+                    pointer += 2;
+                    break;
 
-    protected byte next() {
-        byte result;
-        if (modeMemory) {
-            if (pointer >= Config.MAX_MEMORY) {
-                throw new ExecutionException("Invalid memory address " + pointer + ". "
-                        + "Max " + (Config.MAX_MEMORY - 1) + ".");
+
+                default:
+                    run = false;
+                    success = false;
+                    LOGGER.warn("Error while executing {} - unexpected bytecode 0x{} at {}.",
+                            frame.contractID, DatatypeConverter.printHexBinary(new byte[]{frame.memory.get(pointer)}), pointer);
             }
-            result = memory[(int) pointer];
+        }
+
+        frame.stack.pushShort((short) frame.stack.getSize());
+
+        if (success) {
+            frame.stack.push((byte) 0x00);
         } else {
-            if (pointer >= Config.STORAGE_MAX_SIZE) {
-                throw new ExecutionException("Invalid storage address " + pointer + ". "
-                        + "Max " + (Config.STORAGE_MAX_SIZE - 1) + ".");
-            }
-            result = storage.getByte(pointer);
+            frame.stack.push((byte) 0x01);
         }
-        pointer++;
-        return result;
-    }
 
-    protected void switchMode(boolean memoryMode) {
-        pointer = 0;
-        modeMemory = memoryMode;
+        return frame.stack;
     }
-
 }
