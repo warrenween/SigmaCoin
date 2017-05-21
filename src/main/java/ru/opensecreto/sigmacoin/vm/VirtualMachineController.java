@@ -23,14 +23,16 @@ public class VirtualMachineController {
 
     public Stack invoke(Stack stack, ContractID contractID) {
         if (!contractManager.contractExists(contractID)) {
-            stack.push((byte) 0x01);
-            return stack;
+            Stack resultStack = new Stack(configuration.stackSize);
+            resultStack.pushShort((short) 0);
+            resultStack.push((byte) 0x01);
+            return resultStack;
         }
 
         if (currentCallStackDepth == configuration.maxCallDepth) {
             Stack resultStack = new Stack(configuration.stackSize);
-            stack.pushShort((short) 0);
-            stack.push((byte) 0x01);
+            resultStack.pushShort((short) 0);
+            resultStack.push((byte) 0x01);
             return resultStack;
         } else {
             Frame frame = new Frame(contractManager.getContract(contractID), stack, contractID);
