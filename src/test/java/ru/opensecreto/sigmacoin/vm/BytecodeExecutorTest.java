@@ -116,7 +116,7 @@ public class BytecodeExecutorTest {
 
         assertThat(result.pop()).isEqualTo((byte) 0x00);
         assertThat(result.popShort()).isEqualTo((short) 2);
-        assertThat(result.popShort()).isEqualTo(0x561f);
+        assertThat(result.popShort()).isEqualTo((short) 0x561f);
 
         assertThat(result.getSize()).isEqualTo(0);
     }
