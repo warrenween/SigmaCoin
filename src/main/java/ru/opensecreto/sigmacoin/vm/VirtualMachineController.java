@@ -4,15 +4,13 @@ package ru.opensecreto.sigmacoin.vm;
  * Controls execution of bytecode. Creates frames, handles invocations.
  */
 public class VirtualMachineController {
-
-    private final Memory mainContract;
+    
     private final ContractManager contractManager;
     private final VMConfiguration configuration;
 
     private int currentCallStackDepth;
 
-    public VirtualMachineController(Memory mainContract, ContractManager contractManager, VMConfiguration configuration) {
-        this.mainContract = mainContract;
+    public VirtualMachineController(ContractManager contractManager, VMConfiguration configuration) {
         this.contractManager = contractManager;
         this.configuration = configuration;
     }
