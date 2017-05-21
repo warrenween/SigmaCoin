@@ -60,4 +60,29 @@ public class BytecodeExecutorTest {
         assertThat(result.pop()).isEqualTo((byte) 0x01);
         assertThat(result.popShort()).isEqualTo((short) 0);
     }
+
+    @Test
+    public void testInvokeResultPUSH_DUP() {
+        ContractID idA = new ContractID(new byte[]{0});
+        Memory contractA = mock(Memory.class);
+        when(contractA.get(0)).thenReturn(Opcodes.PUSH);
+        when(contractA.get(1)).thenReturn((byte) 0x1f);
+        when(contractA.get(2)).thenReturn(Opcodes.DUP);
+        when(contractA.get(3)).thenReturn(Opcodes.DUP);
+        when(contractA.get(4)).thenReturn(Opcodes.DUP);
+        when(contractA.get(5)).thenReturn(Opcodes.STOP_BAD);
+
+        ContractManager manager = mock(ContractManager.class);
+        when(manager.contractExists(idA)).thenReturn(true);
+        when(manager.getContract(idA)).thenReturn(contractA);
+
+        VirtualMachineController controller = new VirtualMachineController(manager,
+                new VMConfiguration(10, 1, 10, 10));
+
+        Stack result = controller.invoke(new Stack(0), idA);
+
+        assertThat(result.pop()).isEqualTo((byte) 0x01);
+        assertThat(result.popShort()).isEqualTo((short) 4);
+        assertThat(result.popInt()).isEqualTo(0x1f1f1f1f);
+    }
 }
