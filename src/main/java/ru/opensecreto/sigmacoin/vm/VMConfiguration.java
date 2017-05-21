@@ -18,4 +18,10 @@ public class VMConfiguration {
         this.maxCallDepth = maxCallDepth;
         this.memorySize = memorySize;
     }
+
+    @Override
+    public String toString() {
+        return String.format("Max call depth %s.%nStack size %s.%nMemory size %s.%n",
+                maxCallDepth, stackSize, memorySize);
+    }
 }
