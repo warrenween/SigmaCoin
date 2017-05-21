@@ -20,6 +20,7 @@ public class BytecodeExecutorTest {
 
         assertThat(result.pop()).isEqualTo((byte) 0x01);
         assertThat(result.popShort()).isEqualTo((short) 0);
+
         assertThat(result.getSize()).isEqualTo(0);
     }
 
@@ -40,6 +41,8 @@ public class BytecodeExecutorTest {
 
         assertThat(result.pop()).isEqualTo((byte) 0x00);
         assertThat(result.popShort()).isEqualTo((short) 0);
+
+        assertThat(result.getSize()).isEqualTo(0);
     }
 
     @Test
@@ -59,6 +62,8 @@ public class BytecodeExecutorTest {
 
         assertThat(result.pop()).isEqualTo((byte) 0x01);
         assertThat(result.popShort()).isEqualTo((short) 0);
+
+        assertThat(result.getSize()).isEqualTo(0);
     }
 
     @Test
@@ -84,6 +89,8 @@ public class BytecodeExecutorTest {
         assertThat(result.pop()).isEqualTo((byte) 0x01);
         assertThat(result.popShort()).isEqualTo((short) 4);
         assertThat(result.popInt()).isEqualTo(0x1f1f1f1f);
+
+        assertThat(result.getSize()).isEqualTo(0);
     }
 
     @Test
@@ -110,5 +117,7 @@ public class BytecodeExecutorTest {
         assertThat(result.pop()).isEqualTo((byte) 0x00);
         assertThat(result.popShort()).isEqualTo((short) 2);
         assertThat(result.popShort()).isEqualTo(0x561f);
+
+        assertThat(result.getSize()).isEqualTo(0);
     }
 }
