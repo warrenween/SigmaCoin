@@ -74,6 +74,14 @@ public class BytecodeExecutor {
                     break;
 
 
+                case Opcodes.DUP:
+                    byte data = frame.stack.pop();
+                    frame.stack.push(data);
+                    frame.stack.push(data);
+                    pointer++;
+                    break;
+
+
                 default:
                     run = false;
                     success = false;

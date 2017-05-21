@@ -39,5 +39,7 @@ public class Opcodes {
      */
     public static final byte POP = 0x11;
 
+    public static final byte DUP = 0x12;
+
 
 }
