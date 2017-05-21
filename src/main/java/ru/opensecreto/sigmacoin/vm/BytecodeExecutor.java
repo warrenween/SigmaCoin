@@ -54,7 +54,7 @@ public class BytecodeExecutor {
                         success = false;
                     }
                     ContractID contractId = new ContractID(frame.stack.popCustom(configuration.contractIdLength));
-                    Stack stackInvoke = new Stack(configuration.frameMaxStackSize);
+                    Stack stackInvoke = new Stack(configuration.stackSize);
 
                     Stack result = controller.invoke(stackInvoke, contractId);
                     frame.stack.pushCustom(result.getStack());

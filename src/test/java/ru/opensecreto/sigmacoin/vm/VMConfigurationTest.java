@@ -8,19 +8,19 @@ public class VMConfigurationTest {
     @Test
     public void test() {
         VMConfiguration configuration = new VMConfiguration(28, 33, 54, 94);
-        Assertions.assertThat(configuration.frameMaxStackSize).isEqualTo(28);
+        Assertions.assertThat(configuration.stackSize).isEqualTo(28);
         Assertions.assertThat(configuration.contractIdLength).isEqualTo(33);
         Assertions.assertThat(configuration.maxCallDepth).isEqualTo(54);
-        Assertions.assertThat(configuration.memoryMaxSize).isEqualTo(94);
+        Assertions.assertThat(configuration.memorySize).isEqualTo(94);
     }
 
     @Test
     public void testNearlyBadValues() {
         VMConfiguration configuration = new VMConfiguration(1, 1, 1, 1);
-        Assertions.assertThat(configuration.frameMaxStackSize).isEqualTo(1);
+        Assertions.assertThat(configuration.stackSize).isEqualTo(1);
         Assertions.assertThat(configuration.contractIdLength).isEqualTo(1);
         Assertions.assertThat(configuration.maxCallDepth).isEqualTo(1);
-        Assertions.assertThat(configuration.memoryMaxSize).isEqualTo(1);
+        Assertions.assertThat(configuration.memorySize).isEqualTo(1);
     }
 
     @Test

@@ -16,7 +16,7 @@ public class VirtualMachineController {
     }
 
     public void execute(byte[] invocationData, ContractID contractID) {
-        Stack stack = new Stack(configuration.frameMaxStackSize);
+        Stack stack = new Stack(configuration.stackSize);
         stack.pushCustom(invocationData);
         invoke(stack, contractID);
     }
@@ -28,7 +28,7 @@ public class VirtualMachineController {
         }
 
         if (currentCallStackDepth == configuration.maxCallDepth) {
-            Stack resultStack = new Stack(configuration.frameMaxStackSize);
+            Stack resultStack = new Stack(configuration.stackSize);
             stack.pushShort((short) 0);
             stack.push((byte) 0x01);
             return resultStack;
