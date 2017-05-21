@@ -16,7 +16,7 @@ public class BytecodeExecutorTest {
         VirtualMachineController controller = new VirtualMachineController(manager,
                 new VMConfiguration(10, 1, 10, 10));
 
-        Stack result = controller.invoke(new Stack(0), new ContractID(new byte[]{0}));
+        Stack result = controller.invoke(new Stack(10), new ContractID(new byte[]{0}));
 
         assertThat(result.pop()).isEqualTo((byte) 0x01);
         assertThat(result.popShort()).isEqualTo((short) 0);
@@ -37,7 +37,7 @@ public class BytecodeExecutorTest {
         VirtualMachineController controller = new VirtualMachineController(manager,
                 new VMConfiguration(10, 1, 10, 10));
 
-        Stack result = controller.invoke(new Stack(0), idA);
+        Stack result = controller.invoke(new Stack(10), idA);
 
         assertThat(result.pop()).isEqualTo((byte) 0x00);
         assertThat(result.popShort()).isEqualTo((short) 0);
@@ -58,7 +58,7 @@ public class BytecodeExecutorTest {
         VirtualMachineController controller = new VirtualMachineController(manager,
                 new VMConfiguration(10, 1, 10, 10));
 
-        Stack result = controller.invoke(new Stack(0), idA);
+        Stack result = controller.invoke(new Stack(10), idA);
 
         assertThat(result.pop()).isEqualTo((byte) 0x01);
         assertThat(result.popShort()).isEqualTo((short) 0);
@@ -84,7 +84,7 @@ public class BytecodeExecutorTest {
         VirtualMachineController controller = new VirtualMachineController(manager,
                 new VMConfiguration(10, 1, 10, 10));
 
-        Stack result = controller.invoke(new Stack(0), idA);
+        Stack result = controller.invoke(new Stack(10), idA);
 
         assertThat(result.pop()).isEqualTo((byte) 0x01);
         assertThat(result.popShort()).isEqualTo((short) 4);
@@ -112,7 +112,7 @@ public class BytecodeExecutorTest {
         VirtualMachineController controller = new VirtualMachineController(manager,
                 new VMConfiguration(10, 1, 10, 10));
 
-        Stack result = controller.invoke(new Stack(0), idA);
+        Stack result = controller.invoke(new Stack(10), idA);
 
         assertThat(result.pop()).isEqualTo((byte) 0x00);
         assertThat(result.popShort()).isEqualTo((short) 2);
