@@ -11,7 +11,7 @@ public class VMConfiguration {
         if (maxCallDepth <= 0) throw new IllegalArgumentException("maxCallDepth must be >= 1");
         if (contractIdLength <= 0) throw new IllegalArgumentException("contractIdLength must be >= 1");
         if (frameMaxStackSize <= 0) throw new IllegalArgumentException("frameMaxStack must be >= 1");
-        if (memoryMaxSize < 1) throw new IllegalArgumentException("memoryMaxSize must be >= 1")
+        if (memoryMaxSize < 1) throw new IllegalArgumentException("memoryMaxSize must be >= 1");
 
         this.frameMaxStackSize = frameMaxStackSize;
         this.contractIdLength = contractIdLength;
