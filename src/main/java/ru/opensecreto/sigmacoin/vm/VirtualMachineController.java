@@ -4,7 +4,7 @@ package ru.opensecreto.sigmacoin.vm;
  * Controls execution of bytecode. Creates frames, handles invocations.
  */
 public class VirtualMachineController {
-    
+
     private final ContractManager contractManager;
     private final VMConfiguration configuration;
 
@@ -17,9 +17,7 @@ public class VirtualMachineController {
 
     public void execute(byte[] invocationData, ContractID contractID) {
         Stack stack = new Stack(configuration.frameMaxStackSize);
-        for (int i = 0; i < invocationData.length; i++) {
-            stack.push(invocationData[i]);
-        }
+        stack.pushCustom(invocationData);
         invoke(stack, contractID);
     }
 
