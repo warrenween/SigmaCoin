@@ -66,11 +66,6 @@ public class Stack {
         return Ints.fromByteArray(popCustom(Integer.BYTES));
     }
 
-    @Deprecated
-    public byte[] getStack() {
-        return Arrays.copyOf(stack, size);
-    }
-
     /**
      * Interpret given value as 2 bytes array and {@link Stack#pushCustom(byte[])} it.
      * Most significant byte of given value will be at top of stack.
