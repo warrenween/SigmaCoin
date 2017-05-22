@@ -12,7 +12,8 @@ public class BlockStorageControllerTest {
     @Test
     public void testInvalidArguments() {
         BlockStorageController controller = new BlockStorageController(
-                new File("testInvalid.db"), 4, 4
+                new File("testInvalid.db"), 4, 4,
+                new BlockStorageConfiguration(BlockStorageConfigurator.DEFAULT_START_SIZE, BlockStorageConfigurator.DEFAULT_ALLOCATE_SIZE)
         );
 
         assertThatThrownBy(() ->
@@ -34,7 +35,8 @@ public class BlockStorageControllerTest {
     @Test
     public void test() {
         BlockStorageController controller = new BlockStorageController(
-                new File("test.db"), 2, 2
+                new File("test.db"), 2, 2,
+                new BlockStorageConfiguration(BlockStorageConfigurator.DEFAULT_START_SIZE, BlockStorageConfigurator.DEFAULT_ALLOCATE_SIZE)
         );
 
         assertThat(controller.hasBlock(new byte[]{1, 2})).isFalse();
@@ -55,7 +57,8 @@ public class BlockStorageControllerTest {
         //testing loading database
         controller.close();
         BlockStorageController controllerNew = new BlockStorageController(
-                new File("test.db"), 2, 2
+                new File("test.db"), 2, 2,
+                new BlockStorageConfiguration(BlockStorageConfigurator.DEFAULT_START_SIZE, BlockStorageConfigurator.DEFAULT_ALLOCATE_SIZE)
         );
 
         //check reading block do not changes it
