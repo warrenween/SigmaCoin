@@ -132,17 +132,17 @@ public class BytecodeExecutorTest {
         when(contractA.get(4)).thenReturn(Opcodes.PUSH);//data length
         when(contractA.get(5)).thenReturn((byte) 0x01);
         when(contractA.get(6)).thenReturn(Opcodes.PUSH);
-        when(contractA.get(6)).thenReturn((byte) 0x00);
-        when(contractA.get(7)).thenReturn(Opcodes.INVOKE);//invoking | result: (top) 0x01 0x00 0x03 0x1f 0xab 0xab
-        when(contractA.get(8)).thenReturn(Opcodes.STOP_GOOD); //adds 0x00 0x00 0x06 *result*
+        when(contractA.get(7)).thenReturn((byte) 0x00);
+        when(contractA.get(8)).thenReturn(Opcodes.INVOKE);//invoking | result: (top) 0x01 0x00 0x03 0x1f 0xab 0xab
+        when(contractA.get(9)).thenReturn(Opcodes.STOP_GOOD); //adds 0x00 0x00 0x06 *result*
 
         ContractID idB = new ContractID(new byte[]{0x01});
         Memory contractB = mock(Memory.class);
         //stack has: 0xab
-        when(contractA.get(0)).thenReturn(Opcodes.DUP);
-        when(contractA.get(1)).thenReturn(Opcodes.PUSH);
-        when(contractA.get(2)).thenReturn((byte) 0x1f);
-        when(contractA.get(3)).thenReturn(Opcodes.STOP_BAD);
+        when(contractB.get(0)).thenReturn(Opcodes.DUP);
+        when(contractB.get(1)).thenReturn(Opcodes.PUSH);
+        when(contractB.get(2)).thenReturn((byte) 0x1f);
+        when(contractB.get(3)).thenReturn(Opcodes.STOP_BAD);
         //returns: (top) 0x01 0x00 0x03 0x1f 0xab 0xab
 
         ContractManager manager = mock(ContractManager.class);
