@@ -22,4 +22,9 @@ public class ContractID {
     public String toString() {
         return "0x" + DatatypeConverter.printHexBinary(id);
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        return (obj != null) && (obj instanceof ContractID) && (Arrays.equals(((ContractID) obj).id, id));
+    }
 }
