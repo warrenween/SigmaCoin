@@ -41,7 +41,7 @@ public class BytecodeExecutor {
                     if (frame.stack.getSize() < (configuration.contractIdLength + Short.BYTES)) {
                         LOGGER.warn("Error while executing contract {} at {}. " +
                                         "Can not invoke - stack size is less than required minimum {} bytes.",
-                                pointer, configuration.contractIdLength + Short.BYTES);
+                                frame.contractID, pointer, configuration.contractIdLength + Short.BYTES);
                         run = false;
                         success = false;
                     }
@@ -49,7 +49,7 @@ public class BytecodeExecutor {
                     if (frame.stack.getSize() < (configuration.contractIdLength + Short.BYTES + dataSize)) {
                         LOGGER.warn("Error while executing contract {} at {}. " +
                                         "Can not invoke - stack size is less than {} bytes.",
-                                pointer, configuration.contractIdLength + Short.BYTES + dataSize);
+                                frame.contractID, pointer, configuration.contractIdLength + Short.BYTES + dataSize);
                         run = false;
                         success = false;
                     }
