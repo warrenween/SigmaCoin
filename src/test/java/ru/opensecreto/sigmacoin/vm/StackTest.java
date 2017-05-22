@@ -34,14 +34,6 @@ public class StackTest {
     }
 
     @Test
-    public void testGetStack() {
-        Stack stack = new Stack(8);
-        stack.pushInt(0x12345678);
-        assertThat(stack.getStack()).inHexadecimal().hasSize(4)
-                .containsOnly((byte) 0x12, (byte) 0x34, (byte) 0x56, (byte) 0x78);
-    }
-
-    @Test
     public void testShort() {
         Stack stack = new Stack(2);
         stack.pushShort((short) 0x1234);
