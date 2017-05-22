@@ -143,7 +143,7 @@ public class BytecodeExecutorTest {
         when(contractB.get(1)).thenReturn(Opcodes.PUSH);
         when(contractB.get(2)).thenReturn((byte) 0x1f);
         when(contractB.get(3)).thenReturn(Opcodes.STOP_BAD);
-        //returns: (top) 0x01 0x00 0x03 0x1f 0xab 0xab
+        //returns: (top) 0x01 0x00 0x03 || 0x1f 0xab 0xab
 
         ContractManager manager = mock(ContractManager.class);
         when(manager.contractExists(idA)).thenReturn(true);

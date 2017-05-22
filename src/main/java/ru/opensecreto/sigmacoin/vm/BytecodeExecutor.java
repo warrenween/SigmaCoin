@@ -38,26 +38,14 @@ public class BytecodeExecutor {
 
 
                 case Opcodes.INVOKE:
-                    if (frame.stack.getSize() < (configuration.contractIdLength + Short.BYTES)) {
-                        LOGGER.warn("Error while executing contract {} at {}. " +
-                                        "Can not invoke - stack size is less than required minimum {} bytes.",
-                                frame.contractID, pointer, configuration.contractIdLength + Short.BYTES);
-                        run = false;
-                        success = false;
-                    }
-                    int dataSize = frame.stack.popShort();
-                    if (frame.stack.getSize() < (configuration.contractIdLength + Short.BYTES + dataSize)) {
-                        LOGGER.warn("Error while executing contract {} at {}. " +
-                                        "Can not invoke - stack size is less than {} bytes.",
-                                frame.contractID, pointer, configuration.contractIdLength + Short.BYTES + dataSize);
-                        run = false;
-                        success = false;
-                    }
-                    ContractID contractId = new ContractID(frame.stack.popCustom(configuration.contractIdLength));
                     Stack stackInvoke = new Stack(configuration.stackSize);
 
+                    int dataSize = frame.stack.popShort();
+                    ContractID contractId = new ContractID(frame.stack.popCustom(configuration.contractIdLength));
+                    stackInvoke.pushCustom(frame.stack.popCustom(dataSize));
+
                     Stack result = controller.invoke(stackInvoke, contractId);
-                    frame.stack.pushCustom(result.getStack());
+                    frame.stack.pushCustom(result.popCustom(result.getSize()));
                     pointer++;
                     break;
 
