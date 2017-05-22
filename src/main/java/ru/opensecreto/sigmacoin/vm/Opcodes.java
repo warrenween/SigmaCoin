@@ -34,5 +34,12 @@ public class Opcodes {
      */
     public static final byte PUSH = 0x10;
 
+    /**
+     * Remove one byte from top of stack.
+     */
+    public static final byte POP = 0x11;
+
+    public static final byte DUP = 0x12;
+
 
 }

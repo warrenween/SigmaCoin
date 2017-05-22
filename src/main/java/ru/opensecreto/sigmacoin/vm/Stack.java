@@ -15,70 +15,113 @@ public class Stack {
         this.stack = new byte[stackSize];
     }
 
-    public void push(byte value) {
+    /**
+     * Push one byte to top of stack. Pushed byte will be at top of stack.
+     *
+     * @param value byte to be pushed.
+     * @throws IllegalStateException if stack size has reached maximum
+     */
+    public void push(byte value) throws IllegalStateException {
         if (size == stack.length) throw new IllegalStateException("Can not push. Stack is full.");
         stack[size] = value;
         size++;
     }
 
-    public byte pop() {
+    /**
+     * Removes one byte from top of stack and returns it as the result.
+     *
+     * @return one byte from stack
+     * @throws IllegalStateException if stack is empty
+     */
+    public byte pop() throws IllegalStateException {
         if (size == 0) throw new IllegalStateException("Nothing to pop. Stack is empty.");
         size--;
         return stack[size];
     }
 
+    /**
+     * @return amount of bytes this stack contains now
+     */
     public int getSize() {
         return size;
     }
 
+    /**
+     * Interpret given value as 4 bytes array and {@link Stack#pushCustom(byte[])} it.
+     * Most significant byte of given value will be at top of stack.
+     *
+     * @param value integer to push to this stack.
+     */
     public void pushInt(int value) {
-        byte[] data = Ints.toByteArray(value);
-        for (int i = data.length - 1; i >= 0; i--) {
-            push(data[i]);
-        }
+        pushCustom(Ints.toByteArray(value));
     }
 
+    /**
+     * Pops 4 bytes and interprets them as int.
+     * Byte from top of stack will be the most significant byte of result.
+     *
+     * @return 4 bytes integer.
+     */
     public int popInt() {
-        if (getSize() < 4)
-            throw new IllegalStateException(
-                    "Can not pop int - not enough bytes. Available " + getSize() + " bytes, required 4 bytes");
-        return Ints.fromBytes(pop(), pop(), pop(), pop());
+        return Ints.fromByteArray(popCustom(Integer.BYTES));
     }
 
+    @Deprecated
     public byte[] getStack() {
         return Arrays.copyOf(stack, size);
     }
 
+    /**
+     * Interpret given value as 2 bytes array and {@link Stack#pushCustom(byte[])} it.
+     * Most significant byte of given value will be at top of stack.
+     *
+     * @param value short value to push to this stack.
+     */
     public void pushShort(short value) {
-        byte[] data = Shorts.toByteArray(value);
-        for (int i = data.length - 1; i >= 0; i--) {
-            push(data[i]);
-        }
+        pushCustom(Shorts.toByteArray(value));
     }
 
+    /**
+     * Pops 2 bytes and interprets them as short.
+     * Byte from top of stack will be the most significant byte of result.
+     *
+     * @return 4 bytes integer.
+     */
     public short popShort() {
-        if (getSize() < 2)
-            throw new IllegalStateException(
-                    "Can not pop short - not enough bytes. Available " + getSize() + " bytes, required 2 bytes");
-        return Shorts.fromBytes(pop(), pop());
+        return Shorts.fromByteArray(popCustom(Short.BYTES));
     }
 
+    /**
+     * Interpret given value as 8 bytes array and {@link Stack#pushCustom(byte[])} it.
+     * Most significant byte of given value will be at top of stack.
+     *
+     * @param value long value to push to this stack.
+     */
     public void pushLong(long value) {
-        byte[] data = Longs.toByteArray(value);
-        for (int i = data.length - 1; i >= 0; i--) {
-            push(data[i]);
-        }
+        pushCustom(Longs.toByteArray(value));
     }
 
+    /**
+     * Pops 8 bytes and interprets them as int.
+     * Byte from top of stack will be the most significant byte of result.
+     *
+     * @return long integer.
+     */
     public long popLong() {
-        if (getSize() < 8)
-            throw new IllegalStateException(
-                    "Can not pop long - not enough bytes. Available " + getSize() + " bytes, required 8 bytes");
-        return Longs.fromBytes(pop(), pop(), pop(), pop(), pop(), pop(), pop(), pop());
+        return Longs.fromByteArray(popCustom(Long.BYTES));
     }
 
-    public byte[] popCustom(int size) {
-        if (getSize() < size) throw new IllegalStateException("Can not pop long - not enough bytes. " + "" +
+    /**
+     * Pops specified amount of bytes from this stack. Byte from top of stack will have index 0.
+     *
+     * @param size amount of bytes to pop.
+     * @return array of popped bytes. Byte from top of stack will have index 0.
+     * @throws IllegalStateException    if stack contains less bytes than required
+     * @throws IllegalArgumentException if size is negative
+     */
+    public byte[] popCustom(int size) throws IllegalStateException, IllegalArgumentException {
+        if (size < 0) throw new IllegalArgumentException("size can not be negative");
+        if (getSize() < size) throw new IllegalStateException("Not enough bytes to pop. " + "" +
                 "Available " + getSize() + " bytes, required " + size + " bytes");
         byte[] data = new byte[size];
         for (int i = 0; i < data.length; i++) {
@@ -87,7 +130,14 @@ public class Stack {
         return data;
     }
 
-    public void pushCustom(byte[] data) {
+    /**
+     * Pushes given array of bytes to stack. Byte with index 0 will be at top of stack.
+     *
+     * @param data array of bytes to push
+     * @throws IllegalArgumentException if array is null
+     */
+    public void pushCustom(byte[] data) throws IllegalArgumentException {
+        if (data == null) throw new IllegalArgumentException("array can not be null");
         for (int i = data.length - 1; i >= 0; i--) {
             push(data[i]);
         }

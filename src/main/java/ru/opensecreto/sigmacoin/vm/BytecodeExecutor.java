@@ -38,26 +38,14 @@ public class BytecodeExecutor {
 
 
                 case Opcodes.INVOKE:
-                    if (frame.stack.getSize() < (configuration.contractIdLength + Short.BYTES)) {
-                        LOGGER.warn("Error while executing contract {} at {}. " +
-                                        "Can not invoke - stack size is less than required minimum {} bytes.",
-                                pointer, configuration.contractIdLength + Short.BYTES);
-                        run = false;
-                        success = false;
-                    }
+                    Stack stackInvoke = new Stack(configuration.stackSize);
+
                     int dataSize = frame.stack.popShort();
-                    if (frame.stack.getSize() < (configuration.contractIdLength + Short.BYTES + dataSize)) {
-                        LOGGER.warn("Error while executing contract {} at {}. " +
-                                        "Can not invoke - stack size is less than {} bytes.",
-                                pointer, configuration.contractIdLength + Short.BYTES + dataSize);
-                        run = false;
-                        success = false;
-                    }
                     ContractID contractId = new ContractID(frame.stack.popCustom(configuration.contractIdLength));
-                    Stack stackInvoke = new Stack(configuration.frameMaxStackSize);
+                    stackInvoke.pushCustom(frame.stack.popCustom(dataSize));
 
                     Stack result = controller.invoke(stackInvoke, contractId);
-                    frame.stack.pushCustom(result.getStack());
+                    frame.stack.pushCustom(result.popCustom(result.getSize()));
                     pointer++;
                     break;
 
@@ -65,6 +53,20 @@ public class BytecodeExecutor {
                 case Opcodes.PUSH:
                     frame.stack.push(frame.memory.get(pointer + 1));
                     pointer += 2;
+                    break;
+
+
+                case Opcodes.POP:
+                    frame.stack.pop();
+                    pointer++;
+                    break;
+
+
+                case Opcodes.DUP:
+                    byte data = frame.stack.pop();
+                    frame.stack.push(data);
+                    frame.stack.push(data);
+                    pointer++;
                     break;
 
 

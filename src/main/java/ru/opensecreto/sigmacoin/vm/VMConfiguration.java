@@ -2,13 +2,26 @@ package ru.opensecreto.sigmacoin.vm;
 
 public class VMConfiguration {
 
-    public final int frameMaxStackSize;
+    public final int stackSize;
     public final int contractIdLength;
     public final int maxCallDepth;
+    public final int memorySize;
 
-    public VMConfiguration(int frameMaxStackSize, int contractIdLength, int maxCallDepth) {
-        this.frameMaxStackSize = frameMaxStackSize;
+    public VMConfiguration(int stackSize, int contractIdLength, int maxCallDepth, int memorySize) {
+        if (maxCallDepth <= 0) throw new IllegalArgumentException("maxCallDepth must be >= 1");
+        if (contractIdLength <= 0) throw new IllegalArgumentException("contractIdLength must be >= 1");
+        if (stackSize <= 0) throw new IllegalArgumentException("frameMaxStack must be >= 1");
+        if (memorySize < 1) throw new IllegalArgumentException("memorySize must be >= 1");
+
+        this.stackSize = stackSize;
         this.contractIdLength = contractIdLength;
         this.maxCallDepth = maxCallDepth;
+        this.memorySize = memorySize;
+    }
+
+    @Override
+    public String toString() {
+        return String.format("Max call depth %s.%nStack size %s.%nMemory size %s.%n",
+                maxCallDepth, stackSize, memorySize);
     }
 }

@@ -5,45 +5,43 @@ package ru.opensecreto.sigmacoin.vm;
  */
 public class VirtualMachineController {
 
-    private final Memory mainContract;
     private final ContractManager contractManager;
     private final VMConfiguration configuration;
 
-    private int currentCallStackDepth;
+    private int currentCallStackDepth = 0;
 
-    public VirtualMachineController(Memory mainContract, ContractManager contractManager, VMConfiguration configuration) {
-        this.mainContract = mainContract;
+    public VirtualMachineController(ContractManager contractManager, VMConfiguration configuration) {
         this.contractManager = contractManager;
         this.configuration = configuration;
     }
 
     public void execute(byte[] invocationData, ContractID contractID) {
-        Stack stack = new Stack(configuration.frameMaxStackSize);
-        for (int i = 0; i < invocationData.length; i++) {
-            stack.push(invocationData[i]);
-        }
+        Stack stack = new Stack(configuration.stackSize);
+        stack.pushCustom(invocationData);
         invoke(stack, contractID);
     }
 
     public Stack invoke(Stack stack, ContractID contractID) {
         if (!contractManager.contractExists(contractID)) {
-            stack.push((byte) 0x01);
-            return stack;
+            Stack resultStack = new Stack(configuration.stackSize);
+            resultStack.pushShort((short) 0);
+            resultStack.push((byte) 0x01);
+            return resultStack;
         }
 
-        Frame frame = new Frame(contractManager.getContract(contractID), stack, contractID);
-
-        BytecodeExecutor executor = new BytecodeExecutor(configuration, frame, this);
-        currentCallStackDepth++;
-
         if (currentCallStackDepth == configuration.maxCallDepth) {
-            Stack resultStack = new Stack(configuration.frameMaxStackSize);
-            stack.pushShort((short) 0);
-            stack.push((byte) 0x01);
+            Stack resultStack = new Stack(configuration.stackSize);
+            resultStack.pushShort((short) 0);
+            resultStack.push((byte) 0x01);
             return resultStack;
         } else {
+            Frame frame = new Frame(contractManager.getContract(contractID), stack, contractID);
+            BytecodeExecutor executor = new BytecodeExecutor(configuration, frame, this);
+
+            currentCallStackDepth++;
             Stack result = executor.run();
             currentCallStackDepth--;
+
             return result;
         }
     }

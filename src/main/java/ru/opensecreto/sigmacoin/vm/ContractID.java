@@ -4,7 +4,7 @@ import javax.xml.bind.DatatypeConverter;
 import java.util.Arrays;
 
 /**
- * Most significant byte is in the begining of array, least significant is at the end of array.
+ * Most significant byte is in the beginning of array, least significant is at the end of array.
  */
 public class ContractID {
 
@@ -21,5 +21,10 @@ public class ContractID {
     @Override
     public String toString() {
         return "0x" + DatatypeConverter.printHexBinary(id);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        return (obj != null) && (obj instanceof ContractID) && (Arrays.equals(((ContractID) obj).id, id));
     }
 }
