@@ -19,15 +19,15 @@ public class BlockStorageController {
     private DB db;
     private HTreeMap<byte[], byte[]> blocks;
 
-    public BlockStorageController(File file, int hashSize, int maxBlockSize) {
+    public BlockStorageController(File file, int hashSize, int maxBlockSize, BlockStorageConfiguration configuration) {
         this.hashSize = hashSize;
         this.maxBlockSize = maxBlockSize;
 
         db = DBMaker.fileDB(file)
                 .transactionEnable()
                 .closeOnJvmShutdown()
-                .allocateStartSize(BlockStorageConfigurator.START_SIZE)
-                .allocateIncrement(BlockStorageConfigurator.ALLOCATE_SIZE)
+                .allocateStartSize(configuration.storageStartSize)
+                .allocateIncrement(configuration.allocateSize)
                 .make();
         blocks = db.hashMap("blocks", Serializer.BYTE_ARRAY, Serializer.BYTE_ARRAY)
                 .counterEnable()
