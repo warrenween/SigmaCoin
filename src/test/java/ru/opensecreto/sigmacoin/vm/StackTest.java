@@ -70,7 +70,18 @@ public class StackTest {
     @Test
     public void testPushCustom() {
         Stack stack = new Stack(4);
-        stack.pushCustom(new byte[]{0x12, 0x34, 0x56,0x78 });
+        stack.pushCustom(new byte[]{0x12, 0x34, 0x56, 0x78});
         assertThat(stack.popInt()).inHexadecimal().isEqualTo(0x12345678);
+    }
+
+    @Test
+    public void testMovingBytes() {
+        Stack stackA = new Stack(10);
+        stackA.pushLong(123456789L);
+
+        Stack stackB = new Stack(10);
+        stackB.pushCustom(stackA.popCustom(stackA.getSize()));
+
+        assertThat(stackB.popLong()).isEqualTo(123456789L);
     }
 }
