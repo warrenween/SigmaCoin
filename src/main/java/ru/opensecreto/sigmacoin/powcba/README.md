@@ -1,10 +1,10 @@
-# PoSWBA - Proof of Storage Work and Burned Activity
+# PoWCBA - Proof of Work, Capacity, Burn and Activity
 
 ## General
 
 Algorithm is based on 4 problems:
 * **Proof of work** - miner has to solve computationally hard problem.
-* **Proof of storage** - miner has to store solution from PoW stage.
+* **Proof of capacity** - miner has to store solution from PoW stage.
 * **Proof of burn** - coin holders have to burn their coins to get chance to take part in PoA stage.
 Burned coins can not be send anymore.
 * **Proof of activity** - every burned coin is unique.
@@ -27,7 +27,7 @@ Owner of each selected coin signs block header. When each owner signs block bloc
 ## Implementation
 
 1. PoW - proof of work - done by miner
-2. PoS - proof of storage - done by miner
+2. PoC - proof of capacity - done by miner
 3. PoB - proof of burn - done by coin owners
 4. PoA - proof of activity - done by owners of burned coins
 
@@ -40,7 +40,7 @@ Owner of each selected coin signs block header. When each owner signs block bloc
 2. Choose `N` hashes. Xor each hash `result = hash1 ^ hash2 ^ ... ^ hashN`.
 3. If `result` array contains only zeroes, then shard is mined, else repeat step 2 with different `id`.
 Shard contains information about all `id`s, `seed`, and `publicKey`.
-4. Store shard for PoS step
+4. Store shard for PoC step
 
 
 
