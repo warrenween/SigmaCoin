@@ -94,6 +94,7 @@ public class ShardMiner implements Callable<Shard> {
                     chunkElapsedNano / maxChunkCount);
 
             //solving
+            long solvingNanoStart = System.nanoTime();
             for (int i = ids.length - 1; i >= 0; i--) {
                 boolean mine = true;
                 while (mine) {
@@ -119,8 +120,9 @@ public class ShardMiner implements Callable<Shard> {
 
                     //submitting solution
                     if (isValid) {
-                        LOGGER.info("Found valid shard. Yay!!! Attempts done {}. Chunks generated {}.",
-                                attemptsDone + 1, chunksGenerated + maxChunkCount);
+                        long solvingNanoElapsed = System.nanoTime() - solvingNanoStart;
+                        LOGGER.info("Found valid shard. Yay!!! Attempts done {}. Chunks generated {}. Time per solution {}ns.",
+                                attemptsDone + 1, chunksGenerated + maxChunkCount, solvingNanoElapsed / attemptsDone);
                         long[] finalIds = new long[n];
                         for (int j = 0; j < ids.length; j++) {
                             finalIds[j] = ids[j] + chunksGenerated;
