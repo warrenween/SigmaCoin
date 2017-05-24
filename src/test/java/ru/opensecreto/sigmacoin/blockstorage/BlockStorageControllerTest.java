@@ -1,6 +1,7 @@
 package ru.opensecreto.sigmacoin.blockstorage;
 
 import org.testng.annotations.Test;
+import ru.opensecreto.sigmacoin.config.EnvironmentConfig;
 
 import java.io.File;
 
@@ -13,7 +14,7 @@ public class BlockStorageControllerTest {
     public void testInvalidArguments() {
         BlockStorageController controller = new BlockStorageController(
                 new File("testInvalid.db"), 4, 4,
-                new BlockStorageConfiguration(BlockStorageConfigurator.DEFAULT_START_SIZE, BlockStorageConfigurator.DEFAULT_ALLOCATE_SIZE)
+                new BlockStorageConfiguration(EnvironmentConfig.BLOCK_STORAGE_DEFAULT_START_SIZE, EnvironmentConfig.BLOCK_STORAGE_DEFAULT_ALLOCATE_SIZE)
         );
 
         assertThatThrownBy(() ->
@@ -36,7 +37,7 @@ public class BlockStorageControllerTest {
     public void test() {
         BlockStorageController controller = new BlockStorageController(
                 new File("test.db"), 2, 2,
-                new BlockStorageConfiguration(BlockStorageConfigurator.DEFAULT_START_SIZE, BlockStorageConfigurator.DEFAULT_ALLOCATE_SIZE)
+                new BlockStorageConfiguration(EnvironmentConfig.BLOCK_STORAGE_DEFAULT_START_SIZE, EnvironmentConfig.BLOCK_STORAGE_DEFAULT_ALLOCATE_SIZE)
         );
 
         assertThat(controller.hasBlock(new byte[]{1, 2})).isFalse();
@@ -58,7 +59,7 @@ public class BlockStorageControllerTest {
         controller.close();
         BlockStorageController controllerNew = new BlockStorageController(
                 new File("test.db"), 2, 2,
-                new BlockStorageConfiguration(BlockStorageConfigurator.DEFAULT_START_SIZE, BlockStorageConfigurator.DEFAULT_ALLOCATE_SIZE)
+                new BlockStorageConfiguration(EnvironmentConfig.BLOCK_STORAGE_DEFAULT_START_SIZE, EnvironmentConfig.BLOCK_STORAGE_DEFAULT_ALLOCATE_SIZE)
         );
 
         //check reading block do not changes it
