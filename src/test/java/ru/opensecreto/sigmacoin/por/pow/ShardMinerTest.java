@@ -8,7 +8,7 @@ import org.testng.annotations.Test;
 import ru.opensecreto.sigmacoin.core.DigestProvider;
 import ru.opensecreto.sigmacoin.crypto.Ed25519.Ed25519KeyGenerator;
 import ru.opensecreto.sigmacoin.crypto.Ed25519.Ed25519PublicKey;
-import ru.opensecreto.sigmacoin.por.storage.Shard;
+import ru.opensecreto.sigmacoin.por.capacity.Shard;
 import ru.opensecreto.sigmacoin.por.work.ShardMiner;
 
 import static org.assertj.core.api.Assertions.assertThat;

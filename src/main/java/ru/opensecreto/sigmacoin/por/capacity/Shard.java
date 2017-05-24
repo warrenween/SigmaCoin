@@ -1,4 +1,4 @@
-package ru.opensecreto.sigmacoin.por.storage;
+package ru.opensecreto.sigmacoin.por.capacity;
 
 import ru.opensecreto.sigmacoin.crypto.Ed25519.Ed25519PublicKey;
 
