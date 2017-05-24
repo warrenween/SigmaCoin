@@ -12,6 +12,8 @@ import ru.opensecreto.sigmacoin.crypto.Ed25519.Ed25519PublicKey;
 import ru.opensecreto.sigmacoin.poswba.storage.Shard;
 import ru.opensecreto.sigmacoin.poswba.work.ShardMiner;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 public class ShardMinerTest {
 
     @Test
@@ -23,7 +25,7 @@ public class ShardMinerTest {
 
         Shard shard = miner.call();
 
-        Assertions.assertThat(shard.publicKey).isEqualTo(publicKey);
+        assertThat(shard.publicKey).isEqualTo(publicKey);
 
         //checking if solution valid
         byte[] result = new byte[provider.getDigest().getDigestSize()];
@@ -46,7 +48,7 @@ public class ShardMinerTest {
             result[i] ^= tmp[i];
         }
 
-        Assertions.assertThat(result).containsOnly((byte) 0);
+        assertThat(result).containsOnly((byte) 0);
     }
 
 }
