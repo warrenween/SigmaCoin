@@ -23,7 +23,6 @@ public class VirtualMachineControllerTest {
         };
 
         controller.execute(new byte[]{0x12, 0x34}, new ContractID(new byte[]{0x00, 0x00}));
-
     }
 
 }
