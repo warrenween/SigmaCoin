@@ -1,4 +1,4 @@
-package ru.opensecreto.sigmacoin.powcba.storage;
+package ru.opensecreto.sigmacoin.por.storage;
 
 import ru.opensecreto.sigmacoin.crypto.Ed25519.Ed25519PublicKey;
 

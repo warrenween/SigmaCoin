@@ -1,4 +1,4 @@
-# PoWCBA - Proof of Work, Capacity, Burn and Activity
+# PoR - Proof of Resources
 
 ## General
 
