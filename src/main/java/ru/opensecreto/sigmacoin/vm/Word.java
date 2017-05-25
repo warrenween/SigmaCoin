@@ -18,6 +18,10 @@ public final class Word {
         System.arraycopy(data, 0, this.data, 0, 32);
     }
 
+    public byte[] getData() {
+        return Arrays.copyOf(data, 32);
+    }
+
     @Override
     public boolean equals(Object obj) {
         return (obj != null) && (obj instanceof Word) && Arrays.equals(((Word) obj).data, data);
