@@ -1,4 +1,4 @@
-package ru.opensecreto.sigmacoin.poswba.work;
+package ru.opensecreto.sigmacoin.por.work;
 
 import com.google.common.primitives.Longs;
 import org.bouncycastle.crypto.Digest;
@@ -6,7 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.opensecreto.sigmacoin.core.DigestProvider;
 import ru.opensecreto.sigmacoin.crypto.Ed25519.Ed25519PublicKey;
-import ru.opensecreto.sigmacoin.poswba.storage.Shard;
+import ru.opensecreto.sigmacoin.por.capacity.Shard;
 
 import java.util.Random;
 import java.util.concurrent.Callable;

@@ -1,7 +1,6 @@
-package ru.opensecreto.sigmacoin.poswba.pow;
+package ru.opensecreto.sigmacoin.por.pow;
 
 import com.google.common.primitives.Longs;
-import org.assertj.core.api.Assertions;
 import org.bouncycastle.crypto.Digest;
 import org.bouncycastle.crypto.digests.MD2Digest;
 import org.bouncycastle.crypto.digests.ShortenedDigest;
@@ -9,8 +8,8 @@ import org.testng.annotations.Test;
 import ru.opensecreto.sigmacoin.core.DigestProvider;
 import ru.opensecreto.sigmacoin.crypto.Ed25519.Ed25519KeyGenerator;
 import ru.opensecreto.sigmacoin.crypto.Ed25519.Ed25519PublicKey;
-import ru.opensecreto.sigmacoin.poswba.storage.Shard;
-import ru.opensecreto.sigmacoin.poswba.work.ShardMiner;
+import ru.opensecreto.sigmacoin.por.capacity.Shard;
+import ru.opensecreto.sigmacoin.por.work.ShardMiner;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
