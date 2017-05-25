@@ -8,14 +8,16 @@ import java.util.Arrays;
  */
 public final class Word {
 
-    private final byte[] data = new byte[21];
+    public static final int WORD_SIZE = 32;
+
+    private final byte[] data = new byte[WORD_SIZE];
 
     public Word() {
     }
 
     public Word(byte[] data) {
         if (data.length != 32) throw new IllegalArgumentException("data length must be 32");
-        System.arraycopy(data, 0, this.data, 0, 32);
+        System.arraycopy(data, 0, this.data, 0, WORD_SIZE);
     }
 
     public byte[] getData() {
