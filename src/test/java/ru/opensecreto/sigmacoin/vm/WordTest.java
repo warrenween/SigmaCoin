@@ -41,4 +41,21 @@ public class WordTest {
         assertThat(new Word(-1).compareTo(new Word(-1)) == 0).isTrue();
     }
 
+    @Test
+    public void testMultiply() {
+        assertThat(new Word(0).multiply(new Word(0))).isEqualTo(new Word(0));
+        assertThat(new Word(-1).multiply(new Word(0))).isEqualTo(new Word(0));
+        assertThat(new Word(0).multiply(new Word(-1))).isEqualTo(new Word(0));
+
+        assertThat(new Word(12).multiply(new Word(12))).isEqualTo(new Word(144));
+        assertThat(new Word(12).multiply(new Word(-12))).isEqualTo(new Word(-144));
+        assertThat(new Word(-12).multiply(new Word(12))).isEqualTo(new Word(-144));
+        assertThat(new Word(-12).multiply(new Word(-12))).isEqualTo(new Word(144));
+
+        assertThat(new Word(512).multiply(new Word(986))).isEqualTo(new Word(504832));
+        assertThat(new Word(512).multiply(new Word(-986))).isEqualTo(new Word(-504832));
+        assertThat(new Word(-512).multiply(new Word(986))).isEqualTo(new Word(-504832));
+        assertThat(new Word(-512).multiply(new Word(-986))).isEqualTo(new Word(504832));
+    }
+
 }

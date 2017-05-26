@@ -97,6 +97,31 @@ public final class Word implements Comparable<Word> {
         return (data[0] & 0xff >> 7) == 1;
     }
 
+    public Word multiply(Word value) {
+        byte[] result = new byte[WORD_SIZE];
+        byte[] buf = new byte[WORD_SIZE];
+        System.arraycopy(data, 0, buf, 0, WORD_SIZE);
+
+        for (int i = 0; i < 256; i++) {
+            int caret = 0;
+            for (int j = buf.length - 1; j >= 0; j--) {
+                int tmp = buf[j] & 0xff << 1;
+                buf[j] = (byte) (tmp & 0xff + caret);
+                caret = tmp & 0xff00 >> 8;
+            }
+
+            if (((value.data[i / 8] & 0xff) & (1 << (i % 8))) != 0) {
+                int carry = 0;
+                for (int j = WORD_SIZE - 1; j >= 0; j--) {
+                    int tmp = (result[j] & 0xff) + (buf[j] & 0xff) + carry;
+                    result[j] = (byte) (tmp & 0xff);
+                    carry = (tmp & 0xff00) >> 8;
+                }
+            }
+        }
+        return new Word(result);
+    }
+
     @Override
     public int compareTo(@NotNull Word o) {
         if (equals(o)) return 0;
