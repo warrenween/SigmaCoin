@@ -43,7 +43,7 @@ public final class Word {
     public Word sum(Word value) {
         byte[] result = new byte[32];
         int carry = 0;
-        for (int i = WORD_SIZE; i > 0; i--) {
+        for (int i = WORD_SIZE - 1; i >= 0; i--) {
             int tmp = (data[i] & 0xff) + (value.data[i] & 0xff) + carry;
             result[i] = (byte) (tmp & 0xff);
             carry = (tmp & 0xff00) >> 8;
