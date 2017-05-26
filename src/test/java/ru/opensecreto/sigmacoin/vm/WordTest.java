@@ -22,7 +22,7 @@ public class WordTest {
         Word a = new Word(parseHexBinary("d4735e3a265e16eee03f59718b9b5d03019c07d8b6c51f90da3a666eec13ab35"));
         Word b = new Word(parseHexBinary("e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"));
         Word result = a.sum(b);
-        assertThat(result.equals(new Word(parseHexBinary("b824227cbf5a33037b3b4e3a250b1627294a49bd1b60b2dd7ecfff8a6466638a"))))
+        assertThat(result.equals(new Word(parseHexBinary("b824227cbf5a33037b3b4e3a250b1627294a49bd1b60b2dd7ecfff8a6466638a"))));
     }
 
 }
