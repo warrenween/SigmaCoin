@@ -30,7 +30,7 @@ public class WordTest {
 
     @Test
     public void testPositive() {
-        assertThat(new Word(-1).isNegative()).isTrue();
+        assertThat(new Word(1).isPositive()).isTrue();
     }
 
     @Test
