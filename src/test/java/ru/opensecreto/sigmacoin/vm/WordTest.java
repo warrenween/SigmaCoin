@@ -2,8 +2,6 @@ package ru.opensecreto.sigmacoin.vm;
 
 import org.testng.annotations.Test;
 
-import javax.xml.bind.DatatypeConverter;
-
 import static javax.xml.bind.DatatypeConverter.parseHexBinary;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -23,6 +21,11 @@ public class WordTest {
         Word b = new Word(parseHexBinary("e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"));
         Word result = a.sum(b);
         assertThat(result.equals(new Word(parseHexBinary("b824227cbf5a33037b3b4e3a250b1627294a49bd1b60b2dd7ecfff8a6466638a"))));
+    }
+
+    @Test
+    public void testNegative() {
+        assertThat(new Word(-1).isNegative()).isTrue();
     }
 
 }

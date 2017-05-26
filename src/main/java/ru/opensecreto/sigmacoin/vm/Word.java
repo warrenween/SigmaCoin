@@ -65,6 +65,10 @@ public final class Word {
         return sum(new Word(buf));
     }
 
+    public boolean isNegative() {
+        return (data[0] >>> 8) == 1;
+    }
+
     @Override
     public boolean equals(Object obj) {
         return (obj != null) && (obj instanceof Word) && Arrays.equals(((Word) obj).data, data);
