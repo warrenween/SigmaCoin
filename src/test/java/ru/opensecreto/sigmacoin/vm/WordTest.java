@@ -58,4 +58,14 @@ public class WordTest {
         assertThat(new Word(-512).multiply(new Word(-986))).isEqualTo(new Word(504832));
     }
 
+    @Test
+    public void testInRange() {
+        assertThat(new Word(10).isInRange(new Word(0), new Word(100))).isTrue();
+        assertThat(new Word(0).isInRange(new Word(-20), new Word(100))).isTrue();
+        assertThat(new Word(10).isInRange(new Word(0), new Word(100))).isTrue();
+        assertThat(new Word(10).isInRange(new Word(20), new Word(100))).isFalse();
+        assertThat(new Word(-10).isInRange(new Word(0), new Word(100))).isFalse();
+        assertThat(new Word(-10).isInRange(new Word(-10), new Word(100))).isTrue();
+        assertThat(new Word(-20).isInRange(new Word(-100), new Word(-10))).isTrue();
+    }
 }
