@@ -53,7 +53,7 @@ public final class Word implements Comparable<Word> {
     }
 
     public boolean isInRange(Word down, Word up) {
-        if (down.compareTo(up)>0) throw new IllegalArgumentException("bottom bottom must be less than top border");
+        if (down.compareTo(up) > 0) throw new IllegalArgumentException("bottom bottom must be less than top border");
         return (this.compareTo(down) >= 0) && (this.compareTo(up) <= 0);
     }
 
@@ -104,7 +104,7 @@ public final class Word implements Comparable<Word> {
         System.arraycopy(data, 0, buf, 0, WORD_SIZE);
 
         for (int i = 0; i < 256; i++) {
-            if (((value.data[i / 8] & 0xff) & (1 << (i % 8))) != 0) {
+            if (((value.data[WORD_SIZE - 1 - i / 8] & 0xff) & (1 << (i % 8))) != 0) {
                 int carry = 0;
                 for (int j = WORD_SIZE - 1; j >= 0; j--) {
                     int tmp = (result[j] & 0xff) + (buf[j] & 0xff) + carry;
