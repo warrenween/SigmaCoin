@@ -39,6 +39,10 @@ public class WordTest {
         assertThat(new Word(-1).compareTo(new Word(1)) < 0).isTrue();
         assertThat(new Word(1).compareTo(new Word(1)) == 0).isTrue();
         assertThat(new Word(-1).compareTo(new Word(-1)) == 0).isTrue();
+
+        assertThat(new Word(-10).compareTo(new Word(-10)) == 0).isTrue();
+        assertThat(new Word(-10).compareTo(new Word(10)) < 0).isTrue();
+        assertThat(new Word(10).compareTo(new Word(-10)) > 0).isTrue();
     }
 
     @Test
