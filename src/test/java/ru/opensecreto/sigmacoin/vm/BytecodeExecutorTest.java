@@ -101,12 +101,12 @@ public class BytecodeExecutorTest {
         Word idA = new Word(0x00);
         Memory contractA = mock(Memory.class);
         when(contractA.get(0)).thenReturn(Opcodes.PUSH);
-        when(contractA.get(1)).thenReturn(new Word(0x1f));
+        when(contractA.get(1)).thenReturn(new Word(0x1f));//0x1f (top)
         when(contractA.get(2)).thenReturn(Opcodes.PUSH);
-        when(contractA.get(3)).thenReturn(new Word(0x56));
-        when(contractA.get(4)).thenReturn(Opcodes.DUP);
-        when(contractA.get(5)).thenReturn(Opcodes.POP);
-        when(contractA.get(6)).thenReturn(Opcodes.STOP_GOOD);
+        when(contractA.get(3)).thenReturn(new Word(0x56));//0x1f 0x56 (top)
+        when(contractA.get(4)).thenReturn(Opcodes.DUP);//0x1f 0x56 0x56 (top)
+        when(contractA.get(5)).thenReturn(Opcodes.POP);//0x1f 0x56 (top)
+        when(contractA.get(6)).thenReturn(Opcodes.STOP_GOOD);//0x1f 0x56 | 0x02 0x00 (top)
 
         ContractManager manager = mock(ContractManager.class);
         when(manager.contractExists(idA)).thenReturn(true);
@@ -117,8 +117,10 @@ public class BytecodeExecutorTest {
 
         Stack result = controller.invoke(new Stack(10), idA);
 
-        assertThat(result.pop()).isEqualTo(new Word(2));
-        assertThat(result.pop()).isEqualTo(new Word(2));
+        assertThat(result.getSize()).isEqualTo(4);
+
+        assertThat(result.pop()).isEqualTo(new Word(0x00));
+        assertThat(result.pop()).isEqualTo(new Word(0x02));
         assertThat(result.pop()).isEqualTo(new Word(0x56));
         assertThat(result.pop()).isEqualTo(new Word(0x1f));
 
