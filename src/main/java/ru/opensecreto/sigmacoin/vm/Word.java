@@ -51,6 +51,20 @@ public final class Word {
         return new Word(result);
     }
 
+    /**
+     * Subtract value from this
+     *
+     * @param value value to subtract
+     * @return
+     */
+    public Word subtract(Word value) {
+        byte[] buf = Arrays.copyOf(value.data, WORD_SIZE);
+        for (int i = 0; i < buf.length; i++) {
+            buf[i] ^= (byte) 0xff;
+        }
+        return sum(new Word(buf));
+    }
+
     @Override
     public boolean equals(Object obj) {
         return (obj != null) && (obj instanceof Word) && Arrays.equals(((Word) obj).data, data);
