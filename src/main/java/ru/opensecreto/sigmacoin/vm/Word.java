@@ -90,11 +90,11 @@ public final class Word implements Comparable<Word> {
     }
 
     public boolean isPositive() {
-        return (data[0] >>> 8) == 0;
+        return (data[0] & 0xff >> 7) == 0;
     }
 
     public boolean isNegative() {
-        return (data[0] >>> 8) == 1;
+        return (data[0] & 0xff >> 7) == 1;
     }
 
     @Override
