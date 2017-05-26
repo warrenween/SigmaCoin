@@ -2,6 +2,7 @@ package ru.opensecreto.sigmacoin.vm;
 
 import com.google.common.primitives.Ints;
 import com.google.common.primitives.Shorts;
+import org.jetbrains.annotations.NotNull;
 
 import javax.xml.bind.DatatypeConverter;
 import java.util.Arrays;
@@ -10,7 +11,7 @@ import java.util.Arrays;
  * Word is 32 byte (256 bits) signed value. Most significant bit as at the begining of array.
  * Word is immutable. All operations return new word.
  */
-public final class Word {
+public final class Word implements Comparable<Word> {
 
     public static final int WORD_SIZE = 32;
 
@@ -80,8 +81,18 @@ public final class Word {
         return sum(new Word(buf));
     }
 
+    public boolean isPositive() {
+        return (data[0] >>> 8) == 0;
+    }
+
     public boolean isNegative() {
         return (data[0] >>> 8) == 1;
+    }
+
+    @Override
+    public int compareTo(@NotNull Word o) {
+        if (equals(o)) return 0;
+        return (subtract(o).isPositive()) ? 1 : -1;
     }
 
     @Override

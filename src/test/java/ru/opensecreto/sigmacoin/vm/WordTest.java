@@ -28,4 +28,17 @@ public class WordTest {
         assertThat(new Word(-1).isNegative()).isTrue();
     }
 
+    @Test
+    public void testPositive() {
+        assertThat(new Word(-1).isNegative()).isTrue();
+    }
+
+    @Test
+    public void testCompare() {
+        assertThat(new Word(1).compareTo(new Word(-1)) > 0).isTrue();
+        assertThat(new Word(-1).compareTo(new Word(1)) < 0).isTrue();
+        assertThat(new Word(1).compareTo(new Word(1)) == 0).isTrue();
+        assertThat(new Word(-1).compareTo(new Word(-1)) == 0).isTrue();
+    }
+
 }
