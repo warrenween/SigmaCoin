@@ -8,9 +8,9 @@ public class Opcodes {
     /**
      * Stop execution. Nothing is reverted.
      */
-    public static final byte STOP_BAD = 0x00;
+    public static final Word STOP_BAD = new Word(0x00);
 
-    public static final byte STOP_GOOD = 0x01;
+    public static final Word STOP_GOOD = new Word(0x01);
 
     /**
      * Invoke other contract id.
@@ -27,19 +27,19 @@ public class Opcodes {
      * 2 bytes int is pushed to stack - length of result data.
      * If invoked contract was invoked successfully 0x00 byte is pushed at top of stack, 0x01 otherwise.
      */
-    public static final byte INVOKE = 0x02;
+    public static final Word INVOKE = new Word(0x02);
 
     /**
      * Push next byte to stack. Pointer is moved forward by 2.
      */
-    public static final byte PUSH = 0x10;
+    public static final Word PUSH = new Word(0x10);
 
     /**
      * Remove one byte from top of stack.
      */
-    public static final byte POP = 0x11;
+    public static final Word POP = new Word(0x11);
 
-    public static final byte DUP = 0x12;
+    public static final Word DUP = new Word(0x12);
 
 
 }

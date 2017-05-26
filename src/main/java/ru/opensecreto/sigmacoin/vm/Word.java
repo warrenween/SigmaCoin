@@ -52,6 +52,14 @@ public final class Word implements Comparable<Word> {
         }
     }
 
+    public boolean isInRange(Word down, Word up) {
+        return (this.compareTo(down) >= 0) && (this.compareTo(up) <= 0);
+    }
+
+    public int toInt() {
+        return Ints.fromBytes(data[28], data[29], data[30], data[31]);
+    }
+
     public byte[] getData() {
         return Arrays.copyOf(data, 32);
     }

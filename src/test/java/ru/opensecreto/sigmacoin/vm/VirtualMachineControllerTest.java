@@ -16,13 +16,22 @@ public class VirtualMachineControllerTest {
                 new VMConfiguration(10, 2, 3, 10)
         ) {
             @Override
-            public Stack invoke(Stack stack, ContractID contractID) {
-                Assertions.assertThat(stack.popShort()).isEqualTo((short) 0x1234);
+            public Stack invoke(Stack stack, Word contractID) {
+                Assertions.assertThat(stack.pop()).isEqualTo(new Word(123456789));
+                Assertions.assertThat(stack.pop()).isEqualTo(new Word(987654321));
+                Assertions.assertThat(stack.getSize()).isEqualTo(0);
                 return null;
             }
         };
 
-        controller.execute(new byte[]{0x12, 0x34}, new ContractID(new byte[]{0x00, 0x00}));
+        Word a = new Word(123456789);
+        Word b = new Word(987654321);
+
+        byte[] data = new byte[Word.WORD_SIZE];
+        System.arraycopy(a.getData(), 0, data, 0, Word.WORD_SIZE);
+        System.arraycopy(b.getData(), 0, data, 0, Word.WORD_SIZE);
+
+        controller.execute(data, new Word(0));
     }
 
 }
