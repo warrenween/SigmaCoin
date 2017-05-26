@@ -26,14 +26,29 @@ public final class Word {
 
     public Word(byte value) {
         data[31] = value;
+        if (value < 0) {
+            for (int i = 0; i < data.length - 1; i++) {
+                data[i] = (byte) 0xff;
+            }
+        }
     }
 
     public Word(short value) {
         System.arraycopy(Shorts.toByteArray(value), 0, data, 30, 2);
+        if (value < 0) {
+            for (int i = 0; i < data.length - 2; i++) {
+                data[i] = (byte) 0xff;
+            }
+        }
     }
 
     public Word(int value) {
         System.arraycopy(Ints.toByteArray(value), 0, data, 28, 4);
+        if (value < 0) {
+            for (int i = 0; i < data.length - 4; i++) {
+                data[i] = (byte) 0xff;
+            }
+        }
     }
 
     public byte[] getData() {
