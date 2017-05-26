@@ -53,6 +53,7 @@ public final class Word implements Comparable<Word> {
     }
 
     public boolean isInRange(Word down, Word up) {
+        if (down.compareTo(up)>0) throw new IllegalArgumentException("bottom bottom must be less than top border");
         return (this.compareTo(down) >= 0) && (this.compareTo(up) <= 0);
     }
 
