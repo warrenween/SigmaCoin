@@ -14,7 +14,7 @@ public class BytecodeExecutorTest {
         when(manager.contractExists(new Word(0))).thenReturn(false);
 
         VirtualMachineController controller = new VirtualMachineController(manager,
-                new VMConfiguration(10, 1, 10, 10));
+                new VMConfiguration(10,  10, 10));
 
         Stack result = controller.invoke(new Stack(10), new Word(0));
 
@@ -35,7 +35,7 @@ public class BytecodeExecutorTest {
         when(manager.getContract(idA)).thenReturn(contractA);
 
         VirtualMachineController controller = new VirtualMachineController(manager,
-                new VMConfiguration(10, 1, 10, 10));
+                new VMConfiguration(10,  10, 10));
 
         Stack result = controller.invoke(new Stack(10), idA);
 
@@ -56,7 +56,7 @@ public class BytecodeExecutorTest {
         when(manager.getContract(idA)).thenReturn(contractA);
 
         VirtualMachineController controller = new VirtualMachineController(manager,
-                new VMConfiguration(10, 1, 10, 10));
+                new VMConfiguration(10,  10, 10));
 
         Stack result = controller.invoke(new Stack(10), idA);
 
@@ -82,7 +82,7 @@ public class BytecodeExecutorTest {
         when(manager.getContract(idA)).thenReturn(contractA);
 
         VirtualMachineController controller = new VirtualMachineController(manager,
-                new VMConfiguration(10, 1, 10, 10));
+                new VMConfiguration(10,  10, 10));
 
         Stack result = controller.invoke(new Stack(10), idA);
 
@@ -113,7 +113,7 @@ public class BytecodeExecutorTest {
         when(manager.getContract(idA)).thenReturn(contractA);
 
         VirtualMachineController controller = new VirtualMachineController(manager,
-                new VMConfiguration(10, 1, 10, 10));
+                new VMConfiguration(10,  10, 10));
 
         Stack result = controller.invoke(new Stack(10), idA);
 
@@ -156,7 +156,7 @@ public class BytecodeExecutorTest {
         when(manager.getContract(idB)).thenReturn(contractB);
 
         VirtualMachineController controller = new VirtualMachineController(manager,
-                new VMConfiguration(20, 1, 10, 10));
+                new VMConfiguration(20,  10, 10));
 
         Stack result = controller.invoke(new Stack(20), idA);
 
