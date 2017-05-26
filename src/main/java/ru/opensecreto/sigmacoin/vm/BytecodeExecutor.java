@@ -33,14 +33,19 @@ public class BytecodeExecutor {
                 Stack stackInvoke = new Stack(configuration.stackSize);
 
                 Word dataSize = frame.stack.pop();
-                if (!dataSize.isInRange(new Word(0), new Word(Integer.MAX_VALUE)))
-                    throw new IllegalStateException("dataSize is incorrect");
-                Word contractId = frame.stack.pop();
-                stackInvoke.pushCustom(frame.stack.popCustom(dataSize.toInt()));
+                if (!dataSize.isInRange(new Word(0), new Word(configuration.stackSize))) {
+                    LOGGER.warn("Error executing {} at {}. DataSize parameter exceed stackSize parameter.",
+                            frame.contractID, pointer);
+                    run = false;
+                    success = false;
+                } else {
+                    Word contractId = frame.stack.pop();
+                    stackInvoke.pushCustom(frame.stack.popCustom(dataSize.toInt()));
 
-                Stack result = controller.invoke(stackInvoke, contractId);
-                frame.stack.pushCustom(result.popCustom(result.getSize()));
-                pointer++;
+                    Stack result = controller.invoke(stackInvoke, contractId);
+                    frame.stack.pushCustom(result.popCustom(result.getSize()));
+                    pointer++;
+                }
             } else if (opcode.equals(Opcodes.PUSH)) {
                 frame.stack.push(frame.memory.get(pointer + 1));
                 pointer += 2;
