@@ -104,13 +104,6 @@ public final class Word implements Comparable<Word> {
         System.arraycopy(data, 0, buf, 0, WORD_SIZE);
 
         for (int i = 0; i < 256; i++) {
-            int caret = 0;
-            for (int j = buf.length - 1; j >= 0; j--) {
-                int tmp = buf[j] & 0xff << 1;
-                buf[j] = (byte) (tmp & 0xff + caret);
-                caret = tmp & 0xff00 >> 8;
-            }
-
             if (((value.data[i / 8] & 0xff) & (1 << (i % 8))) != 0) {
                 int carry = 0;
                 for (int j = WORD_SIZE - 1; j >= 0; j--) {
@@ -118,6 +111,13 @@ public final class Word implements Comparable<Word> {
                     result[j] = (byte) (tmp & 0xff);
                     carry = (tmp & 0xff00) >> 8;
                 }
+            }
+
+            int caret = 0;
+            for (int j = buf.length - 1; j >= 0; j--) {
+                int tmp = (buf[j] & 0xff) << 1;
+                buf[j] = (byte) ((tmp & 0xff) + caret);
+                caret = (tmp & 0xff00) >> 8;
             }
         }
         return new Word(result);
