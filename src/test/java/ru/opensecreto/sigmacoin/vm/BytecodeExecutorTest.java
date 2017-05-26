@@ -14,7 +14,7 @@ public class BytecodeExecutorTest {
         when(manager.contractExists(new Word(0))).thenReturn(false);
 
         VirtualMachineController controller = new VirtualMachineController(manager,
-                new VMConfiguration(10,  10, 10));
+                new VMConfiguration(10, 10, 10));
 
         Stack result = controller.invoke(new Stack(10), new Word(0));
 
@@ -35,7 +35,7 @@ public class BytecodeExecutorTest {
         when(manager.getContract(idA)).thenReturn(contractA);
 
         VirtualMachineController controller = new VirtualMachineController(manager,
-                new VMConfiguration(10,  10, 10));
+                new VMConfiguration(10, 10, 10));
 
         Stack result = controller.invoke(new Stack(10), idA);
 
@@ -56,7 +56,7 @@ public class BytecodeExecutorTest {
         when(manager.getContract(idA)).thenReturn(contractA);
 
         VirtualMachineController controller = new VirtualMachineController(manager,
-                new VMConfiguration(10,  10, 10));
+                new VMConfiguration(10, 10, 10));
 
         Stack result = controller.invoke(new Stack(10), idA);
 
@@ -82,7 +82,7 @@ public class BytecodeExecutorTest {
         when(manager.getContract(idA)).thenReturn(contractA);
 
         VirtualMachineController controller = new VirtualMachineController(manager,
-                new VMConfiguration(10,  10, 10));
+                new VMConfiguration(10, 10, 10));
 
         Stack result = controller.invoke(new Stack(10), idA);
 
@@ -113,7 +113,7 @@ public class BytecodeExecutorTest {
         when(manager.getContract(idA)).thenReturn(contractA);
 
         VirtualMachineController controller = new VirtualMachineController(manager,
-                new VMConfiguration(10,  10, 10));
+                new VMConfiguration(10, 10, 10));
 
         Stack result = controller.invoke(new Stack(10), idA);
 
@@ -132,22 +132,21 @@ public class BytecodeExecutorTest {
         Word idA = new Word(0);
         Memory contractA = mock(Memory.class);
         when(contractA.get(0)).thenReturn(Opcodes.PUSH);//data
-        when(contractA.get(1)).thenReturn(new Word(0xab));
+        when(contractA.get(1)).thenReturn(new Word(0xab));// 0xab (top)
         when(contractA.get(2)).thenReturn(Opcodes.PUSH);//contract id
-        when(contractA.get(3)).thenReturn(new Word(0x01));
+        when(contractA.get(3)).thenReturn(new Word(0x01));// 0xab 0x01 (top)
         when(contractA.get(4)).thenReturn(Opcodes.PUSH);//data length
-        when(contractA.get(5)).thenReturn(new Word(0x01));
-        when(contractA.get(6)).thenReturn(Opcodes.INVOKE);//invoking | result: (top) 0x01 0x03 0x1f 0xab 0xab
-        when(contractA.get(7)).thenReturn(Opcodes.STOP_GOOD); //adds 0x00 0x06 *result*
+        when(contractA.get(5)).thenReturn(new Word(0x01));// 0xab 0x01 0x01 (top)
+        when(contractA.get(6)).thenReturn(Opcodes.INVOKE);// 0xab 0xab 0x1f 0x00 0x01 (top)
+        when(contractA.get(7)).thenReturn(Opcodes.STOP_GOOD); // 0xab 0xab 0x1f 0x00 0x01 | 0x05 0x00 (top)
 
         Word idB = new Word(0x01);
         Memory contractB = mock(Memory.class);
-        //stack has: 0xab
-        when(contractB.get(0)).thenReturn(Opcodes.DUP);
+        //0xab (top)
+        when(contractB.get(0)).thenReturn(Opcodes.DUP);// 0xab 0xab (top)
         when(contractB.get(1)).thenReturn(Opcodes.PUSH);
-        when(contractB.get(2)).thenReturn(new Word(0x1f));
-        when(contractB.get(3)).thenReturn(Opcodes.STOP_BAD);
-        //returns: (top) 0x01 0x03 || 0x1f 0xab 0xab
+        when(contractB.get(2)).thenReturn(new Word(0x1f));// 0xab 0xab 0x1f (top)
+        when(contractB.get(3)).thenReturn(Opcodes.STOP_BAD);// 0xab 0xab 0x1f | 0x03 0x01 (top)
 
         ContractManager manager = mock(ContractManager.class);
         when(manager.contractExists(idA)).thenReturn(true);
@@ -156,7 +155,7 @@ public class BytecodeExecutorTest {
         when(manager.getContract(idB)).thenReturn(contractB);
 
         VirtualMachineController controller = new VirtualMachineController(manager,
-                new VMConfiguration(20,  10, 10));
+                new VMConfiguration(20, 10, 10));
 
         Stack result = controller.invoke(new Stack(20), idA);
 
@@ -167,7 +166,7 @@ public class BytecodeExecutorTest {
                 new Word(0x1f),
                 new Word(0x03),
                 new Word(0x01),
-                new Word(0x06),
+                new Word(0x05),
                 new Word(0x00)
         );
 
