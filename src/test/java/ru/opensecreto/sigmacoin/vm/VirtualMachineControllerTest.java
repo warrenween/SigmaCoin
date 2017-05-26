@@ -17,15 +17,15 @@ public class VirtualMachineControllerTest {
         ) {
             @Override
             public Stack invoke(Stack stack, Word contractID) {
-                Assertions.assertThat(stack.pop()).isEqualTo(new Word(123456789));
                 Assertions.assertThat(stack.pop()).isEqualTo(new Word(987654321));
+                Assertions.assertThat(stack.pop()).isEqualTo(new Word(123456789));
                 Assertions.assertThat(stack.getSize()).isEqualTo(0);
                 return null;
             }
         };
 
-        Word a = new Word(123456789);
-        Word b = new Word(987654321);
+        Word a = new Word(123456789);//stack bottom
+        Word b = new Word(987654321);//stack top
 
         byte[] data = new byte[Word.WORD_SIZE];
         System.arraycopy(a.getData(), 0, data, 0, Word.WORD_SIZE);

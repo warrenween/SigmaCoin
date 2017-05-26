@@ -98,7 +98,7 @@ public class BytecodeExecutorTest {
 
     @Test
     public void testPUSH_POP_DUP() {
-        Word idA = new Word(new byte[]{0});
+        Word idA = new Word(0x00);
         Memory contractA = mock(Memory.class);
         when(contractA.get(0)).thenReturn(Opcodes.PUSH);
         when(contractA.get(1)).thenReturn(new Word(0x1f));
@@ -138,7 +138,7 @@ public class BytecodeExecutorTest {
         when(contractA.get(6)).thenReturn(Opcodes.INVOKE);//invoking | result: (top) 0x01 0x03 0x1f 0xab 0xab
         when(contractA.get(7)).thenReturn(Opcodes.STOP_GOOD); //adds 0x00 0x06 *result*
 
-        Word idB = new Word(new byte[]{0x01});
+        Word idB = new Word(0x01);
         Memory contractB = mock(Memory.class);
         //stack has: 0xab
         when(contractB.get(0)).thenReturn(Opcodes.DUP);
