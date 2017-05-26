@@ -33,7 +33,7 @@ public class BytecodeExecutor {
                 Stack stackInvoke = new Stack(configuration.stackSize);
 
                 Word dataSize = frame.stack.pop();
-                if (dataSize.isInRange(new Word(0), new Word(Integer.MAX_VALUE)))
+                if (!dataSize.isInRange(new Word(0), new Word(Integer.MAX_VALUE)))
                     throw new IllegalStateException("dataSize is incorrect");
                 Word contractId = frame.stack.pop();
                 stackInvoke.pushCustom(frame.stack.popCustom(dataSize.toInt()));
