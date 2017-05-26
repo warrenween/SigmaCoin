@@ -17,6 +17,7 @@ public class VirtualMachineControllerTest {
         ) {
             @Override
             public Stack invoke(Stack stack, Word contractID) {
+                Assertions.assertThat(stack.getSize()).isEqualTo(2);
                 Assertions.assertThat(stack.pop()).isEqualTo(new Word(987654321));
                 Assertions.assertThat(stack.pop()).isEqualTo(new Word(123456789));
                 Assertions.assertThat(stack.getSize()).isEqualTo(0);
