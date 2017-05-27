@@ -138,7 +138,7 @@ public class BytecodeExecutorTest {
         when(contractA.get(4)).thenReturn(Opcodes.PUSH);
         when(contractA.get(5)).thenReturn(new Word(0x56));// 0x12 0x34 0x56 (top)
         when(contractA.get(6)).thenReturn(Opcodes.PUSH);
-        when(contractA.get(7)).thenReturn(new Word(0x01));// 0x12 0x34 0x56 | 0x03 (top)
+        when(contractA.get(7)).thenReturn(new Word(0x03));// 0x12 0x34 0x56 | 0x03 (top)
         when(contractA.get(8)).thenReturn(Opcodes.PUSH);
         when(contractA.get(9)).thenReturn(new Word(0x01));// 0x12 0x34 0x56 | 0x03 | 0x01 (top)
         when(contractA.get(10)).thenReturn(Opcodes.INVOKE);// 0x12 0x34 0x56 0x56 0x1f 0x05 0x01 (top)
