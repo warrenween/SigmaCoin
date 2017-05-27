@@ -24,7 +24,7 @@ public class VirtualMachineController {
             throw new IllegalArgumentException("invocationData length must be multiple of 32");
         Stack stack = new Stack(configuration.stackSize);
 
-        for (int i = 0; i < invocationData.length / WORD_SIZE; i++) {
+        for (int i = 0; i <= invocationData.length / WORD_SIZE; i++) {
             stack.push(new Word(Arrays.copyOfRange(invocationData, i * WORD_SIZE, i * WORD_SIZE + WORD_SIZE)));
         }
 
