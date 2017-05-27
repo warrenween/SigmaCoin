@@ -24,6 +24,14 @@ public class WordTest {
     }
 
     @Test
+    public void testSumOpposite() {
+        Word a = new Word(123456);
+        Word b = new Word(-123456);
+        Word result = a.sum(b);
+        assertThat(result.equals(new Word(0)));
+    }
+
+    @Test
     public void testNegative() {
         assertThat(new Word(-1).isNegative()).isTrue();
     }
