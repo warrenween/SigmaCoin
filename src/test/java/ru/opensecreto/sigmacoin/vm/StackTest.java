@@ -3,6 +3,7 @@ package ru.opensecreto.sigmacoin.vm;
 import org.testng.annotations.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 public class StackTest {
 
@@ -77,6 +78,41 @@ public class StackTest {
         assertThat(stack.popCustom(4)).hasSize(4).containsExactly(
                 new Word(123), new Word(456), new Word(789), new Word(100)
         );
+        assertThat(stack.getSize()).isEqualTo(0);
+    }
+
+    @Test
+    public void testPushingNull() {
+        Stack stack = new Stack(4);
+
+        assertThat(stack.getSize()).isEqualTo(0);
+        assertThatThrownBy(() -> stack.push(null)).isInstanceOf(IllegalArgumentException.class);
+        assertThat(stack.getSize()).isEqualTo(0);
+    }
+
+    @Test
+    public void testPopFromEmpty() {
+        Stack stack = new Stack(4);
+
+        assertThat(stack.getSize()).isEqualTo(0);
+        assertThatThrownBy(stack::pop).isInstanceOf(IllegalStateException.class);
+        assertThat(stack.getSize()).isEqualTo(0);
+    }
+
+    @Test
+    public void testPushingToFull() {
+        Stack stack = new Stack(2);
+
+        assertThat(stack.getSize()).isEqualTo(0);
+        stack.push(new Word(123));
+        stack.push(new Word(321));
+        assertThat(stack.getSize()).isEqualTo(2);
+
+        assertThatThrownBy(() -> stack.push(new Word(100))).isInstanceOf(IllegalStateException.class);
+        assertThat(stack.getSize()).isEqualTo(2);
+
+        assertThat(stack.pop()).isEqualTo(new Word(321));
+        assertThat(stack.pop()).isEqualTo(new Word(123));
         assertThat(stack.getSize()).isEqualTo(0);
     }
 
