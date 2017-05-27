@@ -16,6 +16,7 @@ public class Stack {
      * @throws IllegalStateException if stack size has reached maximum
      */
     public void push(Word word) throws IllegalStateException {
+        if (word == null) throw new IllegalArgumentException("word can not be null");
         if (size == stack.length) throw new IllegalStateException("Can not push. Stack is full.");
         stack[size] = word;
         size++;
@@ -42,7 +43,7 @@ public class Stack {
      */
     public Word[] popCustom(int count) {
         Word[] result = new Word[count];
-        for (int i = count; i > 0; i--) {
+        for (int i = count - 1; i >= 0; i--) {
             result[i] = pop();
         }
         return result;
