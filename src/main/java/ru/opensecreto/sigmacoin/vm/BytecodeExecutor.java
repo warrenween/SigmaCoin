@@ -32,19 +32,34 @@ public class BytecodeExecutor {
             } else if (opcode.equals(Opcodes.INVOKE)) {
                 Stack stackInvoke = new Stack(configuration.stackSize);
 
-                Word dataSize = frame.stack.pop();
-                if (!dataSize.isInRange(new Word(0), new Word(configuration.stackSize))) {
-                    LOGGER.warn("Error executing {} at {}. DataSize parameter exceed stackSize parameter.",
+                if (frame.stack.getSize() < 2) {
+                    LOGGER.warn("Error executing {} at {}. Stack size is less than required minimum of 2.",
                             frame.contractID, pointer);
                     run = false;
                     success = false;
                 } else {
                     Word contractId = frame.stack.pop();
-                    stackInvoke.pushCustom(frame.stack.popCustom(dataSize.toInt()));
+                    Word dataSize = frame.stack.pop();
 
-                    Stack result = controller.invoke(stackInvoke, contractId);
-                    frame.stack.pushCustom(result.popCustom(result.getSize()));
-                    pointer++;
+                    if (dataSize.isNegative()) {
+                        LOGGER.warn("Error executing {} at {}. DataSize parameter is negative.",
+                                frame.contractID, pointer);
+                        run = false;
+                        success = false;
+                    } else {
+                        if (dataSize.compareTo(new Word(frame.stack.getSize())) > 0) {
+                            LOGGER.warn("Error executing {} at {}. DataSize parameter is greater than stack size.",
+                                    frame.contractID, pointer);
+                            run = false;
+                            success = false;
+                        } else {
+                            stackInvoke.pushCustom(frame.stack.popCustom(dataSize.toInt()));
+
+                            Stack result = controller.invoke(stackInvoke, contractId);
+                            frame.stack.pushCustom(result.popCustom(result.getSize()));
+                            pointer++;
+                        }
+                    }
                 }
             } else if (opcode.equals(Opcodes.PUSH)) {
                 frame.stack.push(frame.memory.get(pointer + 1));

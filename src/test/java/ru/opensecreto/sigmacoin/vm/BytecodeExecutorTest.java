@@ -129,24 +129,28 @@ public class BytecodeExecutorTest {
 
     @Test
     public void testInvokeFromCode() {
-        Word idA = new Word(0);
+        Word idA = new Word(0x00);
         Memory contractA = mock(Memory.class);
-        when(contractA.get(0)).thenReturn(Opcodes.PUSH);//data
-        when(contractA.get(1)).thenReturn(new Word(0xab));// 0xab (top)
-        when(contractA.get(2)).thenReturn(Opcodes.PUSH);//contract id
-        when(contractA.get(3)).thenReturn(new Word(0x01));// 0xab 0x01 (top)
-        when(contractA.get(4)).thenReturn(Opcodes.PUSH);//data length
-        when(contractA.get(5)).thenReturn(new Word(0x01));// 0xab 0x01 0x01 (top)
-        when(contractA.get(6)).thenReturn(Opcodes.INVOKE);// 0xab 0xab 0x1f 0x00 0x01 (top)
-        when(contractA.get(7)).thenReturn(Opcodes.STOP_GOOD); // 0xab 0xab 0x1f 0x00 0x01 | 0x05 0x00 (top)
+        when(contractA.get(0)).thenReturn(Opcodes.PUSH);
+        when(contractA.get(1)).thenReturn(new Word(0x12));// 0xab (top)
+        when(contractA.get(0)).thenReturn(Opcodes.PUSH);
+        when(contractA.get(1)).thenReturn(new Word(0x34));// 0x12 0x34 (top)
+        when(contractA.get(0)).thenReturn(Opcodes.PUSH);
+        when(contractA.get(1)).thenReturn(new Word(0x56));// 0x12 0x34 0x56 (top)
+        when(contractA.get(2)).thenReturn(Opcodes.PUSH);
+        when(contractA.get(3)).thenReturn(new Word(0x01));// 0x12 0x34 0x56 | 0x03 (top)
+        when(contractA.get(4)).thenReturn(Opcodes.PUSH);
+        when(contractA.get(5)).thenReturn(new Word(0x01));// 0x12 0x34 0x56 | 0x03 | 0x01 (top)
+        when(contractA.get(6)).thenReturn(Opcodes.INVOKE);// 0x12 0x34 0x56 0x56 0x1f 0x05 0x01 (top)
+        when(contractA.get(7)).thenReturn(Opcodes.STOP_GOOD); // 0x12 0x34 0x56 0x56 0x1f 0x05 0x01 | 0x07 0x00 (top)
 
         Word idB = new Word(0x01);
         Memory contractB = mock(Memory.class);
-        //0xab (top)
-        when(contractB.get(0)).thenReturn(Opcodes.DUP);// 0xab 0xab (top)
+        // 0x12 0x34 0x56 (top)
+        when(contractB.get(0)).thenReturn(Opcodes.DUP);// 0x12 0x34 0x56 0x56 (top)
         when(contractB.get(1)).thenReturn(Opcodes.PUSH);
-        when(contractB.get(2)).thenReturn(new Word(0x1f));// 0xab 0xab 0x1f (top)
-        when(contractB.get(3)).thenReturn(Opcodes.STOP_BAD);// 0xab 0xab 0x1f | 0x03 0x01 (top)
+        when(contractB.get(2)).thenReturn(new Word(0x1f));// 0x12 0x34 0x56 0x56 0x1f (top)
+        when(contractB.get(3)).thenReturn(Opcodes.STOP_BAD);// 0x12 0x34 0x56 0x56 0x1f | 0x05 | 0x01 (top)
 
         ContractManager manager = mock(ContractManager.class);
         when(manager.contractExists(idA)).thenReturn(true);
@@ -159,15 +163,17 @@ public class BytecodeExecutorTest {
 
         Stack result = controller.invoke(new Stack(20), idA);
 
-        assertThat(result.getSize()).isEqualTo(7);
-        assertThat(result.popCustom(7)).containsExactly(
-                new Word(0xab),
-                new Word(0xab),
+        assertThat(result.getSize()).isEqualTo(9);
+        assertThat(result.popCustom(9)).containsExactly(
+                new Word(0x12),
+                new Word(0x34),
+                new Word(0x56),
+                new Word(0x56),
                 new Word(0x1f),
-                new Word(0x03),
-                new Word(0x01),
                 new Word(0x05),
-                new Word(0x00)
+                new Word(0x07),
+                new Word(0x00),
+                new Word(0x01)
         );
 
         assertThat(result.getSize()).isEqualTo(0);
