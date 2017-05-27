@@ -132,17 +132,17 @@ public class BytecodeExecutorTest {
         Word idA = new Word(0x00);
         Memory contractA = mock(Memory.class);
         when(contractA.get(0)).thenReturn(Opcodes.PUSH);
-        when(contractA.get(1)).thenReturn(new Word(0x12));// 0xab (top)
-        when(contractA.get(0)).thenReturn(Opcodes.PUSH);
-        when(contractA.get(1)).thenReturn(new Word(0x34));// 0x12 0x34 (top)
-        when(contractA.get(0)).thenReturn(Opcodes.PUSH);
-        when(contractA.get(1)).thenReturn(new Word(0x56));// 0x12 0x34 0x56 (top)
+        when(contractA.get(1)).thenReturn(new Word(0x12));// 0x12 (top)
         when(contractA.get(2)).thenReturn(Opcodes.PUSH);
-        when(contractA.get(3)).thenReturn(new Word(0x01));// 0x12 0x34 0x56 | 0x03 (top)
+        when(contractA.get(3)).thenReturn(new Word(0x34));// 0x12 0x34 (top)
         when(contractA.get(4)).thenReturn(Opcodes.PUSH);
-        when(contractA.get(5)).thenReturn(new Word(0x01));// 0x12 0x34 0x56 | 0x03 | 0x01 (top)
-        when(contractA.get(6)).thenReturn(Opcodes.INVOKE);// 0x12 0x34 0x56 0x56 0x1f 0x05 0x01 (top)
-        when(contractA.get(7)).thenReturn(Opcodes.STOP_GOOD); // 0x12 0x34 0x56 0x56 0x1f 0x05 0x01 | 0x07 0x00 (top)
+        when(contractA.get(5)).thenReturn(new Word(0x56));// 0x12 0x34 0x56 (top)
+        when(contractA.get(6)).thenReturn(Opcodes.PUSH);
+        when(contractA.get(7)).thenReturn(new Word(0x01));// 0x12 0x34 0x56 | 0x03 (top)
+        when(contractA.get(8)).thenReturn(Opcodes.PUSH);
+        when(contractA.get(9)).thenReturn(new Word(0x01));// 0x12 0x34 0x56 | 0x03 | 0x01 (top)
+        when(contractA.get(10)).thenReturn(Opcodes.INVOKE);// 0x12 0x34 0x56 0x56 0x1f 0x05 0x01 (top)
+        when(contractA.get(11)).thenReturn(Opcodes.STOP_GOOD); // 0x12 0x34 0x56 0x56 0x1f 0x05 0x01 | 0x07 0x00 (top)
 
         Word idB = new Word(0x01);
         Memory contractB = mock(Memory.class);
