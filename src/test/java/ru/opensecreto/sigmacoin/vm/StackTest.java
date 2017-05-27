@@ -8,72 +8,112 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 public class StackTest {
 
     @Test
-    public void test() {
-        Stack stack = new Stack(2);
+    public void test_getSize_push_pop() {
+        Stack stack = new Stack(10);
+
         assertThat(stack.getSize()).isEqualTo(0);
-        stack.push((byte) 2);
+        stack.push(new Word(1234));// 1234 (top)
+        stack.push(new Word(4321));// 1234 4321 (top)
+        assertThat(stack.getSize()).isEqualTo(2);
+        assertThat(stack.pop()).isEqualTo(new Word(4321));// 1234 (top)
         assertThat(stack.getSize()).isEqualTo(1);
-        assertThat(stack.pop()).isEqualTo((byte) 2);
+        stack.push(new Word(6789));// 1234 6789 (top)
+        stack.push(new Word(4521));// 1234 6789 4521 (top)
+        assertThat(stack.getSize()).isEqualTo(3);
+        assertThat(stack.pop()).isEqualTo(new Word(4521));// 1234 6789 (top)
+        assertThat(stack.getSize()).isEqualTo(2);
+        assertThat(stack.pop()).isEqualTo(new Word(6789));// 1234 (top)
+        assertThat(stack.getSize()).isEqualTo(1);
+        assertThat(stack.pop()).isEqualTo(new Word(1234));// (top)
         assertThat(stack.getSize()).isEqualTo(0);
     }
 
     @Test
-    public void testExceptions() {
-        Stack stack = new Stack(1);
-        stack.push((byte) 1);
-        assertThatThrownBy(() -> stack.push((byte) 1))
-                .isInstanceOf(IllegalStateException.class);
-    }
-
-    @Test
-    public void testInt() {
-        Stack stack = new Stack(4);
-        stack.pushInt(0x12345678);
-        assertThat(stack.popInt()).inHexadecimal().isEqualTo(0x12345678);
-        assertThatThrownBy(stack::popInt).isInstanceOf(IllegalStateException.class);
-    }
-
-    @Test
-    public void testShort() {
+    public void testBounds() {
         Stack stack = new Stack(2);
-        stack.pushShort((short) 0x1234);
-        assertThat(stack.popShort()).inHexadecimal().isEqualTo(((short) 0x1234));
-        assertThatThrownBy(stack::popShort).isInstanceOf(IllegalStateException.class);
-    }
 
-    @Test
-    public void testLong() {
-        Stack stack = new Stack(8);
-        stack.pushLong(0x123456789abcdef1L);
-        assertThat(stack.popLong()).inHexadecimal().isEqualTo(0x123456789abcdef1L);
-        assertThatThrownBy(stack::popLong).isInstanceOf(IllegalStateException.class);
-    }
-
-    @Test
-    public void testPopCustom() {
-        Stack stack = new Stack(3);
-        stack.push((byte) 1);
-        stack.push((byte) 3);
-        stack.push((byte) 4);
-
-        assertThat(stack.popCustom(3)).containsExactly((byte) 4, (byte) 3, (byte) 1);
+        assertThat(stack.getSize()).isEqualTo(0);
+        stack.push(new Word(1234));// 1234 (top)
+        stack.push(new Word(4321));// 1234 4321 (top)
+        assertThat(stack.getSize()).isEqualTo(2);
+        assertThat(stack.pop()).isEqualTo(new Word(4321));
+        assertThat(stack.pop()).isEqualTo(new Word(1234));
+        assertThat(stack.getSize()).isEqualTo(0);
     }
 
     @Test
     public void testPushCustom() {
         Stack stack = new Stack(4);
-        stack.pushCustom(new byte[]{0x12, 0x34, 0x56, 0x78});
-        assertThat(stack.popInt()).inHexadecimal().isEqualTo(0x12345678);
+
+        assertThat(stack.getSize()).isEqualTo(0);
+        stack.pushCustom(new Word[]{
+                new Word(123),
+                new Word(321),
+                new Word(456),
+                new Word(789)
+        });
+        // 123 321 456 789 (top)
+        assertThat(stack.getSize()).isEqualTo(4);
+        assertThat(stack.pop()).isEqualTo(new Word(789));// 123 321 456 (top)
+        assertThat(stack.getSize()).isEqualTo(3);
+        assertThat(stack.pop()).isEqualTo(new Word(456));// 123 321 (top)
+        assertThat(stack.getSize()).isEqualTo(2);
+        assertThat(stack.pop()).isEqualTo(new Word(321));// 123 (top)
+        assertThat(stack.getSize()).isEqualTo(1);
+        assertThat(stack.pop()).isEqualTo(new Word(123));// (top)
+        assertThat(stack.getSize()).isEqualTo(0);
     }
 
     @Test
-    public void testMovingBytes() {
-        Stack stackA = new Stack(10);
-        stackA.pushLong(123456789L);
+    public void testPopCustom() {
+        Stack stack = new Stack(4);
 
-        Stack stackB = new Stack(10);
-        stackB.pushCustom(stackA.popCustom(stackA.getSize()));
+        assertThat(stack.getSize()).isEqualTo(0);
+        stack.push(new Word(123));
+        stack.push(new Word(456));
+        stack.push(new Word(789));
+        stack.push(new Word(100));
+        assertThat(stack.getSize()).isEqualTo(4);
 
-        assertThat(stackB.popLong()).isEqualTo(123456789L);
+        assertThat(stack.popCustom(4)).hasSize(4).containsExactly(
+                new Word(123), new Word(456), new Word(789), new Word(100)
+        );
+        assertThat(stack.getSize()).isEqualTo(0);
     }
+
+    @Test
+    public void testPushingNull() {
+        Stack stack = new Stack(4);
+
+        assertThat(stack.getSize()).isEqualTo(0);
+        assertThatThrownBy(() -> stack.push(null)).isInstanceOf(IllegalArgumentException.class);
+        assertThat(stack.getSize()).isEqualTo(0);
+    }
+
+    @Test
+    public void testPopFromEmpty() {
+        Stack stack = new Stack(4);
+
+        assertThat(stack.getSize()).isEqualTo(0);
+        assertThatThrownBy(stack::pop).isInstanceOf(IllegalStateException.class);
+        assertThat(stack.getSize()).isEqualTo(0);
+    }
+
+    @Test
+    public void testPushingToFull() {
+        Stack stack = new Stack(2);
+
+        assertThat(stack.getSize()).isEqualTo(0);
+        stack.push(new Word(123));
+        stack.push(new Word(321));
+        assertThat(stack.getSize()).isEqualTo(2);
+
+        assertThatThrownBy(() -> stack.push(new Word(100))).isInstanceOf(IllegalStateException.class);
+        assertThat(stack.getSize()).isEqualTo(2);
+
+        assertThat(stack.pop()).isEqualTo(new Word(321));
+        assertThat(stack.pop()).isEqualTo(new Word(123));
+        assertThat(stack.getSize()).isEqualTo(0);
+    }
+
 }

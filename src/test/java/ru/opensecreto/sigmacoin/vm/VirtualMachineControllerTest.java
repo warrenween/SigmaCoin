@@ -13,16 +13,26 @@ public class VirtualMachineControllerTest {
 
         VirtualMachineController controller = new VirtualMachineController(
                 manager,
-                new VMConfiguration(10, 2, 3, 10)
+                new VMConfiguration(10, 3, 10)
         ) {
             @Override
-            public Stack invoke(Stack stack, ContractID contractID) {
-                Assertions.assertThat(stack.popShort()).isEqualTo((short) 0x1234);
+            public Stack invoke(Stack stack, Word contractID) {
+                Assertions.assertThat(stack.getSize()).isEqualTo(2);
+                Assertions.assertThat(stack.pop()).isEqualTo(new Word(0x9876));
+                Assertions.assertThat(stack.pop()).isEqualTo(new Word(0x1234));
+                Assertions.assertThat(stack.getSize()).isEqualTo(0);
                 return null;
             }
         };
 
-        controller.execute(new byte[]{0x12, 0x34}, new ContractID(new byte[]{0x00, 0x00}));
+        Word a = new Word(0x1234);//stack bottom
+        Word b = new Word(0x9876);//stack top
+
+        byte[] data = new byte[Word.WORD_SIZE * 2];
+        System.arraycopy(a.getData(), 0, data, 0, Word.WORD_SIZE);
+        System.arraycopy(b.getData(), 0, data, Word.WORD_SIZE, Word.WORD_SIZE);
+
+        controller.execute(data, new Word(0));
     }
 
 }

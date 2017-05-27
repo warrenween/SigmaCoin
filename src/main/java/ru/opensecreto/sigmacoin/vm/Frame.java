@@ -4,9 +4,9 @@ public class Frame {
 
     public final Memory memory;
     public final Stack stack;
-    public final ContractID contractID;
+    public final Word contractID;
 
-    public Frame(Memory memory, Stack stack, ContractID contractID) {
+    public Frame(Memory memory, Stack stack, Word contractID) {
         this.memory = memory;
         this.stack = stack;
         this.contractID = contractID;

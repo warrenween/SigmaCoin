@@ -1,5 +1,9 @@
 package ru.opensecreto.sigmacoin.vm;
 
+import java.util.Arrays;
+
+import static ru.opensecreto.sigmacoin.vm.Word.WORD_SIZE;
+
 /**
  * Controls execution of bytecode. Creates frames, handles invocations.
  */
@@ -15,24 +19,30 @@ public class VirtualMachineController {
         this.configuration = configuration;
     }
 
-    public void execute(byte[] invocationData, ContractID contractID) {
+    public void execute(byte[] invocationData, Word contractID) {
+        if (invocationData.length % WORD_SIZE != 0)
+            throw new IllegalArgumentException("invocationData length must be multiple of 32");
         Stack stack = new Stack(configuration.stackSize);
-        stack.pushCustom(invocationData);
+
+        for (int i = 0; i < invocationData.length / WORD_SIZE; i++) {
+            stack.push(new Word(Arrays.copyOfRange(invocationData, i * WORD_SIZE, i * WORD_SIZE + WORD_SIZE)));
+        }
+
         invoke(stack, contractID);
     }
 
-    public Stack invoke(Stack stack, ContractID contractID) {
+    public Stack invoke(Stack stack, Word contractID) {
         if (!contractManager.contractExists(contractID)) {
             Stack resultStack = new Stack(configuration.stackSize);
-            resultStack.pushShort((short) 0);
-            resultStack.push((byte) 0x01);
+            resultStack.push(new Word((short) 0));
+            resultStack.push(new Word((byte) 0x01));
             return resultStack;
         }
 
         if (currentCallStackDepth == configuration.maxCallDepth) {
             Stack resultStack = new Stack(configuration.stackSize);
-            resultStack.pushShort((short) 0);
-            resultStack.push((byte) 0x01);
+            resultStack.push(new Word((short) 0));
+            resultStack.push(new Word((byte) 0x01));
             return resultStack;
         } else {
             Frame frame = new Frame(contractManager.getContract(contractID), stack, contractID);

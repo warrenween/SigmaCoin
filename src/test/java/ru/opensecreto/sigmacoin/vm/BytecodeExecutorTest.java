@@ -11,22 +11,22 @@ public class BytecodeExecutorTest {
     @Test
     public void testInvokeNonExisting() {
         ContractManager manager = mock(ContractManager.class);
-        when(manager.contractExists(new ContractID(new byte[]{0}))).thenReturn(false);
+        when(manager.contractExists(new Word(0))).thenReturn(false);
 
         VirtualMachineController controller = new VirtualMachineController(manager,
-                new VMConfiguration(10, 1, 10, 10));
+                new VMConfiguration(10, 10, 10));
 
-        Stack result = controller.invoke(new Stack(10), new ContractID(new byte[]{0}));
+        Stack result = controller.invoke(new Stack(10), new Word(0));
 
-        assertThat(result.pop()).isEqualTo((byte) 0x01);
-        assertThat(result.popShort()).isEqualTo((short) 0);
+        assertThat(result.pop()).isEqualTo(new Word(1));
+        assertThat(result.pop()).isEqualTo(new Word(0));
 
         assertThat(result.getSize()).isEqualTo(0);
     }
 
     @Test
     public void testInvokeGood() {
-        ContractID idA = new ContractID(new byte[]{0});
+        Word idA = new Word(0);
         Memory contractA = mock(Memory.class);
         when(contractA.get(0)).thenReturn(Opcodes.STOP_GOOD);
 
@@ -35,19 +35,19 @@ public class BytecodeExecutorTest {
         when(manager.getContract(idA)).thenReturn(contractA);
 
         VirtualMachineController controller = new VirtualMachineController(manager,
-                new VMConfiguration(10, 1, 10, 10));
+                new VMConfiguration(10, 10, 10));
 
         Stack result = controller.invoke(new Stack(10), idA);
 
-        assertThat(result.pop()).isEqualTo((byte) 0x00);
-        assertThat(result.popShort()).isEqualTo((short) 0);
+        assertThat(result.pop()).isEqualTo(new Word(0));
+        assertThat(result.pop()).isEqualTo(new Word(0));
 
         assertThat(result.getSize()).isEqualTo(0);
     }
 
     @Test
     public void testInvokeBad() {
-        ContractID idA = new ContractID(new byte[]{0});
+        Word idA = new Word(0);
         Memory contractA = mock(Memory.class);
         when(contractA.get(0)).thenReturn(Opcodes.STOP_BAD);
 
@@ -56,22 +56,22 @@ public class BytecodeExecutorTest {
         when(manager.getContract(idA)).thenReturn(contractA);
 
         VirtualMachineController controller = new VirtualMachineController(manager,
-                new VMConfiguration(10, 1, 10, 10));
+                new VMConfiguration(10, 10, 10));
 
         Stack result = controller.invoke(new Stack(10), idA);
 
-        assertThat(result.pop()).isEqualTo((byte) 0x01);
-        assertThat(result.popShort()).isEqualTo((short) 0);
+        assertThat(result.pop()).isEqualTo(new Word(1));
+        assertThat(result.pop()).isEqualTo(new Word(0));
 
         assertThat(result.getSize()).isEqualTo(0);
     }
 
     @Test
     public void testInvokeResultPUSH_DUP() {
-        ContractID idA = new ContractID(new byte[]{0});
+        Word idA = new Word(0);
         Memory contractA = mock(Memory.class);
         when(contractA.get(0)).thenReturn(Opcodes.PUSH);
-        when(contractA.get(1)).thenReturn((byte) 0x1f);
+        when(contractA.get(1)).thenReturn(new Word(0x1f));
         when(contractA.get(2)).thenReturn(Opcodes.DUP);
         when(contractA.get(3)).thenReturn(Opcodes.DUP);
         when(contractA.get(4)).thenReturn(Opcodes.DUP);
@@ -82,68 +82,75 @@ public class BytecodeExecutorTest {
         when(manager.getContract(idA)).thenReturn(contractA);
 
         VirtualMachineController controller = new VirtualMachineController(manager,
-                new VMConfiguration(10, 1, 10, 10));
+                new VMConfiguration(10, 10, 10));
 
         Stack result = controller.invoke(new Stack(10), idA);
 
-        assertThat(result.pop()).isEqualTo((byte) 0x01);
-        assertThat(result.popShort()).isEqualTo((short) 4);
-        assertThat(result.popInt()).isEqualTo(0x1f1f1f1f);
+        assertThat(result.pop()).isEqualTo(new Word(1));
+        assertThat(result.pop()).isEqualTo(new Word(4));
+        assertThat(result.pop()).isEqualTo(new Word(0x1f));
+        assertThat(result.pop()).isEqualTo(new Word(0x1f));
+        assertThat(result.pop()).isEqualTo(new Word(0x1f));
+        assertThat(result.pop()).isEqualTo(new Word(0x1f));
 
         assertThat(result.getSize()).isEqualTo(0);
     }
 
     @Test
     public void testPUSH_POP_DUP() {
-        ContractID idA = new ContractID(new byte[]{0});
+        Word idA = new Word(0x00);
         Memory contractA = mock(Memory.class);
         when(contractA.get(0)).thenReturn(Opcodes.PUSH);
-        when(contractA.get(1)).thenReturn((byte) 0x1f);
+        when(contractA.get(1)).thenReturn(new Word(0x1f));//0x1f (top)
         when(contractA.get(2)).thenReturn(Opcodes.PUSH);
-        when(contractA.get(3)).thenReturn((byte) 0x56);
-        when(contractA.get(4)).thenReturn(Opcodes.DUP);
-        when(contractA.get(5)).thenReturn(Opcodes.POP);
-        when(contractA.get(6)).thenReturn(Opcodes.STOP_GOOD);
+        when(contractA.get(3)).thenReturn(new Word(0x56));//0x1f 0x56 (top)
+        when(contractA.get(4)).thenReturn(Opcodes.DUP);//0x1f 0x56 0x56 (top)
+        when(contractA.get(5)).thenReturn(Opcodes.POP);//0x1f 0x56 (top)
+        when(contractA.get(6)).thenReturn(Opcodes.STOP_GOOD);//0x1f 0x56 | 0x02 0x00 (top)
 
         ContractManager manager = mock(ContractManager.class);
         when(manager.contractExists(idA)).thenReturn(true);
         when(manager.getContract(idA)).thenReturn(contractA);
 
         VirtualMachineController controller = new VirtualMachineController(manager,
-                new VMConfiguration(10, 1, 10, 10));
+                new VMConfiguration(10, 10, 10));
 
         Stack result = controller.invoke(new Stack(10), idA);
 
-        assertThat(result.pop()).isEqualTo((byte) 0x00);
-        assertThat(result.popShort()).isEqualTo((short) 2);
-        assertThat(result.popShort()).isEqualTo((short) 0x561f);
+        assertThat(result.getSize()).isEqualTo(4);
+
+        assertThat(result.pop()).isEqualTo(new Word(0x00));
+        assertThat(result.pop()).isEqualTo(new Word(0x02));
+        assertThat(result.pop()).isEqualTo(new Word(0x56));
+        assertThat(result.pop()).isEqualTo(new Word(0x1f));
 
         assertThat(result.getSize()).isEqualTo(0);
     }
 
     @Test
     public void testInvokeFromCode() {
-        ContractID idA = new ContractID(new byte[]{0x00});
+        Word idA = new Word(0x00);
         Memory contractA = mock(Memory.class);
-        when(contractA.get(0)).thenReturn(Opcodes.PUSH);//data
-        when(contractA.get(1)).thenReturn((byte) 0xab);
-        when(contractA.get(2)).thenReturn(Opcodes.PUSH);//contract id
-        when(contractA.get(3)).thenReturn((byte) 0x01);
-        when(contractA.get(4)).thenReturn(Opcodes.PUSH);//data length
-        when(contractA.get(5)).thenReturn((byte) 0x01);
+        when(contractA.get(0)).thenReturn(Opcodes.PUSH);
+        when(contractA.get(1)).thenReturn(new Word(0x12));// 0x12 (top)
+        when(contractA.get(2)).thenReturn(Opcodes.PUSH);
+        when(contractA.get(3)).thenReturn(new Word(0x34));// 0x12 0x34 (top)
+        when(contractA.get(4)).thenReturn(Opcodes.PUSH);
+        when(contractA.get(5)).thenReturn(new Word(0x56));// 0x12 0x34 0x56 (top)
         when(contractA.get(6)).thenReturn(Opcodes.PUSH);
-        when(contractA.get(7)).thenReturn((byte) 0x00);
-        when(contractA.get(8)).thenReturn(Opcodes.INVOKE);//invoking | result: (top) 0x01 0x00 0x03 0x1f 0xab 0xab
-        when(contractA.get(9)).thenReturn(Opcodes.STOP_GOOD); //adds 0x00 0x00 0x06 *result*
+        when(contractA.get(7)).thenReturn(new Word(0x03));// 0x12 0x34 0x56 | 0x03 (top)
+        when(contractA.get(8)).thenReturn(Opcodes.PUSH);
+        when(contractA.get(9)).thenReturn(new Word(0x01));// 0x12 0x34 0x56 | 0x03 | 0x01 (top)
+        when(contractA.get(10)).thenReturn(Opcodes.INVOKE);// 0x12 0x34 0x56 0x56 0x1f 0x05 0x01 (top)
+        when(contractA.get(11)).thenReturn(Opcodes.STOP_GOOD); // 0x12 0x34 0x56 0x56 0x1f 0x05 0x01 | 0x07 0x00 (top)
 
-        ContractID idB = new ContractID(new byte[]{0x01});
+        Word idB = new Word(0x01);
         Memory contractB = mock(Memory.class);
-        //stack has: 0xab
-        when(contractB.get(0)).thenReturn(Opcodes.DUP);
+        // 0x12 0x34 0x56 (top)
+        when(contractB.get(0)).thenReturn(Opcodes.DUP);// 0x12 0x34 0x56 0x56 (top)
         when(contractB.get(1)).thenReturn(Opcodes.PUSH);
-        when(contractB.get(2)).thenReturn((byte) 0x1f);
-        when(contractB.get(3)).thenReturn(Opcodes.STOP_BAD);
-        //returns: (top) 0x01 0x00 0x03 || 0x1f 0xab 0xab
+        when(contractB.get(2)).thenReturn(new Word(0x1f));// 0x12 0x34 0x56 0x56 0x1f (top)
+        when(contractB.get(3)).thenReturn(Opcodes.STOP_BAD);// 0x12 0x34 0x56 0x56 0x1f | 0x05 | 0x01 (top)
 
         ContractManager manager = mock(ContractManager.class);
         when(manager.contractExists(idA)).thenReturn(true);
@@ -152,13 +159,22 @@ public class BytecodeExecutorTest {
         when(manager.getContract(idB)).thenReturn(contractB);
 
         VirtualMachineController controller = new VirtualMachineController(manager,
-                new VMConfiguration(20, 1, 10, 10));
+                new VMConfiguration(20, 10, 10));
 
         Stack result = controller.invoke(new Stack(20), idA);
 
-        assertThat(result.popCustom(9)).containsExactly(new byte[]{
-                0x00, 0x00, 0x06, /**/0x01, 0x00, 0x03, 0x1f, (byte) 0xab, (byte) 0xab
-        });
+        assertThat(result.getSize()).isEqualTo(9);
+        assertThat(result.popCustom(9)).containsExactly(
+                new Word(0x12),
+                new Word(0x34),
+                new Word(0x56),
+                new Word(0x56),
+                new Word(0x1f),
+                new Word(0x05),
+                new Word(0x01),
+                new Word(0x07),
+                new Word(0x00)
+        );
 
         assertThat(result.getSize()).isEqualTo(0);
     }
