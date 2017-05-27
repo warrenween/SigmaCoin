@@ -171,9 +171,9 @@ public class BytecodeExecutorTest {
                 new Word(0x56),
                 new Word(0x1f),
                 new Word(0x05),
+                new Word(0x01),
                 new Word(0x07),
-                new Word(0x00),
-                new Word(0x01)
+                new Word(0x00)
         );
 
         assertThat(result.getSize()).isEqualTo(0);
