@@ -72,6 +72,17 @@ public class BytecodeExecutor {
                 frame.stack.push(data);
                 frame.stack.push(data);
                 pointer++;
+            } else if (opcode.equals(Opcodes.ADD)) {
+                if (frame.stack.getSize() < 2) {
+                    LOGGER.warn("Error executing {} at {}. Can not SUM. Stack size is less than 2");
+                    run = false;
+                    success = false;
+                } else {
+                    Word a = frame.stack.pop();
+                    Word b = frame.stack.pop();
+                    Word result = a.sum(b);
+                    frame.stack.push(result);
+                }
             } else {
                 run = false;
                 success = false;
