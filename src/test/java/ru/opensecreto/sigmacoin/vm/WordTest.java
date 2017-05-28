@@ -2,7 +2,6 @@ package ru.opensecreto.sigmacoin.vm;
 
 import org.testng.annotations.Test;
 
-import static javax.xml.bind.DatatypeConverter.parseHexBinary;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class WordTest {
@@ -82,5 +81,18 @@ public class WordTest {
         assertThat(new Word(-10).isInRange(new Word(0), new Word(100))).isFalse();
         assertThat(new Word(-10).isInRange(new Word(-10), new Word(100))).isTrue();
         assertThat(new Word(-20).isInRange(new Word(-100), new Word(-10))).isTrue();
+    }
+
+    @Test
+    public void testSubtract() {
+        assertThat(new Word(100).subtract(new Word(10))).isEqualTo(new Word(90));
+    }
+
+    @Test
+    public void testNegate() {
+        Word a = new Word(100);
+        Word b = a.negate();
+        assertThat(a).isEqualTo(new Word(100));
+        assertThat(b).isEqualTo(new Word(-100));
     }
 }
