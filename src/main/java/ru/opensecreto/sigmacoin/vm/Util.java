@@ -7,11 +7,13 @@ public class Util {
             shiftByteLeft(data);
         }
         int caret = 0;
-        count %= 8;
-        for (int i = data.length - 1; i >= 0; i--) {
-            int tmp = (data[i] & 0xff) << count;
-            data[i] = (byte) ((tmp & 0xff) + caret);
-            caret = (tmp & 0xff00) >> 8;
+        count = count % 8;
+        if (count != 0) {
+            for (int i = data.length - 1; i >= 0; i--) {
+                int tmp = (data[i] & 0xff) << count;
+                data[i] = (byte) ((tmp & 0xff) + caret);
+                caret = (tmp & 0xff00) >> 8;
+            }
         }
     }
 
@@ -34,11 +36,13 @@ public class Util {
             shiftByteRight(data);
         }
         int caret = 0;
-        count %= 8;
-        for (int i = 0; i < data.length; i++) {
-            int tmp = ((data[i] & 0xff) << 8) >> count;
-            data[i] = (byte) ((((tmp & 0xff00) >>> 8) & 0xff) + caret);
-            caret = tmp & 0xff;
+        count = count % 8;
+        if (count != 0) {
+            for (int i = 0; i < data.length; i++) {
+                int tmp = ((data[i] & 0xff) << 8) >> count;
+                data[i] = (byte) ((((tmp & 0xff00) >>> 8) & 0xff) + caret);
+                caret = tmp & 0xff;
+            }
         }
     }
 
