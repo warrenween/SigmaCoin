@@ -74,7 +74,8 @@ public class BytecodeExecutor {
                 pointer++;
             } else if (opcode.equals(Opcodes.ADD)) {
                 if (frame.stack.getSize() < 2) {
-                    LOGGER.warn("Error executing {} at {}. Can not SUM. Stack size is less than 2");
+                    LOGGER.warn("Error executing {} at {}. Can not SUM. Stack size is less than 2",
+                            frame.contractID, pointer);
                     run = false;
                     success = false;
                 } else {
