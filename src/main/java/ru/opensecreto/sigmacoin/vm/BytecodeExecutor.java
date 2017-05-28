@@ -85,6 +85,19 @@ public class BytecodeExecutor {
                     frame.stack.push(result);
                     pointer++;
                 }
+            } else if (opcode.equals(Opcodes.SUB)) {
+                if (frame.stack.getSize() < 2) {
+                    LOGGER.warn("Error executing {} at {}. Can not SUB. Stack size is less than 2",
+                            frame.contractID, pointer);
+                    run = false;
+                    success = false;
+                } else {
+                    Word a = frame.stack.pop();
+                    Word b = frame.stack.pop();
+                    Word result = b.subtract(a);
+                    frame.stack.push(result);
+                    pointer++;
+                }
             } else {
                 run = false;
                 success = false;

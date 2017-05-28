@@ -46,4 +46,9 @@ public class Opcodes {
      */
     public static final Word ADD = new Word(0x20);
 
+    /**
+     * Pop word a. Pop word b. Push word b-a back.
+     */
+    public static final Word SUB = new Word(0x21);
+
 }
