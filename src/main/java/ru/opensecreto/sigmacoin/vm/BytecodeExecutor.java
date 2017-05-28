@@ -83,6 +83,7 @@ public class BytecodeExecutor {
                     Word b = frame.stack.pop();
                     Word result = a.sum(b);
                     frame.stack.push(result);
+                    pointer++;
                 }
             } else {
                 run = false;
