@@ -188,7 +188,7 @@ public class BytecodeExecutorTest {
         when(contractA.get(2)).thenReturn(Opcodes.PUSH);
         when(contractA.get(3)).thenReturn(new Word(-123456));// 123456 -123456 (top)
         when(contractA.get(4)).thenReturn(Opcodes.ADD);// 0 (top)
-        when(contractA.get(6)).thenReturn(Opcodes.STOP_GOOD);// 0 0x01 0x00 (top)
+        when(contractA.get(5)).thenReturn(Opcodes.STOP_GOOD);// 0 0x01 0x00 (top)
 
         ContractManager manager = mock(ContractManager.class);
         when(manager.contractExists(idA)).thenReturn(true);
