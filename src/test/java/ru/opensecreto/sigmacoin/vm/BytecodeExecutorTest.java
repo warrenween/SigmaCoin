@@ -202,7 +202,7 @@ public class BytecodeExecutorTest {
         assertThat(result.getSize()).isEqualTo(3);
 
         assertThat(result.popCustom(3)).containsExactly(
-                new Word(0), new Word(1), new Word(0);
+                new Word(0), new Word(1), new Word(0)
         );
 
         assertThat(result.getSize()).isEqualTo(0);
