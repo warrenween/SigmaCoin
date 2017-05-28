@@ -22,20 +22,16 @@ public class WordTest {
 
     @Test
     public void testSum() {
-        Word a1 = new Word(parseHexBinary("d4735e3a265e16eee03f59718b9b5d03019c07d8b6c51f90da3a666eec13ab35"));
-        Word b1 = new Word(parseHexBinary("e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"));
-        Word result1 = a1.sum(b1);
-        assertThat(result1.equals(new Word(parseHexBinary("b824227cbf5a33037b3b4e3a250b1627294a49bd1b60b2dd7ecfff8a6466638a"))));
-
-        Word a2 = new Word(123456);
-        Word b2 = new Word(-123456);
-        Word result2 = a2.sum(b2);
-        assertThat(result2.equals(new Word(0)));
-    }
-
-    @Test
-    public void testSumOpposite() {
-
+        assertThat(new Word(0).sum(new Word(0)).equals(new Word(0)));
+        assertThat(new Word(123456).sum(new Word(-123456)).equals(new Word(0)));
+        assertThat(new Word(-123456).sum(new Word(123456)).equals(new Word(0)));
+        assertThat(new Word(20).sum(new Word(30)).equals(new Word(50)));
+        assertThat(new Word(-20).sum(new Word(30)).equals(new Word(10)));
+        assertThat(new Word(20).sum(new Word(-30)).equals(new Word(-10)));
+        assertThat(new Word(12565895).sum(new Word(154894949)).equals(new Word(167460844)));
+        assertThat(new Word(12565895).sum(new Word(-154894949)).equals(new Word(-142329054)));
+        assertThat(new Word(-12565895).sum(new Word(154894949)).equals(new Word(142329054)));
+        assertThat(new Word(-12565895).sum(new Word(-154894949)).equals(new Word(142329054)));
     }
 
     @Test
