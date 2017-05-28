@@ -184,10 +184,10 @@ public class BytecodeExecutorTest {
         Word idA = new Word(0x00);
         Memory contractA = mock(Memory.class);
         when(contractA.get(0)).thenReturn(Opcodes.PUSH);
-        when(contractA.get(1)).thenReturn(new Word(123456));//123456 (top)
+        when(contractA.get(1)).thenReturn(new Word(123456));// 123456 (top)
         when(contractA.get(2)).thenReturn(Opcodes.PUSH);
-        when(contractA.get(3)).thenReturn(new Word(-123456));//123456 -123456 (top)
-        when(contractA.get(4)).thenReturn(Opcodes.ADD);//0(top)
+        when(contractA.get(3)).thenReturn(new Word(-123456));// 123456 -123456 (top)
+        when(contractA.get(4)).thenReturn(Opcodes.ADD);// 0 (top)
         when(contractA.get(6)).thenReturn(Opcodes.STOP_GOOD);// 0 0x01 0x00 (top)
 
         ContractManager manager = mock(ContractManager.class);
@@ -201,11 +201,11 @@ public class BytecodeExecutorTest {
 
         assertThat(result.getSize()).isEqualTo(3);
 
-        assertThat(result.pop()).isEqualTo(new Word(0x00));
-        assertThat(result.pop()).isEqualTo(new Word(0x01));
-        assertThat(result.pop()).isEqualTo(new Word(0));
+        assertThat(result.popCustom(3)).containsExactly(
+                new Word(0), new Word(1), new Word(0);
+        );
 
         assertThat(result.getSize()).isEqualTo(0);
     }
-    
+
 }
