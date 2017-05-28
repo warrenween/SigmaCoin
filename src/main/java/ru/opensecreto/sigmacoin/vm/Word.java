@@ -89,9 +89,9 @@ public final class Word implements Comparable<Word> {
     public Word negate() {
         byte[] buf = Arrays.copyOf(data, WORD_SIZE);
         for (int i = 0; i < buf.length; i++) {
-            buf[i] ^= (byte) 0xff;
+            buf[i] = (byte) ((~(buf[i] & 0xff)) & 0xff);
         }
-        return new Word(buf);
+        return new Word(buf).sum(new Word(1));
     }
 
     public boolean isPositive() {
