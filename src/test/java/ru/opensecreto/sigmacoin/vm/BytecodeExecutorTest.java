@@ -27,7 +27,7 @@ public class BytecodeExecutorTest {
     @Test
     public void testInvokeGood() {
         Word idA = new Word(0);
-        Memory contractA = mock(Memory.class, invocation -> Opcodes.STOP_BAD);
+        Memory contractA = mock(Memory.class);
         when(contractA.get(0)).thenReturn(Opcodes.STOP_GOOD);
 
         ContractManager manager = mock(ContractManager.class);
@@ -48,7 +48,7 @@ public class BytecodeExecutorTest {
     @Test
     public void testInvokeBad() {
         Word idA = new Word(0);
-        Memory contractA = mock(Memory.class, invocation -> Opcodes.STOP_BAD);
+        Memory contractA = mock(Memory.class);
         when(contractA.get(0)).thenReturn(Opcodes.STOP_BAD);
 
         ContractManager manager = mock(ContractManager.class);
@@ -69,7 +69,7 @@ public class BytecodeExecutorTest {
     @Test
     public void testInvokeResultPUSH_DUP() {
         Word idA = new Word(0);
-        Memory contractA = mock(Memory.class, invocation -> Opcodes.STOP_BAD);
+        Memory contractA = mock(Memory.class);
         when(contractA.get(0)).thenReturn(Opcodes.PUSH);
         when(contractA.get(1)).thenReturn(new Word(0x1f));
         when(contractA.get(2)).thenReturn(Opcodes.DUP);
@@ -99,7 +99,7 @@ public class BytecodeExecutorTest {
     @Test
     public void testPUSH_POP_DUP() {
         Word idA = new Word(0x00);
-        Memory contractA = mock(Memory.class, invocation -> Opcodes.STOP_BAD);
+        Memory contractA = mock(Memory.class);
         when(contractA.get(0)).thenReturn(Opcodes.PUSH);
         when(contractA.get(1)).thenReturn(new Word(0x1f));//0x1f (top)
         when(contractA.get(2)).thenReturn(Opcodes.PUSH);
@@ -130,7 +130,7 @@ public class BytecodeExecutorTest {
     @Test
     public void testInvokeFromCode() {
         Word idA = new Word(0x00);
-        Memory contractA = mock(Memory.class, invocation -> Opcodes.STOP_BAD);
+        Memory contractA = mock(Memory.class);
         when(contractA.get(0)).thenReturn(Opcodes.PUSH);
         when(contractA.get(1)).thenReturn(new Word(0x12));// 0x12 (top)
         when(contractA.get(2)).thenReturn(Opcodes.PUSH);
@@ -145,7 +145,7 @@ public class BytecodeExecutorTest {
         when(contractA.get(11)).thenReturn(Opcodes.STOP_GOOD); // 0x12 0x34 0x56 0x56 0x1f 0x05 0x01 | 0x07 0x00 (top)
 
         Word idB = new Word(0x01);
-        Memory contractB = mock(Memory.class, invocation -> Opcodes.STOP_BAD);
+        Memory contractB = mock(Memory.class);
         // 0x12 0x34 0x56 (top)
         when(contractB.get(0)).thenReturn(Opcodes.DUP);// 0x12 0x34 0x56 0x56 (top)
         when(contractB.get(1)).thenReturn(Opcodes.PUSH);
@@ -182,13 +182,13 @@ public class BytecodeExecutorTest {
     @Test
     public void test_ADD() {
         Word idA = new Word(0x00);
-        Memory contractA = mock(Memory.class, invocation -> Opcodes.STOP_BAD);
+        Memory contractA = mock(Memory.class);
         when(contractA.get(0)).thenReturn(Opcodes.PUSH);
         when(contractA.get(1)).thenReturn(new Word(123456));// 123456 (top)
         when(contractA.get(2)).thenReturn(Opcodes.PUSH);
         when(contractA.get(3)).thenReturn(new Word(-123456));// 123456 -123456 (top)
         when(contractA.get(4)).thenReturn(Opcodes.ADD);// 0 (top)
-        when(contractA.get(5)).thenReturn(Opcodes.STOP_GOOD);// 0 0x01 0x00 (top)
+        when(contractA.get(6)).thenReturn(Opcodes.STOP_GOOD);// 0 0x01 0x00 (top)
 
         ContractManager manager = mock(ContractManager.class);
         when(manager.contractExists(idA)).thenReturn(true);
