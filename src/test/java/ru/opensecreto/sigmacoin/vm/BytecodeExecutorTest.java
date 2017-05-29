@@ -117,7 +117,7 @@ public class BytecodeExecutorTest {
 
         assertThat(result.getSize()).isEqualTo(4);
 
-        assertThat(result.popCustom(6)).containsExactly(
+        assertThat(result.popCustom(4)).containsExactly(
                 new Word(0x1f), new Word(0x56), new Word(2), new Word(0x00)
         );
     }
