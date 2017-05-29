@@ -34,6 +34,7 @@ ext {
     mapdbVersion = '3.0.4'
     nd4jVersion = '0.8.0'
     commonsnetVersion = '3.6'
+    joolVersion = '0.9.12'
 
     //test libraries
     assertjVersion = '3.8.0'
@@ -55,6 +56,7 @@ dependencies {
     compile "org.mapdb:mapdb:$mapdbVersion"
     compile "org.nd4j:nd4j-common:$nd4jVersion"
     compile "commons-net:commons-net:$commonsnetVersion"
+    compile "org.jooq:jool:$joolVersion"
 
     testCompile "org.assertj:assertj-core:$assertjVersion"
     testCompile "org.testng:testng:$testngVersion"

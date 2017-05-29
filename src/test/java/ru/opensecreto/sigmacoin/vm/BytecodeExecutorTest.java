@@ -178,4 +178,177 @@ public class BytecodeExecutorTest {
 
         assertThat(result.getSize()).isEqualTo(0);
     }
+
+    @Test
+    public void test_ADD() {
+        Word idA = new Word(0x00);
+        Memory contractA = mock(Memory.class);
+        when(contractA.get(0)).thenReturn(Opcodes.PUSH);
+        when(contractA.get(1)).thenReturn(new Word(123456));// 123456 (top)
+        when(contractA.get(2)).thenReturn(Opcodes.PUSH);
+        when(contractA.get(3)).thenReturn(new Word(-123456));// 123456 -123456 (top)
+        when(contractA.get(4)).thenReturn(Opcodes.ADD);// 0 (top)
+        when(contractA.get(5)).thenReturn(Opcodes.STOP_GOOD);// 0 0x01 0x00 (top)
+
+        ContractManager manager = mock(ContractManager.class);
+        when(manager.contractExists(idA)).thenReturn(true);
+        when(manager.getContract(idA)).thenReturn(contractA);
+
+        VirtualMachineController controller = new VirtualMachineController(manager,
+                new VMConfiguration(10, 10, 10));
+
+        Stack result = controller.invoke(new Stack(10), idA);
+
+        assertThat(result.getSize()).isEqualTo(3);
+
+        assertThat(result.popCustom(3)).containsExactly(
+                new Word(0), new Word(1), new Word(0)
+        );
+
+        assertThat(result.getSize()).isEqualTo(0);
+    }
+
+    @Test
+    public void test_SUB() {
+        Word idA = new Word(0x00);
+        Memory contractA = mock(Memory.class);
+        when(contractA.get(0)).thenReturn(Opcodes.PUSH);
+        when(contractA.get(1)).thenReturn(new Word(100));// 100 (top)
+        when(contractA.get(2)).thenReturn(Opcodes.PUSH);
+        when(contractA.get(3)).thenReturn(new Word(10));// 100 10 (top)
+        when(contractA.get(4)).thenReturn(Opcodes.SUB);// 90 (top)
+        when(contractA.get(5)).thenReturn(Opcodes.STOP_GOOD);// 90 0x01 0x00 (top)
+
+        ContractManager manager = mock(ContractManager.class);
+        when(manager.contractExists(idA)).thenReturn(true);
+        when(manager.getContract(idA)).thenReturn(contractA);
+
+        VirtualMachineController controller = new VirtualMachineController(manager,
+                new VMConfiguration(10, 10, 10));
+
+        Stack result = controller.invoke(new Stack(10), idA);
+
+        assertThat(result.getSize()).isEqualTo(3);
+
+        assertThat(result.popCustom(3)).containsExactly(
+                new Word(90), new Word(1), new Word(0)
+        );
+
+        assertThat(result.getSize()).isEqualTo(0);
+    }
+
+    @Test
+    public void test_DIV() {
+        Word idA = new Word(0x00);
+        Memory contractA = mock(Memory.class);
+        when(contractA.get(0)).thenReturn(Opcodes.PUSH);
+        when(contractA.get(1)).thenReturn(new Word(23));// 23 (top)
+        when(contractA.get(2)).thenReturn(Opcodes.PUSH);
+        when(contractA.get(3)).thenReturn(new Word(12));// 23 12 (top)
+        when(contractA.get(4)).thenReturn(Opcodes.DIV);// 1 (top)
+        when(contractA.get(5)).thenReturn(Opcodes.STOP_GOOD);// 1 0x01 0x00 (top)
+
+        ContractManager manager = mock(ContractManager.class);
+        when(manager.contractExists(idA)).thenReturn(true);
+        when(manager.getContract(idA)).thenReturn(contractA);
+
+        VirtualMachineController controller = new VirtualMachineController(manager,
+                new VMConfiguration(10, 10, 10));
+
+        Stack result = controller.invoke(new Stack(10), idA);
+
+        assertThat(result.getSize()).isEqualTo(3);
+
+        assertThat(result.popCustom(3)).containsExactly(
+                new Word(1), new Word(1), new Word(0)
+        );
+
+        assertThat(result.getSize()).isEqualTo(0);
+    }
+
+    @Test
+    public void test_MOD() {
+        Word idA = new Word(0x00);
+        Memory contractA = mock(Memory.class);
+        when(contractA.get(0)).thenReturn(Opcodes.PUSH);
+        when(contractA.get(1)).thenReturn(new Word(23));// 23 (top)
+        when(contractA.get(2)).thenReturn(Opcodes.PUSH);
+        when(contractA.get(3)).thenReturn(new Word(12));// 23 12 (top)
+        when(contractA.get(4)).thenReturn(Opcodes.MOD);// 11 (top)
+        when(contractA.get(5)).thenReturn(Opcodes.STOP_GOOD);// 11 0x01 0x00 (top)
+
+        ContractManager manager = mock(ContractManager.class);
+        when(manager.contractExists(idA)).thenReturn(true);
+        when(manager.getContract(idA)).thenReturn(contractA);
+
+        VirtualMachineController controller = new VirtualMachineController(manager,
+                new VMConfiguration(10, 10, 10));
+
+        Stack result = controller.invoke(new Stack(10), idA);
+
+        assertThat(result.getSize()).isEqualTo(3);
+
+        assertThat(result.popCustom(3)).containsExactly(
+                new Word(11), new Word(1), new Word(0)
+        );
+
+        assertThat(result.getSize()).isEqualTo(0);
+    }
+
+    @Test
+    public void test_DIV_byZero() {
+        Word idA = new Word(0x00);
+        Memory contractA = mock(Memory.class);
+        when(contractA.get(0)).thenReturn(Opcodes.PUSH);
+        when(contractA.get(1)).thenReturn(new Word(23));// 23 (top)
+        when(contractA.get(2)).thenReturn(Opcodes.PUSH);
+        when(contractA.get(3)).thenReturn(new Word(0));// 23 0 (top)
+        when(contractA.get(4)).thenReturn(Opcodes.DIV);// 0x00 0x01 (top)
+
+        ContractManager manager = mock(ContractManager.class);
+        when(manager.contractExists(idA)).thenReturn(true);
+        when(manager.getContract(idA)).thenReturn(contractA);
+
+        VirtualMachineController controller = new VirtualMachineController(manager,
+                new VMConfiguration(10, 10, 10));
+
+        Stack result = controller.invoke(new Stack(10), idA);
+
+        assertThat(result.getSize()).isEqualTo(2);
+
+        assertThat(result.popCustom(2)).containsExactly(
+                new Word(0), new Word(1)
+        );
+
+        assertThat(result.getSize()).isEqualTo(0);
+    }
+
+    @Test
+    public void test_MOD_byZero() {
+        Word idA = new Word(0x00);
+        Memory contractA = mock(Memory.class);
+        when(contractA.get(0)).thenReturn(Opcodes.PUSH);
+        when(contractA.get(1)).thenReturn(new Word(23));// 23 (top)
+        when(contractA.get(2)).thenReturn(Opcodes.PUSH);
+        when(contractA.get(3)).thenReturn(new Word(0));// 23 0 (top)
+        when(contractA.get(4)).thenReturn(Opcodes.MOD);// 0 1 (top)
+
+        ContractManager manager = mock(ContractManager.class);
+        when(manager.contractExists(idA)).thenReturn(true);
+        when(manager.getContract(idA)).thenReturn(contractA);
+
+        VirtualMachineController controller = new VirtualMachineController(manager,
+                new VMConfiguration(10, 10, 10));
+
+        Stack result = controller.invoke(new Stack(10), idA);
+
+        assertThat(result.getSize()).isEqualTo(2);
+
+        assertThat(result.popCustom(2)).containsExactly(
+                new Word(0), new Word(1)
+        );
+
+        assertThat(result.getSize()).isEqualTo(0);
+    }
+
 }

@@ -41,5 +41,23 @@ public class Opcodes {
 
     public static final Word DUP = new Word(0x12);
 
+    /**
+     * Pop 2 words. Sum them and push back to stack.
+     */
+    public static final Word ADD = new Word(0x20);
 
+    /**
+     * Pop word a. Pop word b. Push word b-a back.
+     */
+    public static final Word SUB = new Word(0x21);
+
+    /**
+     * Pop a. Pop b. If a==0 execution fails, (b div a) pushed to stack otherwise.
+     */
+    public static final Word DIV = new Word(0x22);
+
+    /**
+     * Pop a. Pop b. If a==0 execution fails, (b mod a) pushed to stack otherwise.
+     */
+    public static final Word MOD = new Word(0x23);
 }

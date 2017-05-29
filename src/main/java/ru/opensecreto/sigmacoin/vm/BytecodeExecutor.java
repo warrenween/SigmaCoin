@@ -72,6 +72,72 @@ public class BytecodeExecutor {
                 frame.stack.push(data);
                 frame.stack.push(data);
                 pointer++;
+            } else if (opcode.equals(Opcodes.ADD)) {
+                if (frame.stack.getSize() < 2) {
+                    LOGGER.warn("Error executing {} at {}. Can not SUM. Stack size is less than 2",
+                            frame.contractID, pointer);
+                    run = false;
+                    success = false;
+                } else {
+                    Word a = frame.stack.pop();
+                    Word b = frame.stack.pop();
+                    Word result = a.sum(b);
+                    frame.stack.push(result);
+                    pointer++;
+                }
+            } else if (opcode.equals(Opcodes.SUB)) {
+                if (frame.stack.getSize() < 2) {
+                    LOGGER.warn("Error executing {} at {}. Can not SUB. Stack size is less than 2",
+                            frame.contractID, pointer);
+                    run = false;
+                    success = false;
+                } else {
+                    Word a = frame.stack.pop();
+                    Word b = frame.stack.pop();
+                    Word result = b.subtract(a);
+                    frame.stack.push(result);
+                    pointer++;
+                }
+            } else if (opcode.equals(Opcodes.DIV)) {
+                if (frame.stack.getSize() < 2) {
+                    LOGGER.warn("Error executing {} at {}. Can not DIV. Stack size is less than 2",
+                            frame.contractID, pointer);
+                    run = false;
+                    success = false;
+                } else {
+                    Word a = frame.stack.pop();
+                    Word b = frame.stack.pop();
+
+                    if (a.equals(Word.WORD_0)) {
+                        LOGGER.warn("Error executing {} at {}. Can not DIV. Division by zero.",
+                                frame.contractID, pointer);
+                        run = false;
+                        success = false;
+                    } else {
+                        frame.stack.push(b.div(a));
+                        pointer++;
+                    }
+                }
+            } else if (opcode.equals(Opcodes.MOD)) {
+                if (frame.stack.getSize() < 2) {
+                    LOGGER.warn("Error executing {} at {}. Can not MOD. Stack size is less than 2",
+                            frame.contractID, pointer);
+                    run = false;
+                    success = false;
+                } else {
+                    Word a = frame.stack.pop();
+                    Word b = frame.stack.pop();
+
+                    if (a.equals(Word.WORD_0)) {
+                        LOGGER.warn("Error executing {} at {}. Can not MOD. Division by zero.",
+                                frame.contractID, pointer);
+                        run = false;
+                        success = false;
+                    } else {
+                        frame.stack.push(b.mod(a));
+                        pointer++;
+                    }
+                }
             } else {
                 run = false;
                 success = false;
