@@ -89,6 +89,7 @@ public class BytecodeExecutor {
             Word b = frame.stack.pop();
             frame.stack.push(a);
             frame.stack.push(b);
+            pointer++;
         }
     }
 
