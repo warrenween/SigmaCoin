@@ -17,19 +17,14 @@ public class BlockStorageControllerTest {
                 new BlockStorageConfiguration(EnvironmentConfig.BLOCK_STORAGE_DEFAULT_START_SIZE, EnvironmentConfig.BLOCK_STORAGE_DEFAULT_ALLOCATE_SIZE)
         );
 
-        assertThatThrownBy(() ->
-                controller.addBlock(new byte[3], new byte[4]))
+        assertThatThrownBy(() -> controller.addBlock(new byte[3], new byte[4]))
                 .isInstanceOf(IllegalArgumentException.class);
-        assertThatThrownBy(() ->
-                controller.addBlock(new byte[4], new byte[5]))
+        assertThatThrownBy(() -> controller.addBlock(new byte[4], new byte[5]))
                 .isInstanceOf(IllegalArgumentException.class);
 
-        assertThatThrownBy(() ->
-                controller.getBlock(new byte[3]))
+        assertThatThrownBy(() -> controller.getBlock(new byte[3]))
                 .isInstanceOf(IllegalArgumentException.class);
-
-        assertThatThrownBy(() ->
-                controller.hasBlock(new byte[3]))
+        assertThatThrownBy(() -> controller.hasBlock(new byte[3]))
                 .isInstanceOf(IllegalArgumentException.class);
     }
 
