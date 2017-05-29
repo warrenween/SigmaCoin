@@ -351,4 +351,33 @@ public class BytecodeExecutorTest {
         assertThat(result.getSize()).isEqualTo(0);
     }
 
+    @Test
+    public void test_SWAP() {
+        Word idA = new Word(0x00);
+        Memory contractA = mock(Memory.class);
+        when(contractA.get(0)).thenReturn(Opcodes.PUSH);
+        when(contractA.get(1)).thenReturn(new Word(23));// 23 (top)
+        when(contractA.get(2)).thenReturn(Opcodes.PUSH);
+        when(contractA.get(3)).thenReturn(new Word(43));// 23 43 (top)
+        when(contractA.get(4)).thenReturn(Opcodes.SWAP);// 43 23 (top)
+        when(contractA.get(5)).thenReturn(Opcodes.STOP_GOOD);// 43 23 2 0 (top)
+
+        ContractManager manager = mock(ContractManager.class);
+        when(manager.contractExists(idA)).thenReturn(true);
+        when(manager.getContract(idA)).thenReturn(contractA);
+
+        VirtualMachineController controller = new VirtualMachineController(manager,
+                new VMConfiguration(10, 10, 10));
+
+        Stack result = controller.invoke(new Stack(10), idA);
+
+        assertThat(result.getSize()).isEqualTo(4);
+
+        assertThat(result.popCustom(4)).containsExactly(
+                new Word(43), new Word(23), new Word(2), new Word(0)
+        );
+
+        assertThat(result.getSize()).isEqualTo(0);
+    }
+
 }

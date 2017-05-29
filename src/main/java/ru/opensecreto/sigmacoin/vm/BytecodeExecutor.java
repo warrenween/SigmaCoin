@@ -79,6 +79,20 @@ public class BytecodeExecutor {
         pointer++;
     }
 
+    private void opcode_SWAP() {
+        if (frame.stack.getSize() < 2) {
+            LOGGER.warn("Error executing {} at {}. Can not SWAP. Stack size is less than 2.",
+                    frame.contractID, pointer);
+            fail();
+        } else {
+            Word a = frame.stack.pop();
+            Word b = frame.stack.pop();
+            frame.stack.push(a);
+            frame.stack.push(b);
+            pointer++;
+        }
+    }
+
     public Stack run() {
         while (run) {
             Word opcode = frame.memory.get(pointer);
@@ -94,6 +108,8 @@ public class BytecodeExecutor {
                 opcode_POP();
             } else if (opcode.equals(Opcodes.DUP)) {
                 opcode_DUP();
+            } else if (opcode.equals(Opcodes.SWAP)) {
+                opcode_SWAP();
             } else if (opcode.equals(Opcodes.ADD)) {
                 opcode_ADD();
             } else if (opcode.equals(Opcodes.SUB)) {

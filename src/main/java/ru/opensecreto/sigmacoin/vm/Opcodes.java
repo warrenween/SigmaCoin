@@ -42,6 +42,11 @@ public class Opcodes {
     public static final Word DUP = new Word(0x12);
 
     /**
+     * Pop a. Pop b. Push a. Push b.
+     */
+    public static final Word SWAP = new Word(0x13);
+
+    /**
      * Pop 2 words. Sum them and push back to stack.
      */
     public static final Word ADD = new Word(0x20);
