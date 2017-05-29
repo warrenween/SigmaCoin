@@ -206,17 +206,24 @@ public class BytecodeExecutor {
     }
 
     private void opcode_ADD() {
-        if (frame.stack.getSize() < 2) {
-            LOGGER.warn("Error executing {} at {}. Can not SUM. Stack size is less than 2",
+        if (frame.stack.getSize() < 1) {
+            LOGGER.warn("Error executing {} at {}. Can not SUM. Can not pop first value - stack is empty.",
                     frame.contractID, pointer);
             fail();
-        } else {
-            Word a = frame.stack.pop();
-            Word b = frame.stack.pop();
-            Word result = a.sum(b);
-            frame.stack.push(result);
-            pointer++;
+            return;
         }
+        Word a = frame.stack.pop();
+
+        if (frame.stack.getSize() < 1) {
+            LOGGER.warn("Error executing {} at {}. Can not SUM. Can not pop second value - stack is empty.",
+                    frame.contractID, pointer);
+            fail();
+            return;
+        }
+        Word b = frame.stack.pop();
+
+        frame.stack.push(a.sum(b));
+        pointer++;
     }
 
     private void opcode_DUP() {

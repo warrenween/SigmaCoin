@@ -58,7 +58,10 @@ public class Opcodes {
     public static final Word SWAP = new Word(0x13);
 
     /**
-     * Pop 2 words. Sum them and push back to stack.
+     * If stack.size > 0 pop A. Else STOP_BAD is executed.<br>
+     * If stack.size > 0 pop B. Else STOP_BAD is executed.<br>
+     * Push (A+B).<br>
+     * Pointer is increased by 1.
      */
     public static final Word ADD = new Word(0x20);
 
