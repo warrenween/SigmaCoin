@@ -114,6 +114,9 @@ public class WordTest {
         assertThat(new Word(8).div(new Word(2))).isEqualTo(new Word(4));
         assertThat(new Word(8).mod(new Word(2))).isEqualTo(new Word(0));
 
+        assertThat(new Word(8).div(new Word(1))).isEqualTo(new Word(8));
+        assertThat(new Word(8).mod(new Word(1))).isEqualTo(new Word(0));
+
         assertThatThrownBy(() -> new Word(10).div(Word.WORD_0)).isInstanceOf(ArithmeticException.class);
         assertThatThrownBy(() -> new Word(10).mod(Word.WORD_0)).isInstanceOf(ArithmeticException.class);
     }

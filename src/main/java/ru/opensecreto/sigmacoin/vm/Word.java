@@ -7,7 +7,6 @@ import org.jooq.lambda.tuple.Tuple;
 import org.jooq.lambda.tuple.Tuple2;
 
 import javax.xml.bind.DatatypeConverter;
-import java.math.BigInteger;
 import java.util.Arrays;
 
 /**
@@ -136,11 +135,14 @@ public final class Word implements Comparable<Word> {
     /**
      * Make dividend/divisor anr return quotient and remainder
      *
-     * @return Tuple(quotient, divisor)
+     * @return Tuple(quotient, remainder)
      */
     private static Tuple2<Word, Word> divide(Word dividend, Word divisor) {
         if (divisor.equals(WORD_0)) {
             throw new ArithmeticException("division by zero");
+        }
+        if (divisor.equals(WORD_1)) {
+            return Tuple.tuple(dividend, WORD_0);
         }
 
         boolean dividendSign = true;
