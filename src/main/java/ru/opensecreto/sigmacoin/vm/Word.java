@@ -3,6 +3,8 @@ package ru.opensecreto.sigmacoin.vm;
 import com.google.common.primitives.Ints;
 import com.google.common.primitives.Shorts;
 import org.jetbrains.annotations.NotNull;
+import org.jooq.lambda.tuple.Tuple;
+import org.jooq.lambda.tuple.Tuple2;
 
 import javax.xml.bind.DatatypeConverter;
 import java.util.Arrays;
@@ -14,6 +16,8 @@ import java.util.Arrays;
 public final class Word implements Comparable<Word> {
 
     public static final int WORD_SIZE = 32;
+
+    public static final Word WORD_1 = new Word(1);
 
     private final byte[] data = new byte[WORD_SIZE];
 
@@ -125,6 +129,59 @@ public final class Word implements Comparable<Word> {
             }
         }
         return new Word(result);
+    }
+
+    /**
+     * Make dividend/divisor anr return quotient and remainder
+     *
+     * @return Tuple(quotient, divisor)
+     */
+    private static Tuple2<Word, Word> divide(Word dividend, Word divisor) {
+        boolean dividendSign = true;
+        boolean divisorSign = true;
+        if (dividend.isNegative()) {
+            dividend = dividend.negate();
+            dividendSign = false;
+        }
+        if (divisor.isNegative()) {
+            divisor = divisor.negate();
+            divisorSign = false;
+        }
+
+        Word quotient = new Word(0);
+
+        while (dividend.compareTo(divisor) >= 0) {
+            dividend = dividend.subtract(divisor);
+            quotient = quotient.sum(WORD_1);
+        }
+
+        if (!dividendSign) {
+            dividend = dividend.negate();
+        }
+        if (dividendSign != divisorSign) {
+            quotient = quotient.negate();
+        }
+        return Tuple.tuple(quotient, dividend);
+    }
+
+    public Word div(Word divisor) {
+        return divide(this, divisor).v1;
+    }
+
+    public Word mod(Word divisor) {
+        return divide(this, divisor).v2;
+    }
+
+    public Word shiftLeft(int count) {
+        byte[] buf = Arrays.copyOf(data, WORD_SIZE);
+        Util.shiftLeft(buf, count);
+        return new Word(buf);
+    }
+
+    public Word shiftRight(int count) {
+        byte[] buf = Arrays.copyOf(data, WORD_SIZE);
+        Util.shiftRight(buf, count);
+        return new Word(buf);
     }
 
     @Override

@@ -95,4 +95,19 @@ public class WordTest {
         assertThat(a).isEqualTo(new Word(100));
         assertThat(b).isEqualTo(new Word(-100));
     }
+
+    @Test
+    public void testDivision() {
+        assertThat(new Word(7).div(new Word(2))).isEqualTo(new Word(3));
+        assertThat(new Word(7).mod(new Word(2))).isEqualTo(new Word(1));
+
+        assertThat(new Word(-7).div(new Word(2))).isEqualTo(new Word(-3));
+        assertThat(new Word(-7).mod(new Word(2))).isEqualTo(new Word(-1));
+
+        assertThat(new Word(7).div(new Word(-2))).isEqualTo(new Word(-3));
+        assertThat(new Word(7).mod(new Word(-2))).isEqualTo(new Word(1));
+
+        assertThat(new Word(-7).div(new Word(-2))).isEqualTo(new Word(3));
+        assertThat(new Word(-7).mod(new Word(-2))).isEqualTo(new Word(-1));
+    }
 }
