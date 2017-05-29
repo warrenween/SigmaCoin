@@ -109,8 +109,7 @@ public class BytecodeExecutor {
                 opcode_DUP();
             } else if (opcode.equals(Opcodes.SWAP)) {
                 opcode_SWAP();
-            }
-            if (opcode.equals(Opcodes.ADD)) {
+            } else if (opcode.equals(Opcodes.ADD)) {
                 opcode_ADD();
             } else if (opcode.equals(Opcodes.SUB)) {
                 opcode_SUM();
