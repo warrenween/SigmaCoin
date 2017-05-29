@@ -113,9 +113,10 @@ public class BytecodeExecutor {
                                 frame.contractID, pointer);
                         run = false;
                         success = false;
+                    } else {
+                        frame.stack.push(b.div(a));
+                        pointer++;
                     }
-                    frame.stack.push(b.div(a));
-                    pointer++;
                 }
             } else if (opcode.equals(Opcodes.MOD)) {
                 if (frame.stack.getSize() < 2) {
@@ -132,9 +133,10 @@ public class BytecodeExecutor {
                                 frame.contractID, pointer);
                         run = false;
                         success = false;
+                    } else {
+                        frame.stack.push(b.mod(a));
+                        pointer++;
                     }
-                    frame.stack.push(b.mod(a));
-                    pointer++;
                 }
             } else {
                 run = false;
