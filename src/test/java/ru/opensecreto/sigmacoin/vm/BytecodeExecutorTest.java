@@ -9,7 +9,7 @@ import static org.mockito.Mockito.when;
 public class BytecodeExecutorTest {
 
     @Test
-    public void testInvokeNonExisting() {
+    public void test_INVOKE_nonExistingContract() {
         ContractManager manager = mock(ContractManager.class);
         when(manager.contractExists(new Word(0))).thenReturn(false);
 
@@ -18,17 +18,17 @@ public class BytecodeExecutorTest {
 
         Stack result = controller.invoke(new Stack(10), new Word(0));
 
-        assertThat(result.pop()).isEqualTo(new Word(1));
-        assertThat(result.pop()).isEqualTo(new Word(0));
-
-        assertThat(result.getSize()).isEqualTo(0);
+        assertThat(result.getSize()).isEqualTo(2);
+        assertThat(result.popCustom(2)).containsExactly(
+                new Word(0), new Word(1)
+        );
     }
 
     @Test
-    public void testInvokeGood() {
+    public void test_INVOKE_good() {
         Word idA = new Word(0);
         Memory contractA = mock(Memory.class);
-        when(contractA.get(0)).thenReturn(Opcodes.STOP_GOOD);
+        when(contractA.get(0)).thenReturn(Opcodes.STOP_GOOD);// 0 0x00 (top)
 
         ContractManager manager = mock(ContractManager.class);
         when(manager.contractExists(idA)).thenReturn(true);
@@ -39,17 +39,17 @@ public class BytecodeExecutorTest {
 
         Stack result = controller.invoke(new Stack(10), idA);
 
-        assertThat(result.pop()).isEqualTo(new Word(0));
-        assertThat(result.pop()).isEqualTo(new Word(0));
-
-        assertThat(result.getSize()).isEqualTo(0);
+        assertThat(result.getSize()).isEqualTo(2);
+        assertThat(result.popCustom(2)).containsExactly(
+                new Word(0), new Word(0)
+        );
     }
 
     @Test
-    public void testInvokeBad() {
+    public void test_INVOKE_bad() {
         Word idA = new Word(0);
         Memory contractA = mock(Memory.class);
-        when(contractA.get(0)).thenReturn(Opcodes.STOP_BAD);
+        when(contractA.get(0)).thenReturn(Opcodes.STOP_BAD);// 0 0x01 (top)
 
         ContractManager manager = mock(ContractManager.class);
         when(manager.contractExists(idA)).thenReturn(true);
@@ -60,22 +60,23 @@ public class BytecodeExecutorTest {
 
         Stack result = controller.invoke(new Stack(10), idA);
 
-        assertThat(result.pop()).isEqualTo(new Word(1));
-        assertThat(result.pop()).isEqualTo(new Word(0));
-
-        assertThat(result.getSize()).isEqualTo(0);
+        assertThat(result.getSize()).isEqualTo(2);
+        assertThat(result.popCustom(2)).containsExactly(
+                new Word(0), new Word(0x01)
+        );
     }
 
     @Test
-    public void testInvokeResultPUSH_DUP() {
+    public void test_INVOKE_returnsCorrectStack() {
         Word idA = new Word(0);
         Memory contractA = mock(Memory.class);
+
         when(contractA.get(0)).thenReturn(Opcodes.PUSH);
-        when(contractA.get(1)).thenReturn(new Word(0x1f));
-        when(contractA.get(2)).thenReturn(Opcodes.DUP);
-        when(contractA.get(3)).thenReturn(Opcodes.DUP);
-        when(contractA.get(4)).thenReturn(Opcodes.DUP);
-        when(contractA.get(5)).thenReturn(Opcodes.STOP_BAD);
+        when(contractA.get(1)).thenReturn(new Word(0x1f));// 0x1f (top)
+        when(contractA.get(2)).thenReturn(Opcodes.DUP);// 0x1f 0x1f (top)
+        when(contractA.get(3)).thenReturn(Opcodes.DUP);// 0x1f 0x1f 0x1f (top)
+        when(contractA.get(4)).thenReturn(Opcodes.DUP);// 0x1f 0x1f 0x1f (top)
+        when(contractA.get(5)).thenReturn(Opcodes.STOP_BAD);// 0x1f 0x1f 0x1f 0x1f 4 1 (top)
 
         ContractManager manager = mock(ContractManager.class);
         when(manager.contractExists(idA)).thenReturn(true);
@@ -86,18 +87,15 @@ public class BytecodeExecutorTest {
 
         Stack result = controller.invoke(new Stack(10), idA);
 
-        assertThat(result.pop()).isEqualTo(new Word(1));
-        assertThat(result.pop()).isEqualTo(new Word(4));
-        assertThat(result.pop()).isEqualTo(new Word(0x1f));
-        assertThat(result.pop()).isEqualTo(new Word(0x1f));
-        assertThat(result.pop()).isEqualTo(new Word(0x1f));
-        assertThat(result.pop()).isEqualTo(new Word(0x1f));
-
-        assertThat(result.getSize()).isEqualTo(0);
+        assertThat(result.getSize()).isEqualTo(6);
+        assertThat(result.popCustom(6)).containsExactly(
+                new Word(0x1f), new Word(0x1f), new Word(0x1f), new Word(0x1f),
+                new Word(4), new Word(1)
+        );
     }
 
     @Test
-    public void testPUSH_POP_DUP() {
+    public void test_PUSH_POP_DUP() {
         Word idA = new Word(0x00);
         Memory contractA = mock(Memory.class);
         when(contractA.get(0)).thenReturn(Opcodes.PUSH);
@@ -106,7 +104,7 @@ public class BytecodeExecutorTest {
         when(contractA.get(3)).thenReturn(new Word(0x56));//0x1f 0x56 (top)
         when(contractA.get(4)).thenReturn(Opcodes.DUP);//0x1f 0x56 0x56 (top)
         when(contractA.get(5)).thenReturn(Opcodes.POP);//0x1f 0x56 (top)
-        when(contractA.get(6)).thenReturn(Opcodes.STOP_GOOD);//0x1f 0x56 | 0x02 0x00 (top)
+        when(contractA.get(6)).thenReturn(Opcodes.STOP_GOOD);//0x1f 0x56 | 2 0x00 (top)
 
         ContractManager manager = mock(ContractManager.class);
         when(manager.contractExists(idA)).thenReturn(true);
@@ -119,16 +117,13 @@ public class BytecodeExecutorTest {
 
         assertThat(result.getSize()).isEqualTo(4);
 
-        assertThat(result.pop()).isEqualTo(new Word(0x00));
-        assertThat(result.pop()).isEqualTo(new Word(0x02));
-        assertThat(result.pop()).isEqualTo(new Word(0x56));
-        assertThat(result.pop()).isEqualTo(new Word(0x1f));
-
-        assertThat(result.getSize()).isEqualTo(0);
+        assertThat(result.popCustom(6)).containsExactly(
+                new Word(0x1f), new Word(0x56), new Word(2), new Word(0x00)
+        );
     }
 
     @Test
-    public void testInvokeFromCode() {
+    public void test_INVOKE_fromCode() {
         Word idA = new Word(0x00);
         Memory contractA = mock(Memory.class);
         when(contractA.get(0)).thenReturn(Opcodes.PUSH);
@@ -175,8 +170,6 @@ public class BytecodeExecutorTest {
                 new Word(0x07),
                 new Word(0x00)
         );
-
-        assertThat(result.getSize()).isEqualTo(0);
     }
 
     @Test
@@ -204,8 +197,6 @@ public class BytecodeExecutorTest {
         assertThat(result.popCustom(3)).containsExactly(
                 new Word(0), new Word(1), new Word(0)
         );
-
-        assertThat(result.getSize()).isEqualTo(0);
     }
 
     @Test
@@ -233,8 +224,6 @@ public class BytecodeExecutorTest {
         assertThat(result.popCustom(3)).containsExactly(
                 new Word(90), new Word(1), new Word(0)
         );
-
-        assertThat(result.getSize()).isEqualTo(0);
     }
 
     @Test
@@ -262,8 +251,6 @@ public class BytecodeExecutorTest {
         assertThat(result.popCustom(3)).containsExactly(
                 new Word(1), new Word(1), new Word(0)
         );
-
-        assertThat(result.getSize()).isEqualTo(0);
     }
 
     @Test
@@ -291,8 +278,6 @@ public class BytecodeExecutorTest {
         assertThat(result.popCustom(3)).containsExactly(
                 new Word(11), new Word(1), new Word(0)
         );
-
-        assertThat(result.getSize()).isEqualTo(0);
     }
 
     @Test
@@ -319,8 +304,6 @@ public class BytecodeExecutorTest {
         assertThat(result.popCustom(2)).containsExactly(
                 new Word(0), new Word(1)
         );
-
-        assertThat(result.getSize()).isEqualTo(0);
     }
 
     @Test
@@ -347,8 +330,6 @@ public class BytecodeExecutorTest {
         assertThat(result.popCustom(2)).containsExactly(
                 new Word(0), new Word(1)
         );
-
-        assertThat(result.getSize()).isEqualTo(0);
     }
 
     @Test
@@ -376,8 +357,6 @@ public class BytecodeExecutorTest {
         assertThat(result.popCustom(4)).containsExactly(
                 new Word(43), new Word(23), new Word(2), new Word(0)
         );
-
-        assertThat(result.getSize()).isEqualTo(0);
     }
 
 }
