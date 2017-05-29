@@ -213,9 +213,16 @@ public class BytecodeExecutor {
     }
 
     private void opcode_DUP() {
-        Word data = frame.stack.pop();
-        frame.stack.push(data);
-        frame.stack.push(data);
+        if (frame.stack.getSize() < 1) {
+            LOGGER.warn("Error executing {} at {}. Can not DUP. Stack is empty.",
+                    frame.contractID, pointer);
+            fail();
+            return;
+        }
+
+        Word a = frame.stack.pop();
+        frame.stack.push(a);
+        frame.stack.push(a);
         pointer++;
     }
 }

@@ -42,6 +42,10 @@ public class Opcodes {
      */
     public static final Word POP = new Word(0x11);
 
+    /**
+     * If stack.size > 0 then A is popped. A is pushed. A is pushed. Else STOP_BAD executed.<br>
+     * Pointer is increased by 1.
+     */
     public static final Word DUP = new Word(0x12);
 
     /**
