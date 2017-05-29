@@ -32,14 +32,7 @@ public class VirtualMachineController {
     }
 
     public Stack invoke(Stack stack, Word contractID) {
-        if (!contractManager.contractExists(contractID)) {
-            Stack resultStack = new Stack(configuration.stackSize);
-            resultStack.push(new Word((short) 0));
-            resultStack.push(new Word((byte) 0x01));
-            return resultStack;
-        }
-
-        if (currentCallStackDepth == configuration.maxCallDepth) {
+        if ((!contractManager.contractExists(contractID)) | (currentCallStackDepth == configuration.maxCallDepth)) {
             Stack resultStack = new Stack(configuration.stackSize);
             resultStack.push(new Word((short) 0));
             resultStack.push(new Word((byte) 0x01));
