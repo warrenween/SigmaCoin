@@ -49,7 +49,11 @@ public class Opcodes {
     public static final Word DUP = new Word(0x12);
 
     /**
-     * Pop a. Pop b. Push a. Push b.
+     * If stack.size > 0 pop A. Else STOP_BAD is executed.<br>
+     * If stack.size > 0 pop B. Else STOP_BAD is executed.<br>
+     * Push A.<br>
+     * Push B.<br>
+     * Pointer is increased by 1.
      */
     public static final Word SWAP = new Word(0x13);
 

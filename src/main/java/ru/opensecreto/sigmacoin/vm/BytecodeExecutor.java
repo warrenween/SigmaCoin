@@ -83,22 +83,29 @@ public class BytecodeExecutor {
             fail();
             return;
         }
+
         frame.stack.pop();
         pointer++;
     }
 
     private void opcode_SWAP() {
-        if (frame.stack.getSize() < 2) {
-            LOGGER.warn("Error executing {} at {}. Can not SWAP. Stack size is less than 2.",
-                    frame.contractID, pointer);
+        if (frame.stack.getSize() < 1) {
+            LOGGER.warn("Error executing {} at {}. Can not SWAP. Can not pop first value - stack is empty.");
             fail();
-        } else {
-            Word a = frame.stack.pop();
-            Word b = frame.stack.pop();
-            frame.stack.push(a);
-            frame.stack.push(b);
-            pointer++;
+            return;
         }
+        Word a = frame.stack.pop();
+
+        if (frame.stack.getSize() < 1) {
+            LOGGER.warn("Error executing {} at {}. Can not SWAP. Can not pop second value - stack is empty.");
+            fail();
+            return;
+        }
+        Word b = frame.stack.pop();
+
+        frame.stack.push(a);
+        frame.stack.push(b);
+        pointer++;
     }
 
     public Stack run() {
