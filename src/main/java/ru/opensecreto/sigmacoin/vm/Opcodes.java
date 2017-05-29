@@ -52,16 +52,12 @@ public class Opcodes {
     public static final Word SUB = new Word(0x21);
 
     /**
-     * Pop a. Pop b. Push (b div a) back.
-     *
-     * If a==0 executor stops.
+     * Pop a. Pop b. If a==0 execution fails, (b div a) pushed to stack otherwise.
      */
     public static final Word DIV = new Word(0x22);
 
     /**
-     * Pop a. Pop b. Push (b mod a) back.
-     *
-     * If a==0 executor stops.
+     * Pop a. Pop b. If a==0 execution fails, (b mod a) pushed to stack otherwise.
      */
     public static final Word MOD = new Word(0x23);
 }
