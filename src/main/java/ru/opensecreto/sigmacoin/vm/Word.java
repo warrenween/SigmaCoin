@@ -7,6 +7,7 @@ import org.jooq.lambda.tuple.Tuple;
 import org.jooq.lambda.tuple.Tuple2;
 
 import javax.xml.bind.DatatypeConverter;
+import java.math.BigInteger;
 import java.util.Arrays;
 
 /**
@@ -17,6 +18,7 @@ public final class Word implements Comparable<Word> {
 
     public static final int WORD_SIZE = 32;
 
+    public static final Word WORD_0 = new Word(0);
     public static final Word WORD_1 = new Word(1);
 
     private final byte[] data = new byte[WORD_SIZE];
@@ -137,6 +139,10 @@ public final class Word implements Comparable<Word> {
      * @return Tuple(quotient, divisor)
      */
     private static Tuple2<Word, Word> divide(Word dividend, Word divisor) {
+        if (divisor.equals(WORD_0)) {
+            throw new ArithmeticException("division by zero");
+        }
+
         boolean dividendSign = true;
         boolean divisorSign = true;
         if (dividend.isNegative()) {

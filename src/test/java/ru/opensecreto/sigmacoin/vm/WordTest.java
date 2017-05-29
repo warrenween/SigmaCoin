@@ -3,6 +3,7 @@ package ru.opensecreto.sigmacoin.vm;
 import org.testng.annotations.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 public class WordTest {
 
@@ -109,5 +110,11 @@ public class WordTest {
 
         assertThat(new Word(-7).div(new Word(-2))).isEqualTo(new Word(3));
         assertThat(new Word(-7).mod(new Word(-2))).isEqualTo(new Word(-1));
+
+        assertThat(new Word(8).div(new Word(2))).isEqualTo(new Word(4));
+        assertThat(new Word(8).mod(new Word(2))).isEqualTo(new Word(0));
+
+        assertThatThrownBy(() -> new Word(10).div(Word.WORD_0)).isInstanceOf(ArithmeticException.class);
+        assertThatThrownBy(() -> new Word(10).mod(Word.WORD_0)).isInstanceOf(ArithmeticException.class);
     }
 }
