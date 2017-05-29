@@ -38,7 +38,7 @@ public class BytecodeExecutor {
         if (frame.stack.getSize() > 0) {
             contractId = frame.stack.pop();
         } else {
-            LOGGER.warn("Error executing {} at {}. Can not invoke. Can not pop contractID.");
+            LOGGER.warn("Error executing {} at {}. Can not INVOKE. Can not pop contractID.");
             fail();
             return;
         }
@@ -47,13 +47,13 @@ public class BytecodeExecutor {
         if (frame.stack.getSize() > 0) {
             dataSize = frame.stack.pop();
         } else {
-            LOGGER.warn("Error executing {} at {}. Can not invoke. Can not pop dataSize.");
+            LOGGER.warn("Error executing {} at {}. Can not INVOKE. Can not pop dataSize.");
             fail();
             return;
         }
 
         if ((new Word(frame.stack.getSize()).compareTo(dataSize) < 0) | dataSize.isNegative()) {
-            LOGGER.warn("Error executing {} at {}. Can not invoke. Stack.size is less than dataSize.");
+            LOGGER.warn("Error executing {} at {}. Can not INVOKE. Stack.size is less than dataSize.");
             frame.stack.popCustom(frame.stack.getSize());
             fail();
             return;
@@ -78,6 +78,11 @@ public class BytecodeExecutor {
     }
 
     private void opcode_POP() {
+        if (frame.stack.getSize() < 1) {
+            LOGGER.warn("Error executing {} at {}. Can not POP. Can not pop dataSize.");
+            fail();
+            return;
+        }
         frame.stack.pop();
         pointer++;
     }

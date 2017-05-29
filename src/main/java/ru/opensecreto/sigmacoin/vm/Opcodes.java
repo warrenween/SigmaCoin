@@ -25,17 +25,20 @@ public class Opcodes {
      * If stack.size < dataSize or dataSize is negative, all words are removed from stack and STOP_BAD executed.
      * Otherwise dataSize words are moved to new stack. Top word will still be at top of stack.
      * Contract with contractId is invoked with given array of words.
-     * Execution result stack is moved to stack.
+     * Execution result stack is moved to stack.<br>
+     * Pointer is increased by one.
      */
     public static final Word INVOKE = new Word(0x02);
 
     /**
-     * Push next byte to stack. Pointer is moved forward by 2.
+     * Push (pointer+1) word to stack. <br>
+     * Pointer is increased forward by 2.
      */
     public static final Word PUSH = new Word(0x10);
 
     /**
-     * Remove one byte from top of stack.
+     * If stack.size > 0 then one word is removed from top of stack. Otherwise STOP_BAD is executed.
+     * Pointer is increased by 1;
      */
     public static final Word POP = new Word(0x11);
 
