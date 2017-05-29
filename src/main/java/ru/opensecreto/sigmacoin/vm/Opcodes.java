@@ -6,26 +6,26 @@ package ru.opensecreto.sigmacoin.vm;
 public class Opcodes {
 
     /**
-     * Stop execution. Nothing is reverted.
+     * Stack.size is pushed.<br>
+     * 0x01 is pushed.<br>
+     * Execution is stopped. Stack is returned to calling contract.
      */
     public static final Word STOP_BAD = new Word(0x00);
 
+    /**
+     * Stack.size is pushed.<br>
+     * 0x00 is pushed.<br>
+     * Execution is stopped. Stack is returned to calling contract.
+     */
     public static final Word STOP_GOOD = new Word(0x01);
 
     /**
-     * Invoke other contract id.
-     * <p>
-     * Call parameters:
-     * <ul>
-     * <li><b>BOTTOM</b>:call data</li>
-     * <li>contract id  </li>
-     * <li><b>TOP</b>:2 byte int - call data length </li>
-     * </ul>
-     * <p>
-     * All parameters are removed from stack. Contract with given contract id is invoked.
-     * Result is pushed to stack - top of result stack will be at top of stack!
-     * 2 bytes int is pushed to stack - length of result data.
-     * If invoked contract was invoked successfully 0x00 byte is pushed at top of stack, 0x01 otherwise.
+     * If stack.size > 0 contractID is popped. STOP_BAD executed otherwise.<br>
+     * If stack.size > 0 dataSize is popped. STOP_BAD executed otherwise.<br>
+     * If stack.size < dataSize or dataSize is negative, all words are removed from stack and STOP_BAD executed.
+     * Otherwise dataSize words are moved to new stack. Top word will still be at top of stack.
+     * Contract with contractId is invoked with given array of words.
+     * Execution result stack is moved to stack.
      */
     public static final Word INVOKE = new Word(0x02);
 

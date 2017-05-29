@@ -34,34 +34,37 @@ public class BytecodeExecutor {
     }
 
     private void opcode_INVOKE() {
+        Word contractId;
+        if (frame.stack.getSize() > 0) {
+            contractId = frame.stack.pop();
+        } else {
+            LOGGER.warn("Error executing {} at {}. Can not invoke. Can not pop contractID.");
+            fail();
+            return;
+        }
+
+        Word dataSize;
+        if (frame.stack.getSize() > 0) {
+            dataSize = frame.stack.pop();
+        } else {
+            LOGGER.warn("Error executing {} at {}. Can not invoke. Can not pop dataSize.");
+            fail();
+            return;
+        }
+
+        if ((new Word(frame.stack.getSize()).compareTo(dataSize) < 0) | dataSize.isNegative()) {
+            LOGGER.warn("Error executing {} at {}. Can not invoke. Stack.size is less than dataSize.");
+            frame.stack.popCustom(frame.stack.getSize());
+            fail();
+            return;
+        }
+
         Stack stackInvoke = new Stack(configuration.stackSize);
 
-        if (frame.stack.getSize() < 2) {
-            LOGGER.warn("Error executing {} at {}. Stack size is less than required minimum of 2.",
-                    frame.contractID, pointer);
-            fail();
-        } else {
-            Word contractId = frame.stack.pop();
-            Word dataSize = frame.stack.pop();
-
-            if (dataSize.isNegative()) {
-                LOGGER.warn("Error executing {} at {}. DataSize parameter is negative.",
-                        frame.contractID, pointer);
-                fail();
-            } else {
-                if (dataSize.compareTo(new Word(frame.stack.getSize())) > 0) {
-                    LOGGER.warn("Error executing {} at {}. DataSize parameter is greater than stack size.",
-                            frame.contractID, pointer);
-                    fail();
-                } else {
-                    stackInvoke.pushCustom(frame.stack.popCustom(dataSize.toInt()));
-
-                    Stack result = controller.invoke(stackInvoke, contractId);
-                    frame.stack.pushCustom(result.popCustom(result.getSize()));
-                    pointer++;
-                }
-            }
-        }
+        stackInvoke.pushCustom(frame.stack.popCustom(dataSize.toInt()));
+        Stack result = controller.invoke(stackInvoke, contractId);
+        frame.stack.pushCustom(result.popCustom(result.getSize()));
+        pointer++;
     }
 
     private void fail() {
