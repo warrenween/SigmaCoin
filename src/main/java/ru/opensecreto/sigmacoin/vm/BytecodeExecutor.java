@@ -59,7 +59,7 @@ public class BytecodeExecutor {
             return;
         }
 
-        Stack stackInvoke = new Stack(configuration.stackSize);
+        Stack stackInvoke = new Stack();
 
         stackInvoke.pushCustom(frame.stack.popCustom(dataSize.toInt()));
         Stack result = controller.invoke(stackInvoke, contractId);

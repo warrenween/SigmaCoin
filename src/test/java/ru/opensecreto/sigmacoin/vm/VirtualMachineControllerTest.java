@@ -15,7 +15,7 @@ public class VirtualMachineControllerTest {
 
         VirtualMachineController controller = new VirtualMachineController(
                 manager,
-                new VMConfiguration(10, 3, 10)
+                new VMConfiguration( 3, 10)
         ) {
             @Override
             public Stack invoke(Stack stack, Word contractID) {

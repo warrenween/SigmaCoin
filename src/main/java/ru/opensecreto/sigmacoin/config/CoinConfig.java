@@ -22,8 +22,6 @@ public class CoinConfig {
 
     public final static int POW_N = 3;
 
-    public static final int SVM_STACK_SIZE = 8192;
-
     public static final long SVM_MEMORY_SIZE = 16384;
 
     /**
