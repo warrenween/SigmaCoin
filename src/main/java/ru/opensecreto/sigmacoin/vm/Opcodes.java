@@ -86,7 +86,12 @@ public class Opcodes {
     public static final Word ADD = new Word(0x20);
 
     /**
-     * Pop word a. Pop word b. Push word b-a back.
+     * <ol>
+     * <li>If stack.size > 0 pop A. Else STOP_BAD is executed</li>
+     * <li>If stack.size >0 pop B. Else STOP_BAD is executed</li>
+     * <li>Push word (B-A) back</li>
+     * <li>Pointer is increased by 1</li>
+     * </ol>
      */
     public static final Word SUB = new Word(0x21);
 

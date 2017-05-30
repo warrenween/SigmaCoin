@@ -227,6 +227,52 @@ public class BytecodeExecutorTest {
     }
 
     @Test
+    public void test_SUB_noValues() {
+        Word idA = new Word(0x00);
+        Memory contractA = mock(Memory.class);
+        when(contractA.get(0)).thenReturn(Opcodes.SUB);// 0 0x01 (top)
+
+        ContractManager manager = mock(ContractManager.class);
+        when(manager.contractExists(idA)).thenReturn(true);
+        when(manager.getContract(idA)).thenReturn(contractA);
+
+        VirtualMachineController controller = new VirtualMachineController(manager,
+                new VMConfiguration(10, 10));
+
+        Stack result = controller.invoke(new Stack(), idA);
+
+        assertThat(result.getSize()).isEqualTo(2);
+
+        assertThat(result.popCustom(2)).containsExactly(
+                new Word(0), new Word(1)
+        );
+    }
+
+    @Test
+    public void test_SUB_oneValues() {
+        Word idA = new Word(0x00);
+        Memory contractA = mock(Memory.class);
+        when(contractA.get(0)).thenReturn(Opcodes.PUSH);
+        when(contractA.get(1)).thenReturn(new Word(100));// 100 (top)
+        when(contractA.get(2)).thenReturn(Opcodes.SUB);// 100 1 0x01 (top)
+
+        ContractManager manager = mock(ContractManager.class);
+        when(manager.contractExists(idA)).thenReturn(true);
+        when(manager.getContract(idA)).thenReturn(contractA);
+
+        VirtualMachineController controller = new VirtualMachineController(manager,
+                new VMConfiguration(10, 10));
+
+        Stack result = controller.invoke(new Stack(), idA);
+
+        assertThat(result.getSize()).isEqualTo(3);
+
+        assertThat(result.popCustom(3)).containsExactly(
+                new Word(100), new Word(1), new Word(1)
+        );
+    }
+
+    @Test
     public void test_DIV() {
         Word idA = new Word(0x00);
         Memory contractA = mock(Memory.class);

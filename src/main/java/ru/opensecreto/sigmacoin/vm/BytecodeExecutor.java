@@ -192,17 +192,26 @@ public class BytecodeExecutor {
     }
 
     private void opcode_SUB() {
-        if (frame.stack.getSize() < 2) {
-            LOGGER.warn("Error executing {} at {}. Can not SUB. Stack size is less than 2",
+        if (frame.stack.getSize() < 1) {
+            LOGGER.warn("Error executing {} at {}. Can not SUB. Can not pop A.",
                     frame.contractID, pointer);
             fail();
-        } else {
-            Word a = frame.stack.pop();
-            Word b = frame.stack.pop();
-            Word result = b.subtract(a);
-            frame.stack.push(result);
-            pointer++;
+            return;
         }
+        Word A = frame.stack.pop();
+
+        if (frame.stack.getSize() < 1) {
+            LOGGER.warn("Error executing {} at {}. Can not SUB. Can not pop B.",
+                    frame.contractID, pointer);
+            fail();
+            return;
+        }
+        Word B = frame.stack.pop();
+
+        Word result = B.subtract(A);
+        frame.stack.push(result);
+        pointer++;
+
     }
 
     private void opcode_ADD() {
