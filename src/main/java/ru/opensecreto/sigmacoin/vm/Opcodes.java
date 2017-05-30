@@ -6,62 +6,82 @@ package ru.opensecreto.sigmacoin.vm;
 public class Opcodes {
 
     /**
-     * Stack.size is pushed.<br>
-     * 0x01 is pushed.<br>
-     * Execution is stopped. Stack is returned to calling contract.
+     * <ol>
+     * <li>Stack.size is pushed</li>
+     * <li>0x01 is pushed</li>
+     * <li>Stop execution</li>
+     * <li>Returned stack to caller</li>
+     * </ol>
      */
     public static final Word STOP_BAD = new Word(0x00);
 
     /**
-     * Stack.size is pushed.<br>
-     * 0x00 is pushed.<br>
-     * Execution is stopped. Stack is returned to calling contract.
+     * <ol>
+     * <li>Stack.size is pushed</li>
+     * <li>0x00 is pushed</li>
+     * <li>Stop execution</li>
+     * <li>Return stack to caller</li>
+     * </ol>
      */
     public static final Word STOP_GOOD = new Word(0x01);
 
     /**
-     * If stack.size > 0 contractID is popped. STOP_BAD executed otherwise.<br>
-     * If stack.size > 0 dataSize is popped. STOP_BAD executed otherwise.<br>
+     * <ol>
+     * <li>If stack.size > 0 contractID is popped. STOP_BAD executed otherwise</li>
+     * <li>If stack.size > 0 dataSize is popped. STOP_BAD executed otherwise</li>
+     * <li>
      * If stack.size < dataSize or dataSize is negative, all words are removed from stack and STOP_BAD executed.
      * Otherwise dataSize words are moved to new stack. Top word will still be at top of stack.
      * Contract with contractId is invoked with given array of words.
-     * Execution result stack is moved to stack.<br>
-     * Pointer is increased by one.
+     * Execution result stack is moved to stack.
+     * </li>
+     * <li>Pointer is increased by one.</li>
+     * </ol>
      */
     public static final Word INVOKE = new Word(0x02);
 
     /**
-     * Push (pointer+1) word to stack. <br>
-     * Pointer is increased forward by 2.
+     * <ol>
+     * <li>Push word from memory with index (pointer+1).</li>
+     * <li>Pointer is increased by 2.</li>
+     * </ol>
      */
     public static final Word PUSH = new Word(0x10);
 
     /**
-     * If stack.size > 0 then one word is removed from top of stack. Otherwise STOP_BAD is executed.
-     * Pointer is increased by 1;
+     * <ol>
+     * <li>If stack.size > 0 then one word is removed from top of stack. Otherwise STOP_BAD is executed</li>
+     * <li>Pointer is increased by 1</li>
+     * </ol>
      */
     public static final Word POP = new Word(0x11);
 
     /**
-     * If stack.size > 0 then A is popped. A is pushed. A is pushed. Else STOP_BAD executed.<br>
-     * Pointer is increased by 1.
+     * <ol>
+     * <li>If stack.size > 0 then A is popped. A is pushed. A is pushed. Else STOP_BAD executed</li>
+     * <li>Pointer is increased by 1</li>
+     * </ol>
      */
     public static final Word DUP = new Word(0x12);
 
     /**
-     * If stack.size > 0 pop A. Else STOP_BAD is executed.<br>
-     * If stack.size > 0 pop B. Else STOP_BAD is executed.<br>
-     * Push A.<br>
-     * Push B.<br>
-     * Pointer is increased by 1.
+     * <ol>
+     * <li>If stack.size > 0 pop A. Else STOP_BAD is executed</li>
+     * <li>If stack.size > 0 pop B. Else STOP_BAD is executed</li>
+     * <li>Push A</li>
+     * <li>Push B</li>
+     * <li>Pointer is increased by 1</li>
+     * </ol>
      */
     public static final Word SWAP = new Word(0x13);
 
     /**
-     * If stack.size > 0 pop A. Else STOP_BAD is executed.<br>
-     * If stack.size > 0 pop B. Else STOP_BAD is executed.<br>
-     * Push (A+B).<br>
-     * Pointer is increased by 1.
+     * <ol>
+     * <li>If stack.size > 0 pop A. Else STOP_BAD is executed</li>
+     * <li>If stack.size > 0 pop B. Else STOP_BAD is executed</li>
+     * <li>Push (A+B)</li>
+     * <li>Pointer is increased by 1</li>
+     * </ol>
      */
     public static final Word ADD = new Word(0x20);
 
