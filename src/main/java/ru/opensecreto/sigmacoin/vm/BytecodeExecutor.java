@@ -128,7 +128,7 @@ public class BytecodeExecutor {
             } else if (opcode.equals(Opcodes.ADD)) {
                 opcode_ADD();
             } else if (opcode.equals(Opcodes.SUB)) {
-                opcode_SUM();
+                opcode_SUB();
             } else if (opcode.equals(Opcodes.DIV)) {
                 opcode_DIV();
             } else if (opcode.equals(Opcodes.MOD)) {
@@ -191,7 +191,7 @@ public class BytecodeExecutor {
         }
     }
 
-    private void opcode_SUM() {
+    private void opcode_SUB() {
         if (frame.stack.getSize() < 2) {
             LOGGER.warn("Error executing {} at {}. Can not SUB. Stack size is less than 2",
                     frame.contractID, pointer);
