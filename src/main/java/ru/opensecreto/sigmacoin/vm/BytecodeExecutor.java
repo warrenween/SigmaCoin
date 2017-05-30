@@ -34,34 +34,37 @@ public class BytecodeExecutor {
     }
 
     private void opcode_INVOKE() {
-        Stack stackInvoke = new Stack(configuration.stackSize);
-
-        if (frame.stack.getSize() < 2) {
-            LOGGER.warn("Error executing {} at {}. Stack size is less than required minimum of 2.",
-                    frame.contractID, pointer);
-            fail();
+        Word contractId;
+        if (frame.stack.getSize() > 0) {
+            contractId = frame.stack.pop();
         } else {
-            Word contractId = frame.stack.pop();
-            Word dataSize = frame.stack.pop();
-
-            if (dataSize.isNegative()) {
-                LOGGER.warn("Error executing {} at {}. DataSize parameter is negative.",
-                        frame.contractID, pointer);
-                fail();
-            } else {
-                if (dataSize.compareTo(new Word(frame.stack.getSize())) > 0) {
-                    LOGGER.warn("Error executing {} at {}. DataSize parameter is greater than stack size.",
-                            frame.contractID, pointer);
-                    fail();
-                } else {
-                    stackInvoke.pushCustom(frame.stack.popCustom(dataSize.toInt()));
-
-                    Stack result = controller.invoke(stackInvoke, contractId);
-                    frame.stack.pushCustom(result.popCustom(result.getSize()));
-                    pointer++;
-                }
-            }
+            LOGGER.warn("Error executing {} at {}. Can not INVOKE. Can not pop contractID.");
+            fail();
+            return;
         }
+
+        Word dataSize;
+        if (frame.stack.getSize() > 0) {
+            dataSize = frame.stack.pop();
+        } else {
+            LOGGER.warn("Error executing {} at {}. Can not INVOKE. Can not pop dataSize.");
+            fail();
+            return;
+        }
+
+        if ((new Word(frame.stack.getSize()).compareTo(dataSize) < 0) | dataSize.isNegative()) {
+            LOGGER.warn("Error executing {} at {}. Can not INVOKE. Stack.size is less than dataSize.");
+            frame.stack.popCustom(frame.stack.getSize());
+            fail();
+            return;
+        }
+
+        Stack stackInvoke = new Stack();
+
+        stackInvoke.pushCustom(frame.stack.popCustom(dataSize.toInt()));
+        Stack result = controller.invoke(stackInvoke, contractId);
+        frame.stack.pushCustom(result.popCustom(result.getSize()));
+        pointer++;
     }
 
     private void fail() {
@@ -75,22 +78,34 @@ public class BytecodeExecutor {
     }
 
     private void opcode_POP() {
+        if (frame.stack.getSize() < 1) {
+            LOGGER.warn("Error executing {} at {}. Can not POP. Can not pop dataSize.");
+            fail();
+            return;
+        }
+
         frame.stack.pop();
         pointer++;
     }
 
     private void opcode_SWAP() {
-        if (frame.stack.getSize() < 2) {
-            LOGGER.warn("Error executing {} at {}. Can not SWAP. Stack size is less than 2.",
-                    frame.contractID, pointer);
+        if (frame.stack.getSize() < 1) {
+            LOGGER.warn("Error executing {} at {}. Can not SWAP. Can not pop first value - stack is empty.");
             fail();
-        } else {
-            Word a = frame.stack.pop();
-            Word b = frame.stack.pop();
-            frame.stack.push(a);
-            frame.stack.push(b);
-            pointer++;
+            return;
         }
+        Word a = frame.stack.pop();
+
+        if (frame.stack.getSize() < 1) {
+            LOGGER.warn("Error executing {} at {}. Can not SWAP. Can not pop second value - stack is empty.");
+            fail();
+            return;
+        }
+        Word b = frame.stack.pop();
+
+        frame.stack.push(a);
+        frame.stack.push(b);
+        pointer++;
     }
 
     public Stack run() {
@@ -113,7 +128,7 @@ public class BytecodeExecutor {
             } else if (opcode.equals(Opcodes.ADD)) {
                 opcode_ADD();
             } else if (opcode.equals(Opcodes.SUB)) {
-                opcode_SUM();
+                opcode_SUB();
             } else if (opcode.equals(Opcodes.DIV)) {
                 opcode_DIV();
             } else if (opcode.equals(Opcodes.MOD)) {
@@ -137,77 +152,118 @@ public class BytecodeExecutor {
     }
 
     private void opcode_MOD() {
-        if (frame.stack.getSize() < 2) {
-            LOGGER.warn("Error executing {} at {}. Can not MOD. Stack size is less than 2",
+        if (frame.stack.getSize() < 1) {
+            LOGGER.warn("Error executing {} at {}. Can not DIV. Can not pop A.",
                     frame.contractID, pointer);
             fail();
-        } else {
-            Word a = frame.stack.pop();
-            Word b = frame.stack.pop();
-
-            if (a.equals(Word.WORD_0)) {
-                LOGGER.warn("Error executing {} at {}. Can not MOD. Division by zero.",
-                        frame.contractID, pointer);
-                fail();
-            } else {
-                frame.stack.push(b.mod(a));
-                pointer++;
-            }
+            return;
         }
+        Word A = frame.stack.pop();
+
+        if (frame.stack.getSize() < 1) {
+            LOGGER.warn("Error executing {} at {}. Can not DIV. Can not pop B.",
+                    frame.contractID, pointer);
+            fail();
+            return;
+        }
+        Word B = frame.stack.pop();
+
+
+        if (A.equals(Word.WORD_0)) {
+            LOGGER.warn("Error executing {} at {}. Can not DIV. Division by zero.",
+                    frame.contractID, pointer);
+            fail();
+            return;
+        }
+
+        frame.stack.push(B.mod(A));
+        pointer++;
     }
 
     private void opcode_DIV() {
-        if (frame.stack.getSize() < 2) {
-            LOGGER.warn("Error executing {} at {}. Can not DIV. Stack size is less than 2",
+        if (frame.stack.getSize() < 1) {
+            LOGGER.warn("Error executing {} at {}. Can not DIV. Can not pop A.",
                     frame.contractID, pointer);
             fail();
-        } else {
-            Word a = frame.stack.pop();
-            Word b = frame.stack.pop();
-
-            if (a.equals(Word.WORD_0)) {
-                LOGGER.warn("Error executing {} at {}. Can not DIV. Division by zero.",
-                        frame.contractID, pointer);
-                fail();
-            } else {
-                frame.stack.push(b.div(a));
-                pointer++;
-            }
+            return;
         }
+        Word A = frame.stack.pop();
+
+        if (frame.stack.getSize() < 1) {
+            LOGGER.warn("Error executing {} at {}. Can not DIV. Can not pop B.",
+                    frame.contractID, pointer);
+            fail();
+            return;
+        }
+        Word B = frame.stack.pop();
+
+
+        if (A.equals(Word.WORD_0)) {
+            LOGGER.warn("Error executing {} at {}. Can not DIV. Division by zero.",
+                    frame.contractID, pointer);
+            fail();
+            return;
+        }
+
+        frame.stack.push(B.div(A));
+        pointer++;
     }
 
-    private void opcode_SUM() {
-        if (frame.stack.getSize() < 2) {
-            LOGGER.warn("Error executing {} at {}. Can not SUB. Stack size is less than 2",
+    private void opcode_SUB() {
+        if (frame.stack.getSize() < 1) {
+            LOGGER.warn("Error executing {} at {}. Can not SUB. Can not pop A.",
                     frame.contractID, pointer);
             fail();
-        } else {
-            Word a = frame.stack.pop();
-            Word b = frame.stack.pop();
-            Word result = b.subtract(a);
-            frame.stack.push(result);
-            pointer++;
+            return;
         }
+        Word A = frame.stack.pop();
+
+        if (frame.stack.getSize() < 1) {
+            LOGGER.warn("Error executing {} at {}. Can not SUB. Can not pop B.",
+                    frame.contractID, pointer);
+            fail();
+            return;
+        }
+        Word B = frame.stack.pop();
+
+        Word result = B.subtract(A);
+        frame.stack.push(result);
+        pointer++;
+
     }
 
     private void opcode_ADD() {
-        if (frame.stack.getSize() < 2) {
-            LOGGER.warn("Error executing {} at {}. Can not SUM. Stack size is less than 2",
+        if (frame.stack.getSize() < 1) {
+            LOGGER.warn("Error executing {} at {}. Can not SUM. Can not pop first value - stack is empty.",
                     frame.contractID, pointer);
             fail();
-        } else {
-            Word a = frame.stack.pop();
-            Word b = frame.stack.pop();
-            Word result = a.sum(b);
-            frame.stack.push(result);
-            pointer++;
+            return;
         }
+        Word a = frame.stack.pop();
+
+        if (frame.stack.getSize() < 1) {
+            LOGGER.warn("Error executing {} at {}. Can not SUM. Can not pop second value - stack is empty.",
+                    frame.contractID, pointer);
+            fail();
+            return;
+        }
+        Word b = frame.stack.pop();
+
+        frame.stack.push(a.sum(b));
+        pointer++;
     }
 
     private void opcode_DUP() {
-        Word data = frame.stack.pop();
-        frame.stack.push(data);
-        frame.stack.push(data);
+        if (frame.stack.getSize() < 1) {
+            LOGGER.warn("Error executing {} at {}. Can not DUP. Stack is empty.",
+                    frame.contractID, pointer);
+            fail();
+            return;
+        }
+
+        Word a = frame.stack.pop();
+        frame.stack.push(a);
+        frame.stack.push(a);
         pointer++;
     }
 }

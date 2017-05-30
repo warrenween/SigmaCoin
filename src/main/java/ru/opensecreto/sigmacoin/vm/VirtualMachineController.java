@@ -22,7 +22,7 @@ public class VirtualMachineController {
     public void execute(byte[] invocationData, Word contractID) {
         if (invocationData.length % WORD_SIZE != 0)
             throw new IllegalArgumentException("invocationData length must be multiple of 32");
-        Stack stack = new Stack(configuration.stackSize);
+        Stack stack = new Stack();
 
         for (int i = 0; i < invocationData.length / WORD_SIZE; i++) {
             stack.push(new Word(Arrays.copyOfRange(invocationData, i * WORD_SIZE, i * WORD_SIZE + WORD_SIZE)));
@@ -32,15 +32,8 @@ public class VirtualMachineController {
     }
 
     public Stack invoke(Stack stack, Word contractID) {
-        if (!contractManager.contractExists(contractID)) {
-            Stack resultStack = new Stack(configuration.stackSize);
-            resultStack.push(new Word((short) 0));
-            resultStack.push(new Word((byte) 0x01));
-            return resultStack;
-        }
-
-        if (currentCallStackDepth == configuration.maxCallDepth) {
-            Stack resultStack = new Stack(configuration.stackSize);
+        if ((!contractManager.contractExists(contractID)) | (currentCallStackDepth == configuration.maxCallDepth)) {
+            Stack resultStack = new Stack();
             resultStack.push(new Word((short) 0));
             resultStack.push(new Word((byte) 0x01));
             return resultStack;

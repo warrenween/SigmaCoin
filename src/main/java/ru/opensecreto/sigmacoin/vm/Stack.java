@@ -1,12 +1,15 @@
 package ru.opensecreto.sigmacoin.vm;
 
+import java.util.LinkedList;
+import java.util.List;
+
 public class Stack {
 
-    private final Word[] stack;
+    private final List<Word> stack;
     private int size = 0;
 
-    public Stack(int stackSize) {
-        this.stack = new Word[stackSize];
+    public Stack() {
+        this.stack = new LinkedList<>();
     }
 
     /**
@@ -17,8 +20,7 @@ public class Stack {
      */
     public void push(Word word) throws IllegalStateException {
         if (word == null) throw new IllegalArgumentException("word can not be null");
-        if (size == stack.length) throw new IllegalStateException("Can not push. Stack is full.");
-        stack[size] = word;
+        stack.add(word);
         size++;
     }
 
@@ -31,7 +33,7 @@ public class Stack {
     public Word pop() throws IllegalStateException {
         if (size == 0) throw new IllegalStateException("Nothing to pop. Stack is empty.");
         size--;
-        return stack[size];
+        return stack.remove(size);
     }
 
     /**

@@ -9,16 +9,14 @@ public class VMConfigurationTest {
 
     @Test
     public void test() {
-        VMConfiguration configuration = new VMConfiguration(28, 54, 94);
-        assertThat(configuration.stackSize).isEqualTo(28);
+        VMConfiguration configuration = new VMConfiguration(54, 94);
         assertThat(configuration.maxCallDepth).isEqualTo(54);
         assertThat(configuration.memorySize).isEqualTo(94);
     }
 
     @Test
     public void testNearlyBadValues() {
-        VMConfiguration configuration = new VMConfiguration(1, 1, 1);
-        assertThat(configuration.stackSize).isEqualTo(1);
+        VMConfiguration configuration = new VMConfiguration(1, 1);
         assertThat(configuration.maxCallDepth).isEqualTo(1);
         assertThat(configuration.memorySize).isEqualTo(1);
     }
@@ -26,19 +24,15 @@ public class VMConfigurationTest {
     @Test
     public void testBadValues() {
         //test zeroes
-        assertThatThrownBy(() -> new VMConfiguration(0, 1, 1))
+        assertThatThrownBy(() -> new VMConfiguration(0, 1))
                 .isInstanceOf(IllegalArgumentException.class);
-        assertThatThrownBy(() -> new VMConfiguration(1, 0, 1))
-                .isInstanceOf(IllegalArgumentException.class);
-        assertThatThrownBy(() -> new VMConfiguration(1, 1, 0))
+        assertThatThrownBy(() -> new VMConfiguration(1, 0))
                 .isInstanceOf(IllegalArgumentException.class);
 
         //test negatives
-        assertThatThrownBy(() -> new VMConfiguration(-10, 10, 10))
+        assertThatThrownBy(() -> new VMConfiguration(-10, 10))
                 .isInstanceOf(IllegalArgumentException.class);
-        assertThatThrownBy(() -> new VMConfiguration(10, -10, 10))
-                .isInstanceOf(IllegalArgumentException.class);
-        assertThatThrownBy(() -> new VMConfiguration(10, 10, -10))
+        assertThatThrownBy(() -> new VMConfiguration(10, -10))
                 .isInstanceOf(IllegalArgumentException.class);
     }
 

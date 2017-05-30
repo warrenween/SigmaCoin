@@ -5,6 +5,7 @@ import org.testng.annotations.Test;
 import javax.xml.bind.DatatypeConverter;
 import java.math.BigInteger;
 
+import static javax.xml.bind.DatatypeConverter.parseHexBinary;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class MathTest {
@@ -71,7 +72,7 @@ public class MathTest {
                 new BigInteger("145236"),
                 new BigInteger("415263")
         ))).inHexadecimal().containsExactly(
-                DatatypeConverter.parseHexBinary("999e2334297c5e8b25e730487dbba0a71d4a30c36cc64dc5f0af6e7955910f40")
+                parseHexBinary("999e2334297c5e8b25e730487dbba0a71d4a30c36cc64dc5f0af6e7955910f40")
         );
         assertThat(Ed25519Math.pointCompress(new Point(
                 new BigInteger("107476042684030475022426274060332207749171214163680785911355944558756023498617491072792799376062830432612391761593948118248657468455229315710007414441624"),
@@ -79,14 +80,14 @@ public class MathTest {
                 new BigInteger("1136952883970204633706812794638621572368100287039913516575464808807197739972996305654393405099630524103035791773099397724488021844499716655417512209095245"),
                 new BigInteger("511478485024173835300288291093194642055903747030781481957181158890555723796959114150662746971778184230599318770561185466881781850781735713393738658406272"))
         )).inHexadecimal().containsExactly(
-                DatatypeConverter.parseHexBinary("92a009a9f0d4cab8720e820b5f642540a2b27b5416503f8fb3762223ebdb69da")
+                parseHexBinary("92a009a9f0d4cab8720e820b5f642540a2b27b5416503f8fb3762223ebdb69da")
         );
     }
 
     @Test
     public void testSha512modq() {
         assertThat(Ed25519Math.sha512_modq(
-                DatatypeConverter.parseHexBinary("1234567890abcdef")
+                parseHexBinary("1234567890abcdef")
         )).inHexadecimal().isEqualTo(
                 new BigInteger("5803724176970883683641592880329783986223242669612705683448510055637970858590")
         );
@@ -95,20 +96,20 @@ public class MathTest {
     @Test
     public void testSecretExpand() {
         Secret s = Ed25519Math.secretExpand(
-                DatatypeConverter.parseHexBinary("9d61b19deffd5a60ba844af492ec2cc44449c5697b326919703bac031cae7f60")
+                parseHexBinary("9d61b19deffd5a60ba844af492ec2cc44449c5697b326919703bac031cae7f60")
         );
         assertThat(s.v).isEqualTo(
                 new BigInteger("36144925721603087658594284515452164870581325872720374094707712194495455132720")
         );
         assertThat(s.arr).inHexadecimal().containsExactly(
-                DatatypeConverter.parseHexBinary("9b4f0afe280b746a778684e75442502057b7473a03f08f96f5a38e9287e01f8f")
+                parseHexBinary("9b4f0afe280b746a778684e75442502057b7473a03f08f96f5a38e9287e01f8f")
         );
     }
 
     @Test
     public void testPointDecompress() {
         assertThat(Ed25519Math.pointDecompress(
-                DatatypeConverter.parseHexBinary("d75a980182b10ab7d54bfed3c964073a0ee172f3daa62325af021a68f707511a")
+                parseHexBinary("d75a980182b10ab7d54bfed3c964073a0ee172f3daa62325af021a68f707511a")
         )).isEqualTo(new Point(
                 new BigInteger("38815646466658113194383306759739515082307681141926459231621296960732224964046"),
                 new BigInteger("11903303657706407974989296177215005343713679411332034699907763981919547054807"),

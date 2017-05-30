@@ -6,63 +6,110 @@ package ru.opensecreto.sigmacoin.vm;
 public class Opcodes {
 
     /**
-     * Stop execution. Nothing is reverted.
+     * <ol>
+     * <li>Stack.size is pushed</li>
+     * <li>0x01 is pushed</li>
+     * <li>Stop execution</li>
+     * <li>Returned stack to caller</li>
+     * </ol>
      */
     public static final Word STOP_BAD = new Word(0x00);
 
+    /**
+     * <ol>
+     * <li>Stack.size is pushed</li>
+     * <li>0x00 is pushed</li>
+     * <li>Stop execution</li>
+     * <li>Return stack to caller</li>
+     * </ol>
+     */
     public static final Word STOP_GOOD = new Word(0x01);
 
     /**
-     * Invoke other contract id.
-     * <p>
-     * Call parameters:
-     * <ul>
-     * <li><b>BOTTOM</b>:call data</li>
-     * <li>contract id  </li>
-     * <li><b>TOP</b>:2 byte int - call data length </li>
-     * </ul>
-     * <p>
-     * All parameters are removed from stack. Contract with given contract id is invoked.
-     * Result is pushed to stack - top of result stack will be at top of stack!
-     * 2 bytes int is pushed to stack - length of result data.
-     * If invoked contract was invoked successfully 0x00 byte is pushed at top of stack, 0x01 otherwise.
+     * <ol>
+     * <li>If stack.size > 0 contractID is popped. STOP_BAD executed otherwise</li>
+     * <li>If stack.size > 0 dataSize is popped. STOP_BAD executed otherwise</li>
+     * <li>
+     * If stack.size < dataSize or dataSize is negative, all words are removed from stack and STOP_BAD executed.
+     * Otherwise dataSize words are moved to new stack. Top word will still be at top of stack.
+     * Contract with contractId is invoked with given array of words.
+     * Execution result stack is moved to stack.
+     * </li>
+     * <li>Pointer is increased by one.</li>
+     * </ol>
      */
     public static final Word INVOKE = new Word(0x02);
 
     /**
-     * Push next byte to stack. Pointer is moved forward by 2.
+     * <ol>
+     * <li>Push word from memory with index (pointer+1).</li>
+     * <li>Pointer is increased by 2.</li>
+     * </ol>
      */
     public static final Word PUSH = new Word(0x10);
 
     /**
-     * Remove one byte from top of stack.
+     * <ol>
+     * <li>If stack.size > 0 then one word is removed from top of stack. Otherwise STOP_BAD is executed</li>
+     * <li>Pointer is increased by 1</li>
+     * </ol>
      */
     public static final Word POP = new Word(0x11);
 
+    /**
+     * <ol>
+     * <li>If stack.size > 0 then A is popped. A is pushed. A is pushed. Else STOP_BAD executed</li>
+     * <li>Pointer is increased by 1</li>
+     * </ol>
+     */
     public static final Word DUP = new Word(0x12);
 
     /**
-     * Pop a. Pop b. Push a. Push b.
+     * <ol>
+     * <li>If stack.size > 0 pop A. Else STOP_BAD is executed</li>
+     * <li>If stack.size > 0 pop B. Else STOP_BAD is executed</li>
+     * <li>Push A</li>
+     * <li>Push B</li>
+     * <li>Pointer is increased by 1</li>
+     * </ol>
      */
     public static final Word SWAP = new Word(0x13);
 
     /**
-     * Pop 2 words. Sum them and push back to stack.
+     * <ol>
+     * <li>If stack.size > 0 pop A. Else STOP_BAD is executed</li>
+     * <li>If stack.size > 0 pop B. Else STOP_BAD is executed</li>
+     * <li>Push (A+B)</li>
+     * <li>Pointer is increased by 1</li>
+     * </ol>
      */
     public static final Word ADD = new Word(0x20);
 
     /**
-     * Pop word a. Pop word b. Push word b-a back.
+     * <ol>
+     * <li>If stack.size > 0 pop A. Else STOP_BAD is executed</li>
+     * <li>If stack.size >0 pop B. Else STOP_BAD is executed</li>
+     * <li>Push word (B-A) back</li>
+     * <li>Pointer is increased by 1</li>
+     * </ol>
      */
     public static final Word SUB = new Word(0x21);
 
     /**
-     * Pop a. Pop b. If a==0 execution fails, (b div a) pushed to stack otherwise.
+     * <ol>
+     * <li>If stack.size > 0 pop A. Else STOP_BAD is executed</li>
+     * <li>If stack.size > 0 pop B. Else STOP_BAD is executed</li>
+     * <li>If (A=0) STOP_BAD. Else (b div a) is pushed to stack</li>
+     * </ol>
      */
     public static final Word DIV = new Word(0x22);
 
     /**
-     * Pop a. Pop b. If a==0 execution fails, (b mod a) pushed to stack otherwise.
+     * <ol>
+     * <li>If stack.size > 0 pop A. Else STOP_BAD is executed</li>
+     * <li>If stack.size > 0 pop B. Else STOP_BAD is executed</li>
+     * <li>If (A=0) STOP_BAD. Else (b mod a) is pushed to stack</li>
+     * </ol>
      */
     public static final Word MOD = new Word(0x23);
 }
