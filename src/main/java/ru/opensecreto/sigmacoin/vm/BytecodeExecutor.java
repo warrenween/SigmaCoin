@@ -152,23 +152,32 @@ public class BytecodeExecutor {
     }
 
     private void opcode_MOD() {
-        if (frame.stack.getSize() < 2) {
-            LOGGER.warn("Error executing {} at {}. Can not MOD. Stack size is less than 2",
+        if (frame.stack.getSize() < 1) {
+            LOGGER.warn("Error executing {} at {}. Can not DIV. Can not pop A.",
                     frame.contractID, pointer);
             fail();
-        } else {
-            Word a = frame.stack.pop();
-            Word b = frame.stack.pop();
-
-            if (a.equals(Word.WORD_0)) {
-                LOGGER.warn("Error executing {} at {}. Can not MOD. Division by zero.",
-                        frame.contractID, pointer);
-                fail();
-            } else {
-                frame.stack.push(b.mod(a));
-                pointer++;
-            }
+            return;
         }
+        Word A = frame.stack.pop();
+
+        if (frame.stack.getSize() < 1) {
+            LOGGER.warn("Error executing {} at {}. Can not DIV. Can not pop B.",
+                    frame.contractID, pointer);
+            fail();
+            return;
+        }
+        Word B = frame.stack.pop();
+
+
+        if (A.equals(Word.WORD_0)) {
+            LOGGER.warn("Error executing {} at {}. Can not DIV. Division by zero.",
+                    frame.contractID, pointer);
+            fail();
+            return;
+        }
+
+        frame.stack.push(B.mod(A));
+        pointer++;
     }
 
     private void opcode_DIV() {

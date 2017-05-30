@@ -105,7 +105,11 @@ public class Opcodes {
     public static final Word DIV = new Word(0x22);
 
     /**
-     * Pop a. Pop b. If a==0 execution fails, (b mod a) pushed to stack otherwise.
+     * <ol>
+     * <li>If stack.size > 0 pop A. Else STOP_BAD is executed</li>
+     * <li>If stack.size > 0 pop B. Else STOP_BAD is executed</li>
+     * <li>If (A=0) STOP_BAD. Else (b mod a) is pushed to stack</li>
+     * </ol>
      */
     public static final Word MOD = new Word(0x23);
 }
