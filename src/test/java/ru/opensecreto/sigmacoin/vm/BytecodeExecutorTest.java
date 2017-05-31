@@ -658,4 +658,108 @@ public class BytecodeExecutorTest {
         );
     }
 
+    @Test
+    public void test_GET() {
+        Word idA = new Word(0x00);
+        Memory contractA = new SimpleTestMemory() {{
+            set(0, PUSH);
+            set(1, new Word(23));// 23 (top)
+            set(2, GET);// 1234 (top)
+            set(5, STOP_GOOD);// 1234 1 0 (top)
+
+            set(23, new Word(1234));
+        }};
+
+        ContractManager manager = mock(ContractManager.class);
+        when(manager.contractExists(idA)).thenReturn(true);
+        when(manager.getContract(idA)).thenReturn(contractA);
+
+        VirtualMachineController controller = new VirtualMachineController(manager,
+                new VMConfiguration(10, 10));
+
+        Stack result = controller.invoke(new Stack(), idA);
+
+        assertThat(result.getSize()).isEqualTo(3);
+
+        assertThat(result.popCustom(3)).containsExactly(
+                new Word(1234), new Word(1), new Word(0)
+        );
+    }
+
+    @Test
+    public void test_GET_noValues() {
+        Word idA = new Word(0x00);
+        Memory contractA = new SimpleTestMemory() {{
+            set(0, GET);// 0 0x01 (top)
+            set(0, STOP_GOOD);// never executed
+        }};
+
+        ContractManager manager = mock(ContractManager.class);
+        when(manager.contractExists(idA)).thenReturn(true);
+        when(manager.getContract(idA)).thenReturn(contractA);
+
+        VirtualMachineController controller = new VirtualMachineController(manager,
+                new VMConfiguration(10, 10));
+
+        Stack result = controller.invoke(new Stack(), idA);
+
+        assertThat(result.getSize()).isEqualTo(3);
+
+        assertThat(result.popCustom(3)).containsExactly(
+                new Word(0), new Word(0x01)
+        );
+    }
+
+    @Test
+    public void test_GET_negativeValue() {
+        Word idA = new Word(0x00);
+        Memory contractA = new SimpleTestMemory() {{
+            set(0, PUSH);
+            set(1, new Word(-23));
+            set(2, GET);// 0 0x01 (top)
+            set(3, STOP_GOOD);// never executed
+        }};
+
+        ContractManager manager = mock(ContractManager.class);
+        when(manager.contractExists(idA)).thenReturn(true);
+        when(manager.getContract(idA)).thenReturn(contractA);
+
+        VirtualMachineController controller = new VirtualMachineController(manager,
+                new VMConfiguration(10, 10));
+
+        Stack result = controller.invoke(new Stack(), idA);
+
+        assertThat(result.getSize()).isEqualTo(3);
+
+        assertThat(result.popCustom(3)).containsExactly(
+                new Word(0), new Word(0x01)
+        );
+    }
+
+    @Test
+    public void test_GET_bigValue() {
+        Word idA = new Word(0x00);
+        Memory contractA = new SimpleTestMemory() {{
+            set(0, PUSH);
+            set(1, new Word(99999999));
+            set(2, GET);// 0 0x01 (top)
+            set(3, STOP_GOOD);// never executed
+        }};
+
+        ContractManager manager = mock(ContractManager.class);
+        when(manager.contractExists(idA)).thenReturn(true);
+        when(manager.getContract(idA)).thenReturn(contractA);
+
+        VirtualMachineController controller = new VirtualMachineController(manager,
+                new VMConfiguration(10, 10));
+
+        Stack result = controller.invoke(new Stack(), idA);
+
+        assertThat(result.getSize()).isEqualTo(3);
+
+        assertThat(result.popCustom(3)).containsExactly(
+                new Word(0), new Word(0x01)
+        );
+    }
+
 }
