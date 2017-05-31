@@ -790,7 +790,16 @@ public class BytecodeExecutorTest {
                 new Word(0), new Word(0)
         );
 
+        assertThat(contractA.get(0)).isEqualTo(PUSH);
+        assertThat(contractA.get(1)).isEqualTo(new Word(-123456789));
+        assertThat(contractA.get(2)).isEqualTo(PUSH);
+        assertThat(contractA.get(3)).isEqualTo(new Word(7));
+        assertThat(contractA.get(4)).isEqualTo(PUT);
+        assertThat(contractA.get(5)).isEqualTo(STOP_GOOD);
+        assertThat(contractA.get(6)).isEqualTo(Word.WORD_0);
         assertThat(contractA.get(7)).isEqualTo(new Word(-123456789));
+        assertThat(contractA.get(8)).isEqualTo(Word.WORD_0);
+        assertThat(contractA.get(8)).isEqualTo(Word.WORD_0);
     }
 
 }
