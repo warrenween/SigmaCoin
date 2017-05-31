@@ -175,6 +175,7 @@ public class BytecodeExecutor {
         }
 
         frame.stack.push(frame.memory.get(A.toInt()));
+        pointer++;
     }
 
     private void opcode_MOD() {
