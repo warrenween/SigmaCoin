@@ -663,11 +663,11 @@ public class BytecodeExecutorTest {
         Word idA = new Word(0x00);
         Memory contractA = new SimpleTestMemory() {{
             set(0, PUSH);
-            set(1, new Word(23));// 23 (top)
+            set(1, new Word(5));// 5 (top)
             set(2, GET);// 1234 (top)
             set(3, STOP_GOOD);// 1234 1 0 (top)
 
-            set(23, new Word(1234));
+            set(5, new Word(1234));
         }};
 
         ContractManager manager = mock(ContractManager.class);
