@@ -15,7 +15,7 @@ public class SimpleTestMemory implements Memory {
 
     @Override
     public Word get(int pointer) {
-        if (words.containsKey(pointer)) {
+        if (!words.containsKey(pointer)) {
             LOGGER.warn("Unset value requested at {}. \n {}",
                     pointer, ExceptionUtils.getStackTrace(new Throwable()));
             return Word.WORD_0;
