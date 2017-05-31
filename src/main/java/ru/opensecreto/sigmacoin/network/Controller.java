@@ -44,7 +44,6 @@ public class Controller {
         peerWelcomerFuture = executorService.submit(new WelcomeRunnable(port, this));
     }
 
-
     public void stop() {
         LOGGER.info("Stopping controller.");
         try {

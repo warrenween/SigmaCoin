@@ -178,12 +178,6 @@ public class BytecodeExecutor {
             fail();
             return;
         }
-        if (A.compareTo(new Word(configuration.memorySize)) >= 0) {
-            LOGGER.warn("Error while executing {} at {}. Can not GET. Position is greater than memory size",
-                    frame.contractID, pointer);
-            fail();
-            return;
-        }
         
         frame.memory.set(A.toInt(), B);
         pointer++;
@@ -199,12 +193,6 @@ public class BytecodeExecutor {
         Word A = frame.stack.pop();
         if (A.isNegative()) {
             LOGGER.warn("Error while executing {} at {}. Can not GET. Position is negative.",
-                    frame.contractID, pointer);
-            fail();
-            return;
-        }
-        if (A.compareTo(new Word(configuration.memorySize)) >= 0) {
-            LOGGER.warn("Error while executing {} at {}. Can not GET. Position is greater than memory size",
                     frame.contractID, pointer);
             fail();
             return;
@@ -230,7 +218,6 @@ public class BytecodeExecutor {
             return;
         }
         Word B = frame.stack.pop();
-
 
         if (A.equals(Word.WORD_0)) {
             LOGGER.warn("Error executing {} at {}. Can not DIV. Division by zero.",
@@ -259,7 +246,6 @@ public class BytecodeExecutor {
             return;
         }
         Word B = frame.stack.pop();
-
 
         if (A.equals(Word.WORD_0)) {
             LOGGER.warn("Error executing {} at {}. Can not DIV. Division by zero.",

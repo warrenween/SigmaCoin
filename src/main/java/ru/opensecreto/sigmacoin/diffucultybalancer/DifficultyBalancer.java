@@ -19,7 +19,6 @@ public class DifficultyBalancer {
     private final MathContext contextCeil;
     private final MathContext contextFloor;
 
-
     public DifficultyBalancer(BigInteger targetTime, BigDecimal smoothRate, int precision) {
         if (targetTime.compareTo(BigInteger.ZERO) <= 0) {
             throw new IllegalArgumentException("targetTime must be larger than 0");
