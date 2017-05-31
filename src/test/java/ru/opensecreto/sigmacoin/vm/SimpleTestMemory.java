@@ -11,10 +11,10 @@ public class SimpleTestMemory implements Memory {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(SimpleTestMemory.class);
 
-    private final Map<Long, Word> words = new HashMap<>();
+    private final Map<Integer, Word> words = new HashMap<>();
 
     @Override
-    public Word get(long pointer) {
+    public Word get(int pointer) {
         if (words.containsKey(pointer)) {
             LOGGER.warn("Unset value requested at {}. \n {}",
                     pointer, ExceptionUtils.getStackTrace(new Throwable()));
@@ -24,7 +24,7 @@ public class SimpleTestMemory implements Memory {
     }
 
     @Override
-    public void set(long pointer, Word word) {
+    public void set(int pointer, Word word) {
         words.put(pointer, word);
     }
 }

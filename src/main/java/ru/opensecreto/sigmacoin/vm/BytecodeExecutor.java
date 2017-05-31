@@ -11,7 +11,7 @@ public class BytecodeExecutor {
     private final VirtualMachineController controller;
 
     private final Frame frame;
-    private long pointer = 0;
+    private int pointer = 0;
     private boolean run = true;
     private boolean success = true;
 
