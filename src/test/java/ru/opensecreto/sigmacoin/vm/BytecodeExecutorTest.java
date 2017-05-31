@@ -665,7 +665,7 @@ public class BytecodeExecutorTest {
             set(0, PUSH);
             set(1, new Word(23));// 23 (top)
             set(2, GET);// 1234 (top)
-            set(5, STOP_GOOD);// 1234 1 0 (top)
+            set(3, STOP_GOOD);// 1234 1 0 (top)
 
             set(23, new Word(1234));
         }};
@@ -691,7 +691,7 @@ public class BytecodeExecutorTest {
         Word idA = new Word(0x00);
         Memory contractA = new SimpleTestMemory() {{
             set(0, GET);// 0 0x01 (top)
-            set(0, STOP_GOOD);// never executed
+            set(1, STOP_GOOD);// never executed
         }};
 
         ContractManager manager = mock(ContractManager.class);
@@ -729,9 +729,9 @@ public class BytecodeExecutorTest {
 
         Stack result = controller.invoke(new Stack(), idA);
 
-        assertThat(result.getSize()).isEqualTo(3);
+        assertThat(result.getSize()).isEqualTo(2);
 
-        assertThat(result.popCustom(3)).containsExactly(
+        assertThat(result.popCustom(2)).containsExactly(
                 new Word(0), new Word(0x01)
         );
     }
@@ -755,9 +755,9 @@ public class BytecodeExecutorTest {
 
         Stack result = controller.invoke(new Stack(), idA);
 
-        assertThat(result.getSize()).isEqualTo(3);
+        assertThat(result.getSize()).isEqualTo(2);
 
-        assertThat(result.popCustom(3)).containsExactly(
+        assertThat(result.popCustom(2)).containsExactly(
                 new Word(0), new Word(0x01)
         );
     }
