@@ -110,7 +110,6 @@ public class BytecodeExecutorTest {
             set(6, STOP_GOOD);//0x1f 0x56 | 2 0x00 (top)
         }};
 
-
         ContractManager manager = mock(ContractManager.class);
         when(manager.contractExists(idA)).thenReturn(true);
         when(manager.getContract(idA)).thenReturn(contractA);
@@ -191,7 +190,6 @@ public class BytecodeExecutorTest {
             set(5, STOP_GOOD);// 0 0x01 0x00 (top)
         }};
 
-
         ContractManager manager = mock(ContractManager.class);
         when(manager.contractExists(idA)).thenReturn(true);
         when(manager.getContract(idA)).thenReturn(contractA);
@@ -219,7 +217,6 @@ public class BytecodeExecutorTest {
             set(4, SUB);// 90 (top)
             set(5, STOP_GOOD);// 90 0x01 0x00 (top)
         }};
-
 
         ContractManager manager = mock(ContractManager.class);
         when(manager.contractExists(idA)).thenReturn(true);
@@ -264,9 +261,9 @@ public class BytecodeExecutorTest {
     public void test_SUB_oneValues() {
         Word idA = new Word(0x00);
         Memory contractA = new SimpleTestMemory() {{
-            set(0,PUSH);
-            set(1,new Word(100));// 100 (top)
-            set(2,SUB);// 0 0x01 (top)
+            set(0, PUSH);
+            set(1, new Word(100));// 100 (top)
+            set(2, SUB);// 0 0x01 (top)
         }};
 
         ContractManager manager = mock(ContractManager.class);
@@ -289,12 +286,12 @@ public class BytecodeExecutorTest {
     public void test_DIV() {
         Word idA = new Word(0x00);
         Memory contractA = new SimpleTestMemory() {{
-            set(0,PUSH);
-            set(1,new Word(23));// 23 (top)
-            set(2,PUSH);
-            set(3,new Word(12));// 23 12 (top)
-            set(4,DIV);// 1 (top)
-            set(5,STOP_GOOD);// 1 0x01 0x00 (top)
+            set(0, PUSH);
+            set(1, new Word(23));// 23 (top)
+            set(2, PUSH);
+            set(3, new Word(12));// 23 12 (top)
+            set(4, DIV);// 1 (top)
+            set(5, STOP_GOOD);// 1 0x01 0x00 (top)
         }};
 
         ContractManager manager = mock(ContractManager.class);
@@ -317,7 +314,7 @@ public class BytecodeExecutorTest {
     public void test_DIV_noValues() {
         Word idA = new Word(0x00);
         Memory contractA = new SimpleTestMemory() {{
-            set(0,DIV);// 0 0x01 (top)
+            set(0, DIV);// 0 0x01 (top)
         }};
 
         ContractManager manager = mock(ContractManager.class);
@@ -340,9 +337,9 @@ public class BytecodeExecutorTest {
     public void test_DIV_oneValue() {
         Word idA = new Word(0x00);
         Memory contractA = new SimpleTestMemory() {{
-            set(0,PUSH);
-            set(1,new Word(23));// 23 (top)
-            set(2,DIV);// 0 0x01 (top)
+            set(0, PUSH);
+            set(1, new Word(23));// 23 (top)
+            set(2, DIV);// 0 0x01 (top)
         }};
 
         ContractManager manager = mock(ContractManager.class);
@@ -365,7 +362,7 @@ public class BytecodeExecutorTest {
     public void test_MOD_noValues() {
         Word idA = new Word(0x00);
         Memory contractA = new SimpleTestMemory() {{
-            set(0,MOD);// 0 0x01 (top)
+            set(0, MOD);// 0 0x01 (top)
         }};
 
         ContractManager manager = mock(ContractManager.class);
@@ -388,9 +385,9 @@ public class BytecodeExecutorTest {
     public void test_MOD_oneValue() {
         Word idA = new Word(0x00);
         Memory contractA = new SimpleTestMemory() {{
-            set(0,PUSH);
-            set(1,new Word(23));// 23 (top)
-            set(2,MOD);// 0 0x01 (top)
+            set(0, PUSH);
+            set(1, new Word(23));// 23 (top)
+            set(2, MOD);// 0 0x01 (top)
         }};
 
         ContractManager manager = mock(ContractManager.class);
@@ -413,14 +410,13 @@ public class BytecodeExecutorTest {
     public void test_MOD() {
         Word idA = new Word(0x00);
         Memory contractA = new SimpleTestMemory() {{
-            set(0,PUSH);
-            set(1,new Word(23));// 23 (top)
-            set(2,PUSH);
-            set(3,new Word(12));// 23 12 (top)
-            set(4,MOD);// 11 (top)
-            set(5,STOP_GOOD);// 11 0x01 0x00 (top)
+            set(0, PUSH);
+            set(1, new Word(23));// 23 (top)
+            set(2, PUSH);
+            set(3, new Word(12));// 23 12 (top)
+            set(4, MOD);// 11 (top)
+            set(5, STOP_GOOD);// 11 0x01 0x00 (top)
         }};
-
 
         ContractManager manager = mock(ContractManager.class);
         when(manager.contractExists(idA)).thenReturn(true);
@@ -442,13 +438,12 @@ public class BytecodeExecutorTest {
     public void test_DIV_byZero() {
         Word idA = new Word(0x00);
         Memory contractA = new SimpleTestMemory() {{
-            set(0,PUSH);
-            set(1,new Word(23));// 23 (top)
-            set(2,PUSH);
-            set(3,new Word(0));// 23 0 (top)
-            set(4,DIV);// 0x00 0x01 (top)
+            set(0, PUSH);
+            set(1, new Word(23));// 23 (top)
+            set(2, PUSH);
+            set(3, new Word(0));// 23 0 (top)
+            set(4, DIV);// 0x00 0x01 (top)
         }};
-
 
         ContractManager manager = mock(ContractManager.class);
         when(manager.contractExists(idA)).thenReturn(true);
@@ -470,9 +465,8 @@ public class BytecodeExecutorTest {
     public void test_POP_fromEmpty() {
         Word idA = new Word(0x00);
         Memory contractA = new SimpleTestMemory() {{
-            set(0,POP);//0 0x01 (top)
+            set(0, POP);//0 0x01 (top)
         }};
-
 
         ContractManager manager = mock(ContractManager.class);
         when(manager.contractExists(idA)).thenReturn(true);
@@ -494,9 +488,8 @@ public class BytecodeExecutorTest {
     public void test_DUP_fromEmpty() {
         Word idA = new Word(0x00);
         Memory contractA = new SimpleTestMemory() {{
-            set(0,DUP);//0 0x01 (top)
+            set(0, DUP);//0 0x01 (top)
         }};
-
 
         ContractManager manager = mock(ContractManager.class);
         when(manager.contractExists(idA)).thenReturn(true);
@@ -518,9 +511,8 @@ public class BytecodeExecutorTest {
     public void test_SWAP_noValues() {
         Word idA = new Word(0x00);
         Memory contractA = new SimpleTestMemory() {{
-            set(0,SWAP);//0 0x01 (top)
+            set(0, SWAP);//0 0x01 (top)
         }};
-
 
         ContractManager manager = mock(ContractManager.class);
         when(manager.contractExists(idA)).thenReturn(true);
@@ -542,11 +534,10 @@ public class BytecodeExecutorTest {
     public void test_SWAP_oneValue() {
         Word idA = new Word(0x00);
         Memory contractA = new SimpleTestMemory() {{
-            set(0,PUSH);
-            set(1,new Word(12));// 12 (top)
-            set(2,SWAP);//0 0x01 (top)
+            set(0, PUSH);
+            set(1, new Word(12));// 12 (top)
+            set(2, SWAP);//0 0x01 (top)
         }};
-
 
         ContractManager manager = mock(ContractManager.class);
         when(manager.contractExists(idA)).thenReturn(true);
@@ -568,9 +559,8 @@ public class BytecodeExecutorTest {
     public void test_ADD_noValues() {
         Word idA = new Word(0x00);
         Memory contractA = new SimpleTestMemory() {{
-            set(0,ADD);//0 0x01 (top)
+            set(0, ADD);//0 0x01 (top)
         }};
-
 
         ContractManager manager = mock(ContractManager.class);
         when(manager.contractExists(idA)).thenReturn(true);
@@ -592,11 +582,10 @@ public class BytecodeExecutorTest {
     public void test_ADD_oneValue() {
         Word idA = new Word(0x00);
         Memory contractA = new SimpleTestMemory() {{
-            set(0,PUSH);
-            set(1,new Word(12));// 12 (top)
-            set(2,SWAP);//0 0x01 (top)
+            set(0, PUSH);
+            set(1, new Word(12));// 12 (top)
+            set(2, SWAP);//0 0x01 (top)
         }};
-
 
         ContractManager manager = mock(ContractManager.class);
         when(manager.contractExists(idA)).thenReturn(true);
@@ -618,13 +607,12 @@ public class BytecodeExecutorTest {
     public void test_MOD_byZero() {
         Word idA = new Word(0x00);
         Memory contractA = new SimpleTestMemory() {{
-            set(0,PUSH);
-            set(1,new Word(23));// 23 (top)
-            set(2,PUSH);
-            set(3,new Word(0));// 23 0 (top)
-            set(4,MOD);// 0 1 (top)
+            set(0, PUSH);
+            set(1, new Word(23));// 23 (top)
+            set(2, PUSH);
+            set(3, new Word(0));// 23 0 (top)
+            set(4, MOD);// 0 1 (top)
         }};
-
 
         ContractManager manager = mock(ContractManager.class);
         when(manager.contractExists(idA)).thenReturn(true);
@@ -646,14 +634,13 @@ public class BytecodeExecutorTest {
     public void test_SWAP() {
         Word idA = new Word(0x00);
         Memory contractA = new SimpleTestMemory() {{
-            set(0,PUSH);
-            set(1,new Word(23));// 23 (top)
-            set(2,PUSH);
-            set(3,new Word(43));// 23 43 (top)
-            set(4,SWAP);// 43 23 (top)
-            set(5,STOP_GOOD);// 43 23 2 0 (top)
+            set(0, PUSH);
+            set(1, new Word(23));// 23 (top)
+            set(2, PUSH);
+            set(3, new Word(43));// 23 43 (top)
+            set(4, SWAP);// 43 23 (top)
+            set(5, STOP_GOOD);// 43 23 2 0 (top)
         }};
-
 
         ContractManager manager = mock(ContractManager.class);
         when(manager.contractExists(idA)).thenReturn(true);
