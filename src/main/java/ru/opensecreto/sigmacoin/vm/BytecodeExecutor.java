@@ -135,6 +135,8 @@ public class BytecodeExecutor {
                 opcode_MOD();
             } else if (opcode.equals(Opcodes.GET)) {
                 opcode_GET();
+            } else if (opcode.equals(Opcodes.PUT)) {
+                opcode_PUT();
             } else {
                 fail();
                 LOGGER.warn("Error while executing {} - unexpected bytecode {} at {}.",
@@ -151,6 +153,33 @@ public class BytecodeExecutor {
         }
 
         return frame.stack;
+    }
+
+    private void opcode_PUT() {
+        if (frame.stack.getSize() < 1) {
+            LOGGER.warn("Error while executing {} at {}. Can not GET. Stack is empty.",
+                    frame.contractID, pointer);
+            fail();
+            return;
+        }
+        Word A = frame.stack.pop();
+        if (A.isNegative()) {
+            LOGGER.warn("Error while executing {} at {}. Can not GET. Position is negative.",
+                    frame.contractID, pointer);
+            fail();
+            return;
+        }
+        if (A.compareTo(new Word(configuration.memorySize)) >= 0) {
+            LOGGER.warn("Error while executing {} at {}. Can not GET. Position is greater than memory size",
+                    frame.contractID, pointer);
+            fail();
+            return;
+        }
+
+        Word B = frame.stack.pop();
+
+        frame.memory.set(A.toInt(), B);
+        pointer++;
     }
 
     private void opcode_GET() {

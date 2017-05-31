@@ -762,4 +762,35 @@ public class BytecodeExecutorTest {
         );
     }
 
+    @Test
+    public void test_PUT() {
+        Word idA = new Word(0x00);
+        Memory contractA = new SimpleTestMemory() {{
+            set(0, PUSH);
+            set(1, new Word(-123456789));// -123456789 (top)
+            set(2, PUSH);
+            set(3, new Word(7));// -123456789 7 (top)
+            set(4, PUT);// (top)
+            // (7) = -123456789
+            set(5, STOP_GOOD);// 0 0 (top)
+        }};
+
+        ContractManager manager = mock(ContractManager.class);
+        when(manager.contractExists(idA)).thenReturn(true);
+        when(manager.getContract(idA)).thenReturn(contractA);
+
+        VirtualMachineController controller = new VirtualMachineController(manager,
+                new VMConfiguration(10, 10));
+
+        Stack result = controller.invoke(new Stack(), idA);
+
+        assertThat(result.getSize()).isEqualTo(2);
+
+        assertThat(result.popCustom(2)).containsExactly(
+                new Word(0), new Word(0)
+        );
+
+        assertThat(contractA.get(7)).isEqualTo(new Word(-123456789));
+    }
+
 }
