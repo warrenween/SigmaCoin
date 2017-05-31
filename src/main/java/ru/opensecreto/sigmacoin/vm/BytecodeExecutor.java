@@ -219,7 +219,6 @@ public class BytecodeExecutor {
         }
         Word B = frame.stack.pop();
 
-
         if (A.equals(Word.WORD_0)) {
             LOGGER.warn("Error executing {} at {}. Can not DIV. Division by zero.",
                     frame.contractID, pointer);
@@ -247,7 +246,6 @@ public class BytecodeExecutor {
             return;
         }
         Word B = frame.stack.pop();
-
 
         if (A.equals(Word.WORD_0)) {
             LOGGER.warn("Error executing {} at {}. Can not DIV. Division by zero.",

@@ -19,5 +19,4 @@ public class Time {
         offset = newOffset;
     }
 
-
 }

@@ -42,7 +42,6 @@ public class StunMessage {
         if (messageMethod.length != 2) throw new IllegalArgumentException("bad messageMethod");
         if (id.length != 12) throw new IllegalArgumentException("bad id length");
 
-
         stunMessage = new byte[20 + message.length];
 
         for (int i = 0; i < messageClass.length; i++) {

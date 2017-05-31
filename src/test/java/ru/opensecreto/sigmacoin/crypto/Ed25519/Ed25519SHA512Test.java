@@ -107,5 +107,4 @@ public class Ed25519SHA512Test {
         )).isFalse();
     }
 
-
 }

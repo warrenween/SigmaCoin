@@ -41,6 +41,3 @@ Owner of each selected coin signs block header. When each owner signs block bloc
 3. If `result` array contains only zeroes, then shard is mined, else repeat step 2 with different `id`.
 Shard contains information about all `id`s, `seed`, and `publicKey`.
 4. Store shard for PoC step
-
-
-
