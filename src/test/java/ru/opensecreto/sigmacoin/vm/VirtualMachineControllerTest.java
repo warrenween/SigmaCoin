@@ -1,6 +1,5 @@
 package ru.opensecreto.sigmacoin.vm;
 
-import org.assertj.core.api.Assertions;
 import org.testng.annotations.Test;
 
 import static java.lang.System.arraycopy;
@@ -15,7 +14,7 @@ public class VirtualMachineControllerTest {
 
         VirtualMachineController controller = new VirtualMachineController(
                 manager,
-                new VMConfiguration( 3, 10)
+                new VMConfiguration(3)
         ) {
             @Override
             public Stack invoke(Stack stack, Word contractID) {

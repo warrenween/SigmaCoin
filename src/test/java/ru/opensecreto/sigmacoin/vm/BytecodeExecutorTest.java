@@ -15,7 +15,7 @@ public class BytecodeExecutorTest {
         when(manager.contractExists(new Word(0))).thenReturn(false);
 
         VirtualMachineController controller = new VirtualMachineController(manager,
-                new VMConfiguration(10, 10));
+                new VMConfiguration(10));
 
         Stack result = controller.invoke(new Stack(), new Word(0));
 
@@ -37,7 +37,7 @@ public class BytecodeExecutorTest {
         when(manager.getContract(idA)).thenReturn(contractA);
 
         VirtualMachineController controller = new VirtualMachineController(manager,
-                new VMConfiguration(10, 10));
+                new VMConfiguration(10));
 
         Stack result = controller.invoke(new Stack(), idA);
 
@@ -59,7 +59,7 @@ public class BytecodeExecutorTest {
         when(manager.getContract(idA)).thenReturn(contractA);
 
         VirtualMachineController controller = new VirtualMachineController(manager,
-                new VMConfiguration(10, 10));
+                new VMConfiguration(10));
 
         Stack result = controller.invoke(new Stack(), idA);
 
@@ -86,7 +86,7 @@ public class BytecodeExecutorTest {
         when(manager.getContract(idA)).thenReturn(contractA);
 
         VirtualMachineController controller = new VirtualMachineController(manager,
-                new VMConfiguration(10, 10));
+                new VMConfiguration(10));
 
         Stack result = controller.invoke(new Stack(), idA);
 
@@ -115,7 +115,7 @@ public class BytecodeExecutorTest {
         when(manager.getContract(idA)).thenReturn(contractA);
 
         VirtualMachineController controller = new VirtualMachineController(manager,
-                new VMConfiguration(10, 10));
+                new VMConfiguration(10));
 
         Stack result = controller.invoke(new Stack(), idA);
 
@@ -160,7 +160,7 @@ public class BytecodeExecutorTest {
         when(manager.getContract(idB)).thenReturn(contractB);
 
         VirtualMachineController controller = new VirtualMachineController(manager,
-                new VMConfiguration(10, 10));
+                new VMConfiguration(10));
 
         Stack result = controller.invoke(new Stack(), idA);
 
@@ -195,7 +195,7 @@ public class BytecodeExecutorTest {
         when(manager.getContract(idA)).thenReturn(contractA);
 
         VirtualMachineController controller = new VirtualMachineController(manager,
-                new VMConfiguration(10, 10));
+                new VMConfiguration(10));
 
         Stack result = controller.invoke(new Stack(), idA);
 
@@ -223,7 +223,7 @@ public class BytecodeExecutorTest {
         when(manager.getContract(idA)).thenReturn(contractA);
 
         VirtualMachineController controller = new VirtualMachineController(manager,
-                new VMConfiguration(10, 10));
+                new VMConfiguration(10));
 
         Stack result = controller.invoke(new Stack(), idA);
 
@@ -246,7 +246,7 @@ public class BytecodeExecutorTest {
         when(manager.getContract(idA)).thenReturn(contractA);
 
         VirtualMachineController controller = new VirtualMachineController(manager,
-                new VMConfiguration(10, 10));
+                new VMConfiguration(10));
 
         Stack result = controller.invoke(new Stack(), idA);
 
@@ -271,7 +271,7 @@ public class BytecodeExecutorTest {
         when(manager.getContract(idA)).thenReturn(contractA);
 
         VirtualMachineController controller = new VirtualMachineController(manager,
-                new VMConfiguration(10, 10));
+                new VMConfiguration(10));
 
         Stack result = controller.invoke(new Stack(), idA);
 
@@ -299,7 +299,7 @@ public class BytecodeExecutorTest {
         when(manager.getContract(idA)).thenReturn(contractA);
 
         VirtualMachineController controller = new VirtualMachineController(manager,
-                new VMConfiguration(10, 10));
+                new VMConfiguration(10));
 
         Stack result = controller.invoke(new Stack(), idA);
 
@@ -322,7 +322,7 @@ public class BytecodeExecutorTest {
         when(manager.getContract(idA)).thenReturn(contractA);
 
         VirtualMachineController controller = new VirtualMachineController(manager,
-                new VMConfiguration(10, 10));
+                new VMConfiguration(10));
 
         Stack result = controller.invoke(new Stack(), idA);
 
@@ -347,7 +347,7 @@ public class BytecodeExecutorTest {
         when(manager.getContract(idA)).thenReturn(contractA);
 
         VirtualMachineController controller = new VirtualMachineController(manager,
-                new VMConfiguration(10, 10));
+                new VMConfiguration(10));
 
         Stack result = controller.invoke(new Stack(), idA);
 
@@ -370,7 +370,7 @@ public class BytecodeExecutorTest {
         when(manager.getContract(idA)).thenReturn(contractA);
 
         VirtualMachineController controller = new VirtualMachineController(manager,
-                new VMConfiguration(10, 10));
+                new VMConfiguration(10));
 
         Stack result = controller.invoke(new Stack(), idA);
 
@@ -395,7 +395,7 @@ public class BytecodeExecutorTest {
         when(manager.getContract(idA)).thenReturn(contractA);
 
         VirtualMachineController controller = new VirtualMachineController(manager,
-                new VMConfiguration(10, 10));
+                new VMConfiguration(10));
 
         Stack result = controller.invoke(new Stack(), idA);
 
@@ -423,7 +423,7 @@ public class BytecodeExecutorTest {
         when(manager.getContract(idA)).thenReturn(contractA);
 
         VirtualMachineController controller = new VirtualMachineController(manager,
-                new VMConfiguration(10, 10));
+                new VMConfiguration(10));
 
         Stack result = controller.invoke(new Stack(), idA);
 
@@ -450,7 +450,7 @@ public class BytecodeExecutorTest {
         when(manager.getContract(idA)).thenReturn(contractA);
 
         VirtualMachineController controller = new VirtualMachineController(manager,
-                new VMConfiguration(10, 10));
+                new VMConfiguration(10));
 
         Stack result = controller.invoke(new Stack(), idA);
 
@@ -473,7 +473,7 @@ public class BytecodeExecutorTest {
         when(manager.getContract(idA)).thenReturn(contractA);
 
         VirtualMachineController controller = new VirtualMachineController(manager,
-                new VMConfiguration(10, 10));
+                new VMConfiguration(10));
 
         Stack result = controller.invoke(new Stack(), idA);
 
@@ -496,7 +496,7 @@ public class BytecodeExecutorTest {
         when(manager.getContract(idA)).thenReturn(contractA);
 
         VirtualMachineController controller = new VirtualMachineController(manager,
-                new VMConfiguration(10, 10));
+                new VMConfiguration(10));
 
         Stack result = controller.invoke(new Stack(), idA);
 
@@ -519,7 +519,7 @@ public class BytecodeExecutorTest {
         when(manager.getContract(idA)).thenReturn(contractA);
 
         VirtualMachineController controller = new VirtualMachineController(manager,
-                new VMConfiguration(10, 10));
+                new VMConfiguration(10));
 
         Stack result = controller.invoke(new Stack(), idA);
 
@@ -544,7 +544,7 @@ public class BytecodeExecutorTest {
         when(manager.getContract(idA)).thenReturn(contractA);
 
         VirtualMachineController controller = new VirtualMachineController(manager,
-                new VMConfiguration(10, 10));
+                new VMConfiguration(10));
 
         Stack result = controller.invoke(new Stack(), idA);
 
@@ -567,7 +567,7 @@ public class BytecodeExecutorTest {
         when(manager.getContract(idA)).thenReturn(contractA);
 
         VirtualMachineController controller = new VirtualMachineController(manager,
-                new VMConfiguration(10, 10));
+                new VMConfiguration(10));
 
         Stack result = controller.invoke(new Stack(), idA);
 
@@ -592,7 +592,7 @@ public class BytecodeExecutorTest {
         when(manager.getContract(idA)).thenReturn(contractA);
 
         VirtualMachineController controller = new VirtualMachineController(manager,
-                new VMConfiguration(10, 10));
+                new VMConfiguration(10));
 
         Stack result = controller.invoke(new Stack(), idA);
 
@@ -619,7 +619,7 @@ public class BytecodeExecutorTest {
         when(manager.getContract(idA)).thenReturn(contractA);
 
         VirtualMachineController controller = new VirtualMachineController(manager,
-                new VMConfiguration(10, 10));
+                new VMConfiguration(10));
 
         Stack result = controller.invoke(new Stack(), idA);
 
@@ -647,7 +647,7 @@ public class BytecodeExecutorTest {
         when(manager.getContract(idA)).thenReturn(contractA);
 
         VirtualMachineController controller = new VirtualMachineController(manager,
-                new VMConfiguration(10, 10));
+                new VMConfiguration(10));
 
         Stack result = controller.invoke(new Stack(), idA);
 
@@ -675,7 +675,7 @@ public class BytecodeExecutorTest {
         when(manager.getContract(idA)).thenReturn(contractA);
 
         VirtualMachineController controller = new VirtualMachineController(manager,
-                new VMConfiguration(10, 10));
+                new VMConfiguration(10));
 
         Stack result = controller.invoke(new Stack(), idA);
 
@@ -699,7 +699,7 @@ public class BytecodeExecutorTest {
         when(manager.getContract(idA)).thenReturn(contractA);
 
         VirtualMachineController controller = new VirtualMachineController(manager,
-                new VMConfiguration(10, 10));
+                new VMConfiguration(10));
 
         Stack result = controller.invoke(new Stack(), idA);
 
@@ -725,7 +725,7 @@ public class BytecodeExecutorTest {
         when(manager.getContract(idA)).thenReturn(contractA);
 
         VirtualMachineController controller = new VirtualMachineController(manager,
-                new VMConfiguration(10, 10));
+                new VMConfiguration(10));
 
         Stack result = controller.invoke(new Stack(), idA);
 
@@ -751,7 +751,7 @@ public class BytecodeExecutorTest {
         when(manager.getContract(idA)).thenReturn(contractA);
 
         VirtualMachineController controller = new VirtualMachineController(manager,
-                new VMConfiguration(10, 10));
+                new VMConfiguration(10));
 
         Stack result = controller.invoke(new Stack(), idA);
 
@@ -780,7 +780,7 @@ public class BytecodeExecutorTest {
         when(manager.getContract(idA)).thenReturn(contractA);
 
         VirtualMachineController controller = new VirtualMachineController(manager,
-                new VMConfiguration(10, 10));
+                new VMConfiguration(10));
 
         Stack result = controller.invoke(new Stack(), idA);
 
@@ -817,7 +817,7 @@ public class BytecodeExecutorTest {
         when(manager.getContract(idA)).thenReturn(contractA);
 
         VirtualMachineController controller = new VirtualMachineController(manager,
-                new VMConfiguration(10, 10));
+                new VMConfiguration(10));
 
         Stack result = controller.invoke(new Stack(), idA);
 
@@ -852,7 +852,7 @@ public class BytecodeExecutorTest {
         when(manager.getContract(idA)).thenReturn(contractA);
 
         VirtualMachineController controller = new VirtualMachineController(manager,
-                new VMConfiguration(10, 10));
+                new VMConfiguration(10));
 
         Stack result = controller.invoke(new Stack(), idA);
 
@@ -891,7 +891,7 @@ public class BytecodeExecutorTest {
         when(manager.getContract(idA)).thenReturn(contractA);
 
         VirtualMachineController controller = new VirtualMachineController(manager,
-                new VMConfiguration(10, 10));
+                new VMConfiguration(10));
 
         Stack result = controller.invoke(new Stack(), idA);
 
@@ -905,45 +905,6 @@ public class BytecodeExecutorTest {
         assertThat(contractA.get(1)).isEqualTo(new Word(-123456789));
         assertThat(contractA.get(2)).isEqualTo(PUSH);
         assertThat(contractA.get(3)).isEqualTo(new Word(-7));
-        assertThat(contractA.get(4)).isEqualTo(PUT);
-        assertThat(contractA.get(5)).isEqualTo(STOP_GOOD);
-        assertThat(contractA.get(6)).isEqualTo(Word.WORD_0);
-        assertThat(contractA.get(7)).isEqualTo(Word.WORD_0);
-        assertThat(contractA.get(8)).isEqualTo(Word.WORD_0);
-        assertThat(contractA.get(8)).isEqualTo(Word.WORD_0);
-    }
-
-    @Test
-    public void test_PUT_bigIndex() {
-        Word idA = new Word(0x00);
-        Memory contractA = new SimpleTestMemory() {{
-            set(0, PUSH);
-            set(1, new Word(-123456789));// -123456789 (top)
-            set(2, PUSH);
-            set(3, new Word(10));// -123456789 -7 (top)
-            set(4, PUT);// 0 0x01(top)
-            set(5, STOP_GOOD);//never executed
-        }};
-
-        ContractManager manager = mock(ContractManager.class);
-        when(manager.contractExists(idA)).thenReturn(true);
-        when(manager.getContract(idA)).thenReturn(contractA);
-
-        VirtualMachineController controller = new VirtualMachineController(manager,
-                new VMConfiguration(10, 10));
-
-        Stack result = controller.invoke(new Stack(), idA);
-
-        assertThat(result.getSize()).isEqualTo(2);
-
-        assertThat(result.popCustom(2)).containsExactly(
-                new Word(0), new Word(0x01)
-        );
-
-        assertThat(contractA.get(0)).isEqualTo(PUSH);
-        assertThat(contractA.get(1)).isEqualTo(new Word(-123456789));
-        assertThat(contractA.get(2)).isEqualTo(PUSH);
-        assertThat(contractA.get(3)).isEqualTo(new Word(10));
         assertThat(contractA.get(4)).isEqualTo(PUT);
         assertThat(contractA.get(5)).isEqualTo(STOP_GOOD);
         assertThat(contractA.get(6)).isEqualTo(Word.WORD_0);
