@@ -112,4 +112,25 @@ public class Opcodes {
      * </ol>
      */
     public static final Word MOD = new Word(0x23);
+
+    /**
+     * <ol>
+     * <li>If stack.size > 0 pop A. Else STOP_BAD is executed.</li>
+     * <li>If A<0 or A>=configuration.memorySize STOP_BAD is executed.</li>
+     * <li>If memory has word with index A word with index A is pushed to stack. Else 0x00 is pushed to stack.</li>
+     * <li>Pointer is increased by 1</li>
+     * </ol>
+     */
+    public static final Word GET = new Word(0x30);
+
+    /**
+     * <ol>
+     * <li>If stack.size > 0 pop A. Else STOP_BAD is executed.</li>
+     * <li>If stack.size > 0 pop B. Else STOP_BAD is executed.</li>
+     * <li>If A<0 STOP_BAD is executed. If a>=configuration.memorySize STOP_BAD is executed</li>
+     * <li>Word B is put to memory with index A</li>
+     * <li>Pointer is increased by 1</li>
+     * </ol>
+     */
+    public static final Word PUT = new Word(0x31);
 }
