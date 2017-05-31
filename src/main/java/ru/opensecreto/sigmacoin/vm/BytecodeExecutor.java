@@ -163,6 +163,15 @@ public class BytecodeExecutor {
             return;
         }
         Word A = frame.stack.pop();
+
+        if (frame.stack.getSize() < 1) {
+            LOGGER.warn("Error while executing {} at {}. Can not GET. Stack is empty.",
+                    frame.contractID, pointer);
+            fail();
+            return;
+        }
+        Word B = frame.stack.pop();
+
         if (A.isNegative()) {
             LOGGER.warn("Error while executing {} at {}. Can not GET. Position is negative.",
                     frame.contractID, pointer);
@@ -175,9 +184,7 @@ public class BytecodeExecutor {
             fail();
             return;
         }
-
-        Word B = frame.stack.pop();
-
+        
         frame.memory.set(A.toInt(), B);
         pointer++;
     }
