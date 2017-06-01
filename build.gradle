@@ -59,7 +59,7 @@ dependencies {
     compile "commons-net:commons-net:$commonsnetVersion"
     compile "org.jooq:jool:$joolVersion"
     compile "org.jetbrains.xodus:xodus-openAPI:$xodusVersion"
-    compile "org.jetbrains.xodus:environment:$xodusVersion"
+    compile "org.jetbrains.xodus:xodus-environment:$xodusVersion"
 
     testCompile "org.assertj:assertj-core:$assertjVersion"
     testCompile "org.testng:testng:$testngVersion"
