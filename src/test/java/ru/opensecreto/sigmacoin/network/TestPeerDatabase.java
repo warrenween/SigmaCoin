@@ -12,7 +12,7 @@ public class TestPeerDatabase {
 
     @Test
     public void testAddingPeers() throws IOException {
-        File dbFile = new File("testAddingPeers.db");
+        File dbFile = new File("/testAddingPeers");
         PeerDatabase db = new PeerDatabase(dbFile);
 
         Peer peer1 = new Peer(new InetSocketAddress(InetAddress.getByName("127.0.0.1"), 1234), 128, 256);
@@ -20,11 +20,9 @@ public class TestPeerDatabase {
 
         db.addPeer(peer1);
         db.addPeer(peer2);
-        db.save();
         db.close();
 
         PeerDatabase db2 = new PeerDatabase(dbFile);
-        db2.loadPeers();
 
         Assertions.assertThat(db2.getPeers()).containsOnly(peer1, peer2);
     }

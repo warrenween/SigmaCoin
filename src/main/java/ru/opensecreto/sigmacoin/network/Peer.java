@@ -1,13 +1,17 @@
 package ru.opensecreto.sigmacoin.network;
 
+import jetbrains.exodus.bindings.ComparableBinding;
+import jetbrains.exodus.util.LightOutputStream;
+import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.xml.bind.DatatypeConverter;
+import java.io.ByteArrayInputStream;
 import java.net.*;
 import java.nio.ByteBuffer;
 
-public class Peer {
+public class Peer implements Comparable {
 
     public static final Logger LOGGER = LoggerFactory.getLogger(Peer.class);
     public final static int PEER_DATA_SIZE = 37;
@@ -92,5 +96,25 @@ public class Peer {
     @Override
     public String toString() {
         return socketAddress.toString() + ':' + socketAddress.getPort();
+    }
+
+    @Override
+    public int compareTo(@NotNull Object o) {
+        return 0;
+    }
+
+    public static class PeerComparableBinding extends ComparableBinding {
+
+        @Override
+        public Comparable readObject(@NotNull ByteArrayInputStream stream) {
+            byte[] buf = new byte[stream.available()];
+            stream.read(buf, 0, stream.available());
+            return deserialize(buf);
+        }
+
+        @Override
+        public void writeObject(@NotNull LightOutputStream output, @NotNull Comparable object) {
+            output.write(((Peer) object).serialize());
+        }
     }
 }
