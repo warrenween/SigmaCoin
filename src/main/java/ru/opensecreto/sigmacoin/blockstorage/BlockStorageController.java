@@ -31,10 +31,9 @@ public class BlockStorageController {
     public boolean addBlock(byte[] hash, byte[] data) {
         checkHash(hash);
         checkBlock(data);
-        environment.executeInTransaction(txn -> {
-            blockStore.add(txn, new ArrayByteIterable(hash), new ArrayByteIterable(data));
-        });
-        return false;
+        return environment.computeInTransaction(
+                txn -> blockStore.add(txn, new ArrayByteIterable(hash), new ArrayByteIterable(data))
+        );
     }
 
     public boolean hasBlock(byte[] hash) {
