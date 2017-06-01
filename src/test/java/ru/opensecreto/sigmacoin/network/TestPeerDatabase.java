@@ -12,7 +12,7 @@ public class TestPeerDatabase {
 
     @Test
     public void testAddingPeers() throws IOException {
-        File dbFile = new File("/testAddingPeers");
+        File dbFile = new File("testAddingPeers");
         PeerDatabase db = new PeerDatabase(dbFile);
 
         Peer peer1 = new Peer(new InetSocketAddress(InetAddress.getByName("127.0.0.1"), 1234), 128, 256);
