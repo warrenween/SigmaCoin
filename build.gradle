@@ -43,6 +43,7 @@ ext {
     mockitoCoreVersion = '2.+'
     slf4jSimpleVersion = '1.7.25'
     datafactoryVersion = '0.8'
+    xodusVersion = '1.0.5'
 }
 
 dependencies {
@@ -57,6 +58,7 @@ dependencies {
     compile "org.nd4j:nd4j-common:$nd4jVersion"
     compile "commons-net:commons-net:$commonsnetVersion"
     compile "org.jooq:jool:$joolVersion"
+    compile "org.jetbrains.xodus:xodus-openAPI:$xodusVersion"
 
     testCompile "org.assertj:assertj-core:$assertjVersion"
     testCompile "org.testng:testng:$testngVersion"
