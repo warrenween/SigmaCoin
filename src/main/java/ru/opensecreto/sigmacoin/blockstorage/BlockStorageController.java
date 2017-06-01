@@ -1,9 +1,7 @@
 package ru.opensecreto.sigmacoin.blockstorage;
 
-import org.mapdb.DB;
-import org.mapdb.DBMaker;
-import org.mapdb.HTreeMap;
-import org.mapdb.Serializer;
+import jetbrains.exodus.ArrayByteIterable;
+import jetbrains.exodus.env.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -16,43 +14,40 @@ public class BlockStorageController {
     private final int hashSize;
     private final int maxBlockSize;
 
-    private DB db;
-    private HTreeMap<byte[], byte[]> blocks;
+    private final Environment environment;
+    private final Store blockStore;
 
-    public BlockStorageController(File file, int hashSize, int maxBlockSize, BlockStorageConfiguration configuration) {
+    public BlockStorageController(File dbDir, int hashSize, int maxBlockSize, BlockStorageConfiguration configuration) {
         this.hashSize = hashSize;
         this.maxBlockSize = maxBlockSize;
 
-        db = DBMaker.fileDB(file)
-                .transactionEnable()
-                .closeOnJvmShutdown()
-                .allocateStartSize(configuration.storageStartSize)
-                .allocateIncrement(configuration.allocateSize)
-                .make();
-        blocks = db.hashMap("blocks", Serializer.BYTE_ARRAY, Serializer.BYTE_ARRAY)
-                .counterEnable()
-                .createOrOpen();
+        environment = Environments.newInstance(dbDir, new EnvironmentConfig().setLogDurableWrite(true));
+
+        blockStore = environment.computeInTransaction(
+                txn -> environment.openStore("blocks", StoreConfig.WITHOUT_DUPLICATES, txn, true)
+        );
     }
 
     public boolean addBlock(byte[] hash, byte[] data) {
         checkHash(hash);
         checkBlock(data);
-        if (!blocks.containsKey(hash)) {
-            blocks.put(hash, data);
-            db.commit();
-            return true;
-        }
+        environment.executeInTransaction(txn -> {
+            blockStore.add(txn, new ArrayByteIterable(hash), new ArrayByteIterable(data));
+        });
         return false;
     }
 
     public boolean hasBlock(byte[] hash) {
         checkHash(hash);
-        return blocks.containsKey(hash);
+        return environment.computeInReadonlyTransaction(txn -> blockStore.get(txn, new ArrayByteIterable(hash)) != null);
     }
 
     public byte[] getBlock(byte[] hash) {
         checkHash(hash);
-        return blocks.get(hash);
+        return environment.computeInReadonlyTransaction(txn -> {
+            if (!hasBlock(hash)) throw new IllegalStateException("Can not find block");
+            return blockStore.get(txn, new ArrayByteIterable(hash)).getBytesUnsafe();
+        });
     }
 
     private void checkHash(byte[] hash) {
@@ -68,8 +63,7 @@ public class BlockStorageController {
     }
 
     public void close() {
-        blocks.close();
-        db.close();
+        environment.close();
     }
 
 }
