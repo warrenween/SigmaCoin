@@ -4,10 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.xml.bind.DatatypeConverter;
-import java.net.Inet4Address;
-import java.net.Inet6Address;
-import java.net.InetAddress;
-import java.net.UnknownHostException;
+import java.net.*;
 import java.nio.ByteBuffer;
 
 public class Peer {
@@ -15,14 +12,12 @@ public class Peer {
     public static final Logger LOGGER = LoggerFactory.getLogger(Peer.class);
     public final static int PEER_DATA_SIZE = 37;
 
-    public final InetAddress address;
-    public int port;
+    public final InetSocketAddress socketAddress;
     public long lastSeen;
     public long unbanTime;
 
-    public Peer(InetAddress address, int port, long lastSeen, long unbanTime) {
-        this.address = address;
-        this.port = port;
+    public Peer(InetSocketAddress socketAddress, long lastSeen, long unbanTime) {
+        this.socketAddress = socketAddress;
         this.lastSeen = lastSeen;
         this.unbanTime = unbanTime;
     }
@@ -57,7 +52,7 @@ public class Peer {
         int port = buffer.getInt();
         long lastSeen = buffer.getLong();
         long unbanTime = buffer.getLong();
-        return new Peer(address, port, lastSeen, unbanTime);
+        return new Peer(new InetSocketAddress(address, port), lastSeen, unbanTime);
     }
 
     /**
@@ -70,19 +65,19 @@ public class Peer {
      */
     public byte[] serialize() {
         ByteBuffer buffer = ByteBuffer.allocate(PEER_DATA_SIZE);
-        if (address instanceof Inet4Address) {
+        if (socketAddress.getAddress() instanceof Inet4Address) {
             buffer.put((byte) 4);
-            buffer.put(address.getAddress());
+            buffer.put(socketAddress.getAddress().getAddress());
             //fill space with additional bytes (space is 16(ipv6), but ipv4 is only 4 bytes)
             buffer.put(new byte[12]);
-        } else if (address instanceof Inet6Address) {
+        } else if (socketAddress.getAddress() instanceof Inet6Address) {
             buffer.put((byte) 6);
-            buffer.put(address.getAddress());
+            buffer.put(socketAddress.getAddress().getAddress());
         } else {
-            LOGGER.warn("Unknown type of InetAddress. Address: {}", address);
+            LOGGER.warn("Unknown type of InetAddress. Address: {}", socketAddress);
             buffer.put(new byte[16]);
         }
-        buffer.putInt(port);
+        buffer.putInt(socketAddress.getPort());
         buffer.putLong(lastSeen);
         buffer.putLong(unbanTime);
         return buffer.array();
@@ -91,11 +86,11 @@ public class Peer {
     @Override
     public boolean equals(Object obj) {
         return (obj != null) && (obj instanceof Peer) &&
-                (((Peer) obj).address.equals(address)) && (((Peer) obj).port == port);
+                (((Peer) obj).socketAddress.equals(socketAddress));
     }
 
     @Override
     public String toString() {
-        return new StringBuilder().append(address.toString()).append(':').append(port).toString();
+        return socketAddress.toString() + ':' + socketAddress.getPort();
     }
 }

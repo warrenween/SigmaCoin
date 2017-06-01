@@ -6,6 +6,7 @@ import org.testng.annotations.Test;
 import java.io.File;
 import java.io.IOException;
 import java.net.InetAddress;
+import java.net.InetSocketAddress;
 
 public class TestPeerDatabase {
 
@@ -14,8 +15,8 @@ public class TestPeerDatabase {
         File dbFile = new File("testAddingPeers.db");
         PeerDatabase db = new PeerDatabase(dbFile);
 
-        Peer peer1 = new Peer(InetAddress.getByName("127.0.0.1"), 1234, 128, 256);
-        Peer peer2 = new Peer(InetAddress.getByName("1080::8:800:200C:417A"), 1234, 128, 256);
+        Peer peer1 = new Peer(new InetSocketAddress(InetAddress.getByName("127.0.0.1"), 1234), 128, 256);
+        Peer peer2 = new Peer(new InetSocketAddress(InetAddress.getByName("1080::8:800:200C:417A"), 1234), 128, 256);
 
         db.addPeer(peer1);
         db.addPeer(peer2);

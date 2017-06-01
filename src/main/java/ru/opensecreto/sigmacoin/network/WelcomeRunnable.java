@@ -33,8 +33,7 @@ public class WelcomeRunnable implements Runnable {
                 Socket socket = serverSocket.accept();
                 LOGGER.debug("Accepted connection from {}", socket.getRemoteSocketAddress());
                 controller.registerPeer(new Peer(
-                        ((InetSocketAddress) socket.getRemoteSocketAddress()).getAddress(),
-                        ((InetSocketAddress) socket.getRemoteSocketAddress()).getPort(),
+                        (InetSocketAddress) socket.getRemoteSocketAddress(),
                         System.currentTimeMillis(),
                         0
                 ));
