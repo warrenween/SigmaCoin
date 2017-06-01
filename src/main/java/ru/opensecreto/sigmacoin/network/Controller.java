@@ -22,18 +22,17 @@ public class Controller {
     private InetAddress address;
     private Future peerWelcomerFuture;
 
-    public Controller(File peerDatabaseFile, String software, int version) throws IOException {
-        this(peerDatabaseFile, WelcomeRunnable.DEFAULT_PORT, software, version);
+    public Controller(File peerDatabaseDir, String software, int version) throws IOException {
+        this(peerDatabaseDir, WelcomeRunnable.DEFAULT_PORT, software, version);
     }
 
-    public Controller(File peerDatabaseFile, int port, String software, int version) throws IOException {
+    public Controller(File peerDatabaseDir, int port, String software, int version) throws IOException {
         this.software = software;
         this.version = version;
 
-        this.peerDatabaseFile = peerDatabaseFile;
+        this.peerDatabaseFile = peerDatabaseDir;
         try {
-            database = new PeerDatabase(peerDatabaseFile);
-            database.loadPeers();
+            database = new PeerDatabase(peerDatabaseDir);
         } catch (IOException e) {
             LOGGER.error("Could not initialize peer database.", e);
             throw e;
@@ -47,7 +46,6 @@ public class Controller {
     public void stop() {
         LOGGER.info("Stopping controller.");
         try {
-            database.save();
             database.close();
         } catch (IOException e) {
             LOGGER.error("Error while closing peer database.", e);
