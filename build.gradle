@@ -67,38 +67,6 @@ dependencies {
     testCompile "org.fluttercode.datafactory:datafactory:$datafactoryVersion"
 }
 
-dependencyVerification {
-    verify = [
-            'com.google.guava:guava:1158e94c7de4da480873f0b4ab4a1da14c0d23d4b1902cc94a58a6f0f9ab579e',
-            'com.google.code.gson:gson:c6221763bd79c4f1c3dc7f750b5f29a0bb38b367b81314c4f71896e340c40825',
-            'org.bouncycastle:bcprov-jdk15on:4c7fb5f7fb043fedc4b7e7af88871050f61af8dea7aaade87f8ebd60e509cd89',
-            'org.apache.commons:commons-lang3:8ac96fc686512d777fca85e144f196cd7cfe0c0aec23127229497d1a38ff651c',
-            'org.slf4j:slf4j-api:18c4a0095d5c1da6b817592e767bb23d29dd2f560ad74df75ff3961dbde25b79',
-            'ru.opensecreto:openutils:f7c9b91230ddec9ecf294679638f32165fea2495b8e99e6d53d69ee02341ba50',
-            'ru.opensecreto:jcommands:33af79aab5d3a1d11f4715fb5f22bf7a1dabd45767420dff5e47d288279216e4',
-            'org.mapdb:mapdb:b254112a54945a48e7f3828cc654a276ae7db3c8a67c48a43aaf7f39941b0669',
-            'org.nd4j:nd4j-common:5665adfb1e0a5548ce743409c28f399132a655b00fd399d7c0757f4ad4861b1b',
-            'commons-net:commons-net:d3b3866c61a47ba3bf040ab98e60c3010d027da0e7a99e1755e407dd47bc2702',
-            'com.google.code.findbugs:jsr305:905721a0eea90a81534abb7ee6ef4ea2e5e645fa1def0a5cd88402df1b46c9ed',
-            'com.google.errorprone:error_prone_annotations:cb4cfad870bf563a07199f3ebea5763f0dec440fcda0b318640b1feaa788656b',
-            'com.google.j2objc:j2objc-annotations:40ceb7157feb263949e0f503fe5f71689333a621021aa20ce0d0acee3badaa0f',
-            'org.codehaus.mojo:animal-sniffer-annotations:2068320bd6bad744c3673ab048f67e30bef8f518996fa380033556600669905d',
-            'org.jetbrains.kotlin:kotlin-stdlib:7eb837b3767c06e1e181c5479a74d28ce1d2ca90a8be18d596aa64ba2dfd4dda',
-            'org.eclipse.collections:eclipse-collections-api:8ed2ad5aeba56b4331f9bc561b0cc1cef9e5175a070fb37160e6dac958b017a0',
-            'org.eclipse.collections:eclipse-collections:7ee31f16a8c665c751d231620e0b7e17a56dee8398443dfb5f5af762b58faac8',
-            'org.eclipse.collections:eclipse-collections-forkjoin:d3d6346dd988906fd50864152c51ca01d8ee5ddf88e66c6809acc052ce6f23b4',
-            'net.jpountz.lz4:lz4:b877a4d4a3a0140486d3d0f83d9058e7c0ff6ca80b00d2f7b77145935b385b56',
-            'org.mapdb:elsa:c84f01440b506ae1ce69ee4f69d887ce2009b9e86b696be1c50774ca1f2b359a',
-            'org.reflections:reflections:6eecd8b68f937e7220cf4da839403730e102cc31d25ccf5685a2dba0ea8d7553',
-            'commons-io:commons-io:cc6a41dc3eaacc9e440a6bd0d2890b20d36b4ee408fe2d67122f328bb6e01581',
-            'org.apache.commons:commons-math3:d1075b14a71087038b0bfd198f0f7dd8e49b5b3529d8e2eba99e7d9eb8565e4b',
-            'org.jetbrains.kotlin:kotlin-runtime:d328f57ddc7c1afc1567d276d2378758fe8dc63a9398814f1b32606d19b1dec5',
-            'net.jcip:jcip-annotations:be5805392060c71474bf6c9a67a099471274d30b83eef84bfc4e0889a4f1dcc0',
-            'org.javassist:javassist:3b6205716b7c0dc471def89fa367b1e97f085d6faac6acac6ac14e0cd67324b3',
-            'com.google.code.findbugs:annotations:893b2203a27e4a8ba9d16cd6ed6e9f730736b4878a6bfffeff06861f32e6631b',
-    ]
-}
-
 test {
     useTestNG()
     workingDir = "$buildDir"
