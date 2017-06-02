@@ -154,7 +154,7 @@ public class Miner implements Callable<int[]> {
                                 search = false;
                                 solutionFound = false;
                             }
-                            if ((result[j] & 0xff) < (target[i] & 0xff)) {
+                            if ((result[j] & 0xff) < (target[j] & 0xff)) {
                                 search = false;
                                 solutionFound = true;
                             }
