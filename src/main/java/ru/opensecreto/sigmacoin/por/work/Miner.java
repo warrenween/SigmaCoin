@@ -128,6 +128,7 @@ public class Miner implements Callable<int[]> {
                     //checking final
                     boolean solutionFound = false;
                     if (isValid) {
+                        LOGGER.trace("Found valid MemHash solution.");
                         //sorting unsigned
                         long[] tmp = new long[n];
                         for (int j = 0; j < n; j++) {
@@ -169,6 +170,7 @@ public class Miner implements Callable<int[]> {
                                         "Total time {}. Time per solution {}ns.",
                                 attemptsDone, chunksGenerated, attemptsDone, Duration.ofNanos(solvingNanoElapsed),
                                 BigInteger.valueOf(solvingNanoElapsed).divide(attemptsDone));
+
                     }
 
                     //updating ids for next solution
