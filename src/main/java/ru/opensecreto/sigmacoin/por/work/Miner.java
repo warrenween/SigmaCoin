@@ -156,21 +156,17 @@ public class Miner implements Callable<int[]> {
                                 solutionFound = false;
                             }
                             if ((result[j] & 0xff) < (target[j] & 0xff)) {
-                                search = false;
-                                solutionFound = true;
+                                long solvingNanoElapsed = System.nanoTime() - solvingTimeNanoStart;
+                                LOGGER.info("Found valid solution. Attempts done {}. Chunks generated {}. " +
+                                                "Total time {}. Time per solution {}ns.",
+                                        attemptsDone, chunksGenerated, attemptsDone, Duration.ofNanos(solvingNanoElapsed),
+                                        BigInteger.valueOf(solvingNanoElapsed).divide(attemptsDone));
+                                int[] resultIds = new int[n];
+                                return tmpInt;
                             }
 
                             j++;
                         }
-                    }
-
-                    if (solutionFound) {
-                        long solvingNanoElapsed = System.nanoTime() - solvingTimeNanoStart;
-                        LOGGER.info("Found valid solution. Attempts done {}. Chunks generated {}. " +
-                                        "Total time {}. Time per solution {}ns.",
-                                attemptsDone, chunksGenerated, attemptsDone, Duration.ofNanos(solvingNanoElapsed),
-                                BigInteger.valueOf(solvingNanoElapsed).divide(attemptsDone));
-
                     }
 
                     //updating ids for next solution
