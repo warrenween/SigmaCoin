@@ -182,7 +182,7 @@ public class Miner implements Callable<int[]> {
                                         "Time per solution {}.",
                                 roundCounter,
                                 solvingAttemptsDoneTotal,
-                                memhashesSuccessfulTotal, getRate(memhashesSuccessfulTotal, solvingAttemptsDoneTotal),
+                                memhashesSuccessfulTotal, getRate(memhashesSuccessfulTotal, solvingAttemptsDoneTotal).toPlainString(),
                                 chunksGenerated,
                                 Duration.ofNanos(solvingRoundNanoTime),
                                 Duration.ofNanos(BigInteger.valueOf(solvingRoundNanoTime).divide(solvingAttemptsDoneTotal).longValue()));
@@ -224,8 +224,8 @@ public class Miner implements Callable<int[]> {
                             "Time per solution {}.",
                     roundCounter,
                     solvingAttemptsDoneInRound, solvingAttemptsDoneTotal,
-                    memhashesSuccessfulInRound, getRate(memhashesSuccessfulInRound, solvingAttemptsDoneInRound),
-                    memhashesSuccessfulTotal, getRate(memhashesSuccessfulTotal, solvingAttemptsDoneTotal),
+                    memhashesSuccessfulInRound, getRate(memhashesSuccessfulInRound, solvingAttemptsDoneInRound).toPlainString(),
+                    memhashesSuccessfulTotal, getRate(memhashesSuccessfulTotal, solvingAttemptsDoneTotal).toPlainString(),
                     chunksGenerated,
                     Duration.ofNanos(solvingRoundNanoTime), Duration.ofNanos(solvingTimeNanosTotal),
                     Duration.ofNanos(BigInteger.valueOf(solvingRoundNanoTime).divide(solvingAttemptsDoneInRound).longValue()));

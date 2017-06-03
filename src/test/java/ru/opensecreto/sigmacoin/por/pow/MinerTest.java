@@ -79,7 +79,7 @@ public class MinerTest {
         }
         byte[] hash = new byte[2];
         hashDigest.doFinal(hash, 0);
-        
+
         assertThat(hash[0] == 0).isTrue();
         assertThat((hash[1] & 0xff) < 0xff).isTrue();
     }
