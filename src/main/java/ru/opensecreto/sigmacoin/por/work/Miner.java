@@ -8,6 +8,7 @@ import ru.opensecreto.sigmacoin.core.DigestProvider;
 
 import java.math.BigInteger;
 import java.time.Duration;
+import java.time.Period;
 import java.util.Arrays;
 import java.util.concurrent.Callable;
 import java.util.concurrent.TimeUnit;
@@ -90,8 +91,8 @@ public class Miner implements Callable<int[]> {
             }
 
             long chunkTimeNanoElapsed = System.nanoTime() - chunkTimeNanoStart;
-            LOGGER.trace("Generated {} chunks. Total {}sec. Time per one {}ns.",
-                    maxChunkCount, TimeUnit.NANOSECONDS.toSeconds(chunkTimeNanoElapsed),
+            LOGGER.trace("Generated {} chunks. Total {}. Time per one {}ns.",
+                    maxChunkCount, Duration.ofNanos(chunkTimeNanoElapsed),
                     chunkTimeNanoElapsed / maxChunkCount);
 
             for (int i = 0; i < ids.length; i++) {
