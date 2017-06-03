@@ -120,13 +120,12 @@ public class Miner implements Callable<int[]> {
 
                     //checking solution
                     boolean isValid = true;
-                    for (int j = 0; j < result.length; j++) {
-                        isValid &= result[j] == 0;
+                    for (byte aResult : result) {
+                        isValid &= aResult == 0;
                     }
                     attemptsDone = attemptsDone.add(BigInteger.ONE);
 
                     //checking final
-                    boolean solutionFound = false;
                     if (isValid) {
                         //sorting unsigned
                         long[] tmp = new long[n];
