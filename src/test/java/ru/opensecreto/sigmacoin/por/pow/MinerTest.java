@@ -17,16 +17,17 @@ public class MinerTest {
 
     @Test
     public void test() throws Exception {
-        DigestProvider provider = () -> new ShortenedDigest(new SHA3Digest(256), 2);
+        DigestProvider chunkProvider = () -> new ShortenedDigest(new SHA3Digest(256), 3);
+        DigestProvider hashProvider = () -> new ShortenedDigest(new SHA3Digest(256), 8);
 
         byte[] data = new byte[16];
         new Random().nextBytes(data);
         byte[] dataCopy = Arrays.copyOf(data, 16);
 
-        byte[] target = new byte[]{0x00, (byte) 0xff};
-        byte[] targetCopy = new byte[]{0x00, (byte) 0xff};
+        byte[] target = new byte[]{0x00, 0x00, 0x00, (byte) 0xff, 0x00, 0x00, 0x00, 0x00};
+        byte[] targetCopy = new byte[]{0x00, 0x00, 0x00, (byte) 0xff, 0x00, 0x00, 0x00, 0x00};
 
-        Miner miner = new Miner(data, provider, 8, target, 100000);
+        Miner miner = new Miner(data, chunkProvider, hashProvider, 16, target, 100000);
         int[] result = miner.call();
 
         //assert original arrays are unchanged
@@ -34,9 +35,9 @@ public class MinerTest {
         assertThat(target).containsExactly(targetCopy);
 
         //checking valid data (not hash)
-        assertThat(result).hasSize(8);
+        assertThat(result).hasSize(16);
         //checking ordered. Ids are unsigned
-        long[] tmp = new long[8];
+        long[] tmp = new long[16];
         for (int i = 0; i < result.length; i++) {
             tmp[i] = result[i] & 0xffffffffL;
         }
@@ -45,13 +46,38 @@ public class MinerTest {
             assertThat(tmp[i]).overridingErrorMessage("Array is expected to be ordered.").isGreaterThan(previous);
         }
 
-        Digest digest = provider.getDigest();
-        digest.update(data, 0, data.length);
+        //checking xor is 0
+        byte[] chunkResult = new byte[0];
+        Digest chunkDigest = chunkProvider.getDigest();
+        //first value
+        chunkDigest.update(Ints.toByteArray(result[0]), 0, Integer.BYTES);
+        chunkDigest.update(data, 0, data.length);
+        chunkDigest.doFinal(chunkResult, 0);
+
+        for (int i = 1; i < result.length; i++) {
+            byte[] chunkTmp = new byte[3];
+            chunkDigest.reset();
+            chunkDigest.update(Ints.toByteArray(result[0]), 0, Integer.BYTES);
+            chunkDigest.update(data, 0, data.length);
+            chunkDigest.doFinal(chunkTmp, 0);
+            for (int j = 0; j < chunkTmp.length; j++) {
+                chunkResult[j] ^= chunkTmp[j];
+            }
+        }
+
+        for (byte aChunkResult : chunkResult) {
+            assertThat(aChunkResult).isEqualTo((byte) 0);
+        }
+
+
+        //checking final
+        Digest hashDigest = hashProvider.getDigest();
+        hashDigest.update(data, 0, data.length);
         for (int i = 0; i < result.length; i++) {
-            digest.update(Ints.toByteArray(result[i]), 0, Integer.BYTES);
+            hashDigest.update(Ints.toByteArray(result[i]), 0, Integer.BYTES);
         }
         byte[] hash = new byte[2];
-        digest.doFinal(hash, 0);
+        hashDigest.doFinal(hash, 0);
         assertThat(hash[0] == 0).isTrue();
         assertThat((hash[1] & 0xff) < 0xff).isTrue();
 

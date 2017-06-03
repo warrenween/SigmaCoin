@@ -17,24 +17,29 @@ public class Miner implements Callable<int[]> {
 
     private final int maxChunkCount;
     private final byte[] data;
-    private final DigestProvider digestProvider;
+    private final DigestProvider chunkProvider;
+    private final DigestProvider hashProvider;
     private final int n;
     private final byte[] target;
 
-    public Miner(byte[] data, DigestProvider digestProvider, int n, byte[] target, int maxChunkCount) {
+    public Miner(byte[] data, DigestProvider chunkProvider, DigestProvider hashProvider, int n, byte[] target, int maxChunkCount) {
         if (data == null) throw new IllegalArgumentException("data can not be null");
-        if (digestProvider == null) throw new IllegalArgumentException("Digest provider can not be null.");
+        if (chunkProvider == null) throw new IllegalArgumentException("Chunk digest provider can not be null.");
+        if (hashProvider == null) throw new IllegalArgumentException("Hash digest provider can not be null.");
         if (target == null) throw new IllegalArgumentException("target can not be null");
 
-        if (digestProvider.getDigest() == null)
-            throw new IllegalArgumentException("Digest provider can not return null");
+        if (hashProvider.getDigest() == null)
+            throw new IllegalArgumentException("Hash digest provider can not return null");
+        if (chunkProvider.getDigest() == null)
+            throw new IllegalArgumentException("Chunk digest provider can not return null");
         if (n < 2) throw new IllegalArgumentException("N must be >= 2");
-        if (digestProvider.getDigest().getDigestSize() != target.length)
+        if (hashProvider.getDigest().getDigestSize() != target.length)
             throw new IllegalArgumentException("Target bytes count is not equal to digest size.");
         if (maxChunkCount < n) throw new IllegalArgumentException("Max chunk count can not be less than N.");
 
         this.data = Arrays.copyOf(data, data.length);
-        this.digestProvider = digestProvider;
+        this.chunkProvider = chunkProvider;
+        this.hashProvider = hashProvider;
         this.n = n;
         this.target = Arrays.copyOf(target, target.length);
         this.maxChunkCount = maxChunkCount;
@@ -43,7 +48,7 @@ public class Miner implements Callable<int[]> {
     @Override
     public int[] call() throws Exception {
         //counters
-        int digestLength = digestProvider.getDigest().getDigestSize();
+        int chunkSize = chunkProvider.getDigest().getDigestSize();
         long stepCounter = 0;
         BigInteger attemptsDone = BigInteger.ZERO;
         int chunkCounter = Integer.MIN_VALUE;
@@ -58,14 +63,15 @@ public class Miner implements Callable<int[]> {
         //modify this values to select new chunks set
         int[] ids = new int[n];
         //store chunks
-        byte[][] chunks = new byte[maxChunkCount][digestLength];
+        byte[][] chunks = new byte[maxChunkCount][chunkSize];
         //map each chunk to its id
         int[] chunkId = new int[maxChunkCount];
         int[] finalIds = new int[n];
 
         //needed stuff
-        Digest digest = digestProvider.getDigest();
-        byte[] result = new byte[digestLength];
+        Digest chunkDigest = chunkProvider.getDigest();
+        Digest hashDigest = hashProvider.getDigest();
+        byte[] result = new byte[chunkSize];
 
         LOGGER.info("Successfully prepared. Starting mining.");
 
@@ -78,12 +84,12 @@ public class Miner implements Callable<int[]> {
 
             for (int i = 0; i < maxChunkCount; i++) {
                 chunksGenerated++;
-                digest.reset();
+                chunkDigest.reset();
 
-                digest.update(Ints.toByteArray(chunkCounter), 0, Integer.BYTES);
-                digest.update(data, 0, data.length);
+                chunkDigest.update(Ints.toByteArray(chunkCounter), 0, Integer.BYTES);
+                chunkDigest.update(data, 0, data.length);
 
-                digest.doFinal(chunks[i], 0);
+                chunkDigest.doFinal(chunks[i], 0);
                 chunkId[i] = chunkCounter;
                 chunkCounter++;
             }
@@ -110,9 +116,9 @@ public class Miner implements Callable<int[]> {
                     }
 
                     //xoring chunks
-                    System.arraycopy(chunks[ids[0]], 0, result, 0, digestLength);
+                    System.arraycopy(chunks[ids[0]], 0, result, 0, chunkSize);
                     for (int j = 1; j < ids.length; j++) {
-                        for (int k = 0; k < digestLength; k++) {
+                        for (int k = 0; k < chunkSize; k++) {
                             result[k] ^= chunks[ids[j]][k];
                         }
                     }
@@ -137,12 +143,12 @@ public class Miner implements Callable<int[]> {
                             tmpInt[j] = (int) tmp[j];
                         }
 
-                        digest.reset();
-                        digest.update(data, 0, data.length);
+                        hashDigest.reset();
+                        hashDigest.update(data, 0, data.length);
                         for (int j = 0; j < finalIds.length; j++) {
-                            digest.update(Ints.toByteArray(tmpInt[j]), 0, Integer.BYTES);
+                            hashDigest.update(Ints.toByteArray(tmpInt[j]), 0, Integer.BYTES);
                         }
-                        digest.doFinal(result, 0);
+                        hashDigest.doFinal(result, 0);
 
                         //checking if hash is less than header
                         if (meetsTarget(result, target)) {
