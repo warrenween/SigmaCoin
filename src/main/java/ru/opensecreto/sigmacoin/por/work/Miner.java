@@ -155,7 +155,7 @@ public class Miner implements Callable<int[]> {
                             }
                             if ((result[j] & 0xff) < (target[j] & 0xff)) {
                                 long solvingNanoElapsed = System.nanoTime() - solvingTimeNanoStart;
-                                LOGGER.info("Found valid solution. Attempts done {}. Chunks generated {}. " +
+                                LOGGER.info("Found valid solution. Attempts done {}. Chunks generated {}. Attempts done {}." +
                                                 "Total time {}. Time per solution {}ns.",
                                         attemptsDone, chunksGenerated, attemptsDone, Duration.ofNanos(solvingNanoElapsed),
                                         BigInteger.valueOf(solvingNanoElapsed).divide(attemptsDone));
