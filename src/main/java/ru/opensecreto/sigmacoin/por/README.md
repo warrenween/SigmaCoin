@@ -2,9 +2,8 @@
 
 ## General
 
-Algorithm is based on 4 problems:
-* **Proof of work** - miner has to solve computationally hard problem.
-* **Proof of capacity** - miner has to store solution from PoW stage.
+Algorithm is based on 3 problems:
+* **Memory hard proof of work** - miner has to solve hard problem.
 * **Proof of burn** - coin holders have to burn their coins to get chance to take part in PoA stage.
 Burned coins can not be send anymore.
 * **Proof of activity** - every burned coin is unique.
