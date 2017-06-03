@@ -180,7 +180,6 @@ public class Miner implements Callable<int[]> {
                                         "Total chunks processed {}." +
                                         "Total time {}. " +
                                         "Time per solution {}.",
-                                roundCounter,
                                 solvingAttemptsDoneTotal,
                                 memhashesSuccessfulTotal, getRate(memhashesSuccessfulTotal, solvingAttemptsDoneTotal).toPlainString(),
                                 chunksGenerated,
@@ -220,7 +219,7 @@ public class Miner implements Callable<int[]> {
                             "Successful memhashes in round {}. Successful memhases rate in round {}%. " +
                             "Successful memhashes total {}. Successful memhashes rate total {}%. " +
                             "Total chunks processed {}. " +
-                            "Time per round {]. Total time {}. " +
+                            "Time per round {}. Total time {}. " +
                             "Time per solution {}.",
                     roundCounter,
                     solvingAttemptsDoneInRound, solvingAttemptsDoneTotal,
