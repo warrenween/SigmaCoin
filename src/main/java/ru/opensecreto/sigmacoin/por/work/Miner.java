@@ -177,7 +177,7 @@ public class Miner implements Callable<int[]> {
             }
 
             LOGGER.debug("Step {} was not lucky. Chunks processed {}. Attempts done {}",
-                    stepCounter, chunksGenerated += maxChunkCount, attemptsDone);
+                    stepCounter, chunksGenerated, attemptsDone);
             chunkMinId += maxChunkCount;
             chunkMaxId += maxChunkCount;
             stepCounter++;
