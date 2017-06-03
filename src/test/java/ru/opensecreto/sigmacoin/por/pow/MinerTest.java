@@ -50,7 +50,7 @@ public class MinerTest {
         for (int i = 0; i < result.length; i++) {
             digest.update(Ints.toByteArray(result[i]), 0, Integer.BYTES);
         }
-        byte[] hash = new byte[1];
+        byte[] hash = new byte[2];
         digest.doFinal(hash, 0);
         assertThat(hash[0] == 0).isTrue();
         assertThat((hash[1] & 0xff) < 0xff).isTrue();
