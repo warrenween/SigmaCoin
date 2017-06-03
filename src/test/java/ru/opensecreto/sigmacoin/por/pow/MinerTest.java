@@ -17,14 +17,14 @@ public class MinerTest {
 
     @Test
     public void test() throws Exception {
-        DigestProvider provider = () -> new ShortenedDigest(new SHA3Digest(256), 1);
+        DigestProvider provider = () -> new ShortenedDigest(new SHA3Digest(256), 2);
 
         byte[] data = new byte[16];
         new Random().nextBytes(data);
         byte[] dataCopy = Arrays.copyOf(data, 16);
 
-        byte[] target = new byte[]{0x00};
-        byte[] targetCopy = new byte[]{0x00};
+        byte[] target = new byte[]{0x00, (byte) 0xff};
+        byte[] targetCopy = new byte[]{0x00, (byte) 0xff};
 
         Miner miner = new Miner(data, provider, 8, target, 10000);
         int[] result = miner.call();
@@ -52,7 +52,8 @@ public class MinerTest {
         }
         byte[] hash = new byte[1];
         digest.doFinal(hash, 0);
-        assertThat((hash[0] & 0xff) < 0x0f);
+        assertThat(hash[0] == 0).isTrue();
+        assertThat((hash[1] & 0xff) < 0xff).isTrue();
 
     }
 
