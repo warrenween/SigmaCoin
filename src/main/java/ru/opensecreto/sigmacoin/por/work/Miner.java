@@ -49,6 +49,7 @@ public class Miner implements Callable<int[]> {
     public int[] call() throws Exception {
         //counters
         int chunkSize = chunkProvider.getDigest().getDigestSize();
+        int hashSize = hashProvider.getDigest().getDigestSize();
         long stepCounter = 0;
         BigInteger attemptsDone = BigInteger.ZERO;
         int chunkCounter = Integer.MIN_VALUE;
@@ -71,7 +72,8 @@ public class Miner implements Callable<int[]> {
         //needed stuff
         Digest chunkDigest = chunkProvider.getDigest();
         Digest hashDigest = hashProvider.getDigest();
-        byte[] result = new byte[chunkSize];
+        byte[] chunkResult = new byte[chunkSize];
+        byte[] hashResult = new byte[hashSize];
 
         LOGGER.info("Successfully prepared. Starting mining.");
 
@@ -111,21 +113,21 @@ public class Miner implements Callable<int[]> {
 
                 while (mine) {
                     //resetting result cache
-                    for (int j = 0; j < result.length; j++) {
-                        result[j] = 0;
+                    for (int j = 0; j < chunkResult.length; j++) {
+                        chunkResult[j] = 0;
                     }
 
                     //xoring chunks
-                    System.arraycopy(chunks[ids[0]], 0, result, 0, chunkSize);
+                    System.arraycopy(chunks[ids[0]], 0, chunkResult, 0, chunkSize);
                     for (int j = 1; j < ids.length; j++) {
                         for (int k = 0; k < chunkSize; k++) {
-                            result[k] ^= chunks[ids[j]][k];
+                            chunkResult[k] ^= chunks[ids[j]][k];
                         }
                     }
 
                     //checking solution
                     boolean isValid = true;
-                    for (byte aResult : result) {
+                    for (byte aResult : chunkResult) {
                         isValid &= aResult == 0;
                     }
                     attemptsDone = attemptsDone.add(BigInteger.ONE);
@@ -148,10 +150,10 @@ public class Miner implements Callable<int[]> {
                         for (int j = 0; j < finalIds.length; j++) {
                             hashDigest.update(Ints.toByteArray(tmpInt[j]), 0, Integer.BYTES);
                         }
-                        hashDigest.doFinal(result, 0);
+                        hashDigest.doFinal(hashResult, 0);
 
                         //checking if hash is less than header
-                        if (meetsTarget(result, target)) {
+                        if (meetsTarget(hashResult, target)) {
                             long solvingNanoElapsed = System.nanoTime() - solvingTimeNanoStart;
                             LOGGER.info("Found valid solution. Attempts done {}. Chunks generated {}. Attempts done {}." +
                                             "Total time {}. Time per solution {}ns.",
