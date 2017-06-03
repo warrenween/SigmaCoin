@@ -172,7 +172,7 @@ public class Miner implements Callable<int[]> {
                     if (meetsTarget(hashResult, target)) {
                         long solvingRoundNanoTime = System.nanoTime() - solvingRoundNanoTimeStart;
                         solvingAttemptsDoneTotal = solvingAttemptsDoneTotal.add(solvingAttemptsDoneInRound);
-                        memhashesSuccessfulTotal = solvingAttemptsDoneTotal.add(solvingAttemptsDoneInRound);
+                        memhashesSuccessfulTotal = memhashesSuccessfulTotal.add(memhashesSuccessfulInRound);
                         LOGGER.info(
                                 "Found valid solution!!! " +
                                         "Attempts total {}. " +
