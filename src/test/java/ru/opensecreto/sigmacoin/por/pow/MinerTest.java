@@ -23,8 +23,8 @@ public class MinerTest {
         new Random().nextBytes(data);
         byte[] dataCopy = Arrays.copyOf(data, 16);
 
-        byte[] target = new byte[]{0x08};
-        byte[] targetCopy = new byte[]{0x08};
+        byte[] target = new byte[]{0x00};
+        byte[] targetCopy = new byte[]{0x00};
 
         Miner miner = new Miner(data, provider, 8, target, 10000);
         int[] result = miner.call();
