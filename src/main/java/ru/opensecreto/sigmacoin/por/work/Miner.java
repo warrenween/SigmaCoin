@@ -128,7 +128,6 @@ public class Miner implements Callable<int[]> {
                     //checking final
                     boolean solutionFound = false;
                     if (isValid) {
-                        LOGGER.trace("Found valid MemHash solution.");
                         //sorting unsigned
                         long[] tmp = new long[n];
                         for (int j = 0; j < n; j++) {
@@ -153,7 +152,6 @@ public class Miner implements Callable<int[]> {
                         while ((j < result.length) & search) {
                             if ((result[j] & 0xff) > (target[j] & 0xff)) {
                                 search = false;
-                                solutionFound = false;
                             }
                             if ((result[j] & 0xff) < (target[j] & 0xff)) {
                                 long solvingNanoElapsed = System.nanoTime() - solvingTimeNanoStart;
@@ -161,7 +159,6 @@ public class Miner implements Callable<int[]> {
                                                 "Total time {}. Time per solution {}ns.",
                                         attemptsDone, chunksGenerated, attemptsDone, Duration.ofNanos(solvingNanoElapsed),
                                         BigInteger.valueOf(solvingNanoElapsed).divide(attemptsDone));
-                                int[] resultIds = new int[n];
                                 return tmpInt;
                             }
 
