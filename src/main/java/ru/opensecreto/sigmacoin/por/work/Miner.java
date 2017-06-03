@@ -212,7 +212,7 @@ public class Miner implements Callable<int[]> {
             long solvingRoundNanoTime = System.nanoTime() - solvingRoundNanoTimeStart;
             solvingTimeNanosTotal += solvingRoundNanoTime;
             solvingAttemptsDoneTotal = solvingAttemptsDoneTotal.add(solvingAttemptsDoneInRound);
-            memhashesSuccessfulTotal = solvingAttemptsDoneTotal.add(solvingAttemptsDoneInRound);
+            memhashesSuccessfulTotal = memhashesSuccessfulTotal.add(memhashesSuccessfulInRound);
             LOGGER.debug(
                     "Round {} was unlucky. " +
                             "Attempts in round {}. Attempts total {}. " +
