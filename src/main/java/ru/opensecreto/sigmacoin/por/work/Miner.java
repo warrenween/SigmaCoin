@@ -147,22 +147,13 @@ public class Miner implements Callable<int[]> {
                         digest.doFinal(result, 0);
 
                         //checking if hash is less than header
-                        boolean search = true;
-                        int j = 0;
-                        while ((j < result.length) & search) {
-                            if ((result[j] & 0xff) > (target[j] & 0xff)) {
-                                search = false;
-                            }
-                            if ((result[j] & 0xff) < (target[j] & 0xff)) {
-                                long solvingNanoElapsed = System.nanoTime() - solvingTimeNanoStart;
-                                LOGGER.info("Found valid solution. Attempts done {}. Chunks generated {}. Attempts done {}." +
-                                                "Total time {}. Time per solution {}ns.",
-                                        attemptsDone, chunksGenerated, attemptsDone, Duration.ofNanos(solvingNanoElapsed),
-                                        BigInteger.valueOf(solvingNanoElapsed).divide(attemptsDone));
-                                return tmpInt;
-                            }
-
-                            j++;
+                        if (meetsTarget(result,target)) {
+                            long solvingNanoElapsed = System.nanoTime() - solvingTimeNanoStart;
+                            LOGGER.info("Found valid solution. Attempts done {}. Chunks generated {}. Attempts done {}." +
+                                            "Total time {}. Time per solution {}ns.",
+                                    attemptsDone, chunksGenerated, attemptsDone, Duration.ofNanos(solvingNanoElapsed),
+                                    BigInteger.valueOf(solvingNanoElapsed).divide(attemptsDone));
+                            return tmpInt;
                         }
                     }
 
@@ -193,4 +184,17 @@ public class Miner implements Callable<int[]> {
         LOGGER.info("Unable to find solution.");
         throw new Exception("Unable to compute result.");
     }
+
+    private boolean meetsTarget(byte[] hash, byte[] target) {
+        for (int i = 0; i < hash.length; i++) {
+            if ((hash[i] & 0xff) > (target[i] & 0xff)) {
+                return false;
+            }
+            if ((hash[i] & 0xff) < (target[i] & 0xff)) {
+                return true;
+            }
+        }
+        return true;
+    }
 }
+
