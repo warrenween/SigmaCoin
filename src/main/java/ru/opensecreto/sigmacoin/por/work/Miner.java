@@ -8,10 +8,8 @@ import ru.opensecreto.sigmacoin.core.DigestProvider;
 
 import java.math.BigInteger;
 import java.time.Duration;
-import java.time.Period;
 import java.util.Arrays;
 import java.util.concurrent.Callable;
-import java.util.concurrent.TimeUnit;
 
 public class Miner implements Callable<int[]> {
 
@@ -147,7 +145,7 @@ public class Miner implements Callable<int[]> {
                         digest.doFinal(result, 0);
 
                         //checking if hash is less than header
-                        if (meetsTarget(result,target)) {
+                        if (meetsTarget(result, target)) {
                             long solvingNanoElapsed = System.nanoTime() - solvingTimeNanoStart;
                             LOGGER.info("Found valid solution. Attempts done {}. Chunks generated {}. Attempts done {}." +
                                             "Total time {}. Time per solution {}ns.",
@@ -158,20 +156,23 @@ public class Miner implements Callable<int[]> {
                     }
 
                     //updating ids for next solution
-                    if (i == (n - 1)) {
-                        if (ids[i] == (maxChunkCount - 1)) {
-                            mine = false;
+                    int j = 0;
+                    boolean update = true;
+                    while ((j < (n)) & update) {
+                        if (j == (n - 1)) {
+                            if (ids[j] == maxChunkCount - 1) {
+                                mine = false;
+                            } else {
+                                ids[j]++;
+                            }
                         } else {
-                            ids[i]++;
+                            if ((ids[j + 1] - ids[j]) > 1) {
+                                ids[j]++;
+                                update = false;
+                            }
                         }
-                    } else {
-                        if (ids[i] == (ids[i + 1] - 1)) {
-                            mine = false;
-                        } else {
-                            ids[i]++;
-                        }
+                        j++;
                     }
-
                 }
             }
 
