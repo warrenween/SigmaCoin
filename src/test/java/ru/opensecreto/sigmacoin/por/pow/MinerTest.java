@@ -17,17 +17,18 @@ public class MinerTest {
 
     @Test
     public void test() throws Exception {
-        DigestProvider chunkProvider = () -> new ShortenedDigest(new SHA3Digest(256), 3);
-        DigestProvider hashProvider = () -> new ShortenedDigest(new SHA3Digest(256), 8);
+        DigestProvider chunkProvider = () -> new ShortenedDigest(new SHA3Digest(256), 2);
+        DigestProvider hashProvider = () -> new ShortenedDigest(new SHA3Digest(256), 4);
+        final int N = 32;
 
-        byte[] data = new byte[16];
+        byte[] data = new byte[32];
         new Random().nextBytes(data);
-        byte[] dataCopy = Arrays.copyOf(data, 16);
+        byte[] dataCopy = Arrays.copyOf(data, 32);
 
-        byte[] target = new byte[]{0x00, 0x00, 0x00, (byte) 0xff, 0x00, 0x00, 0x00, 0x00};
-        byte[] targetCopy = new byte[]{0x00, 0x00, 0x00, (byte) 0xff, 0x00, 0x00, 0x00, 0x00};
+        byte[] target = new byte[]{0x00, (byte) 0xff, 0x00, 0x00};
+        byte[] targetCopy = new byte[]{0x00, (byte) 0xff, 0x00, 0x00};
 
-        Miner miner = new Miner(data, chunkProvider, hashProvider, 16, target, 100000);
+        Miner miner = new Miner(data, chunkProvider, hashProvider, N, target, 100000);
         int[] result = miner.call();
 
         //assert original arrays are unchanged
@@ -35,9 +36,9 @@ public class MinerTest {
         assertThat(target).containsExactly(targetCopy);
 
         //checking valid data (not hash)
-        assertThat(result).hasSize(16);
+        assertThat(result).hasSize(N);
         //checking ordered. Ids are unsigned
-        long[] tmp = new long[16];
+        long[] tmp = new long[N];
         for (int i = 0; i < result.length; i++) {
             tmp[i] = result[i] & 0xffffffffL;
         }
@@ -47,7 +48,7 @@ public class MinerTest {
         }
 
         //checking xor is 0
-        byte[] chunkResult = new byte[0];
+        byte[] chunkResult = new byte[2];
         Digest chunkDigest = chunkProvider.getDigest();
         //first value
         chunkDigest.update(Ints.toByteArray(result[0]), 0, Integer.BYTES);
@@ -55,7 +56,7 @@ public class MinerTest {
         chunkDigest.doFinal(chunkResult, 0);
 
         for (int i = 1; i < result.length; i++) {
-            byte[] chunkTmp = new byte[3];
+            byte[] chunkTmp = new byte[2];
             chunkDigest.reset();
             chunkDigest.update(Ints.toByteArray(result[0]), 0, Integer.BYTES);
             chunkDigest.update(data, 0, data.length);
@@ -73,14 +74,14 @@ public class MinerTest {
         //checking final
         Digest hashDigest = hashProvider.getDigest();
         hashDigest.update(data, 0, data.length);
-        for (int i = 0; i < result.length; i++) {
-            hashDigest.update(Ints.toByteArray(result[i]), 0, Integer.BYTES);
+        for (int aResult : result) {
+            hashDigest.update(Ints.toByteArray(aResult), 0, Integer.BYTES);
         }
         byte[] hash = new byte[2];
         hashDigest.doFinal(hash, 0);
+        
         assertThat(hash[0] == 0).isTrue();
         assertThat((hash[1] & 0xff) < 0xff).isTrue();
-
     }
 
 }
