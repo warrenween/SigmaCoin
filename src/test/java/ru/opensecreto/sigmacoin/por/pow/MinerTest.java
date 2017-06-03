@@ -26,7 +26,7 @@ public class MinerTest {
         byte[] target = new byte[]{0x00, (byte) 0xff};
         byte[] targetCopy = new byte[]{0x00, (byte) 0xff};
 
-        Miner miner = new Miner(data, provider, 8, target, 10000);
+        Miner miner = new Miner(data, provider, 8, target, 100000);
         int[] result = miner.call();
 
         //assert original arrays are unchanged
