@@ -77,7 +77,7 @@ public class MinerTest {
         for (int aResult : result) {
             hashDigest.update(Ints.toByteArray(aResult), 0, Integer.BYTES);
         }
-        byte[] hash = new byte[2];
+        byte[] hash = new byte[4];
         hashDigest.doFinal(hash, 0);
 
         assertThat(hash[0] == 0).isTrue();
