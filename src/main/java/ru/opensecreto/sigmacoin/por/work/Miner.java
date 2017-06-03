@@ -6,7 +6,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.opensecreto.sigmacoin.core.DigestProvider;
 
+import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.math.MathContext;
 import java.time.Duration;
 import java.util.Arrays;
 import java.util.concurrent.Callable;
@@ -47,16 +49,21 @@ public class Miner implements Callable<int[]> {
 
     @Override
     public int[] call() throws Exception {
-        //counters
+        //constants
         int chunkSize = chunkProvider.getDigest().getDigestSize();
         int hashSize = hashProvider.getDigest().getDigestSize();
-        long stepCounter = 0;
-        BigInteger attemptsDone = BigInteger.ZERO;
+
+        //counters
+        long roundCounter = 1;
+        BigInteger solvingAttemptsDoneTotal = BigInteger.ZERO;
+        BigInteger memhashesSuccessfulTotal = BigInteger.ZERO;
+        //chunkCounter is negative to cover 100% of integer values
+        //ints are signed so if we start with 0 we will cover 1/2 ov all possible chunk values
         int chunkCounter = Integer.MIN_VALUE;
         long chunksGenerated = 0;
-        //values are negative to cover 100% of integer values
-        //ints are signed so if we start with 0 we will cover 1/2 ov all possible values
+        long solvingTimeNanosTotal = 0;
 
+        //used to check chunkCounter overflow
         int chunkMinId = Integer.MIN_VALUE;
         int chunkMaxId = Integer.MIN_VALUE + maxChunkCount - 1;
 
@@ -66,8 +73,7 @@ public class Miner implements Callable<int[]> {
         //store chunks
         byte[][] chunks = new byte[maxChunkCount][chunkSize];
         //map each chunk to its id
-        int[] chunkId = new int[maxChunkCount];
-        int[] finalIds = new int[n];
+        int[] chunkIds = new int[maxChunkCount];
 
         //needed stuff
         Digest chunkDigest = chunkProvider.getDigest();
@@ -77,13 +83,17 @@ public class Miner implements Callable<int[]> {
 
         LOGGER.info("Successfully prepared. Starting mining.");
 
-        //checking chunkMaxId has already overflew
+        //by default chunkMaxId>chunksMinId
+        //but if chunkMaxId has oveflow it will be chunkMaxId<chunkMinId and mining stops
         while (chunkMaxId > chunkMinId) {
-            LOGGER.debug("Started mining step {}.", stepCounter);
+            LOGGER.debug("Started mining round {}.", roundCounter);
+            //setting default ids
+            for (int i = 0; i < ids.length; i++) {
+                ids[i] = i;
+            }
 
             //generating chunks
             long chunkTimeNanoStart = System.nanoTime();
-
             for (int i = 0; i < maxChunkCount; i++) {
                 chunksGenerated++;
                 chunkDigest.reset();
@@ -92,103 +102,136 @@ public class Miner implements Callable<int[]> {
                 chunkDigest.update(data, 0, data.length);
 
                 chunkDigest.doFinal(chunks[i], 0);
-                chunkId[i] = chunkCounter;
+                chunkIds[i] = chunkCounter;
                 chunkCounter++;
             }
-
             long chunkTimeNanoElapsed = System.nanoTime() - chunkTimeNanoStart;
-            LOGGER.trace("Generated {} chunks. Total {}. Time per one {}ns.",
+            LOGGER.trace("Generated {} chunks. Time for all chunks {}. Time per one chunk {}.",
                     maxChunkCount, Duration.ofNanos(chunkTimeNanoElapsed),
-                    chunkTimeNanoElapsed / maxChunkCount);
+                    Duration.ofNanos(chunkTimeNanoElapsed / maxChunkCount));
 
-            for (int i = 0; i < ids.length; i++) {
-                ids[i] = i;
-            }
 
             //solving
-            long solvingTimeNanoStart = System.nanoTime();
+            long solvingRoundNanoTimeStart = System.nanoTime();
+            BigInteger solvingAttemptsDoneInRound = BigInteger.ZERO;
+            BigInteger memhashesSuccessfulInRound = BigInteger.ZERO;
+            boolean mine = true;
+            while (mine) {
+                solvingAttemptsDoneInRound = solvingAttemptsDoneInRound.add(BigInteger.ONE);
 
-            for (int i = ids.length - 1; i >= 0; i--) {
-                boolean mine = true;
+                //resetting result cache
+                for (int i = 0; i < chunkResult.length; i++) {
+                    chunkResult[i] = 0;
+                }
 
-                while (mine) {
-                    //resetting result cache
-                    for (int j = 0; j < chunkResult.length; j++) {
-                        chunkResult[j] = 0;
+                //xoring chunks
+                for (int id : ids) {
+                    for (int i = 0; i < chunkSize; i++) {
+                        chunkResult[i] ^= chunks[id][i];
+                    }
+                }
+
+                //checking solution
+                boolean isValid = true;
+                for (byte aResult : chunkResult) {
+                    isValid &= aResult == 0;
+                }
+
+                //checking hash meets target
+                if (isValid) {
+                    memhashesSuccessfulInRound = memhashesSuccessfulInRound.add(BigInteger.ONE);
+
+                    //mapping ids to chunkIds
+                    long[] tmpChunkIds = new long[n];
+                    for (int i = 0; i < n; i++) {
+                        tmpChunkIds[i] = chunkIds[ids[i]];
                     }
 
-                    //xoring chunks
-                    System.arraycopy(chunks[ids[0]], 0, chunkResult, 0, chunkSize);
-                    for (int j = 1; j < ids.length; j++) {
-                        for (int k = 0; k < chunkSize; k++) {
-                            chunkResult[k] ^= chunks[ids[j]][k];
-                        }
+                    //converting to longs
+                    for (int i = 0; i < n; i++) {
+                        tmpChunkIds[i] = tmpChunkIds[i] & 0xffffffffL;
                     }
 
-                    //checking solution
-                    boolean isValid = true;
-                    for (byte aResult : chunkResult) {
-                        isValid &= aResult == 0;
-                    }
-                    attemptsDone = attemptsDone.add(BigInteger.ONE);
+                    //sorting
+                    Arrays.sort(tmpChunkIds);
 
-                    //checking final
-                    if (isValid) {
-                        //sorting unsigned
-                        long[] tmp = new long[n];
-                        for (int j = 0; j < n; j++) {
-                            tmp[j] = ids[j] & 0xffffffffL;
-                        }
-                        Arrays.sort(tmp);
-                        int[] tmpInt = new int[n];
-                        for (int j = 0; j < n; j++) {
-                            tmpInt[j] = (int) tmp[j];
-                        }
-
-                        hashDigest.reset();
-                        hashDigest.update(data, 0, data.length);
-                        for (int j = 0; j < finalIds.length; j++) {
-                            hashDigest.update(Ints.toByteArray(tmpInt[j]), 0, Integer.BYTES);
-                        }
-                        hashDigest.doFinal(hashResult, 0);
-
-                        //checking if hash is less than header
-                        if (meetsTarget(hashResult, target)) {
-                            long solvingNanoElapsed = System.nanoTime() - solvingTimeNanoStart;
-                            LOGGER.info("Found valid solution. Attempts done {}. Chunks generated {}. Attempts done {}." +
-                                            "Total time {}. Time per solution {}ns.",
-                                    attemptsDone, chunksGenerated, attemptsDone, Duration.ofNanos(solvingNanoElapsed),
-                                    BigInteger.valueOf(solvingNanoElapsed).divide(attemptsDone));
-                            return tmpInt;
-                        }
+                    //casting tmpChunkIds back to ints
+                    int[] finalChunkIds = new int[n];
+                    for (int i = 0; i < n; i++) {
+                        finalChunkIds[i] = (int) tmpChunkIds[i];
                     }
 
-                    //updating ids for next solution
-                    int j = 0;
-                    boolean update = true;
-                    while ((j < (n)) & update) {
-                        if (j == (n - 1)) {
-                            if (ids[j] == maxChunkCount - 1) {
-                                mine = false;
-                            } else {
-                                ids[j]++;
-                            }
+                    hashDigest.reset();
+                    hashDigest.update(data, 0, data.length);
+                    for (int j = 0; j < n; j++) {
+                        hashDigest.update(Ints.toByteArray(finalChunkIds[j]), 0, Integer.BYTES);
+                    }
+                    hashDigest.doFinal(hashResult, 0);
+
+                    //checking if hash is less than header
+                    if (meetsTarget(hashResult, target)) {
+                        long solvingRoundNanoTime = System.nanoTime() - solvingRoundNanoTimeStart;
+                        solvingAttemptsDoneTotal = solvingAttemptsDoneTotal.add(solvingAttemptsDoneInRound);
+                        memhashesSuccessfulTotal = solvingAttemptsDoneTotal.add(solvingAttemptsDoneInRound);
+                        LOGGER.info(
+                                "Found valid solution!!! " +
+                                        "Attempts total {}. " +
+                                        "Successful memhashes total {}. Successful memhashes rate total {}%. " +
+                                        "Total chunks processed {}." +
+                                        "Total time {}. " +
+                                        "Time per solution {}.",
+                                roundCounter,
+                                solvingAttemptsDoneTotal,
+                                memhashesSuccessfulTotal, getRate(memhashesSuccessfulTotal, solvingAttemptsDoneTotal),
+                                chunksGenerated,
+                                Duration.ofNanos(solvingRoundNanoTime),
+                                Duration.ofNanos(BigInteger.valueOf(solvingRoundNanoTime).divide(solvingAttemptsDoneTotal).longValue()));
+                        return finalChunkIds;
+                    }
+                }
+
+                //updating ids for next solution
+                int j = 0;
+                boolean update = true;
+                while ((j < (n)) & update) {
+                    if (j == (n - 1)) {
+                        if (ids[j] == maxChunkCount - 1) {
+                            mine = false;
                         } else {
-                            if ((ids[j + 1] - ids[j]) > 1) {
-                                ids[j]++;
-                                update = false;
-                            }
+                            ids[j]++;
                         }
-                        j++;
+                    } else {
+                        if ((ids[j + 1] - ids[j]) > 1) {
+                            ids[j]++;
+                            update = false;
+                        }
                     }
+                    j++;
                 }
             }
 
-            LOGGER.debug("Step {} was not lucky. Chunks processed {}. Attempts done {}",
-                    stepCounter, chunksGenerated, attemptsDone);
+            long solvingRoundNanoTime = System.nanoTime() - solvingRoundNanoTimeStart;
+            solvingTimeNanosTotal += solvingRoundNanoTime;
+            solvingAttemptsDoneTotal = solvingAttemptsDoneTotal.add(solvingAttemptsDoneInRound);
+            memhashesSuccessfulTotal = solvingAttemptsDoneTotal.add(solvingAttemptsDoneInRound);
+            LOGGER.debug(
+                    "Round {} was unlucky. " +
+                            "Attempts in round {}. Attempts total {}. " +
+                            "Successful memhashes in round {}. Successful memhases rate in round {}%. " +
+                            "Successful memhashes total {}. Successful memhashes rate total {}%. " +
+                            "Total chunks processed {}. " +
+                            "Time per round {]. Total time {}. " +
+                            "Time per solution {}.",
+                    roundCounter,
+                    solvingAttemptsDoneInRound, solvingAttemptsDoneTotal,
+                    memhashesSuccessfulInRound, getRate(memhashesSuccessfulInRound, solvingAttemptsDoneInRound),
+                    memhashesSuccessfulTotal, getRate(memhashesSuccessfulTotal, solvingAttemptsDoneTotal),
+                    chunksGenerated,
+                    Duration.ofNanos(solvingRoundNanoTime), Duration.ofNanos(solvingTimeNanosTotal),
+                    Duration.ofNanos(BigInteger.valueOf(solvingRoundNanoTime).divide(solvingAttemptsDoneInRound).longValue()));
             chunkMinId += maxChunkCount;
             chunkMaxId += maxChunkCount;
-            stepCounter++;
+            roundCounter++;
         }
         LOGGER.info("Unable to find solution.");
         throw new Exception("Unable to compute result.");
@@ -204,6 +247,12 @@ public class Miner implements Callable<int[]> {
             }
         }
         return true;
+    }
+
+    private BigDecimal getRate(BigInteger good, BigInteger total) {
+        return new BigDecimal(good, new MathContext(4))
+                .multiply(BigDecimal.valueOf(100))
+                .divide(new BigDecimal(total), BigDecimal.ROUND_DOWN);
     }
 }
 
