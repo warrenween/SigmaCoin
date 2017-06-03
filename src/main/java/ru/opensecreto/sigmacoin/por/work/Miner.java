@@ -142,7 +142,7 @@ public class Miner implements Callable<int[]> {
                         digest.reset();
                         digest.update(data, 0, data.length);
                         for (int j = 0; j < finalIds.length; j++) {
-                            digest.update(Ints.toByteArray(j), 0, Integer.BYTES);
+                            digest.update(Ints.toByteArray(tmpInt[j]), 0, Integer.BYTES);
                         }
                         digest.doFinal(result, 0);
 
