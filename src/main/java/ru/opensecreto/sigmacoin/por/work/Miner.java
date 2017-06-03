@@ -251,7 +251,7 @@ public class Miner implements Callable<int[]> {
     private BigDecimal getRate(BigInteger good, BigInteger total) {
         return new BigDecimal(good, new MathContext(8))
                 .multiply(BigDecimal.valueOf(100))
-                .divide(new BigDecimal(total), BigDecimal.ROUND_DOWN);
+                .divide(new BigDecimal(total, new MathContext(8)), BigDecimal.ROUND_DOWN);
     }
 }
 
