@@ -250,9 +250,8 @@ public class Miner implements Callable<int[]> {
     }
 
     private BigDecimal getRate(BigInteger good, BigInteger total) {
-        return new BigDecimal(good, new MathContext(16))
-                .multiply(BigDecimal.valueOf(100))
-                .divide(new BigDecimal(total, new MathContext(8)), RoundingMode.DOWN);
+        return new BigDecimal(good).multiply(BigDecimal.valueOf(100))
+                .divide(new BigDecimal(total), new MathContext(16, RoundingMode.DOWN));
     }
 }
 
