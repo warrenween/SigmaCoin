@@ -1,7 +1,7 @@
 #!/bin/bash
 set -ev
 if [ "${BUILD_TYPE}" = "ORACLE_JDK_8" ]; then
-    sudo add-apt-repository ppa:webupd8team/java
+    sudo add-apt-repository  ppa:webupd8team/java -y
     sudo apt-get update
     sudo apt-get install oracle-java8-installer
     ./jdk_switcher.sh use oraclejdk8
@@ -11,7 +11,7 @@ if [ "${BUILD_TYPE}" = "ORACLE_JDK_8" ]; then
 fi
 
 if [ "${BUILD_TYPE}" = "OPEN_JDK_8" ]; then
-    sudo add-apt-repository ppa:openjdk-r/ppa
+    sudo add-apt-repository ppa:openjdk-r/ppa -y
     sudo apt-get update
     sudo apt-get install openjdk-8
     ./jdk_switcher.sh use openjdk8
