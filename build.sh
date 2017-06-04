@@ -1,7 +1,7 @@
 #!/bin/bash
 set -ev
 if [ "${BUILD_TYPE}" = "ORACLE_JDK_8" ]; then
-    ./sudo jdk_switcher use oraclejdk8
+    ./jdk_switcher use oraclejdk8
     ./gradlew test
 fi
 
