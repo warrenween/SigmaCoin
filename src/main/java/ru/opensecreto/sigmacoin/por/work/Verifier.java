@@ -30,7 +30,7 @@ public class Verifier {
         }
         long previous = tmp[0];
         for (int i = 1; i < tmp.length; i++) {
-            if (previous <= tmp[i]) return false;
+            if (previous >= tmp[i]) return false;
         }
 
         //xoring
