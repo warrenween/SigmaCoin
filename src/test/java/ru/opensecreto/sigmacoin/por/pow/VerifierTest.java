@@ -24,7 +24,7 @@ public class VerifierTest {
         new Random().nextBytes(data);
         byte[] target = new byte[]{0x0f, (byte) 0x00, 0x00, 0x00};
 
-        Miner miner = new Miner(data, chunkProvider, hashProvider, N, target, 100000);
+        Miner miner = new Miner(data, chunkProvider, hashProvider, N, target, 1000000);
         int[] solution = miner.call();
 
         byte[] dataCopy = Arrays.copyOf(data, data.length);
