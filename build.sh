@@ -1,5 +1,4 @@
 #!/bin/bash
-
 set -ev
 
 if [ "${BUILD_TYPE}" = "JDK8" ]; then
