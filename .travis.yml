@@ -1,10 +1,5 @@
 language: generic
 sudo: required
-addons:
-  apt:
-    packages:
-      - oracle-java8-installer
-      - openjdk-8-jdk
 dist: trusty
 notifications:
   email: false
