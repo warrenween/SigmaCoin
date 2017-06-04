@@ -4,6 +4,7 @@ if [ "${BUILD_TYPE}" = "ORACLE_JDK_8" ]; then
     sudo add-apt-repository  ppa:webupd8team/java -y
     sudo apt-get update
     sudo apt-get install oracle-java8-installer
+    sudo apt install oracle-java8-set-default
     ./jdk_switcher.sh use oraclejdk8
     java -version
     javac -version
