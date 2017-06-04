@@ -1,8 +1,9 @@
+language: generic
 sudo: required
 dist: trusty
 notifications:
   email: false
 env:
-  - TYPE=JDK8
-  - TYPE=OPENJDK8
+  - BUILD_TYPE=JDK8
+  - BUILD_TYPE=OPENJDK8
 script: ./build.sh
