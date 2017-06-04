@@ -15,16 +15,18 @@ matrix:
         directories:
           - $HOME/.gradle/caches/
           - $HOME/.gradle/wrapper/
-      script:
+      before_script:
         - java -version
         - javac -version
+      script:
         - ./gradlew test
     - language: java
       dist: trusty
       jdk: openjdk8
-      script:
+      before_script:
         - java -version
         - javac -version
+      script:
         - ./gradlew test
       addons:
         apt:
