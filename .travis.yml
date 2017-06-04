@@ -6,4 +6,5 @@ notifications:
 env:
   - BUILD_TYPE=JDK8
   - BUILD_TYPE=OPENJDK8
-script: ./build.sh
+script:
+- ./build.sh
