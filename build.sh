@@ -9,6 +9,7 @@ if [ "${BUILD_TYPE}" = "ORACLE_JDK_8" ]; then
 fi
 
 if [ "${BUILD_TYPE}" = "OPEN_JDK_8" ]; then
+    sudo apt-get install openjdk-8-jdk
     ./jdk_switcher.sh use openjdk8
     java -version
     javac -version
