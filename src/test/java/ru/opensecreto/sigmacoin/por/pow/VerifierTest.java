@@ -32,12 +32,69 @@ public class VerifierTest {
         int[] solutionCopy = Arrays.copyOf(solution, solution.length);
 
         Verifier verifier = new Verifier(chunkProvider, hashProvider, N);
-        assertThat(verifier.verify(data, target, solution));
+        assertThat(verifier.verify(data, target, solution)).isTrue();
 
         //check original data is unchanged
         assertThat(data).containsExactly(dataCopy);
         assertThat(target).containsExactly(targetCopy);
         assertThat(solution).containsExactly(solutionCopy);
+    }
+
+    @Test
+    public void testInvalidA() throws Exception {
+        DigestProvider chunkProvider = () -> new ShortenedDigest(new SHA3Digest(256), 2);
+        DigestProvider hashProvider = () -> new ShortenedDigest(new SHA3Digest(256), 4);
+        final int N = 64;
+
+        byte[] data = new byte[32];
+        new Random().nextBytes(data);
+        byte[] target = new byte[]{0x10, (byte) 0x00, 0x00, 0x00};
+
+        Miner miner = new Miner(data, chunkProvider, hashProvider, N, target, 1000000);
+        int[] solution = miner.call();
+
+        Verifier verifier = new Verifier(chunkProvider, hashProvider, N);
+        data[3] ^= 35;
+
+        assertThat(verifier.verify(data, target, solution)).isFalse();
+    }
+
+    @Test
+    public void testInvalidB() throws Exception {
+        DigestProvider chunkProvider = () -> new ShortenedDigest(new SHA3Digest(256), 2);
+        DigestProvider hashProvider = () -> new ShortenedDigest(new SHA3Digest(256), 4);
+        final int N = 64;
+
+        byte[] data = new byte[32];
+        new Random().nextBytes(data);
+        byte[] target = new byte[]{0x10, (byte) 0x00, 0x00, 0x00};
+
+        Miner miner = new Miner(data, chunkProvider, hashProvider, N, target, 1000000);
+        int[] solution = miner.call();
+
+        Verifier verifier = new Verifier(chunkProvider, hashProvider, N);
+        solution[2] ^= 5668;
+        solution[4] ^= 256;
+
+        assertThat(verifier.verify(data, target, solution)).isFalse();
+    }
+
+    @Test
+    public void testInvalidSolutionSize() throws Exception {
+        DigestProvider chunkProvider = () -> new ShortenedDigest(new SHA3Digest(256), 2);
+        DigestProvider hashProvider = () -> new ShortenedDigest(new SHA3Digest(256), 4);
+        final int N = 64;
+
+        byte[] data = new byte[32];
+        new Random().nextBytes(data);
+        byte[] target = new byte[]{0x10, (byte) 0x00, 0x00, 0x00};
+
+        Miner miner = new Miner(data, chunkProvider, hashProvider, N, target, 1000000);
+        int[] solution = miner.call();
+
+        Verifier verifier = new Verifier(chunkProvider, hashProvider, N - 1);
+
+        assertThat(verifier.verify(data, target, solution)).isFalse();
     }
 
 }
