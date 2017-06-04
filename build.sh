@@ -7,6 +7,6 @@ if [ "${BUILD_TYPE}" = "JDK8" ]; then
 fi
 
 if [ "${BUILD_TYPE}" = "OPENJDK8" ]; then
-    sudo apt-get -y --force-yes install java-1.8.0-openjdk
+    sudo apt-get -y --force-yes install openjdk-8-jdk
     ./gradlew test
 fi
