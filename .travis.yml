@@ -3,8 +3,8 @@ sudo: required
 notifications:
   email: false
 env:
-  - BUILD_TYPE=JDK8
-  - BUILD_TYPE=OPENJDK8
+  - BUILD_TYPE=ORACLE_JDK_8
+  - BUILD_TYPE=OPEN_JDK_8
 script:
   - whereis bash
   - ./build.sh
