@@ -2,6 +2,7 @@
 set -ev
 if [ "${BUILD_TYPE}" = "JDK8" ]; then
     sudo apt-get -y --force-yes install oracle-java8-installer
+    sudo apt install oracle-java8-set-default
     ./gradlew test
 fi
 
