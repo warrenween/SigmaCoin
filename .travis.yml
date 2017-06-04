@@ -1,9 +1,8 @@
-language: java
-sudo: required
 notifications:
   email: false
-env:
-  - BUILD_TYPE=ORACLE_JDK_8
-  - BUILD_TYPE=OPEN_JDK_8
-script:
-  - ./build.sh
+matrix:
+  include:
+    - language: java
+      jdk: oraclejdk8
+    - language: java
+      jdk: openjdk8
