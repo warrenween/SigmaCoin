@@ -11,13 +11,14 @@ public class Transaction {
     public final static int TARGET_SIZE = 32;
 
     private final byte[] chainID;
+    private final long timestamp;
     private final byte[] source;
     private final byte[] target;
     private final byte[] data;
     private final short sigmethod;
     private final byte[] signature;
 
-    public Transaction(byte[] chainID, byte[] source, byte[] target, byte[] data, short sigmethod, byte[] signature)
+    public Transaction(byte[] chainID, long timestamp, byte[] source, byte[] target, byte[] data, short sigmethod, byte[] signature)
             throws IllegalArgumentException {
         //chainid verification
         if (chainID == null) throw new IllegalArgumentException("Chain id can not be null");
@@ -44,6 +45,7 @@ public class Transaction {
 
 
         this.chainID = Arrays.copyOf(chainID, CHAINID_SIZE);
+        this.timestamp = timestamp;
         this.source = Arrays.copyOf(source, SOURCE_SIZE);
         this.target = Arrays.copyOf(target, TARGET_SIZE);
         this.data = Arrays.copyOf(data, data.length);
