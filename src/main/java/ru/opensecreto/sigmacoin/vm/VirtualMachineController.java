@@ -33,27 +33,18 @@ public class VirtualMachineController {
             stack.push(new Word(Arrays.copyOfRange(invocationData, i * WORD_SIZE, i * WORD_SIZE + WORD_SIZE)));
         }
 
-        try {
-            invoke(stack, contractID);
-        } catch (AbortException e) {
-            LOGGER.info("Execution of {} was aborted.", contractID, e);
-            return StopType.REVERT;
-        }
-        return StopType.COMMIT;
+        return invoke(stack, contractID).stopType;
     }
 
-    public Stack invoke(Stack stack, Word contractID) throws AbortException {
+    public ResultFrame invoke(Stack stack, Word contractID) {
         if ((!contractManager.contractExists(contractID)) | (currentCallStackDepth == configuration.maxCallDepth)) {
-            Stack resultStack = new Stack();
-            resultStack.push(new Word((short) 0));
-            resultStack.push(new Word((byte) 0x01));
-            return resultStack;
+            return new ResultFrame(new Stack(), StopType.BAD);
         } else {
-            Frame frame = new Frame(contractManager.getContract(contractID), stack, contractID);
-            BytecodeExecutor executor = new BytecodeExecutor(configuration, frame, this);
+            ExecutionFrame executionFrame = new ExecutionFrame(contractManager.getContract(contractID), stack, contractID);
+            BytecodeExecutor executor = new BytecodeExecutor(configuration, executionFrame, this);
 
             currentCallStackDepth++;
-            Stack result = executor.run();
+            ResultFrame result = executor.run();
             currentCallStackDepth--;
 
             return result;

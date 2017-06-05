@@ -10,23 +10,23 @@ import static ru.opensecreto.sigmacoin.vm.Opcodes.*;
 public class BytecodeExecutorTest {
 
     @Test
-    public void test_INVOKE_nonExistingContract() throws AbortException {
+    public void test_INVOKE_nonExistingContract()  {
         ContractManager manager = mock(ContractManager.class);
         when(manager.contractExists(new Word(0))).thenReturn(false);
 
         VirtualMachineController controller = new VirtualMachineController(manager,
                 new VMConfiguration(10));
 
-        Stack result = controller.invoke(new Stack(), new Word(0));
+        ResultFrame result = controller.invoke(new Stack(), new Word(0));
 
-        assertThat(result.getSize()).isEqualTo(2);
-        assertThat(result.popCustom(2)).containsExactly(
+        assertThat(result.result.getSize()).isEqualTo(2);
+        assertThat(result.result.popCustom(2)).containsExactly(
                 new Word(0), new Word(1)
         );
     }
 
     @Test
-    public void test_INVOKE_good() throws AbortException {
+    public void test_INVOKE_good()  {
         Word idA = new Word(0);
         Memory contractA = new SimpleTestMemory() {{
             set(0, STOP_GOOD);// 0 0x00 (top)
@@ -39,16 +39,16 @@ public class BytecodeExecutorTest {
         VirtualMachineController controller = new VirtualMachineController(manager,
                 new VMConfiguration(10));
 
-        Stack result = controller.invoke(new Stack(), idA);
+        ResultFrame result = controller.invoke(new Stack(), idA);
 
-        assertThat(result.getSize()).isEqualTo(2);
-        assertThat(result.popCustom(2)).containsExactly(
+        assertThat(result.result.getSize()).isEqualTo(2);
+        assertThat(result.result.popCustom(2)).containsExactly(
                 new Word(0), new Word(0)
         );
     }
 
     @Test
-    public void test_INVOKE_bad() throws AbortException {
+    public void test_INVOKE_bad()  {
         Word idA = new Word(0);
         Memory contractA = new SimpleTestMemory() {{
             set(0, STOP_BAD);// 0 0x01 (top)
@@ -61,16 +61,16 @@ public class BytecodeExecutorTest {
         VirtualMachineController controller = new VirtualMachineController(manager,
                 new VMConfiguration(10));
 
-        Stack result = controller.invoke(new Stack(), idA);
+        ResultFrame result = controller.invoke(new Stack(), idA);
 
-        assertThat(result.getSize()).isEqualTo(2);
-        assertThat(result.popCustom(2)).containsExactly(
+        assertThat(result.result.getSize()).isEqualTo(2);
+        assertThat(result.result.popCustom(2)).containsExactly(
                 new Word(0), new Word(0x01)
         );
     }
 
     @Test
-    public void test_INVOKE_returnsCorrectStack() throws AbortException {
+    public void test_INVOKE_returnsCorrectStack()  {
         Word idA = new Word(0);
         Memory contractA = new SimpleTestMemory() {{
             set(0, PUSH);
@@ -88,17 +88,17 @@ public class BytecodeExecutorTest {
         VirtualMachineController controller = new VirtualMachineController(manager,
                 new VMConfiguration(10));
 
-        Stack result = controller.invoke(new Stack(), idA);
+        ResultFrame result = controller.invoke(new Stack(), idA);
 
-        assertThat(result.getSize()).isEqualTo(6);
-        assertThat(result.popCustom(6)).containsExactly(
+        assertThat(result.result.getSize()).isEqualTo(6);
+        assertThat(result.result.popCustom(6)).containsExactly(
                 new Word(0x1f), new Word(0x1f), new Word(0x1f), new Word(0x1f),
                 new Word(4), new Word(1)
         );
     }
 
     @Test
-    public void test_PUSH_POP_DUP() throws AbortException{
+    public void test_PUSH_POP_DUP() {
         Word idA = new Word(0x00);
         Memory contractA = new SimpleTestMemory() {{
             set(0, PUSH);
@@ -117,17 +117,17 @@ public class BytecodeExecutorTest {
         VirtualMachineController controller = new VirtualMachineController(manager,
                 new VMConfiguration(10));
 
-        Stack result = controller.invoke(new Stack(), idA);
+        ResultFrame result = controller.invoke(new Stack(), idA);
 
-        assertThat(result.getSize()).isEqualTo(4);
+        assertThat(result.result.getSize()).isEqualTo(4);
 
-        assertThat(result.popCustom(4)).containsExactly(
+        assertThat(result.result.popCustom(4)).containsExactly(
                 new Word(0x1f), new Word(0x56), new Word(2), new Word(0x00)
         );
     }
 
     @Test
-    public void test_INVOKE_fromCode()throws AbortException {
+    public void test_INVOKE_fromCode() {
         Word idA = new Word(0x00);
         Memory contractA = new SimpleTestMemory() {{
             set(0, PUSH);
@@ -162,10 +162,10 @@ public class BytecodeExecutorTest {
         VirtualMachineController controller = new VirtualMachineController(manager,
                 new VMConfiguration(10));
 
-        Stack result = controller.invoke(new Stack(), idA);
+        ResultFrame result = controller.invoke(new Stack(), idA);
 
-        assertThat(result.getSize()).isEqualTo(9);
-        assertThat(result.popCustom(9)).containsExactly(
+        assertThat(result.result.getSize()).isEqualTo(9);
+        assertThat(result.result.popCustom(9)).containsExactly(
                 new Word(0x12),
                 new Word(0x34),
                 new Word(0x56),
@@ -179,7 +179,7 @@ public class BytecodeExecutorTest {
     }
 
     @Test
-    public void test_ADD()throws AbortException {
+    public void test_ADD() {
         Word idA = new Word(0x00);
         Memory contractA = new SimpleTestMemory() {{
             set(0, PUSH);
@@ -197,17 +197,17 @@ public class BytecodeExecutorTest {
         VirtualMachineController controller = new VirtualMachineController(manager,
                 new VMConfiguration(10));
 
-        Stack result = controller.invoke(new Stack(), idA);
+        ResultFrame result = controller.invoke(new Stack(), idA);
 
-        assertThat(result.getSize()).isEqualTo(3);
+        assertThat(result.result.getSize()).isEqualTo(3);
 
-        assertThat(result.popCustom(3)).containsExactly(
+        assertThat(result.result.popCustom(3)).containsExactly(
                 new Word(0), new Word(1), new Word(0)
         );
     }
 
     @Test
-    public void test_SUB()throws AbortException {
+    public void test_SUB() {
         Word idA = new Word(0x00);
         Memory contractA = new SimpleTestMemory() {{
             set(0, PUSH);
@@ -225,17 +225,17 @@ public class BytecodeExecutorTest {
         VirtualMachineController controller = new VirtualMachineController(manager,
                 new VMConfiguration(10));
 
-        Stack result = controller.invoke(new Stack(), idA);
+        ResultFrame result = controller.invoke(new Stack(), idA);
 
-        assertThat(result.getSize()).isEqualTo(3);
+        assertThat(result.result.getSize()).isEqualTo(3);
 
-        assertThat(result.popCustom(3)).containsExactly(
+        assertThat(result.result.popCustom(3)).containsExactly(
                 new Word(90), new Word(1), new Word(0)
         );
     }
 
     @Test
-    public void test_SUB_noValues()throws AbortException {
+    public void test_SUB_noValues() {
         Word idA = new Word(0x00);
         Memory contractA = new SimpleTestMemory() {{
             set(0, SUB);
@@ -248,17 +248,17 @@ public class BytecodeExecutorTest {
         VirtualMachineController controller = new VirtualMachineController(manager,
                 new VMConfiguration(10));
 
-        Stack result = controller.invoke(new Stack(), idA);
+        ResultFrame result = controller.invoke(new Stack(), idA);
 
-        assertThat(result.getSize()).isEqualTo(2);
+        assertThat(result.result.getSize()).isEqualTo(2);
 
-        assertThat(result.popCustom(2)).containsExactly(
+        assertThat(result.result.popCustom(2)).containsExactly(
                 new Word(0), new Word(1)
         );
     }
 
     @Test
-    public void test_SUB_oneValues() throws AbortException{
+    public void test_SUB_oneValues() {
         Word idA = new Word(0x00);
         Memory contractA = new SimpleTestMemory() {{
             set(0, PUSH);
@@ -273,17 +273,17 @@ public class BytecodeExecutorTest {
         VirtualMachineController controller = new VirtualMachineController(manager,
                 new VMConfiguration(10));
 
-        Stack result = controller.invoke(new Stack(), idA);
+        ResultFrame result = controller.invoke(new Stack(), idA);
 
-        assertThat(result.getSize()).isEqualTo(2);
+        assertThat(result.result.getSize()).isEqualTo(2);
 
-        assertThat(result.popCustom(2)).containsExactly(
+        assertThat(result.result.popCustom(2)).containsExactly(
                 new Word(0), new Word(0x01)
         );
     }
 
     @Test
-    public void test_DIV()throws AbortException {
+    public void test_DIV() {
         Word idA = new Word(0x00);
         Memory contractA = new SimpleTestMemory() {{
             set(0, PUSH);
@@ -301,17 +301,17 @@ public class BytecodeExecutorTest {
         VirtualMachineController controller = new VirtualMachineController(manager,
                 new VMConfiguration(10));
 
-        Stack result = controller.invoke(new Stack(), idA);
+        ResultFrame result = controller.invoke(new Stack(), idA);
 
-        assertThat(result.getSize()).isEqualTo(3);
+        assertThat(result.result.getSize()).isEqualTo(3);
 
-        assertThat(result.popCustom(3)).containsExactly(
+        assertThat(result.result.popCustom(3)).containsExactly(
                 new Word(1), new Word(1), new Word(0)
         );
     }
 
     @Test
-    public void test_DIV_noValues()throws AbortException {
+    public void test_DIV_noValues() {
         Word idA = new Word(0x00);
         Memory contractA = new SimpleTestMemory() {{
             set(0, DIV);// 0 0x01 (top)
@@ -324,17 +324,17 @@ public class BytecodeExecutorTest {
         VirtualMachineController controller = new VirtualMachineController(manager,
                 new VMConfiguration(10));
 
-        Stack result = controller.invoke(new Stack(), idA);
+        ResultFrame result = controller.invoke(new Stack(), idA);
 
-        assertThat(result.getSize()).isEqualTo(2);
+        assertThat(result.result.getSize()).isEqualTo(2);
 
-        assertThat(result.popCustom(2)).containsExactly(
+        assertThat(result.result.popCustom(2)).containsExactly(
                 new Word(0), new Word(0x01)
         );
     }
 
     @Test
-    public void test_DIV_oneValue()throws AbortException {
+    public void test_DIV_oneValue() {
         Word idA = new Word(0x00);
         Memory contractA = new SimpleTestMemory() {{
             set(0, PUSH);
@@ -349,17 +349,17 @@ public class BytecodeExecutorTest {
         VirtualMachineController controller = new VirtualMachineController(manager,
                 new VMConfiguration(10));
 
-        Stack result = controller.invoke(new Stack(), idA);
+        ResultFrame result = controller.invoke(new Stack(), idA);
 
-        assertThat(result.getSize()).isEqualTo(2);
+        assertThat(result.result.getSize()).isEqualTo(2);
 
-        assertThat(result.popCustom(2)).containsExactly(
+        assertThat(result.result.popCustom(2)).containsExactly(
                 new Word(0), new Word(0x01)
         );
     }
 
     @Test
-    public void test_MOD_noValues()throws AbortException {
+    public void test_MOD_noValues() {
         Word idA = new Word(0x00);
         Memory contractA = new SimpleTestMemory() {{
             set(0, MOD);// 0 0x01 (top)
@@ -372,17 +372,17 @@ public class BytecodeExecutorTest {
         VirtualMachineController controller = new VirtualMachineController(manager,
                 new VMConfiguration(10));
 
-        Stack result = controller.invoke(new Stack(), idA);
+        ResultFrame result = controller.invoke(new Stack(), idA);
 
-        assertThat(result.getSize()).isEqualTo(2);
+        assertThat(result.result.getSize()).isEqualTo(2);
 
-        assertThat(result.popCustom(2)).containsExactly(
+        assertThat(result.result.popCustom(2)).containsExactly(
                 new Word(0), new Word(0x01)
         );
     }
 
     @Test
-    public void test_MOD_oneValue()throws AbortException {
+    public void test_MOD_oneValue() {
         Word idA = new Word(0x00);
         Memory contractA = new SimpleTestMemory() {{
             set(0, PUSH);
@@ -397,17 +397,17 @@ public class BytecodeExecutorTest {
         VirtualMachineController controller = new VirtualMachineController(manager,
                 new VMConfiguration(10));
 
-        Stack result = controller.invoke(new Stack(), idA);
+        ResultFrame result = controller.invoke(new Stack(), idA);
 
-        assertThat(result.getSize()).isEqualTo(2);
+        assertThat(result.result.getSize()).isEqualTo(2);
 
-        assertThat(result.popCustom(2)).containsExactly(
+        assertThat(result.result.popCustom(2)).containsExactly(
                 new Word(0), new Word(0x01)
         );
     }
 
     @Test
-    public void test_MOD() throws AbortException{
+    public void test_MOD() {
         Word idA = new Word(0x00);
         Memory contractA = new SimpleTestMemory() {{
             set(0, PUSH);
@@ -425,17 +425,17 @@ public class BytecodeExecutorTest {
         VirtualMachineController controller = new VirtualMachineController(manager,
                 new VMConfiguration(10));
 
-        Stack result = controller.invoke(new Stack(), idA);
+        ResultFrame result = controller.invoke(new Stack(), idA);
 
-        assertThat(result.getSize()).isEqualTo(3);
+        assertThat(result.result.getSize()).isEqualTo(3);
 
-        assertThat(result.popCustom(3)).containsExactly(
+        assertThat(result.result.popCustom(3)).containsExactly(
                 new Word(11), new Word(1), new Word(0)
         );
     }
 
     @Test
-    public void test_DIV_byZero()throws AbortException {
+    public void test_DIV_byZero() {
         Word idA = new Word(0x00);
         Memory contractA = new SimpleTestMemory() {{
             set(0, PUSH);
@@ -452,17 +452,17 @@ public class BytecodeExecutorTest {
         VirtualMachineController controller = new VirtualMachineController(manager,
                 new VMConfiguration(10));
 
-        Stack result = controller.invoke(new Stack(), idA);
+        ResultFrame result = controller.invoke(new Stack(), idA);
 
-        assertThat(result.getSize()).isEqualTo(2);
+        assertThat(result.result.getSize()).isEqualTo(2);
 
-        assertThat(result.popCustom(2)).containsExactly(
+        assertThat(result.result.popCustom(2)).containsExactly(
                 new Word(0), new Word(1)
         );
     }
 
     @Test
-    public void test_POP_fromEmpty()throws AbortException {
+    public void test_POP_fromEmpty() {
         Word idA = new Word(0x00);
         Memory contractA = new SimpleTestMemory() {{
             set(0, POP);//0 0x01 (top)
@@ -475,17 +475,17 @@ public class BytecodeExecutorTest {
         VirtualMachineController controller = new VirtualMachineController(manager,
                 new VMConfiguration(10));
 
-        Stack result = controller.invoke(new Stack(), idA);
+        ResultFrame result = controller.invoke(new Stack(), idA);
 
-        assertThat(result.getSize()).isEqualTo(2);
+        assertThat(result.result.getSize()).isEqualTo(2);
 
-        assertThat(result.popCustom(2)).containsExactly(
+        assertThat(result.result.popCustom(2)).containsExactly(
                 new Word(0), new Word(1)
         );
     }
 
     @Test
-    public void test_DUP_fromEmpty()throws AbortException {
+    public void test_DUP_fromEmpty() {
         Word idA = new Word(0x00);
         Memory contractA = new SimpleTestMemory() {{
             set(0, DUP);//0 0x01 (top)
@@ -498,17 +498,17 @@ public class BytecodeExecutorTest {
         VirtualMachineController controller = new VirtualMachineController(manager,
                 new VMConfiguration(10));
 
-        Stack result = controller.invoke(new Stack(), idA);
+        ResultFrame result = controller.invoke(new Stack(), idA);
 
-        assertThat(result.getSize()).isEqualTo(2);
+        assertThat(result.result.getSize()).isEqualTo(2);
 
-        assertThat(result.popCustom(2)).containsExactly(
+        assertThat(result.result.popCustom(2)).containsExactly(
                 new Word(0), new Word(1)
         );
     }
 
     @Test
-    public void test_SWAP_noValues()throws AbortException {
+    public void test_SWAP_noValues() {
         Word idA = new Word(0x00);
         Memory contractA = new SimpleTestMemory() {{
             set(0, SWAP);//0 0x01 (top)
@@ -521,17 +521,17 @@ public class BytecodeExecutorTest {
         VirtualMachineController controller = new VirtualMachineController(manager,
                 new VMConfiguration(10));
 
-        Stack result = controller.invoke(new Stack(), idA);
+        ResultFrame result = controller.invoke(new Stack(), idA);
 
-        assertThat(result.getSize()).isEqualTo(2);
+        assertThat(result.result.getSize()).isEqualTo(2);
 
-        assertThat(result.popCustom(2)).containsExactly(
+        assertThat(result.result.popCustom(2)).containsExactly(
                 new Word(0), new Word(1)
         );
     }
 
     @Test
-    public void test_SWAP_oneValue()throws AbortException {
+    public void test_SWAP_oneValue() {
         Word idA = new Word(0x00);
         Memory contractA = new SimpleTestMemory() {{
             set(0, PUSH);
@@ -546,17 +546,17 @@ public class BytecodeExecutorTest {
         VirtualMachineController controller = new VirtualMachineController(manager,
                 new VMConfiguration(10));
 
-        Stack result = controller.invoke(new Stack(), idA);
+        ResultFrame result = controller.invoke(new Stack(), idA);
 
-        assertThat(result.getSize()).isEqualTo(2);
+        assertThat(result.result.getSize()).isEqualTo(2);
 
-        assertThat(result.popCustom(2)).containsExactly(
+        assertThat(result.result.popCustom(2)).containsExactly(
                 new Word(0), new Word(1)
         );
     }
 
     @Test
-    public void test_ADD_noValues()throws AbortException {
+    public void test_ADD_noValues() {
         Word idA = new Word(0x00);
         Memory contractA = new SimpleTestMemory() {{
             set(0, ADD);//0 0x01 (top)
@@ -569,17 +569,17 @@ public class BytecodeExecutorTest {
         VirtualMachineController controller = new VirtualMachineController(manager,
                 new VMConfiguration(10));
 
-        Stack result = controller.invoke(new Stack(), idA);
+        ResultFrame result = controller.invoke(new Stack(), idA);
 
-        assertThat(result.getSize()).isEqualTo(2);
+        assertThat(result.result.getSize()).isEqualTo(2);
 
-        assertThat(result.popCustom(2)).containsExactly(
+        assertThat(result.result.popCustom(2)).containsExactly(
                 new Word(0), new Word(1)
         );
     }
 
     @Test
-    public void test_ADD_oneValue()throws AbortException {
+    public void test_ADD_oneValue() {
         Word idA = new Word(0x00);
         Memory contractA = new SimpleTestMemory() {{
             set(0, PUSH);
@@ -594,17 +594,17 @@ public class BytecodeExecutorTest {
         VirtualMachineController controller = new VirtualMachineController(manager,
                 new VMConfiguration(10));
 
-        Stack result = controller.invoke(new Stack(), idA);
+        ResultFrame result = controller.invoke(new Stack(), idA);
 
-        assertThat(result.getSize()).isEqualTo(2);
+        assertThat(result.result.getSize()).isEqualTo(2);
 
-        assertThat(result.popCustom(2)).containsExactly(
+        assertThat(result.result.popCustom(2)).containsExactly(
                 new Word(0), new Word(1)
         );
     }
 
     @Test
-    public void test_MOD_byZero()throws AbortException {
+    public void test_MOD_byZero() {
         Word idA = new Word(0x00);
         Memory contractA = new SimpleTestMemory() {{
             set(0, PUSH);
@@ -621,17 +621,17 @@ public class BytecodeExecutorTest {
         VirtualMachineController controller = new VirtualMachineController(manager,
                 new VMConfiguration(10));
 
-        Stack result = controller.invoke(new Stack(), idA);
+        ResultFrame result = controller.invoke(new Stack(), idA);
 
-        assertThat(result.getSize()).isEqualTo(2);
+        assertThat(result.result.getSize()).isEqualTo(2);
 
-        assertThat(result.popCustom(2)).containsExactly(
+        assertThat(result.result.popCustom(2)).containsExactly(
                 new Word(0), new Word(1)
         );
     }
 
     @Test
-    public void test_SWAP() throws AbortException{
+    public void test_SWAP() {
         Word idA = new Word(0x00);
         Memory contractA = new SimpleTestMemory() {{
             set(0, PUSH);
@@ -649,17 +649,17 @@ public class BytecodeExecutorTest {
         VirtualMachineController controller = new VirtualMachineController(manager,
                 new VMConfiguration(10));
 
-        Stack result = controller.invoke(new Stack(), idA);
+        ResultFrame result = controller.invoke(new Stack(), idA);
 
-        assertThat(result.getSize()).isEqualTo(4);
+        assertThat(result.result.getSize()).isEqualTo(4);
 
-        assertThat(result.popCustom(4)).containsExactly(
+        assertThat(result.result.popCustom(4)).containsExactly(
                 new Word(43), new Word(23), new Word(2), new Word(0)
         );
     }
 
     @Test
-    public void test_GET()throws AbortException {
+    public void test_GET() {
         Word idA = new Word(0x00);
         Memory contractA = new SimpleTestMemory() {{
             set(0, PUSH);
@@ -677,17 +677,17 @@ public class BytecodeExecutorTest {
         VirtualMachineController controller = new VirtualMachineController(manager,
                 new VMConfiguration(10));
 
-        Stack result = controller.invoke(new Stack(), idA);
+        ResultFrame result = controller.invoke(new Stack(), idA);
 
-        assertThat(result.getSize()).isEqualTo(3);
+        assertThat(result.result.getSize()).isEqualTo(3);
 
-        assertThat(result.popCustom(3)).containsExactly(
+        assertThat(result.result.popCustom(3)).containsExactly(
                 new Word(1234), new Word(1), new Word(0)
         );
     }
 
     @Test
-    public void test_GET_noValues()throws AbortException {
+    public void test_GET_noValues() {
         Word idA = new Word(0x00);
         Memory contractA = new SimpleTestMemory() {{
             set(0, GET);// 0 0x01 (top)
@@ -701,17 +701,17 @@ public class BytecodeExecutorTest {
         VirtualMachineController controller = new VirtualMachineController(manager,
                 new VMConfiguration(10));
 
-        Stack result = controller.invoke(new Stack(), idA);
+        ResultFrame result = controller.invoke(new Stack(), idA);
 
-        assertThat(result.getSize()).isEqualTo(2);
+        assertThat(result.result.getSize()).isEqualTo(2);
 
-        assertThat(result.popCustom(2)).containsExactly(
+        assertThat(result.result.popCustom(2)).containsExactly(
                 new Word(0), new Word(0x01)
         );
     }
 
     @Test
-    public void test_GET_negativeValue()throws AbortException {
+    public void test_GET_negativeValue() {
         Word idA = new Word(0x00);
         Memory contractA = new SimpleTestMemory() {{
             set(0, PUSH);
@@ -727,17 +727,17 @@ public class BytecodeExecutorTest {
         VirtualMachineController controller = new VirtualMachineController(manager,
                 new VMConfiguration(10));
 
-        Stack result = controller.invoke(new Stack(), idA);
+        ResultFrame result = controller.invoke(new Stack(), idA);
 
-        assertThat(result.getSize()).isEqualTo(2);
+        assertThat(result.result.getSize()).isEqualTo(2);
 
-        assertThat(result.popCustom(2)).containsExactly(
+        assertThat(result.result.popCustom(2)).containsExactly(
                 new Word(0), new Word(0x01)
         );
     }
 
     @Test
-    public void test_PUT()throws AbortException {
+    public void test_PUT() {
         Word idA = new Word(0x00);
         Memory contractA = new SimpleTestMemory() {{
             set(0, PUSH);
@@ -756,11 +756,11 @@ public class BytecodeExecutorTest {
         VirtualMachineController controller = new VirtualMachineController(manager,
                 new VMConfiguration(10));
 
-        Stack result = controller.invoke(new Stack(), idA);
+        ResultFrame result = controller.invoke(new Stack(), idA);
 
-        assertThat(result.getSize()).isEqualTo(2);
+        assertThat(result.result.getSize()).isEqualTo(2);
 
-        assertThat(result.popCustom(2)).containsExactly(
+        assertThat(result.result.popCustom(2)).containsExactly(
                 new Word(0), new Word(0)
         );
 
@@ -777,7 +777,7 @@ public class BytecodeExecutorTest {
     }
 
     @Test
-    public void test_PUT_oneValue() throws AbortException{
+    public void test_PUT_oneValue() {
         Word idA = new Word(0x00);
         Memory contractA = new SimpleTestMemory() {{
             set(0, PUSH);
@@ -793,11 +793,11 @@ public class BytecodeExecutorTest {
         VirtualMachineController controller = new VirtualMachineController(manager,
                 new VMConfiguration(10));
 
-        Stack result = controller.invoke(new Stack(), idA);
+        ResultFrame result = controller.invoke(new Stack(), idA);
 
-        assertThat(result.getSize()).isEqualTo(2);
+        assertThat(result.result.getSize()).isEqualTo(2);
 
-        assertThat(result.popCustom(2)).containsExactly(
+        assertThat(result.result.popCustom(2)).containsExactly(
                 new Word(0), new Word(0x01)
         );
 
@@ -814,7 +814,7 @@ public class BytecodeExecutorTest {
     }
 
     @Test
-    public void test_PUT_noValues()throws AbortException {
+    public void test_PUT_noValues() {
         Word idA = new Word(0x00);
         Memory contractA = new SimpleTestMemory() {{
             set(0, PUT);// 0 0x01(top)
@@ -828,11 +828,11 @@ public class BytecodeExecutorTest {
         VirtualMachineController controller = new VirtualMachineController(manager,
                 new VMConfiguration(10));
 
-        Stack result = controller.invoke(new Stack(), idA);
+        ResultFrame result = controller.invoke(new Stack(), idA);
 
-        assertThat(result.getSize()).isEqualTo(2);
+        assertThat(result.result.getSize()).isEqualTo(2);
 
-        assertThat(result.popCustom(2)).containsExactly(
+        assertThat(result.result.popCustom(2)).containsExactly(
                 new Word(0), new Word(0x01)
         );
 
@@ -849,7 +849,7 @@ public class BytecodeExecutorTest {
     }
 
     @Test
-    public void test_PUT_negativeIndex()throws AbortException {
+    public void test_PUT_negativeIndex() {
         Word idA = new Word(0x00);
         Memory contractA = new SimpleTestMemory() {{
             set(0, PUSH);
@@ -867,11 +867,11 @@ public class BytecodeExecutorTest {
         VirtualMachineController controller = new VirtualMachineController(manager,
                 new VMConfiguration(10));
 
-        Stack result = controller.invoke(new Stack(), idA);
+        ResultFrame result = controller.invoke(new Stack(), idA);
 
-        assertThat(result.getSize()).isEqualTo(2);
+        assertThat(result.result.getSize()).isEqualTo(2);
 
-        assertThat(result.popCustom(2)).containsExactly(
+        assertThat(result.result.popCustom(2)).containsExactly(
                 new Word(0), new Word(0x01)
         );
 

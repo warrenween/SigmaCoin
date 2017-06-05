@@ -32,10 +32,10 @@ public class Opcodes {
 
     /**
      * <ol>
-     * <li>If stack.size > 0 contractID is popped. STOP_BAD executed otherwise</li>
-     * <li>If stack.size > 0 dataSize is popped. STOP_BAD executed otherwise</li>
+     * <li>If stack.size > 0 contractID is popped. STOP_REVERT executed otherwise</li>
+     * <li>If stack.size > 0 dataSize is popped. STOP_REVERT executed otherwise</li>
      * <li>
-     * If stack.size < dataSize or dataSize is negative, all words are removed from stack and STOP_BAD executed.
+     * If stack.size < dataSize or dataSize is negative, all words are removed from stack and STOP_REVERT executed.
      * Otherwise dataSize words are moved to new stack. Top word will still be at top of stack.
      * Contract with contractId is invoked with given array of words.
      * Execution result stack is moved to stack.
@@ -55,7 +55,7 @@ public class Opcodes {
 
     /**
      * <ol>
-     * <li>If stack.size > 0 then one word is removed from top of stack. Otherwise STOP_BAD is executed</li>
+     * <li>If stack.size > 0 then one word is removed from top of stack. Otherwise STOP_REVERT is executed</li>
      * <li>Pointer is increased by 1</li>
      * </ol>
      */
@@ -63,7 +63,7 @@ public class Opcodes {
 
     /**
      * <ol>
-     * <li>If stack.size > 0 then A is popped. A is pushed. A is pushed. Else STOP_BAD executed</li>
+     * <li>If stack.size > 0 then A is popped. A is pushed. A is pushed. Else STOP_REVERT executed</li>
      * <li>Pointer is increased by 1</li>
      * </ol>
      */
@@ -71,8 +71,8 @@ public class Opcodes {
 
     /**
      * <ol>
-     * <li>If stack.size > 0 pop A. Else STOP_BAD is executed</li>
-     * <li>If stack.size > 0 pop B. Else STOP_BAD is executed</li>
+     * <li>If stack.size > 0 pop A. Else STOP_REVERT is executed</li>
+     * <li>If stack.size > 0 pop B. Else STOP_REVERT is executed</li>
      * <li>Push A</li>
      * <li>Push B</li>
      * <li>Pointer is increased by 1</li>
@@ -82,8 +82,8 @@ public class Opcodes {
 
     /**
      * <ol>
-     * <li>If stack.size > 0 pop A. Else STOP_BAD is executed</li>
-     * <li>If stack.size > 0 pop B. Else STOP_BAD is executed</li>
+     * <li>If stack.size > 0 pop A. Else STOP_REVERT is executed</li>
+     * <li>If stack.size > 0 pop B. Else STOP_REVERT is executed</li>
      * <li>Push (A+B)</li>
      * <li>Pointer is increased by 1</li>
      * </ol>
@@ -92,8 +92,8 @@ public class Opcodes {
 
     /**
      * <ol>
-     * <li>If stack.size > 0 pop A. Else STOP_BAD is executed</li>
-     * <li>If stack.size >0 pop B. Else STOP_BAD is executed</li>
+     * <li>If stack.size > 0 pop A. Else STOP_REVERT is executed</li>
+     * <li>If stack.size >0 pop B. Else STOP_REVERT is executed</li>
      * <li>Push word (B-A) back</li>
      * <li>Pointer is increased by 1</li>
      * </ol>
@@ -102,26 +102,26 @@ public class Opcodes {
 
     /**
      * <ol>
-     * <li>If stack.size > 0 pop A. Else STOP_BAD is executed</li>
-     * <li>If stack.size > 0 pop B. Else STOP_BAD is executed</li>
-     * <li>If (A=0) STOP_BAD. Else (b div a) is pushed to stack</li>
+     * <li>If stack.size > 0 pop A. Else STOP_REVERT is executed</li>
+     * <li>If stack.size > 0 pop B. Else STOP_REVERT is executed</li>
+     * <li>If (A=0) STOP_REVERT. Else (b div a) is pushed to stack</li>
      * </ol>
      */
     public static final Word DIV = new Word(0x22);
 
     /**
      * <ol>
-     * <li>If stack.size > 0 pop A. Else STOP_BAD is executed</li>
-     * <li>If stack.size > 0 pop B. Else STOP_BAD is executed</li>
-     * <li>If (A=0) STOP_BAD. Else (b mod a) is pushed to stack</li>
+     * <li>If stack.size > 0 pop A. Else STOP_REVERT is executed</li>
+     * <li>If stack.size > 0 pop B. Else STOP_REVERT is executed</li>
+     * <li>If (A=0) STOP_REVERT. Else (b mod a) is pushed to stack</li>
      * </ol>
      */
     public static final Word MOD = new Word(0x23);
 
     /**
      * <ol>
-     * <li>If stack.size > 0 pop A. Else STOP_BAD is executed.</li>
-     * <li>If A<0 STOP_BAD is executed.</li>
+     * <li>If stack.size > 0 pop A. Else STOP_REVERT is executed.</li>
+     * <li>If A<0 STOP_REVERT is executed.</li>
      * <li>If memory has word with index A word with index A is pushed to stack. Else 0x00 is pushed to stack.</li>
      * <li>Pointer is increased by 1</li>
      * </ol>
@@ -130,9 +130,9 @@ public class Opcodes {
 
     /**
      * <ol>
-     * <li>If stack.size > 0 pop A. Else STOP_BAD is executed.</li>
-     * <li>If stack.size > 0 pop B. Else STOP_BAD is executed.</li>
-     * <li>If A<0 STOP_BAD is executed.</li>
+     * <li>If stack.size > 0 pop A. Else STOP_REVERT is executed.</li>
+     * <li>If stack.size > 0 pop B. Else STOP_REVERT is executed.</li>
+     * <li>If A<0 STOP_REVERT is executed.</li>
      * <li>Word B is put to memory with index A</li>
      * <li>Pointer is increased by 1</li>
      * </ol>
