@@ -73,12 +73,17 @@ public class BytecodeExecutor {
 
         stackInvoke.pushCustom(executionFrame.stack.popCustom(dataSize.toInt()));
         ResultFrame result = controller.invoke(stackInvoke, contractId);
-        switch (result.stopType) {
-            case REVERT:
-
+        if (result.stopType == StopType.REVERT) {
+            stop_REVERT();
+        } else {
+            executionFrame.stack.pushCustom(result.stack.popCustom(result.stack.getSize()));
+            executionFrame.stack.push(new Word(result.stack.getSize()));
+            if (result.stopType == StopType.GOOD) {
+                executionFrame.stack.push(Word.WORD_0);
+            } else if (result.stopType == StopType.BAD) {
+                executionFrame.stack.push(Word.WORD_1);
+            } else throw new IllegalStateException("Unexpected stop type " + result.stopType.toString());
         }
-        executionFrame.stack.pushCustom(result.stack.popCustom(result.stack.getSize()));
-        executionFrame.stack.push(new Word(result.stack.getSize()));
         pointer++;
     }
 
