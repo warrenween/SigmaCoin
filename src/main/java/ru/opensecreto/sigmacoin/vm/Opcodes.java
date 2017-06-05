@@ -38,7 +38,7 @@ public class Opcodes {
      * If stack.size < dataSize or dataSize is negative, all words are removed from stack and STOP_REVERT executed.
      * Otherwise dataSize words are moved to new stack. Top word will still be at top of stack.
      * Contract with contractId is invoked with given array of words.
-     * Execution result stack is moved to stack.
+     * Execution stack stack is moved to stack.
      * </li>
      * <li>Pointer is increased by one.</li>
      * </ol>

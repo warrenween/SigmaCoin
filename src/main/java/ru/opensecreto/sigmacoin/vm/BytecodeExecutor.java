@@ -77,8 +77,8 @@ public class BytecodeExecutor {
             case REVERT:
 
         }
-        executionFrame.stack.pushCustom(result.result.popCustom(result.result.getSize()));
-        executionFrame.stack.push(new Word(result.result.getSize()));
+        executionFrame.stack.pushCustom(result.stack.popCustom(result.stack.getSize()));
+        executionFrame.stack.push(new Word(result.stack.getSize()));
         pointer++;
     }
 

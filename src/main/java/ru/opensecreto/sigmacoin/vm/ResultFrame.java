@@ -2,11 +2,11 @@ package ru.opensecreto.sigmacoin.vm;
 
 public class ResultFrame {
 
-    public final Stack result;
+    public final Stack stack;
     public final StopType stopType;
 
-    public ResultFrame(Stack result, StopType stopType) {
-        this.result = result;
+    public ResultFrame(Stack stack, StopType stopType) {
+        this.stack = stack;
         this.stopType = stopType;
     }
 }

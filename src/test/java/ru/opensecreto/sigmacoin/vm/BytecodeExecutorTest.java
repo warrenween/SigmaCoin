@@ -19,8 +19,8 @@ public class BytecodeExecutorTest {
 
         ResultFrame result = controller.invoke(new Stack(), new Word(0));
 
-        assertThat(result.result.getSize()).isEqualTo(2);
-        assertThat(result.result.popCustom(2)).containsExactly(
+        assertThat(result.stack.getSize()).isEqualTo(2);
+        assertThat(result.stack.popCustom(2)).containsExactly(
                 new Word(0), new Word(1)
         );
     }
@@ -41,8 +41,8 @@ public class BytecodeExecutorTest {
 
         ResultFrame result = controller.invoke(new Stack(), idA);
 
-        assertThat(result.result.getSize()).isEqualTo(2);
-        assertThat(result.result.popCustom(2)).containsExactly(
+        assertThat(result.stack.getSize()).isEqualTo(2);
+        assertThat(result.stack.popCustom(2)).containsExactly(
                 new Word(0), new Word(0)
         );
     }
@@ -63,8 +63,8 @@ public class BytecodeExecutorTest {
 
         ResultFrame result = controller.invoke(new Stack(), idA);
 
-        assertThat(result.result.getSize()).isEqualTo(2);
-        assertThat(result.result.popCustom(2)).containsExactly(
+        assertThat(result.stack.getSize()).isEqualTo(2);
+        assertThat(result.stack.popCustom(2)).containsExactly(
                 new Word(0), new Word(0x01)
         );
     }
@@ -90,8 +90,8 @@ public class BytecodeExecutorTest {
 
         ResultFrame result = controller.invoke(new Stack(), idA);
 
-        assertThat(result.result.getSize()).isEqualTo(6);
-        assertThat(result.result.popCustom(6)).containsExactly(
+        assertThat(result.stack.getSize()).isEqualTo(6);
+        assertThat(result.stack.popCustom(6)).containsExactly(
                 new Word(0x1f), new Word(0x1f), new Word(0x1f), new Word(0x1f),
                 new Word(4), new Word(1)
         );
@@ -119,9 +119,9 @@ public class BytecodeExecutorTest {
 
         ResultFrame result = controller.invoke(new Stack(), idA);
 
-        assertThat(result.result.getSize()).isEqualTo(4);
+        assertThat(result.stack.getSize()).isEqualTo(4);
 
-        assertThat(result.result.popCustom(4)).containsExactly(
+        assertThat(result.stack.popCustom(4)).containsExactly(
                 new Word(0x1f), new Word(0x56), new Word(2), new Word(0x00)
         );
     }
@@ -164,8 +164,8 @@ public class BytecodeExecutorTest {
 
         ResultFrame result = controller.invoke(new Stack(), idA);
 
-        assertThat(result.result.getSize()).isEqualTo(9);
-        assertThat(result.result.popCustom(9)).containsExactly(
+        assertThat(result.stack.getSize()).isEqualTo(9);
+        assertThat(result.stack.popCustom(9)).containsExactly(
                 new Word(0x12),
                 new Word(0x34),
                 new Word(0x56),
@@ -199,9 +199,9 @@ public class BytecodeExecutorTest {
 
         ResultFrame result = controller.invoke(new Stack(), idA);
 
-        assertThat(result.result.getSize()).isEqualTo(3);
+        assertThat(result.stack.getSize()).isEqualTo(3);
 
-        assertThat(result.result.popCustom(3)).containsExactly(
+        assertThat(result.stack.popCustom(3)).containsExactly(
                 new Word(0), new Word(1), new Word(0)
         );
     }
@@ -227,9 +227,9 @@ public class BytecodeExecutorTest {
 
         ResultFrame result = controller.invoke(new Stack(), idA);
 
-        assertThat(result.result.getSize()).isEqualTo(3);
+        assertThat(result.stack.getSize()).isEqualTo(3);
 
-        assertThat(result.result.popCustom(3)).containsExactly(
+        assertThat(result.stack.popCustom(3)).containsExactly(
                 new Word(90), new Word(1), new Word(0)
         );
     }
@@ -250,9 +250,9 @@ public class BytecodeExecutorTest {
 
         ResultFrame result = controller.invoke(new Stack(), idA);
 
-        assertThat(result.result.getSize()).isEqualTo(2);
+        assertThat(result.stack.getSize()).isEqualTo(2);
 
-        assertThat(result.result.popCustom(2)).containsExactly(
+        assertThat(result.stack.popCustom(2)).containsExactly(
                 new Word(0), new Word(1)
         );
     }
@@ -275,9 +275,9 @@ public class BytecodeExecutorTest {
 
         ResultFrame result = controller.invoke(new Stack(), idA);
 
-        assertThat(result.result.getSize()).isEqualTo(2);
+        assertThat(result.stack.getSize()).isEqualTo(2);
 
-        assertThat(result.result.popCustom(2)).containsExactly(
+        assertThat(result.stack.popCustom(2)).containsExactly(
                 new Word(0), new Word(0x01)
         );
     }
@@ -303,9 +303,9 @@ public class BytecodeExecutorTest {
 
         ResultFrame result = controller.invoke(new Stack(), idA);
 
-        assertThat(result.result.getSize()).isEqualTo(3);
+        assertThat(result.stack.getSize()).isEqualTo(3);
 
-        assertThat(result.result.popCustom(3)).containsExactly(
+        assertThat(result.stack.popCustom(3)).containsExactly(
                 new Word(1), new Word(1), new Word(0)
         );
     }
@@ -326,9 +326,9 @@ public class BytecodeExecutorTest {
 
         ResultFrame result = controller.invoke(new Stack(), idA);
 
-        assertThat(result.result.getSize()).isEqualTo(2);
+        assertThat(result.stack.getSize()).isEqualTo(2);
 
-        assertThat(result.result.popCustom(2)).containsExactly(
+        assertThat(result.stack.popCustom(2)).containsExactly(
                 new Word(0), new Word(0x01)
         );
     }
@@ -351,9 +351,9 @@ public class BytecodeExecutorTest {
 
         ResultFrame result = controller.invoke(new Stack(), idA);
 
-        assertThat(result.result.getSize()).isEqualTo(2);
+        assertThat(result.stack.getSize()).isEqualTo(2);
 
-        assertThat(result.result.popCustom(2)).containsExactly(
+        assertThat(result.stack.popCustom(2)).containsExactly(
                 new Word(0), new Word(0x01)
         );
     }
@@ -374,9 +374,9 @@ public class BytecodeExecutorTest {
 
         ResultFrame result = controller.invoke(new Stack(), idA);
 
-        assertThat(result.result.getSize()).isEqualTo(2);
+        assertThat(result.stack.getSize()).isEqualTo(2);
 
-        assertThat(result.result.popCustom(2)).containsExactly(
+        assertThat(result.stack.popCustom(2)).containsExactly(
                 new Word(0), new Word(0x01)
         );
     }
@@ -399,9 +399,9 @@ public class BytecodeExecutorTest {
 
         ResultFrame result = controller.invoke(new Stack(), idA);
 
-        assertThat(result.result.getSize()).isEqualTo(2);
+        assertThat(result.stack.getSize()).isEqualTo(2);
 
-        assertThat(result.result.popCustom(2)).containsExactly(
+        assertThat(result.stack.popCustom(2)).containsExactly(
                 new Word(0), new Word(0x01)
         );
     }
@@ -427,9 +427,9 @@ public class BytecodeExecutorTest {
 
         ResultFrame result = controller.invoke(new Stack(), idA);
 
-        assertThat(result.result.getSize()).isEqualTo(3);
+        assertThat(result.stack.getSize()).isEqualTo(3);
 
-        assertThat(result.result.popCustom(3)).containsExactly(
+        assertThat(result.stack.popCustom(3)).containsExactly(
                 new Word(11), new Word(1), new Word(0)
         );
     }
@@ -454,9 +454,9 @@ public class BytecodeExecutorTest {
 
         ResultFrame result = controller.invoke(new Stack(), idA);
 
-        assertThat(result.result.getSize()).isEqualTo(2);
+        assertThat(result.stack.getSize()).isEqualTo(2);
 
-        assertThat(result.result.popCustom(2)).containsExactly(
+        assertThat(result.stack.popCustom(2)).containsExactly(
                 new Word(0), new Word(1)
         );
     }
@@ -477,9 +477,9 @@ public class BytecodeExecutorTest {
 
         ResultFrame result = controller.invoke(new Stack(), idA);
 
-        assertThat(result.result.getSize()).isEqualTo(2);
+        assertThat(result.stack.getSize()).isEqualTo(2);
 
-        assertThat(result.result.popCustom(2)).containsExactly(
+        assertThat(result.stack.popCustom(2)).containsExactly(
                 new Word(0), new Word(1)
         );
     }
@@ -500,9 +500,9 @@ public class BytecodeExecutorTest {
 
         ResultFrame result = controller.invoke(new Stack(), idA);
 
-        assertThat(result.result.getSize()).isEqualTo(2);
+        assertThat(result.stack.getSize()).isEqualTo(2);
 
-        assertThat(result.result.popCustom(2)).containsExactly(
+        assertThat(result.stack.popCustom(2)).containsExactly(
                 new Word(0), new Word(1)
         );
     }
@@ -523,9 +523,9 @@ public class BytecodeExecutorTest {
 
         ResultFrame result = controller.invoke(new Stack(), idA);
 
-        assertThat(result.result.getSize()).isEqualTo(2);
+        assertThat(result.stack.getSize()).isEqualTo(2);
 
-        assertThat(result.result.popCustom(2)).containsExactly(
+        assertThat(result.stack.popCustom(2)).containsExactly(
                 new Word(0), new Word(1)
         );
     }
@@ -548,9 +548,9 @@ public class BytecodeExecutorTest {
 
         ResultFrame result = controller.invoke(new Stack(), idA);
 
-        assertThat(result.result.getSize()).isEqualTo(2);
+        assertThat(result.stack.getSize()).isEqualTo(2);
 
-        assertThat(result.result.popCustom(2)).containsExactly(
+        assertThat(result.stack.popCustom(2)).containsExactly(
                 new Word(0), new Word(1)
         );
     }
@@ -571,9 +571,9 @@ public class BytecodeExecutorTest {
 
         ResultFrame result = controller.invoke(new Stack(), idA);
 
-        assertThat(result.result.getSize()).isEqualTo(2);
+        assertThat(result.stack.getSize()).isEqualTo(2);
 
-        assertThat(result.result.popCustom(2)).containsExactly(
+        assertThat(result.stack.popCustom(2)).containsExactly(
                 new Word(0), new Word(1)
         );
     }
@@ -596,9 +596,9 @@ public class BytecodeExecutorTest {
 
         ResultFrame result = controller.invoke(new Stack(), idA);
 
-        assertThat(result.result.getSize()).isEqualTo(2);
+        assertThat(result.stack.getSize()).isEqualTo(2);
 
-        assertThat(result.result.popCustom(2)).containsExactly(
+        assertThat(result.stack.popCustom(2)).containsExactly(
                 new Word(0), new Word(1)
         );
     }
@@ -623,9 +623,9 @@ public class BytecodeExecutorTest {
 
         ResultFrame result = controller.invoke(new Stack(), idA);
 
-        assertThat(result.result.getSize()).isEqualTo(2);
+        assertThat(result.stack.getSize()).isEqualTo(2);
 
-        assertThat(result.result.popCustom(2)).containsExactly(
+        assertThat(result.stack.popCustom(2)).containsExactly(
                 new Word(0), new Word(1)
         );
     }
@@ -651,9 +651,9 @@ public class BytecodeExecutorTest {
 
         ResultFrame result = controller.invoke(new Stack(), idA);
 
-        assertThat(result.result.getSize()).isEqualTo(4);
+        assertThat(result.stack.getSize()).isEqualTo(4);
 
-        assertThat(result.result.popCustom(4)).containsExactly(
+        assertThat(result.stack.popCustom(4)).containsExactly(
                 new Word(43), new Word(23), new Word(2), new Word(0)
         );
     }
@@ -679,9 +679,9 @@ public class BytecodeExecutorTest {
 
         ResultFrame result = controller.invoke(new Stack(), idA);
 
-        assertThat(result.result.getSize()).isEqualTo(3);
+        assertThat(result.stack.getSize()).isEqualTo(3);
 
-        assertThat(result.result.popCustom(3)).containsExactly(
+        assertThat(result.stack.popCustom(3)).containsExactly(
                 new Word(1234), new Word(1), new Word(0)
         );
     }
@@ -703,9 +703,9 @@ public class BytecodeExecutorTest {
 
         ResultFrame result = controller.invoke(new Stack(), idA);
 
-        assertThat(result.result.getSize()).isEqualTo(2);
+        assertThat(result.stack.getSize()).isEqualTo(2);
 
-        assertThat(result.result.popCustom(2)).containsExactly(
+        assertThat(result.stack.popCustom(2)).containsExactly(
                 new Word(0), new Word(0x01)
         );
     }
@@ -729,9 +729,9 @@ public class BytecodeExecutorTest {
 
         ResultFrame result = controller.invoke(new Stack(), idA);
 
-        assertThat(result.result.getSize()).isEqualTo(2);
+        assertThat(result.stack.getSize()).isEqualTo(2);
 
-        assertThat(result.result.popCustom(2)).containsExactly(
+        assertThat(result.stack.popCustom(2)).containsExactly(
                 new Word(0), new Word(0x01)
         );
     }
@@ -758,9 +758,9 @@ public class BytecodeExecutorTest {
 
         ResultFrame result = controller.invoke(new Stack(), idA);
 
-        assertThat(result.result.getSize()).isEqualTo(2);
+        assertThat(result.stack.getSize()).isEqualTo(2);
 
-        assertThat(result.result.popCustom(2)).containsExactly(
+        assertThat(result.stack.popCustom(2)).containsExactly(
                 new Word(0), new Word(0)
         );
 
@@ -795,9 +795,9 @@ public class BytecodeExecutorTest {
 
         ResultFrame result = controller.invoke(new Stack(), idA);
 
-        assertThat(result.result.getSize()).isEqualTo(2);
+        assertThat(result.stack.getSize()).isEqualTo(2);
 
-        assertThat(result.result.popCustom(2)).containsExactly(
+        assertThat(result.stack.popCustom(2)).containsExactly(
                 new Word(0), new Word(0x01)
         );
 
@@ -830,9 +830,9 @@ public class BytecodeExecutorTest {
 
         ResultFrame result = controller.invoke(new Stack(), idA);
 
-        assertThat(result.result.getSize()).isEqualTo(2);
+        assertThat(result.stack.getSize()).isEqualTo(2);
 
-        assertThat(result.result.popCustom(2)).containsExactly(
+        assertThat(result.stack.popCustom(2)).containsExactly(
                 new Word(0), new Word(0x01)
         );
 
@@ -869,9 +869,9 @@ public class BytecodeExecutorTest {
 
         ResultFrame result = controller.invoke(new Stack(), idA);
 
-        assertThat(result.result.getSize()).isEqualTo(2);
+        assertThat(result.stack.getSize()).isEqualTo(2);
 
-        assertThat(result.result.popCustom(2)).containsExactly(
+        assertThat(result.stack.popCustom(2)).containsExactly(
                 new Word(0), new Word(0x01)
         );
 
