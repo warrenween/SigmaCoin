@@ -6,7 +6,6 @@ package ru.opensecreto.sigmacoin.vm;
 public class AbortException extends Exception {
 
     public AbortException() {
-        super();
     }
 
 }
