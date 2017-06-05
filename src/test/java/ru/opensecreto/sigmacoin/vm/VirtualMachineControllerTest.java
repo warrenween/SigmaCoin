@@ -22,7 +22,7 @@ public class VirtualMachineControllerTest {
                 assertThat(stack.pop()).isEqualTo(new Word(0x9876));
                 assertThat(stack.pop()).isEqualTo(new Word(0x1234));
                 assertThat(stack.getSize()).isEqualTo(0);
-                return null;
+                return new ResultFrame(new Stack(), StopType.BAD);
             }
         };
 
