@@ -31,7 +31,8 @@ public class Opcodes {
      * <li>
      * If stack.size < dataSize or dataSize is negative, stack is cleared and THROW executed.
      * Else dataSize words are moved to new stack. Top word will be at top of new stack.
-     * Contract with contractId is invoked with given array of words.
+     * <li>If contract with given contractId do not exist than reuslt is empty stack and BAD flag</li>
+     *<li> Contract with contractId is invoked with given array of words.</li>
      * </li>
      * <li>Result stack is pushed to current stack.</li>
      * <li>

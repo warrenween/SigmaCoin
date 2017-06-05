@@ -20,7 +20,7 @@ public class BytecodeExecutorTest {
 
         ResultFrame result = controller.invoke(new Stack(), new Word(0));
 
-        assertThat(result.stopType).isEqualTo(EXCEPTION);
+        assertThat(result.stopType).isEqualTo(BAD);
         assertThat(result.stack.getSize()).isEqualTo(0);
     }
 
@@ -87,7 +87,7 @@ public class BytecodeExecutorTest {
 
         assertThat(result.stopType).isEqualTo(BAD);
         assertThat(result.stack.getSize()).isEqualTo(4);
-        assertThat(result.stack.popCustom(6)).containsExactly(
+        assertThat(result.stack.popCustom(4)).containsExactly(
                 new Word(0x1f), new Word(0x1f), new Word(0x1f), new Word(0x1f)
         );
     }
@@ -116,7 +116,7 @@ public class BytecodeExecutorTest {
 
         assertThat(result.stopType).isEqualTo(GOOD);
         assertThat(result.stack.getSize()).isEqualTo(2);
-        assertThat(result.stack.popCustom(4)).containsExactly(
+        assertThat(result.stack.popCustom(2)).containsExactly(
                 new Word(0x1f), new Word(0x56)
         );
     }
@@ -162,7 +162,7 @@ public class BytecodeExecutorTest {
 
         assertThat(result.stopType).isEqualTo(GOOD);
         assertThat(result.stack.getSize()).isEqualTo(7);
-        assertThat(result.stack.popCustom(9)).containsExactly(
+        assertThat(result.stack.popCustom(7)).containsExactly(
                 new Word(0x12), new Word(0x34), new Word(0x56),
                 new Word(0x56), new Word(0x1f), new Word(0x05),
                 new Word(0x01)
@@ -402,7 +402,7 @@ public class BytecodeExecutorTest {
 
         assertThat(result.stopType).isEqualTo(GOOD);
         assertThat(result.stack.getSize()).isEqualTo(1);
-        assertThat(result.stack.popCustom(3)).containsExactly(
+        assertThat(result.stack.popCustom(1)).containsExactly(
                 new Word(11)
         );
     }
@@ -602,7 +602,7 @@ public class BytecodeExecutorTest {
 
         assertThat(result.stopType).isEqualTo(GOOD);
         assertThat(result.stack.getSize()).isEqualTo(2);
-        assertThat(result.stack.popCustom(4)).containsExactly(
+        assertThat(result.stack.popCustom(2)).containsExactly(
                 new Word(43), new Word(23)
         );
     }
@@ -733,7 +733,7 @@ public class BytecodeExecutorTest {
         ResultFrame result = controller.invoke(new Stack(), idA);
 
         assertThat(result.stopType).isEqualTo(EXCEPTION);
-        assertThat(result.stack.getSize()).isEqualTo(2);
+        assertThat(result.stack.getSize()).isEqualTo(0);
 
         assertThat(contractA.get(0)).isEqualTo(PUSH);
         assertThat(contractA.get(1)).isEqualTo(new Word(-123456789));
