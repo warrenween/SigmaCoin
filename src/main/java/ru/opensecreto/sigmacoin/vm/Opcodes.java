@@ -28,7 +28,7 @@ public class Opcodes {
      * <li>Return stack to caller</li>
      * </ol>
      */
-    public static final Word STOP_GOOD = new Word(0x01);
+    public static final Word STOP_GOOD = new Word(0x02);
 
     /**
      * <ol>
