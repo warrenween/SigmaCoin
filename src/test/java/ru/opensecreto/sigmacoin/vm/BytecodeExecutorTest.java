@@ -10,7 +10,7 @@ import static ru.opensecreto.sigmacoin.vm.Opcodes.*;
 public class BytecodeExecutorTest {
 
     @Test
-    public void test_INVOKE_nonExistingContract() {
+    public void test_INVOKE_nonExistingContract() throws AbortException {
         ContractManager manager = mock(ContractManager.class);
         when(manager.contractExists(new Word(0))).thenReturn(false);
 
@@ -26,7 +26,7 @@ public class BytecodeExecutorTest {
     }
 
     @Test
-    public void test_INVOKE_good() {
+    public void test_INVOKE_good() throws AbortException {
         Word idA = new Word(0);
         Memory contractA = new SimpleTestMemory() {{
             set(0, STOP_GOOD);// 0 0x00 (top)
@@ -48,7 +48,7 @@ public class BytecodeExecutorTest {
     }
 
     @Test
-    public void test_INVOKE_bad() {
+    public void test_INVOKE_bad() throws AbortException {
         Word idA = new Word(0);
         Memory contractA = new SimpleTestMemory() {{
             set(0, STOP_BAD);// 0 0x01 (top)
@@ -70,7 +70,7 @@ public class BytecodeExecutorTest {
     }
 
     @Test
-    public void test_INVOKE_returnsCorrectStack() {
+    public void test_INVOKE_returnsCorrectStack() throws AbortException {
         Word idA = new Word(0);
         Memory contractA = new SimpleTestMemory() {{
             set(0, PUSH);
@@ -98,7 +98,7 @@ public class BytecodeExecutorTest {
     }
 
     @Test
-    public void test_PUSH_POP_DUP() {
+    public void test_PUSH_POP_DUP() throws AbortException{
         Word idA = new Word(0x00);
         Memory contractA = new SimpleTestMemory() {{
             set(0, PUSH);
@@ -127,7 +127,7 @@ public class BytecodeExecutorTest {
     }
 
     @Test
-    public void test_INVOKE_fromCode() {
+    public void test_INVOKE_fromCode()throws AbortException {
         Word idA = new Word(0x00);
         Memory contractA = new SimpleTestMemory() {{
             set(0, PUSH);
@@ -179,7 +179,7 @@ public class BytecodeExecutorTest {
     }
 
     @Test
-    public void test_ADD() {
+    public void test_ADD()throws AbortException {
         Word idA = new Word(0x00);
         Memory contractA = new SimpleTestMemory() {{
             set(0, PUSH);
@@ -207,7 +207,7 @@ public class BytecodeExecutorTest {
     }
 
     @Test
-    public void test_SUB() {
+    public void test_SUB()throws AbortException {
         Word idA = new Word(0x00);
         Memory contractA = new SimpleTestMemory() {{
             set(0, PUSH);
@@ -235,7 +235,7 @@ public class BytecodeExecutorTest {
     }
 
     @Test
-    public void test_SUB_noValues() {
+    public void test_SUB_noValues()throws AbortException {
         Word idA = new Word(0x00);
         Memory contractA = new SimpleTestMemory() {{
             set(0, SUB);
@@ -258,7 +258,7 @@ public class BytecodeExecutorTest {
     }
 
     @Test
-    public void test_SUB_oneValues() {
+    public void test_SUB_oneValues() throws AbortException{
         Word idA = new Word(0x00);
         Memory contractA = new SimpleTestMemory() {{
             set(0, PUSH);
@@ -283,7 +283,7 @@ public class BytecodeExecutorTest {
     }
 
     @Test
-    public void test_DIV() {
+    public void test_DIV()throws AbortException {
         Word idA = new Word(0x00);
         Memory contractA = new SimpleTestMemory() {{
             set(0, PUSH);
@@ -311,7 +311,7 @@ public class BytecodeExecutorTest {
     }
 
     @Test
-    public void test_DIV_noValues() {
+    public void test_DIV_noValues()throws AbortException {
         Word idA = new Word(0x00);
         Memory contractA = new SimpleTestMemory() {{
             set(0, DIV);// 0 0x01 (top)
@@ -334,7 +334,7 @@ public class BytecodeExecutorTest {
     }
 
     @Test
-    public void test_DIV_oneValue() {
+    public void test_DIV_oneValue()throws AbortException {
         Word idA = new Word(0x00);
         Memory contractA = new SimpleTestMemory() {{
             set(0, PUSH);
@@ -359,7 +359,7 @@ public class BytecodeExecutorTest {
     }
 
     @Test
-    public void test_MOD_noValues() {
+    public void test_MOD_noValues()throws AbortException {
         Word idA = new Word(0x00);
         Memory contractA = new SimpleTestMemory() {{
             set(0, MOD);// 0 0x01 (top)
@@ -382,7 +382,7 @@ public class BytecodeExecutorTest {
     }
 
     @Test
-    public void test_MOD_oneValue() {
+    public void test_MOD_oneValue()throws AbortException {
         Word idA = new Word(0x00);
         Memory contractA = new SimpleTestMemory() {{
             set(0, PUSH);
@@ -407,7 +407,7 @@ public class BytecodeExecutorTest {
     }
 
     @Test
-    public void test_MOD() {
+    public void test_MOD() throws AbortException{
         Word idA = new Word(0x00);
         Memory contractA = new SimpleTestMemory() {{
             set(0, PUSH);
@@ -435,7 +435,7 @@ public class BytecodeExecutorTest {
     }
 
     @Test
-    public void test_DIV_byZero() {
+    public void test_DIV_byZero()throws AbortException {
         Word idA = new Word(0x00);
         Memory contractA = new SimpleTestMemory() {{
             set(0, PUSH);
@@ -462,7 +462,7 @@ public class BytecodeExecutorTest {
     }
 
     @Test
-    public void test_POP_fromEmpty() {
+    public void test_POP_fromEmpty()throws AbortException {
         Word idA = new Word(0x00);
         Memory contractA = new SimpleTestMemory() {{
             set(0, POP);//0 0x01 (top)
@@ -485,7 +485,7 @@ public class BytecodeExecutorTest {
     }
 
     @Test
-    public void test_DUP_fromEmpty() {
+    public void test_DUP_fromEmpty()throws AbortException {
         Word idA = new Word(0x00);
         Memory contractA = new SimpleTestMemory() {{
             set(0, DUP);//0 0x01 (top)
@@ -508,7 +508,7 @@ public class BytecodeExecutorTest {
     }
 
     @Test
-    public void test_SWAP_noValues() {
+    public void test_SWAP_noValues()throws AbortException {
         Word idA = new Word(0x00);
         Memory contractA = new SimpleTestMemory() {{
             set(0, SWAP);//0 0x01 (top)
@@ -531,7 +531,7 @@ public class BytecodeExecutorTest {
     }
 
     @Test
-    public void test_SWAP_oneValue() {
+    public void test_SWAP_oneValue()throws AbortException {
         Word idA = new Word(0x00);
         Memory contractA = new SimpleTestMemory() {{
             set(0, PUSH);
@@ -556,7 +556,7 @@ public class BytecodeExecutorTest {
     }
 
     @Test
-    public void test_ADD_noValues() {
+    public void test_ADD_noValues()throws AbortException {
         Word idA = new Word(0x00);
         Memory contractA = new SimpleTestMemory() {{
             set(0, ADD);//0 0x01 (top)
@@ -579,7 +579,7 @@ public class BytecodeExecutorTest {
     }
 
     @Test
-    public void test_ADD_oneValue() {
+    public void test_ADD_oneValue()throws AbortException {
         Word idA = new Word(0x00);
         Memory contractA = new SimpleTestMemory() {{
             set(0, PUSH);
@@ -604,7 +604,7 @@ public class BytecodeExecutorTest {
     }
 
     @Test
-    public void test_MOD_byZero() {
+    public void test_MOD_byZero()throws AbortException {
         Word idA = new Word(0x00);
         Memory contractA = new SimpleTestMemory() {{
             set(0, PUSH);
@@ -631,7 +631,7 @@ public class BytecodeExecutorTest {
     }
 
     @Test
-    public void test_SWAP() {
+    public void test_SWAP() throws AbortException{
         Word idA = new Word(0x00);
         Memory contractA = new SimpleTestMemory() {{
             set(0, PUSH);
@@ -659,7 +659,7 @@ public class BytecodeExecutorTest {
     }
 
     @Test
-    public void test_GET() {
+    public void test_GET()throws AbortException {
         Word idA = new Word(0x00);
         Memory contractA = new SimpleTestMemory() {{
             set(0, PUSH);
@@ -687,7 +687,7 @@ public class BytecodeExecutorTest {
     }
 
     @Test
-    public void test_GET_noValues() {
+    public void test_GET_noValues()throws AbortException {
         Word idA = new Word(0x00);
         Memory contractA = new SimpleTestMemory() {{
             set(0, GET);// 0 0x01 (top)
@@ -711,7 +711,7 @@ public class BytecodeExecutorTest {
     }
 
     @Test
-    public void test_GET_negativeValue() {
+    public void test_GET_negativeValue()throws AbortException {
         Word idA = new Word(0x00);
         Memory contractA = new SimpleTestMemory() {{
             set(0, PUSH);
@@ -737,7 +737,7 @@ public class BytecodeExecutorTest {
     }
 
     @Test
-    public void test_PUT() {
+    public void test_PUT()throws AbortException {
         Word idA = new Word(0x00);
         Memory contractA = new SimpleTestMemory() {{
             set(0, PUSH);
@@ -777,7 +777,7 @@ public class BytecodeExecutorTest {
     }
 
     @Test
-    public void test_PUT_oneValue() {
+    public void test_PUT_oneValue() throws AbortException{
         Word idA = new Word(0x00);
         Memory contractA = new SimpleTestMemory() {{
             set(0, PUSH);
@@ -814,7 +814,7 @@ public class BytecodeExecutorTest {
     }
 
     @Test
-    public void test_PUT_noValues() {
+    public void test_PUT_noValues()throws AbortException {
         Word idA = new Word(0x00);
         Memory contractA = new SimpleTestMemory() {{
             set(0, PUT);// 0 0x01(top)
@@ -849,7 +849,7 @@ public class BytecodeExecutorTest {
     }
 
     @Test
-    public void test_PUT_negativeIndex() {
+    public void test_PUT_negativeIndex()throws AbortException {
         Word idA = new Word(0x00);
         Memory contractA = new SimpleTestMemory() {{
             set(0, PUSH);

@@ -6,6 +6,11 @@ package ru.opensecreto.sigmacoin.vm;
 public class Opcodes {
 
     /**
+     * Immediately stops execution. All Changes are reverted
+     */
+    public static final Word STOP_REVERT = new Word(0x00);
+
+    /**
      * <ol>
      * <li>Stack.size is pushed</li>
      * <li>0x01 is pushed</li>
@@ -13,7 +18,7 @@ public class Opcodes {
      * <li>Returned stack to caller</li>
      * </ol>
      */
-    public static final Word STOP_BAD = new Word(0x00);
+    public static final Word STOP_BAD = new Word(0x01);
 
     /**
      * <ol>

@@ -108,10 +108,12 @@ public class BytecodeExecutor {
         pointer++;
     }
 
-    public Stack run() {
+    public Stack run() throws AbortException {
         while (run) {
             Word opcode = frame.memory.get(pointer);
-            if (opcode.equals(Opcodes.STOP_BAD)) {
+            if (opcode.equals(Opcodes.STOP_REVERT)) {
+                throw new AbortException();
+            }if (opcode.equals(Opcodes.STOP_BAD)) {
                 opcode_STOP_BAD();
             } else if (opcode.equals(Opcodes.STOP_GOOD)) {
                 opcode_STOP_GOOD();
