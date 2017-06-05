@@ -43,7 +43,7 @@ public class Opcodes {
      * <li>Pointer is increased by one.</li>
      * </ol>
      */
-    public static final Word INVOKE = new Word(0x02);
+    public static final Word INVOKE = new Word(0x03);
 
     /**
      * <ol>
