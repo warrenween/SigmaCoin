@@ -76,8 +76,9 @@ public class BytecodeExecutor {
         if (result.stopType == StopType.EXCEPTION) {
             stop_REVERT();
         } else {
+            int stackSize = result.stack.getSize();
             executionFrame.stack.pushCustom(result.stack.popCustom(result.stack.getSize()));
-            executionFrame.stack.push(new Word(result.stack.getSize()));
+            executionFrame.stack.push(new Word(stackSize));
             if (result.stopType == StopType.GOOD) {
                 executionFrame.stack.push(Word.WORD_0);
             } else if (result.stopType == StopType.BAD) {
