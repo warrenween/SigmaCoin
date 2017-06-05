@@ -131,7 +131,7 @@ public class BytecodeExecutor {
     public ResultFrame run() {
         while (run) {
             Word opcode = executionFrame.memory.get(pointer);
-            if (opcode.equals(Opcodes.STOP_REVERT)) {
+            if (opcode.equals(Opcodes.THROW)) {
                 opcode_STOP_REVERT();
             } else if (opcode.equals(Opcodes.STOP_BAD)) {
                 opcode_STOP_BAD();
