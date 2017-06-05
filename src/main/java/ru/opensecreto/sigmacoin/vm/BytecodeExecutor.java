@@ -73,7 +73,7 @@ public class BytecodeExecutor {
 
         stackInvoke.pushCustom(executionFrame.stack.popCustom(dataSize.toInt()));
         ResultFrame result = controller.invoke(stackInvoke, contractId);
-        if (result.stopType == StopType.REVERT) {
+        if (result.stopType == StopType.EXCEPTION) {
             stop_REVERT();
         } else {
             executionFrame.stack.pushCustom(result.stack.popCustom(result.stack.getSize()));
@@ -89,7 +89,7 @@ public class BytecodeExecutor {
 
     private void stop_REVERT() {
         run = false;
-        stopType = StopType.REVERT;
+        stopType = StopType.EXCEPTION;
     }
 
     private void opcode_PUSH() {

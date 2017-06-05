@@ -20,7 +20,7 @@ public class BytecodeExecutorTest {
 
         ResultFrame result = controller.invoke(new Stack(), new Word(0));
 
-        assertThat(result.stopType).isEqualTo(REVERT);
+        assertThat(result.stopType).isEqualTo(EXCEPTION);
         assertThat(result.stack.getSize()).isEqualTo(0);
     }
 
@@ -241,7 +241,7 @@ public class BytecodeExecutorTest {
 
         ResultFrame result = controller.invoke(new Stack(), idA);
 
-        assertThat(result.stopType).isEqualTo(REVERT);
+        assertThat(result.stopType).isEqualTo(EXCEPTION);
         assertThat(result.stack.getSize()).isEqualTo(0);
     }
 
@@ -263,7 +263,7 @@ public class BytecodeExecutorTest {
 
         ResultFrame result = controller.invoke(new Stack(), idA);
 
-        assertThat(result.stopType).isEqualTo(REVERT);
+        assertThat(result.stopType).isEqualTo(EXCEPTION);
         assertThat(result.stack.getSize()).isEqualTo(0);
     }
 
@@ -311,7 +311,7 @@ public class BytecodeExecutorTest {
 
         ResultFrame result = controller.invoke(new Stack(), idA);
 
-        assertThat(result.stopType).isEqualTo(REVERT);
+        assertThat(result.stopType).isEqualTo(EXCEPTION);
         assertThat(result.stack.getSize()).isEqualTo(0);
     }
 
@@ -333,7 +333,7 @@ public class BytecodeExecutorTest {
 
         ResultFrame result = controller.invoke(new Stack(), idA);
 
-        assertThat(result.stopType).isEqualTo(REVERT);
+        assertThat(result.stopType).isEqualTo(EXCEPTION);
         assertThat(result.stack.getSize()).isEqualTo(0);
     }
 
@@ -353,7 +353,7 @@ public class BytecodeExecutorTest {
 
         ResultFrame result = controller.invoke(new Stack(), idA);
 
-        assertThat(result.stopType).isEqualTo(REVERT);
+        assertThat(result.stopType).isEqualTo(EXCEPTION);
         assertThat(result.stack.getSize()).isEqualTo(0);
     }
 
@@ -375,7 +375,7 @@ public class BytecodeExecutorTest {
 
         ResultFrame result = controller.invoke(new Stack(), idA);
 
-        assertThat(result.stopType).isEqualTo(REVERT);
+        assertThat(result.stopType).isEqualTo(EXCEPTION);
         assertThat(result.stack.getSize()).isEqualTo(0);
     }
 
@@ -427,7 +427,7 @@ public class BytecodeExecutorTest {
 
         ResultFrame result = controller.invoke(new Stack(), idA);
 
-        assertThat(result.stopType).isEqualTo(REVERT);
+        assertThat(result.stopType).isEqualTo(EXCEPTION);
         assertThat(result.stack.getSize()).isEqualTo(0);
     }
 
@@ -447,7 +447,7 @@ public class BytecodeExecutorTest {
 
         ResultFrame result = controller.invoke(new Stack(), idA);
 
-        assertThat(result.stopType).isEqualTo(REVERT);
+        assertThat(result.stopType).isEqualTo(EXCEPTION);
         assertThat(result.stack.getSize()).isEqualTo(0);
     }
 
@@ -467,7 +467,7 @@ public class BytecodeExecutorTest {
 
         ResultFrame result = controller.invoke(new Stack(), idA);
 
-        assertThat(result.stopType).isEqualTo(REVERT);
+        assertThat(result.stopType).isEqualTo(EXCEPTION);
         assertThat(result.stack.getSize()).isEqualTo(0);
     }
 
@@ -487,7 +487,7 @@ public class BytecodeExecutorTest {
 
         ResultFrame result = controller.invoke(new Stack(), idA);
 
-        assertThat(result.stopType).isEqualTo(REVERT);
+        assertThat(result.stopType).isEqualTo(EXCEPTION);
         assertThat(result.stack.getSize()).isEqualTo(0);
     }
 
@@ -509,7 +509,7 @@ public class BytecodeExecutorTest {
 
         ResultFrame result = controller.invoke(new Stack(), idA);
 
-        assertThat(result.stopType).isEqualTo(REVERT);
+        assertThat(result.stopType).isEqualTo(EXCEPTION);
         assertThat(result.stack.getSize()).isEqualTo(0);
     }
 
@@ -529,7 +529,7 @@ public class BytecodeExecutorTest {
 
         ResultFrame result = controller.invoke(new Stack(), idA);
 
-        assertThat(result.stopType).isEqualTo(REVERT);
+        assertThat(result.stopType).isEqualTo(EXCEPTION);
         assertThat(result.stack.getSize()).isEqualTo(0);
     }
 
@@ -551,7 +551,7 @@ public class BytecodeExecutorTest {
 
         ResultFrame result = controller.invoke(new Stack(), idA);
 
-        assertThat(result.stopType).isEqualTo(REVERT);
+        assertThat(result.stopType).isEqualTo(EXCEPTION);
         assertThat(result.stack.getSize()).isEqualTo(0);
     }
 
@@ -575,7 +575,7 @@ public class BytecodeExecutorTest {
 
         ResultFrame result = controller.invoke(new Stack(), idA);
 
-        assertThat(result.stopType).isEqualTo(REVERT);
+        assertThat(result.stopType).isEqualTo(EXCEPTION);
         assertThat(result.stack.getSize()).isEqualTo(0);
     }
 
@@ -651,7 +651,7 @@ public class BytecodeExecutorTest {
 
         ResultFrame result = controller.invoke(new Stack(), idA);
 
-        assertThat(result.stopType).isEqualTo(REVERT);
+        assertThat(result.stopType).isEqualTo(EXCEPTION);
         assertThat(result.stack.getSize()).isEqualTo(0);
     }
 
@@ -673,7 +673,7 @@ public class BytecodeExecutorTest {
 
         ResultFrame result = controller.invoke(new Stack(), idA);
 
-        assertThat(result.stopType).isEqualTo(REVERT);
+        assertThat(result.stopType).isEqualTo(EXCEPTION);
         assertThat(result.stack.getSize()).isEqualTo(0);
     }
 
@@ -732,7 +732,7 @@ public class BytecodeExecutorTest {
 
         ResultFrame result = controller.invoke(new Stack(), idA);
 
-        assertThat(result.stopType).isEqualTo(REVERT);
+        assertThat(result.stopType).isEqualTo(EXCEPTION);
         assertThat(result.stack.getSize()).isEqualTo(2);
 
         assertThat(contractA.get(0)).isEqualTo(PUSH);
@@ -763,7 +763,7 @@ public class BytecodeExecutorTest {
 
         ResultFrame result = controller.invoke(new Stack(), idA);
 
-        assertThat(result.stopType).isEqualTo(REVERT);
+        assertThat(result.stopType).isEqualTo(EXCEPTION);
         assertThat(result.stack.getSize()).isEqualTo(0);
 
         assertThat(contractA.get(0)).isEqualTo(PUT);
@@ -798,7 +798,7 @@ public class BytecodeExecutorTest {
 
         ResultFrame result = controller.invoke(new Stack(), idA);
 
-        assertThat(result.stopType).isEqualTo(REVERT);
+        assertThat(result.stopType).isEqualTo(EXCEPTION);
         assertThat(result.stack.getSize()).isEqualTo(0);
 
         assertThat(contractA.get(0)).isEqualTo(PUSH);
