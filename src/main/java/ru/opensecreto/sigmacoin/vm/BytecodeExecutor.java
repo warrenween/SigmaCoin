@@ -33,7 +33,7 @@ public class BytecodeExecutor {
         run = false;
     }
 
-    private void opcode_INVOKE() {
+    private void opcode_INVOKE() throws AbortException {
         Word contractId;
         if (frame.stack.getSize() > 0) {
             contractId = frame.stack.pop();
