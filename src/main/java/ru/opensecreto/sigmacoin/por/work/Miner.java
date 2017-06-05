@@ -191,22 +191,22 @@ public class Miner implements Callable<int[]> {
                 }
 
                 //updating ids for next solution
-                int j = 0;
+                int i = 0;
                 boolean update = true;
-                while ((j < (n)) & update) {
-                    if (j == (n - 1)) {
-                        if (ids[j] == maxChunkCount - 1) {
+                while ((i < (n)) & update) {
+                    if (i == (n - 1)) {
+                        if (ids[i] == maxChunkCount - 1) {
                             mine = false;
                         } else {
-                            ids[j]++;
+                            ids[i]++;
                         }
                     } else {
-                        if ((ids[j + 1] - ids[j]) > 1) {
-                            ids[j]++;
+                        if ((ids[i + 1] - ids[i]) > 1) {
+                            ids[i]++;
                             update = false;
                         }
                     }
-                    j++;
+                    i++;
                 }
             }
 
