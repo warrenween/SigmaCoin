@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/bin/bash
 set -ev
 
 pandoc doc/ru.md --latex-engine=xelatex -o ru.pdf
