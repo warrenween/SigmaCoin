@@ -69,11 +69,11 @@ matrix:
         - pandoc doc/en.md --latex-engine=xelatex -o en.pdf
 
         #commit pdf
+        - git add -f ru.pdf en.pdf
         - git stash
         - git fetch
         - git checkout gh-pages
         - git stash apply
-        - git add -f ru.pdf en.pdf
         - git config user.name "$COMMIT_AUTHOR_EMAIL"
         - git config user.email "Travis CI"
         - git commit -m "Built book from {$git.commit.id}."
