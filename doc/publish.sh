@@ -1,3 +1,6 @@
 #!/bin/bash
 set -ev
-if [
+if [ "${TRAVIS_BRANCH}" = "book" ]; then
+    pandoc --version
+fi
+
