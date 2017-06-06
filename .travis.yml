@@ -44,10 +44,7 @@ matrix:
      #Generating Pandoc documentation
     - language: r
       dist: trusty
-      addons:
-        apt:
-          packages:
-            - pandoc
+      pandoc_version: 1.19.2.1
       script:
         - if [ "${TRAVIS_BRANCH}" = "book" ]; then
               pandoc --version;
