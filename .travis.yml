@@ -47,6 +47,7 @@ matrix:
       pandoc_version: 1.19.2.1
       install:
         - pandoc --version
+        - tlmgr install xkeyval
       script:
         - if [ "${TRAVIS_BRANCH}" = "book" ]; then
               pandoc ./doc/ru.md --latex-engine=xelatex -o ru.pdf;
