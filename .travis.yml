@@ -52,6 +52,6 @@ matrix:
         - if [ "${TRAVIS_BRANCH}" = "book" ]; then
               pandoc ./doc/ru.md --latex-engine=xelatex -o ru.pdf;
               pandoc ./doc/en.md --latex-engine=xelatex -o en.pdf;
-              git fetch --depth=<depth>
+              git fetch --depth=<depth>;
               git checkout gh-pages;
           fi;
