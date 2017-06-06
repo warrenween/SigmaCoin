@@ -44,6 +44,8 @@ matrix:
      #Generating Pandoc documentation
     - language: r
       dist: trusty
+      env:
+        - secure: "ZKA5hC8vESWIpGraFB97MqYDyigzOzYW5cYVWT5e7MrO4cDipnYZtdS/4caTYGvbDmzcnYof2ea04Fxc2u0wFiy3JYz7YsX00PysDE80bTK1vMGaSZOI0Jl5ipwp7ivLlqGG2hBOS8kckEX0QzLlvLY6u+QJ7U0bYINGPlhDe+Vcgggw2Ihz0RiVioF+g6QKuMsZpsIQX3z8RBGJ+3MsZdVio8A8CZ8Asbs+6if+GuxsRFv9tFBc/WFHt1D/XRMIXuZEHSN1x2sEKmD/woHyMuzsVzQ4LLm2IF4NIOGLQkHt+g15JQT/mnBjec4MfW0P5x/UJeEq8+SCiXULLM7I7NVoKX/kRFve/2HYA/5XYDcQiqCfF4rHDx02D8CqNT5rLK2KKRve47nMefcZi0bc73aaCCRUaXaQYFJceTbMILsmCS3h5/FVH2V8EOpds12GwhiA86hOzBXRlUx31JQC+ZKuP4wJLVrduNehizQW6ZO2B5We/4toT10Jgd+pDHGdhcXmJStXpkZz2/vBd3YsKvnMhWTHBOIiySOr8wFzKRhXNHJwf46HZgZRbixTqwKCQ4J1/Qp+jqQqca2rTiErlzIxIf2HsR1m/x6An+YonrWYkxJ1eIMSNgC21ApXPLFS/QHSCX8P0fjb9MbDVrOBLozrpzNgOzHj0N34uKN+5Pc="
       branches:
         only:
         - book
@@ -57,10 +59,10 @@ matrix:
         - pandoc ./doc/en.md --latex-engine=xelatex -o en.pdf;
 
         #setup ssh
-        - openssl aes-256-cbc -K $encrypted_b4615568df0b_key -iv $encrypted_b4615568df0b_iv -in github_deploy_key.enc -out github_deploy_key -d
-        - chmod 600 github_deploy_key
+        - echo $pass | gpg --passphrase-fd 0 deploy_key.gpg
+        - chmod 600 deploy_key
         - eval `ssh-agent -s`
-        - ssh-add github_deploy_key
+        - ssh-add deploy_key
 
         #commit pdf
         - git fetch origin
