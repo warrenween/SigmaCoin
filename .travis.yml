@@ -41,7 +41,7 @@ matrix:
         directories:
            - $HOME/.gradle/caches/
            - $HOME/.gradle/wrapper/
-     #Verify doc
+     #Compile and publish doc
     - language: r
       dist: trusty
       pandoc_version: 1.19.2.1
@@ -50,17 +50,3 @@ matrix:
         - tlmgr install xkeyval
       script:
         - ./doc/compile.sh
-    #Deploy doc
-    - language: r
-      dist: trusty
-      env:
-        - secure: "KKSSemYCE2rCAJhEkBb++gNbrTRIp7WCuHu4p0yCTTafbcBdQQtBmwEJh1J1nICsUA/OBPrAwZO2QttUNIMmhM8JS2DB+cUZZan1eZd+t4MygsmxPE8ZXwdtzVtysp/5fWD45UEdeVL4745cRFHZRwnyGZcnUumJaHNyFVb/1Bmbb/1cNgOV2oMEe6cLGEjNIbwiQSBp/FZctZ8dx9BmShUu/4oqEOxQAqHJ6j4pypPBSc+XFeUDmYyI0T1dy+uCK6kkmzxvVtGA3mNNrbaOy4cmROis7Rvl3M5Vxp/Gxi6XBC0THXna6BfpcmaBQkru/NR7ZRkdWZOSExeO8VY5QdUD68lN4vzCnjDUOTG7EyM3fuHHOiOCBkWQbKx/el4Dcm4QURp9JQYzUkEM5FfPmGjtcR7yh8+ZN3P+MBhyBzhZG7IQRf1vaP2LaJrNzyQIzBmf61WdoctbUq2V0tdjM3Mdx6U8t5pNWVLiN0+4id5grJ/1jsU+TyDDH39oYql+DsLFaaQ3IDtRl7DyAQDHW2CyHq5ixb3dlL56VXCJohWCuFJZPtVWDAztjKAO1NXiF0UNMwALPgb8rbbJGXjdM8bYnUC/aq8KuoFLBXxvmETMQe08UgFaVto37Af+jRWKPW/TORGYvwMij27b9DyAycMnGGlLOJQXBDnabsIM1jU="
-      branches:
-        only:
-          - master
-      pandoc_version: 1.19.2.1
-      install:
-        - pandoc --version
-        - tlmgr install xkeyval
-      script:
-        - ./doc/publish.sh
