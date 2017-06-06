@@ -57,9 +57,9 @@ matrix:
         - pandoc ./doc/en.md --latex-engine=xelatex -o en.pdf;
 
         #setup ssh
-        - $(npm bin)/set-up-ssh --key "$encrypted_b4615568df0b_key" \
-                                      --iv "$encrypted_b4615568df0b_iv" \
-                                      --path-encrypted-key "github_deploy_key.enc"
+        - openssl aes-256-cbc -K $encrypted_b4615568df0b_key -iv $encrypted_b4615568df0b_iv -in github_deploy_key.enc -out github_deploy_key -d
+        - eval $(ssh-agent -s)
+        - ssh-add github_deploy_key
 
         #commit pdf
         - git checkout -b gh-pages origin/gh-pages
