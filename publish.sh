@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/bin/bash
 set -ev
 
 SOURCE_BRANCH="master"
