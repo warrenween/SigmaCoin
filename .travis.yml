@@ -42,7 +42,7 @@ matrix:
            - $HOME/.gradle/caches/
            - $HOME/.gradle/wrapper/
      #Generating Pandoc documentation
-    - language: generic
+    - language: r
       dist: trusty
       addons:
         apt:
