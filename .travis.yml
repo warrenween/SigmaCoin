@@ -49,7 +49,7 @@ matrix:
         - pandoc --version
         - tlmgr install xkeyval
       script:
-        - doc/compile.sh
+        - ./doc/compile.sh
     #Deploy doc
     - language: r
       dist: trusty
@@ -63,4 +63,4 @@ matrix:
         - pandoc --version
         - tlmgr install xkeyval
       script:
-        - doc/deploy.sh
+        - ./doc/deploy.sh
