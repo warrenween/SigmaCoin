@@ -52,8 +52,20 @@ matrix:
         - pandoc --version
         - tlmgr install xkeyval
       script:
+        #create pdf
         - pandoc ./doc/ru.md --latex-engine=xelatex -o ru.pdf;
         - pandoc ./doc/en.md --latex-engine=xelatex -o en.pdf;
-        - git fetch --depth=1 origin;
-        - git checkout gh-pages;
+
+        #setup ssh
+        - $(npm bin)/set-up-ssh --key "$encrypted_b4615568df0b_key" \
+                                      --iv "$encrypted_b4615568df0b_iv" \
+                                      --path-encrypted-key "github_deploy_key.enc"
+
+        #commit pdf
+        - git checkout -b gh-pages origin/gh-pages
+        - git config user.name "qwertyppp11@gmail.com"
+        - git config user.email "Travis CI"
+        - git add -f ru.pdf en.pdf
+        - git commit -m "Built book from {$SHA}."
+        - git push -f "git@github.com:OpenSecreto/SigmaCoin.git" gh-pages
 
