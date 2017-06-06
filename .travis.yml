@@ -58,13 +58,14 @@ matrix:
 
         #setup ssh
         - openssl aes-256-cbc -K $encrypted_b4615568df0b_key -iv $encrypted_b4615568df0b_iv -in github_deploy_key.enc -out github_deploy_key -d
-        - eval $(ssh-agent -s)
+        - chmod 600 github_deploy_key
+        - eval `ssh-agent -s`
         - ssh-add github_deploy_key
 
         #commit pdf
         - git fetch origin
         - git checkout -b gh-pages origin/gh-pages
-        - git config user.name "qwertyppp11@gmail.com"
+        - git config user.name "$COMMIT_AUTHOR_EMAIL"
         - git config user.email "Travis CI"
         - git add -f ru.pdf en.pdf
         - git commit -m "Built book from {$SHA}."
