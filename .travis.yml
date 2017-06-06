@@ -64,7 +64,7 @@ matrix:
 
         #commit pdf
         - git fetch origin
-        - git checkout -b gh-pages origin/gh-pages
+        - git checkout gh-pages
         - git config user.name "$COMMIT_AUTHOR_EMAIL"
         - git config user.email "Travis CI"
         - git add -f ru.pdf en.pdf
