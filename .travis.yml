@@ -69,8 +69,8 @@ matrix:
         - git config user.email "Travis CI"
 
         #create pdf
-        - pandoc ./doc/ru.md --latex-engine=xelatex -o ru.pdf;
-        - pandoc ./doc/en.md --latex-engine=xelatex -o en.pdf;
+        - pandoc /doc/ru.md --latex-engine=xelatex -o ru.pdf;
+        - pandoc /doc/en.md --latex-engine=xelatex -o en.pdf;
 
         #commit pdf
         - git add -f ru.pdf en.pdf
