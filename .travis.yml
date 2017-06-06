@@ -48,4 +48,6 @@ matrix:
           packages:
             - pandoc
       script:
-        - ./doc/publish.sh
+        - if [ "${TRAVIS_BRANCH}" = "book" ]; then
+              pandoc --version
+          fi
