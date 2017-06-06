@@ -42,7 +42,10 @@ matrix:
            - $HOME/.gradle/caches/
            - $HOME/.gradle/wrapper/
      #Generating Pandoc documentation
-    - language: r
-      pandoc_version: 1.19.2.1
+    - language: generic
+      addons:
+        apt:
+          packages:
+            - pandoc
       script:
         - ./doc/publish.sh
