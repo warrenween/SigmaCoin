@@ -43,6 +43,7 @@ matrix:
            - $HOME/.gradle/wrapper/
      #Generating Pandoc documentation
     - language: generic
+      dist: trusty
       addons:
         apt:
           packages:
