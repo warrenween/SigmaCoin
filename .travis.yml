@@ -54,6 +54,6 @@ matrix:
       script:
         - pandoc ./doc/ru.md --latex-engine=xelatex -o ru.pdf;
         - pandoc ./doc/en.md --latex-engine=xelatex -o en.pdf;
-        - git fetch --depth=1;
+        - git fetch --depth=1 origin;
         - git checkout gh-pages;
 
