@@ -73,6 +73,8 @@ matrix:
         - git stash
         - git fetch
         - git checkout gh-pages
+        - rm ru.pdf
+        - rm en.pdf
         - git stash apply
         - git config user.name "$COMMIT_AUTHOR_EMAIL"
         - git config user.email "Travis CI"
