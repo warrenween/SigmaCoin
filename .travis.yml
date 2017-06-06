@@ -2,6 +2,7 @@ notifications:
   email: false
 matrix:
   include:
+    #OracleJDK 8
     - language: java
       jdk: oraclejdk8
       addons:
@@ -20,6 +21,7 @@ matrix:
         - javac -version
       script:
         - ./gradlew test
+    #OpenJDK 8
     - language: java
       dist: trusty
       jdk: openjdk8
@@ -39,3 +41,37 @@ matrix:
         directories:
            - $HOME/.gradle/caches/
            - $HOME/.gradle/wrapper/
+     #Generating Pandoc documentation
+    - language: r
+      dist: trusty
+      env:
+        - secure: "KKSSemYCE2rCAJhEkBb++gNbrTRIp7WCuHu4p0yCTTafbcBdQQtBmwEJh1J1nICsUA/OBPrAwZO2QttUNIMmhM8JS2DB+cUZZan1eZd+t4MygsmxPE8ZXwdtzVtysp/5fWD45UEdeVL4745cRFHZRwnyGZcnUumJaHNyFVb/1Bmbb/1cNgOV2oMEe6cLGEjNIbwiQSBp/FZctZ8dx9BmShUu/4oqEOxQAqHJ6j4pypPBSc+XFeUDmYyI0T1dy+uCK6kkmzxvVtGA3mNNrbaOy4cmROis7Rvl3M5Vxp/Gxi6XBC0THXna6BfpcmaBQkru/NR7ZRkdWZOSExeO8VY5QdUD68lN4vzCnjDUOTG7EyM3fuHHOiOCBkWQbKx/el4Dcm4QURp9JQYzUkEM5FfPmGjtcR7yh8+ZN3P+MBhyBzhZG7IQRf1vaP2LaJrNzyQIzBmf61WdoctbUq2V0tdjM3Mdx6U8t5pNWVLiN0+4id5grJ/1jsU+TyDDH39oYql+DsLFaaQ3IDtRl7DyAQDHW2CyHq5ixb3dlL56VXCJohWCuFJZPtVWDAztjKAO1NXiF0UNMwALPgb8rbbJGXjdM8bYnUC/aq8KuoFLBXxvmETMQe08UgFaVto37Af+jRWKPW/TORGYvwMij27b9DyAycMnGGlLOJQXBDnabsIM1jU="
+      branches:
+        only:
+        - book
+      pandoc_version: 1.19.2.1
+      install:
+        - pandoc --version
+        - tlmgr install xkeyval
+      script:
+        #create pdf
+        - pandoc ./doc/ru.md --latex-engine=xelatex -o ru.pdf;
+        - pandoc ./doc/en.md --latex-engine=xelatex -o en.pdf;
+
+        #setup ssh
+        - echo $pass | gpg --passphrase-fd 0 deploy_key.gpg
+        - chmod 600 deploy_key
+        - eval `ssh-agent -s`
+        - ssh-add deploy_key
+
+        #commit pdf
+        - git remote rm origin
+        - git remote add origin git@github.com:OpenSecreto/SigmaCoin.git
+        - git fetch
+        - git checkout gh-pages
+        - git config user.name "$COMMIT_AUTHOR_EMAIL"
+        - git config user.email "Travis CI"
+        - git add -f ru.pdf en.pdf
+        - git commit -m "Built book from {$SHA}."
+        - git push -f origin gh-pages
+
