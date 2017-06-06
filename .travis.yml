@@ -49,4 +49,4 @@ matrix:
         - pandoc --version
         - tlmgr install xkeyval
       script:
-        - ./doc/compile.sh
+        - ./publish.sh
