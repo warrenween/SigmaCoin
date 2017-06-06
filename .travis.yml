@@ -46,6 +46,7 @@ matrix:
       dist: trusty
       pandoc_version: 1.19.2.1
       install:
+        - pandoc --version
       script:
         - if [ "${TRAVIS_BRANCH}" = "book" ]; then
               pandoc --version;
