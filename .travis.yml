@@ -63,10 +63,6 @@ matrix:
         #set up git
         - git remote rm origin
         - git remote add origin git@github.com:OpenSecreto/SigmaCoin.git
-        - git fetch
-        - git checkout gh-pages
-        - git config user.name "$COMMIT_AUTHOR_EMAIL"
-        - git config user.email "Travis CI"
 
         #create pdf
         - pandoc doc/ru.md --latex-engine=xelatex -o ru.pdf;
@@ -74,5 +70,9 @@ matrix:
 
         #commit pdf
         - git add -f ru.pdf en.pdf
+        - git fetch
+        - git checkout gh-pages
+        - git config user.name "$COMMIT_AUTHOR_EMAIL"
+        - git config user.email "Travis CI"
         - git commit -m "Built book from {$git.commit.id}."
         - git push -f origin gh-pages
