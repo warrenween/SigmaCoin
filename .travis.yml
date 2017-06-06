@@ -49,5 +49,6 @@ matrix:
         - pandoc --version
       script:
         - if [ "${TRAVIS_BRANCH}" = "book" ]; then
-              pandoc --version;
+              pandoc /doc/ru.md --latex-engine=xelatex -o ru.pdf;
+              pandoc /doc/en.md --latex-engine=xelatex -o en.pdf;
           fi;
