@@ -42,7 +42,7 @@ public class Transaction {
         checkArgument(sigmethod.signum() >= 0, "Sigmethod can not be negative");
         checkArgument(Signers.SIGNERS.containsKey(sigmethod),
                 "Unknown signature method " + sigmethod);
-        checkArgument(signature.length != Signers.SIG_SIZES.get(sigmethod),
+        checkArgument(signature.length == Signers.SIG_SIZES.get(sigmethod),
                 "Signature of type " + Signers.SIGNERS_NAMES.get(sigmethod) +
                         " expected to have length of " + Signers.SIG_SIZES.get(sigmethod));
     }
