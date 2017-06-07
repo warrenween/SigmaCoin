@@ -8,6 +8,9 @@ import ru.opensecreto.sigmacoin.crypto.PublicKey;
 import java.math.BigInteger;
 import java.util.Arrays;
 
+import static com.google.common.base.Preconditions.checkArgument;
+import static com.google.common.base.Preconditions.checkNotNull;
+
 /**
  * See: EdDSA and Ed25519 draft-josefsson-eddsa-ed25519-03
  * <p>
@@ -15,13 +18,16 @@ import java.util.Arrays;
  */
 public class Ed25519SHA512 implements BaseSigner {
 
+    public static final int SIGNATURE_SIZE = 64;
+
     @Override
-    public byte[] sign(byte[] message, PrivateKey privateKey) {
-        if (!(privateKey instanceof Ed25519PrivateKey))
-            throw new IllegalArgumentException(String.format(
-                    "Private key must be '{}'. Given '{}'",
-                    Ed25519PrivateKey.class, privateKey.getClass()
-            ));
+    public byte[] sign(byte[] message, PrivateKey privateKey)
+            throws NullPointerException, IllegalArgumentException {
+        checkNotNull(message);
+        checkNotNull(privateKey);
+        checkArgument(privateKey instanceof Ed25519PrivateKey,
+                "Private key must have class " + Ed25519PrivateKey.class + ". Given " + privateKey.getClass() + "."
+        );
 
         Secret tmp = Ed25519Math.secretExpand(((Ed25519PrivateKey) privateKey).getPrivateKey());
         //-------
@@ -38,17 +44,20 @@ public class Ed25519SHA512 implements BaseSigner {
     }
 
     @Override
-    public boolean verify(byte[] message, byte[] signature, PublicKey publicKey) {
-        if (!(publicKey instanceof Ed25519PublicKey))
-            throw new IllegalArgumentException(String.format(
-                    "Private key must be '{}'. Given '{}'",
-                    Ed25519PublicKey.class, publicKey.getClass()
-            ));
+    public boolean verify(byte[] message, byte[] signature, PublicKey publicKey)
+            throws NullPointerException, IllegalArgumentException {
+        checkNotNull(message);
+        checkNotNull(signature);
+        checkNotNull(publicKey);
 
-        if (signature.length != 64) {
-            throw new IllegalArgumentException("Bad signature length");
-        }
-        Point A = Ed25519Math.pointDecompress(((Ed25519PublicKey) publicKey).getPublicKey());
+        checkArgument(publicKey instanceof Ed25519PublicKey,
+                "Public key must have class " + Ed25519PublicKey.class + ". Given " + publicKey.getClass() + "."
+        );
+        checkArgument(signature.length == SIGNATURE_SIZE);
+
+        Ed25519PublicKey publicKeyCasted = (Ed25519PublicKey) publicKey;
+
+        Point A = Ed25519Math.pointDecompress(publicKeyCasted.getPublicKey());
         if (A == null) {
             return false;
         }
@@ -65,7 +74,7 @@ public class Ed25519SHA512 implements BaseSigner {
 
         BigInteger s = new BigInteger(1, Util.switchEndianness(sigR));
         BigInteger h = Ed25519Math.sha512_modq(Util.arrayConcat(
-                Util.arrayConcat(Rs, ((Ed25519PublicKey) publicKey).getPublicKey()), message)
+                Util.arrayConcat(Rs, publicKeyCasted.getPublicKey()), message)
         );
 
         Point sB = Ed25519Math.pointMultiply(s, Ed25519Math.G);

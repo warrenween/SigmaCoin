@@ -10,6 +10,9 @@ import ru.opensecreto.openutil.Util;
 import javax.xml.bind.DatatypeConverter;
 import java.util.Arrays;
 
+import static com.google.common.base.Preconditions.checkArgument;
+import static com.google.common.base.Preconditions.checkNotNull;
+
 /**
  * Word is 32 byte (256 bits) signed value. Most significant bit as at the begining of array.
  * Word is immutable. All operations return new word.
@@ -28,7 +31,8 @@ public final class Word implements Comparable<Word> {
     }
 
     public Word(byte[] data) throws IllegalArgumentException {
-        if (data.length != 32) throw new IllegalArgumentException("data length must be 32");
+        checkNotNull(data);
+        checkArgument(data.length == 32);
         System.arraycopy(data, 0, this.data, 0, WORD_SIZE);
     }
 

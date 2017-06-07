@@ -1,5 +1,7 @@
 package ru.opensecreto.sigmacoin.vm;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+
 public class ExecutionFrame {
 
     public final Memory memory;
@@ -7,8 +9,8 @@ public class ExecutionFrame {
     public final Word contractID;
 
     public ExecutionFrame(Memory memory, Stack stack, Word contractID) {
-        this.memory = memory;
-        this.stack = stack;
-        this.contractID = contractID;
+        this.memory = checkNotNull(memory);
+        this.stack = checkNotNull(stack);
+        this.contractID = checkNotNull(contractID);
     }
 }

@@ -3,6 +3,8 @@ package ru.opensecreto.sigmacoin.vm;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+
 public class BytecodeExecutor {
 
     public static final Logger LOGGER = LoggerFactory.getLogger(BytecodeExecutor.class);
@@ -15,10 +17,11 @@ public class BytecodeExecutor {
     private boolean run = true;
     private StopType stopType;
 
-    public BytecodeExecutor(VMConfiguration configuration, ExecutionFrame executionFrame, VirtualMachineController controller) {
-        this.executionFrame = executionFrame;
-        this.configuration = configuration;
-        this.controller = controller;
+    public BytecodeExecutor(VMConfiguration configuration, ExecutionFrame executionFrame, VirtualMachineController controller)
+    throws NullPointerException{
+        this.executionFrame = checkNotNull(executionFrame);
+        this.configuration = checkNotNull(configuration);
+        this.controller = checkNotNull(controller);
     }
 
     private void opcode_STOP_BAD() {

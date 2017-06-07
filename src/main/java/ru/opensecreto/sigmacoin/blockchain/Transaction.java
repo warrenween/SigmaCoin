@@ -47,7 +47,9 @@ public class Transaction {
                         " expected to have length of " + Signers.SIG_SIZES.get(sigmethod));
     }
 
-    public static byte[] encode(Transaction tx) {
+    public static byte[] encode(Transaction tx)
+            throws NullPointerException {
+        checkNotNull(tx);
         ByteBuffer buf = ByteBuffer.allocate(
                 Integer.BYTES + bigIntBytes(tx.chainID) +
                         Integer.BYTES + bigIntBytes(tx.timestamp) +
@@ -90,8 +92,9 @@ public class Transaction {
         return buf.array();
     }
 
-    public static Transaction decode(byte[] data) {
-        ByteBuffer buf = ByteBuffer.wrap(data);
+    public static Transaction decode(byte[] data)
+            throws NullPointerException {
+        ByteBuffer buf = ByteBuffer.wrap(checkNotNull(data));
 
         byte[] chainIdArr = new byte[buf.getInt()];
         buf.get(chainIdArr);
@@ -136,8 +139,8 @@ public class Transaction {
             return false;
         }
         Transaction o = (Transaction) obj;
-        return (o.chainID.equals(chainID)) && (o.timestamp.equals(timestamp)) && (o.target.equals(target)) &&
-                (o.cuLimit.equals(cuLimit)) && (o.cuPrice.equals(cuPrice)) && (o.sigmethod.equals(sigmethod)) &&
+        return o.chainID.equals(chainID) && o.timestamp.equals(timestamp) && o.target.equals(target) &&
+                o.cuLimit.equals(cuLimit) && o.cuPrice.equals(cuPrice) && o.sigmethod.equals(sigmethod) &&
                 Arrays.equals(o.signature, signature) && Arrays.equals(o.data, data);
     }
 }

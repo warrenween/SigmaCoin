@@ -5,6 +5,8 @@ import org.slf4j.LoggerFactory;
 
 import java.util.Arrays;
 
+import static com.google.common.base.Preconditions.checkArgument;
+import static com.google.common.base.Preconditions.checkNotNull;
 import static ru.opensecreto.sigmacoin.vm.Word.WORD_SIZE;
 
 /**
@@ -20,17 +22,19 @@ public class VirtualMachineController {
     private int currentCallStackDepth = 0;
 
     public VirtualMachineController(ContractManager contractManager, VMConfiguration configuration) {
-        this.contractManager = contractManager;
-        this.configuration = configuration;
+        this.contractManager = checkNotNull(contractManager);
+        this.configuration = checkNotNull(configuration);
     }
 
     public StopType execute(byte[] invokationData, ContractAddress contractAddress) {
         return execute(invokationData, contractAddress.id);
     }
 
-    public StopType execute(byte[] invocationData, Word contractID) {
-        if (invocationData.length % WORD_SIZE != 0)
-            throw new IllegalArgumentException("invocationData length must be multiple of 32");
+    public StopType execute(byte[] invocationData, Word contractID)
+            throws IllegalArgumentException {
+        checkNotNull(invocationData);
+        checkNotNull(contractID);
+        checkArgument(invocationData.length % WORD_SIZE == 0);
         Stack stack = new Stack();
 
         for (int i = 0; i < invocationData.length / WORD_SIZE; i++) {
@@ -41,6 +45,8 @@ public class VirtualMachineController {
     }
 
     public ResultFrame invoke(Stack stack, Word contractID) {
+        checkNotNull(stack);
+        checkNotNull(contractID);
         if ((!contractManager.contractExists(contractID)) | (currentCallStackDepth == configuration.maxCallDepth)) {
             return new ResultFrame(new Stack(), StopType.BAD);
         } else {

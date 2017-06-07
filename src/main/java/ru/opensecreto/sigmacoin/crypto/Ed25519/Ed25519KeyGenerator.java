@@ -3,6 +3,8 @@ package ru.opensecreto.sigmacoin.crypto.Ed25519;
 import java.math.BigInteger;
 import java.security.SecureRandom;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+
 public class Ed25519KeyGenerator {
 
     private final SecureRandom secureRandom;
@@ -12,8 +14,7 @@ public class Ed25519KeyGenerator {
     }
 
     public Ed25519KeyGenerator(SecureRandom secureRandom) {
-        if (secureRandom == null) throw new IllegalArgumentException("SecureRandom can not be null");
-        this.secureRandom = secureRandom;
+        this.secureRandom = checkNotNull(secureRandom);
     }
 
     public Ed25519PrivateKey generatePrivateKey() {
@@ -32,7 +33,7 @@ public class Ed25519KeyGenerator {
     }
 
     public static Ed25519PublicKey generatePublicKey(Ed25519PrivateKey privateKey) {
-        BigInteger a = Ed25519Math.secretExpand(privateKey.getPrivateKey()).v;
+        BigInteger a = Ed25519Math.secretExpand(checkNotNull(privateKey).getPrivateKey()).v;
         return new Ed25519PublicKey(Ed25519Math.pointCompress(Ed25519Math.pointMultiply(a, Ed25519Math.G)));
     }
 }

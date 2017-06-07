@@ -6,4 +6,8 @@ public interface DigestProvider {
 
     public Digest getDigest();
 
+    public default int getDigestSize() {
+        return getDigest().getDigestSize();
+    }
+
 }

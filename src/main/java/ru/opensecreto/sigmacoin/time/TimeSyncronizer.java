@@ -13,6 +13,8 @@ import java.util.List;
 import java.util.Random;
 import java.util.Scanner;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+
 public class TimeSyncronizer {
 
     private final static Logger LOGGER = LoggerFactory.getLogger(TimeSyncronizer.class);
@@ -51,7 +53,7 @@ public class TimeSyncronizer {
     }
 
     public TimeSyncronizer(Time time, int timeout) {
-        this.time = time;
+        this.time = checkNotNull(time);
 
         ntpClient = new NTPUDPClient();
         ntpClient.setDefaultTimeout(timeout);
@@ -66,8 +68,8 @@ public class TimeSyncronizer {
         update(servers.get(new Random().nextInt(servers.size())));
     }
 
-    public void update(InetAddress server) throws IOException {
-        TimeInfo timeInfo = ntpClient.getTime(server);
+    public void update(InetAddress server) throws IOException, NullPointerException {
+        TimeInfo timeInfo = ntpClient.getTime(checkNotNull(server));
         timeInfo.computeDetails();
         time.setOffset(timeInfo.getOffset());
 

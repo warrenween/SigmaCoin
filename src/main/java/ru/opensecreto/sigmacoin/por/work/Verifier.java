@@ -4,6 +4,9 @@ import com.google.common.primitives.Ints;
 import org.bouncycastle.crypto.Digest;
 import ru.opensecreto.sigmacoin.core.DigestProvider;
 
+import static com.google.common.base.Preconditions.checkArgument;
+import static com.google.common.base.Preconditions.checkNotNull;
+
 public class Verifier {
 
     private final DigestProvider chunkProvider;
@@ -11,16 +14,20 @@ public class Verifier {
     private final int n;
 
     public Verifier(DigestProvider chunkProvider, DigestProvider hashProvider, int n) {
-        if (chunkProvider.getDigest() == null) throw new IllegalArgumentException("Chunk provider can not return null");
-        if (hashProvider.getDigest() == null) throw new IllegalArgumentException("Hash provider can not return null");
-        if (n < 2) throw new IllegalArgumentException("n musy be >=2");
-
-        this.chunkProvider = chunkProvider;
-        this.hashProvider = hashProvider;
+        this.chunkProvider = checkNotNull(chunkProvider);
+        this.hashProvider = checkNotNull(hashProvider);
         this.n = n;
+
+        checkNotNull(chunkProvider.getDigest());
+        checkNotNull(hashProvider.getDigest());
+        checkArgument(n > 1);
     }
 
     public boolean verify(byte[] data, byte[] target, int[] solution) {
+        checkNotNull(data);
+        checkNotNull(target);
+        checkNotNull(solution);
+
         if (solution.length != n) return false;
 
         //check values are in ascending order (unsigned)
