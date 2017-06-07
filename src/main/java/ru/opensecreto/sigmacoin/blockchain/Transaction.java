@@ -99,7 +99,7 @@ public class Transaction {
 
         byte[] timestampArr = new byte[buf.getInt()];
         buf.get(timestampArr);
-        BigInteger timestamp = new BigInteger(chainIdArr);
+        BigInteger timestamp = new BigInteger(timestampArr);
 
         byte[] targetArr = new byte[ContractAddress.BYTES];
         buf.get(targetArr);
