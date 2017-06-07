@@ -136,8 +136,8 @@ public class Transaction {
             return false;
         }
         Transaction o = (Transaction) obj;
-        return (o.chainID.equals(chainID)) && (o.timestamp.equals(timestamp)) && (o.target.equals(target)) &&
-                (o.cuLimit.equals(cuLimit)) && (o.cuPrice.equals(cuPrice)) && (o.sigmethod.equals(sigmethod)) &&
+        return o.chainID.equals(chainID) && o.timestamp.equals(timestamp) && o.target.equals(target) &&
+                o.cuLimit.equals(cuLimit) && o.cuPrice.equals(cuPrice) && o.sigmethod.equals(sigmethod) &&
                 Arrays.equals(o.signature, signature) && Arrays.equals(o.data, data);
     }
 }
