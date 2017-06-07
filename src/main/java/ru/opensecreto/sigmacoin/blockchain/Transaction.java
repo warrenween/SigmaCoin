@@ -34,6 +34,10 @@ public class Transaction {
         this.signature = Arrays.copyOf(checkNotNull(signature), signature.length);
         this.data = Arrays.copyOf(checkNotNull(data), data.length);
 
+        checkArgument(chainID.signum() >= 0, "ChainID can not be negative");
+        checkArgument(timestamp.signum() >= 0, "Timestamp can not be negative");
+        checkArgument(cuLimit.signum() >= 0, "CU limit can not be negative");
+        checkArgument(cuPrice.signum() >= 0, "CU price can not be negative");
         checkArgument(Signers.SIGNERS.containsKey(sigmethod),
                 "Unknown signature method " + sigmethod);
         checkArgument(signature.length != Signers.SIG_SIZES.get(sigmethod),
