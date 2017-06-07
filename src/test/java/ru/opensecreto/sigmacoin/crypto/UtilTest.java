@@ -1,6 +1,7 @@
 package ru.opensecreto.sigmacoin.crypto;
 
 import org.testng.annotations.Test;
+import ru.opensecreto.sigmacoin.Util;
 
 import javax.xml.bind.DatatypeConverter;
 

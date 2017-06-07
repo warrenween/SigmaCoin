@@ -183,13 +183,13 @@ public final class Word implements Comparable<Word> {
 
     public Word shiftLeft(int count) {
         byte[] buf = Arrays.copyOf(data, WORD_SIZE);
-        Util.shiftLeft(buf, count);
+        ru.opensecreto.sigmacoin.Util.shiftLeft(buf, count);
         return new Word(buf);
     }
 
     public Word shiftRight(int count) {
         byte[] buf = Arrays.copyOf(data, WORD_SIZE);
-        Util.shiftRight(buf, count);
+        ru.opensecreto.sigmacoin.Util.shiftRight(buf, count);
         return new Word(buf);
     }
 
