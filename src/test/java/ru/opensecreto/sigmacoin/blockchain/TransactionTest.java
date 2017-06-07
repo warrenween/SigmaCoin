@@ -31,7 +31,7 @@ public class TransactionTest {
 
         Transaction tx2 = Transaction.decode(Transaction.encode(tx1));
 
-        assertThat(tx1).isEqualTo(tx2);
+        assertThat(tx2.equals(tx1)).isTrue();
     }
 
     @Test
