@@ -22,7 +22,7 @@ public class VerifierTest {
 
         byte[] data = new byte[32];
         new Random().nextBytes(data);
-        byte[] target = new byte[]{0x0f, (byte) 0x00, 0x00, 0x00};
+        byte[] target = new byte[]{0x00, (byte) 0xf0, 0x00, 0x00};
 
         Miner miner = new Miner(data, chunkProvider, hashProvider, N, target, 100000);
         int[] solution = miner.call();
@@ -48,7 +48,7 @@ public class VerifierTest {
 
         byte[] data = new byte[32];
         new Random().nextBytes(data);
-        byte[] target = new byte[]{0x10, (byte) 0x00, 0x00, 0x00};
+        byte[] target = new byte[]{0x0f, (byte) 0x00, 0x00, 0x00};
 
         Miner miner = new Miner(data, chunkProvider, hashProvider, N, target, 100000);
         int[] solution = miner.call();
@@ -67,7 +67,7 @@ public class VerifierTest {
 
         byte[] data = new byte[32];
         new Random().nextBytes(data);
-        byte[] target = new byte[]{0x10, (byte) 0x00, 0x00, 0x00};
+        byte[] target = new byte[]{0x0f, (byte) 0x00, 0x00, 0x00};
 
         Miner miner = new Miner(data, chunkProvider, hashProvider, N, target, 100000);
         int[] solution = miner.call();
@@ -87,7 +87,7 @@ public class VerifierTest {
 
         byte[] data = new byte[32];
         new Random().nextBytes(data);
-        byte[] target = new byte[]{0x10, (byte) 0x00, 0x00, 0x00};
+        byte[] target = new byte[]{0x0f, (byte) 0x00, 0x00, 0x00};
 
         Miner miner = new Miner(data, chunkProvider, hashProvider, N, target, 100000);
         int[] solution = miner.call();

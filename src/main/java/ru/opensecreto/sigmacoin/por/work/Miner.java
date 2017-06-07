@@ -120,7 +120,7 @@ public class Miner implements Callable<int[]> {
             while (mine) {
                 solvingAttemptsDoneInRound = solvingAttemptsDoneInRound.add(BigInteger.ONE);
 
-                //resetting result cache
+                //resetting stack cache
                 for (int i = 0; i < chunkResult.length; i++) {
                     chunkResult[i] = 0;
                 }
@@ -234,7 +234,7 @@ public class Miner implements Callable<int[]> {
             roundCounter++;
         }
         LOGGER.info("Unable to find solution.");
-        throw new Exception("Unable to compute result.");
+        throw new Exception("Unable to compute stack.");
     }
 
     private boolean meetsTarget(byte[] hash, byte[] target) {

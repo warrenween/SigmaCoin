@@ -25,7 +25,7 @@ public class Stack {
     }
 
     /**
-     * Removes one word from top of stack and returns it as the result.
+     * Removes one word from top of stack and returns it as the stack.
      *
      * @return one word from stack
      * @throws IllegalStateException if stack is empty
