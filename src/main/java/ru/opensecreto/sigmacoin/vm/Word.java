@@ -5,6 +5,7 @@ import com.google.common.primitives.Shorts;
 import org.jetbrains.annotations.NotNull;
 import org.jooq.lambda.tuple.Tuple;
 import org.jooq.lambda.tuple.Tuple2;
+import ru.opensecreto.openutil.Util;
 
 import javax.xml.bind.DatatypeConverter;
 import java.util.Arrays;

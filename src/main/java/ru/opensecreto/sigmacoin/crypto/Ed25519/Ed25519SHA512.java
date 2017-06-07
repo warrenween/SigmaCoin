@@ -1,11 +1,12 @@
 package ru.opensecreto.sigmacoin.crypto.Ed25519;
 
+import ru.opensecreto.openutil.Util;
 import ru.opensecreto.sigmacoin.crypto.BaseSigner;
 import ru.opensecreto.sigmacoin.crypto.PrivateKey;
 import ru.opensecreto.sigmacoin.crypto.PublicKey;
-import ru.opensecreto.sigmacoin.crypto.Util;
 
 import java.math.BigInteger;
+import java.util.Arrays;
 
 /**
  * See: EdDSA and Ed25519 draft-josefsson-eddsa-ed25519-03
@@ -33,7 +34,7 @@ public class Ed25519SHA512 implements BaseSigner {
         BigInteger h = Ed25519Math.sha512_modq(Util.arrayConcat(Util.arrayConcat(Rs, A), message));
         //s = (r + h * a) % q
         BigInteger s = h.multiply(a).add(r).mod(Ed25519Math.q);
-        return Util.arrayConcat(Rs, Util.arrayLim(Util.switchEndianness(s.toByteArray()), 32));
+        return Util.arrayConcat(Rs, Arrays.copyOf(Util.switchEndianness(s.toByteArray()), 32));
     }
 
     @Override
