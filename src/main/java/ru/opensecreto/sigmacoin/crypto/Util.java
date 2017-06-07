@@ -18,14 +18,4 @@ public class Util {
         return out;
     }
 
-    public static byte[] arrayLim(byte[] a, int l) {
-        byte[] out = new byte[l];
-        if (a.length > l) {
-            System.arraycopy(a, 0, out, 0, l);
-        } else {
-            System.arraycopy(a, 0, out, 0, a.length);
-        }
-        return out;
-    }
-
 }

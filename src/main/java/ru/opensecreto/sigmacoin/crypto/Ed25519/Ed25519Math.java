@@ -4,6 +4,7 @@ import org.bouncycastle.crypto.digests.SHA512Digest;
 import ru.opensecreto.sigmacoin.crypto.Util;
 
 import java.math.BigInteger;
+import java.util.Arrays;
 
 class Ed25519Math {
     /**
@@ -38,7 +39,7 @@ class Ed25519Math {
         BigInteger zinv = modp_inv(P.z);
         BigInteger x = P.x.multiply(zinv).mod(p);
         BigInteger y = P.y.multiply(zinv).mod(p);
-        return Util.arrayLim(Util.switchEndianness(y.or(x.and(BigInteger.ONE).shiftLeft(255)).toByteArray()), 32);
+        return Arrays.copyOf(Util.switchEndianness(y.or(x.and(BigInteger.ONE).shiftLeft(255)).toByteArray()), 32);
     }
 
     public static Point pointDecompress(byte[] s) {
