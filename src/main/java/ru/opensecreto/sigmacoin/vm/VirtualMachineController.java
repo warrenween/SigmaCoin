@@ -24,6 +24,10 @@ public class VirtualMachineController {
         this.configuration = configuration;
     }
 
+    public StopType execute(byte[] invokationData, ContractAddress contractAddress) {
+        return execute(invokationData, contractAddress.id);
+    }
+
     public StopType execute(byte[] invocationData, Word contractID) {
         if (invocationData.length % WORD_SIZE != 0)
             throw new IllegalArgumentException("invocationData length must be multiple of 32");

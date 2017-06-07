@@ -36,7 +36,7 @@ public class Transaction {
         this.sigmethod=checkNotNull(sigmethod);
         this.signature = Arrays.copyOf(checkNotNull(signature), signature.length);
         this.data = Arrays.copyOf(checkNotNull(data), data.length);
-        
+
         checkArgument(Signers.SIGNERS.containsKey(sigmethod),
                 "Unknown signature method " + sigmethod);
         checkArgument(signature.length != Signers.SIG_SIZES.get(sigmethod),
