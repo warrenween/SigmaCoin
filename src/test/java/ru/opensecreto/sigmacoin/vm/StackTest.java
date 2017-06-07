@@ -86,7 +86,7 @@ public class StackTest {
         Stack stack = new Stack();
 
         assertThat(stack.getSize()).isEqualTo(0);
-        assertThatThrownBy(() -> stack.push(null)).isInstanceOf(IllegalArgumentException.class);
+        assertThatThrownBy(() -> stack.push(null));
         assertThat(stack.getSize()).isEqualTo(0);
     }
 
