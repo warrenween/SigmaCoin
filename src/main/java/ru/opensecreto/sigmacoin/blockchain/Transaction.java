@@ -25,13 +25,12 @@ public class Transaction {
                        BigInteger cuLimit, BigInteger cuPrice, BigInteger sigmethod, byte[] signature,
                        byte[] data)
             throws IllegalArgumentException, NullPointerException {
-        //chainid verification
         this.chainID = checkNotNull(chainID);
         this.timestamp = checkNotNull(timestamp);
         this.target = checkNotNull(target);
         this.cuLimit = checkNotNull(cuLimit);
         this.cuPrice = checkNotNull(cuPrice);
-        this.sigmethod=checkNotNull(sigmethod);
+        this.sigmethod = checkNotNull(sigmethod);
         this.signature = Arrays.copyOf(checkNotNull(signature), signature.length);
         this.data = Arrays.copyOf(checkNotNull(data), data.length);
 
