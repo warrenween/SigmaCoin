@@ -13,7 +13,6 @@ public class Transaction {
 
     private final BigInteger chainID;
     private final BigInteger timestamp;
-    private final ContractAddress source;
     private final ContractAddress target;
     private final BigInteger cuLimit;
     private final BigInteger cuPrice;
@@ -22,14 +21,13 @@ public class Transaction {
     private final byte[] data;
 
 
-    public Transaction(BigInteger chainID, BigInteger timestamp, ContractAddress source, ContractAddress target,
+    public Transaction(BigInteger chainID, BigInteger timestamp, ContractAddress target,
                        BigInteger cuLimit, BigInteger cuPrice, BigInteger sigmethod, byte[] signature,
                        byte[] data)
             throws IllegalArgumentException, NullPointerException {
         //chainid verification
         this.chainID = checkNotNull(chainID);
         this.timestamp = checkNotNull(timestamp);
-        this.source = checkNotNull(source);
         this.target = checkNotNull(target);
         this.cuLimit = checkNotNull(cuLimit);
         this.cuPrice = checkNotNull(cuPrice);
