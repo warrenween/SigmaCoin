@@ -10,19 +10,21 @@ public class Opcodes {
      */
     public static final Word THROW = new Word(0x00);
 
+    public static final Word ERROR = new Word(0x01);
+
     /**
      * <ol>
      * <li>Current stack and BAD flag are returned to caller</li>
      * </ol>
      */
-    public static final Word STOP_BAD = new Word(0x01);
+    public static final Word STOP_BAD = new Word(0x02);
 
     /**
      * <ol>
      * <li>Current stack and GOOD flag are returned to caller</li>
      * </ol>
      */
-    public static final Word STOP_GOOD = new Word(0x02);
+    public static final Word STOP_GOOD = new Word(0x03);
 
     /**
      * <ol>
@@ -32,10 +34,11 @@ public class Opcodes {
      * If stack.size < dataSize or dataSize is negative, stack is cleared and THROW executed.
      * Else dataSize words are moved to new stack. Top word will be at top of new stack.
      * <li>If contract with given contractId do not exist than reuslt is empty stack and BAD flag</li>
-     *<li> Contract with contractId is invoked with given array of words.</li>
+     * <li> Contract with contractId is invoked with given array of words.</li>
      * </li>
      * <li>Result stack is pushed to current stack.</li>
      * <li>
+     * If flag is ERROR current stack is returned to caller with ERROR flag.
      * If flag is EXCEPTION current stack is returned to caller with EXCEPTION flag.
      * If flag is GOOD resultStack.size and 0x00 is pushed to current stack.
      * If flag is BAD resultStack.size and 0x01 is pushed to current stack.
@@ -43,7 +46,29 @@ public class Opcodes {
      * <li>Pointer is increased by 1.</li>
      * </ol>
      */
-    public static final Word INVOKE = new Word(0x03);
+    public static final Word INVOKE = new Word(0x04);
+
+    /**
+     * <ol>
+     * <li>If stack.size > 0 contractID is popped. Else THROW.</li>
+     * <li>If stack.size > 0 dataSize is popped. Else THROW.</li>
+     * <li>
+     * If stack.size < dataSize or dataSize is negative, stack is cleared and THROW executed.
+     * Else dataSize words are moved to new stack. Top word will be at top of new stack.
+     * <li>If contract with given contractId do not exist than reuslt is empty stack and BAD flag</li>
+     * <li> Contract with contractId is invoked with given array of words.</li>
+     * </li>
+     * <li>Result stack is pushed to current stack.</li>
+     * <li>
+     * If flag is ERROR current stack is returned to caller with ERROR flag.
+     * If flag is EXCEPTION resultStack.size and 0x02 is pushed to current stack.
+     * If flag is GOOD resultStack.size and 0x00 is pushed to current stack.
+     * If flag is BAD resultStack.size and 0x01 is pushed to current stack.
+     * </li>
+     * <li>Pointer is increased by 1.</li>
+     * </ol>
+     */
+    public static final Word INVOKE_CATCH = new Word(0x05);
 
     /**
      * <ol>

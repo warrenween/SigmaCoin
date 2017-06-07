@@ -19,6 +19,7 @@ public final class Word implements Comparable<Word> {
 
     public static final Word WORD_0 = new Word(0);
     public static final Word WORD_1 = new Word(1);
+    public static final Word WORD_2 = new Word(2);
 
     private final byte[] data = new byte[WORD_SIZE];
 
