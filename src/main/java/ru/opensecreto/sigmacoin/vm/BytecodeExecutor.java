@@ -97,11 +97,11 @@ public class BytecodeExecutor {
                 break;
 
             case GOOD:
-                executionFrame.stack.push(Word.WORD_1);
+                executionFrame.stack.push(Word.WORD_0);
                 break;
 
             case BAD:
-                executionFrame.stack.push(Word.WORD_0);
+                executionFrame.stack.push(Word.WORD_1);
                 break;
 
             default:
@@ -129,11 +129,11 @@ public class BytecodeExecutor {
                 break;
 
             case GOOD:
-                executionFrame.stack.push(Word.WORD_1);
+                executionFrame.stack.push(Word.WORD_0);
                 break;
 
             case BAD:
-                executionFrame.stack.push(Word.WORD_0);
+                executionFrame.stack.push(Word.WORD_1);
                 break;
 
             default:
