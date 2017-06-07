@@ -25,7 +25,7 @@ public final class Word implements Comparable<Word> {
     public Word() {
     }
 
-    public Word(byte[] data) {
+    public Word(byte[] data) throws IllegalArgumentException {
         if (data.length != 32) throw new IllegalArgumentException("data length must be 32");
         System.arraycopy(data, 0, this.data, 0, WORD_SIZE);
     }
