@@ -17,8 +17,6 @@ public class BlockStorageControllerTest {
 
         assertThatThrownBy(() -> controller.addBlock(new byte[3], new byte[4]))
                 .isInstanceOf(IllegalArgumentException.class);
-        assertThatThrownBy(() -> controller.addBlock(new byte[4], new byte[5]))
-                .isInstanceOf(IllegalArgumentException.class);
 
         assertThatThrownBy(() -> controller.getBlock(new byte[3]))
                 .isInstanceOf(IllegalArgumentException.class);
