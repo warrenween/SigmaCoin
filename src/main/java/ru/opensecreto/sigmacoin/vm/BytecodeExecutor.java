@@ -22,75 +22,134 @@ public class BytecodeExecutor {
     }
 
     private void opcode_STOP_BAD() {
-        stop_BAD();
+        stopBad();
     }
 
     private void opcode_STOP_GOOD() {
-        stop_GOOD();
+        stopGood();
     }
 
     private void opcode_STOP_REVERT() {
-        stop_REVERT();
+        stopException();
     }
 
-    private void stop_GOOD() {
+    private void stopGood() {
         run = false;
         stopType = StopType.GOOD;
     }
 
-    private void stop_BAD() {
+    private void stopBad() {
         run = false;
         stopType = StopType.BAD;
     }
 
-    private void opcode_INVOKE() {
+    private ResultFrame invoke(String opcodeName) {
         Word contractId;
         if (executionFrame.stack.getSize() > 0) {
             contractId = executionFrame.stack.pop();
         } else {
-            LOGGER.warn("Error executing {} at {}. Can not INVOKE. Can not pop contractID.");
-            stop_REVERT();
-            return;
+            LOGGER.warn("Error executing {} at {}. Can not {}. Can not pop contractID.",
+                    executionFrame.contractID, pointer, opcodeName);
+            stopException();
+            return null;
         }
 
         Word dataSize;
         if (executionFrame.stack.getSize() > 0) {
             dataSize = executionFrame.stack.pop();
         } else {
-            LOGGER.warn("Error executing {} at {}. Can not INVOKE. Can not pop dataSize.");
-            stop_REVERT();
-            return;
+            LOGGER.warn("Error executing {} at {}. Can not {}. Can not pop dataSize.",
+                    executionFrame.contractID, pointer, opcodeName);
+            stopException();
+            return null;
         }
 
         if ((new Word(executionFrame.stack.getSize()).compareTo(dataSize) < 0) | dataSize.isNegative()) {
-            LOGGER.warn("Error executing {} at {}. Can not INVOKE. Stack.size is less than dataSize.");
+            LOGGER.warn("Error executing {} at {}. Can not {}. Stack.size is less than dataSize.",
+                    executionFrame.contractID, pointer, opcodeName);
             executionFrame.stack.popCustom(executionFrame.stack.getSize());
-            stop_REVERT();
-            return;
+            stopException();
+            return null;
         }
 
         Stack stackInvoke = new Stack();
 
         stackInvoke.pushCustom(executionFrame.stack.popCustom(dataSize.toInt()));
-        ResultFrame result = controller.invoke(stackInvoke, contractId);
-        if (result.stopType == StopType.EXCEPTION) {
-            stop_REVERT();
-        } else {
-            int stackSize = result.stack.getSize();
-            executionFrame.stack.pushCustom(result.stack.popCustom(result.stack.getSize()));
-            executionFrame.stack.push(new Word(stackSize));
-            if (result.stopType == StopType.GOOD) {
-                executionFrame.stack.push(Word.WORD_0);
-            } else if (result.stopType == StopType.BAD) {
+        return controller.invoke(stackInvoke, contractId);
+    }
+
+    private void opcode_INVOKE() {
+        ResultFrame result = invoke("INVOKE");
+
+        if (result == null) return;
+
+        int stackSize = result.stack.getSize();
+        executionFrame.stack.pushCustom(result.stack.popCustom(result.stack.getSize()));
+        executionFrame.stack.push(new Word(stackSize));
+
+        switch (result.stopType) {
+            case ERROR:
+                stopError();
+                return;
+
+            case EXCEPTION:
+                stopException();
+                break;
+
+            case GOOD:
                 executionFrame.stack.push(Word.WORD_1);
-            } else throw new IllegalStateException("Unexpected stop type " + result.stopType.toString());
+                break;
+
+            case BAD:
+                executionFrame.stack.push(Word.WORD_0);
+                break;
+
+            default:
+                throw new IllegalStateException("Unexpected stop type " + result.stopType.toString());
         }
         pointer++;
     }
 
-    private void stop_REVERT() {
+    private void opcode_INVOKE_CATCH() {
+        ResultFrame result = invoke("INVOKE");
+
+        if (result == null) return;
+
+        int stackSize = result.stack.getSize();
+        executionFrame.stack.pushCustom(result.stack.popCustom(result.stack.getSize()));
+        executionFrame.stack.push(new Word(stackSize));
+
+        switch (result.stopType) {
+            case ERROR:
+                stopError();
+                return;
+
+            case EXCEPTION:
+                executionFrame.stack.push(Word.WORD_2);
+                break;
+
+            case GOOD:
+                executionFrame.stack.push(Word.WORD_1);
+                break;
+
+            case BAD:
+                executionFrame.stack.push(Word.WORD_0);
+                break;
+
+            default:
+                throw new IllegalStateException("Unexpected stop type " + result.stopType.toString());
+        }
+        pointer++;
+    }
+
+    private void stopException() {
         run = false;
         stopType = StopType.EXCEPTION;
+    }
+
+    private void stopError() {
+        run = false;
+        stopType = StopType.ERROR;
     }
 
     private void opcode_PUSH() {
@@ -101,7 +160,7 @@ public class BytecodeExecutor {
     private void opcode_POP() {
         if (executionFrame.stack.getSize() < 1) {
             LOGGER.warn("Error executing {} at {}. Can not POP. Can not pop dataSize.");
-            stop_REVERT();
+            stopException();
             return;
         }
 
@@ -112,14 +171,14 @@ public class BytecodeExecutor {
     private void opcode_SWAP() {
         if (executionFrame.stack.getSize() < 1) {
             LOGGER.warn("Error executing {} at {}. Can not SWAP. Can not pop first value - stack is empty.");
-            stop_REVERT();
+            stopException();
             return;
         }
         Word a = executionFrame.stack.pop();
 
         if (executionFrame.stack.getSize() < 1) {
             LOGGER.warn("Error executing {} at {}. Can not SWAP. Can not pop second value - stack is empty.");
-            stop_REVERT();
+            stopException();
             return;
         }
         Word b = executionFrame.stack.pop();
@@ -140,6 +199,8 @@ public class BytecodeExecutor {
                 opcode_STOP_GOOD();
             } else if (opcode.equals(Opcodes.INVOKE)) {
                 opcode_INVOKE();
+            } else if (opcode.equals(Opcodes.INVOKE_CATCH)) {
+                opcode_INVOKE_CATCH();
             } else if (opcode.equals(Opcodes.PUSH)) {
                 opcode_PUSH();
             } else if (opcode.equals(Opcodes.POP)) {
@@ -161,7 +222,7 @@ public class BytecodeExecutor {
             } else if (opcode.equals(Opcodes.PUT)) {
                 opcode_PUT();
             } else {
-                stop_REVERT();
+                stopException();
                 LOGGER.warn("Error while executing {} - unexpected bytecode {} at {}.",
                         executionFrame.contractID, executionFrame.memory.get(pointer), pointer);
             }
@@ -174,7 +235,7 @@ public class BytecodeExecutor {
         if (executionFrame.stack.getSize() < 1) {
             LOGGER.warn("Error while executing {} at {}. Can not GET. Stack is empty.",
                     executionFrame.contractID, pointer);
-            stop_REVERT();
+            stopException();
             return;
         }
         Word A = executionFrame.stack.pop();
@@ -182,7 +243,7 @@ public class BytecodeExecutor {
         if (executionFrame.stack.getSize() < 1) {
             LOGGER.warn("Error while executing {} at {}. Can not GET. Stack is empty.",
                     executionFrame.contractID, pointer);
-            stop_REVERT();
+            stopException();
             return;
         }
         Word B = executionFrame.stack.pop();
@@ -190,7 +251,7 @@ public class BytecodeExecutor {
         if (A.isNegative()) {
             LOGGER.warn("Error while executing {} at {}. Can not GET. Position is negative.",
                     executionFrame.contractID, pointer);
-            stop_REVERT();
+            stopException();
             return;
         }
 
@@ -202,14 +263,14 @@ public class BytecodeExecutor {
         if (executionFrame.stack.getSize() < 1) {
             LOGGER.warn("Error while executing {} at {}. Can not GET. Stack is empty.",
                     executionFrame.contractID, pointer);
-            stop_REVERT();
+            stopException();
             return;
         }
         Word A = executionFrame.stack.pop();
         if (A.isNegative()) {
             LOGGER.warn("Error while executing {} at {}. Can not GET. Position is negative.",
                     executionFrame.contractID, pointer);
-            stop_REVERT();
+            stopException();
             return;
         }
 
@@ -221,7 +282,7 @@ public class BytecodeExecutor {
         if (executionFrame.stack.getSize() < 1) {
             LOGGER.warn("Error executing {} at {}. Can not DIV. Can not pop A.",
                     executionFrame.contractID, pointer);
-            stop_REVERT();
+            stopException();
             return;
         }
         Word A = executionFrame.stack.pop();
@@ -229,7 +290,7 @@ public class BytecodeExecutor {
         if (executionFrame.stack.getSize() < 1) {
             LOGGER.warn("Error executing {} at {}. Can not DIV. Can not pop B.",
                     executionFrame.contractID, pointer);
-            stop_REVERT();
+            stopException();
             return;
         }
         Word B = executionFrame.stack.pop();
@@ -237,7 +298,7 @@ public class BytecodeExecutor {
         if (A.equals(Word.WORD_0)) {
             LOGGER.warn("Error executing {} at {}. Can not DIV. Division by zero.",
                     executionFrame.contractID, pointer);
-            stop_REVERT();
+            stopException();
             return;
         }
 
@@ -249,7 +310,7 @@ public class BytecodeExecutor {
         if (executionFrame.stack.getSize() < 1) {
             LOGGER.warn("Error executing {} at {}. Can not DIV. Can not pop A.",
                     executionFrame.contractID, pointer);
-            stop_REVERT();
+            stopException();
             return;
         }
         Word A = executionFrame.stack.pop();
@@ -257,7 +318,7 @@ public class BytecodeExecutor {
         if (executionFrame.stack.getSize() < 1) {
             LOGGER.warn("Error executing {} at {}. Can not DIV. Can not pop B.",
                     executionFrame.contractID, pointer);
-            stop_REVERT();
+            stopException();
             return;
         }
         Word B = executionFrame.stack.pop();
@@ -265,7 +326,7 @@ public class BytecodeExecutor {
         if (A.equals(Word.WORD_0)) {
             LOGGER.warn("Error executing {} at {}. Can not DIV. Division by zero.",
                     executionFrame.contractID, pointer);
-            stop_REVERT();
+            stopException();
             return;
         }
 
@@ -277,7 +338,7 @@ public class BytecodeExecutor {
         if (executionFrame.stack.getSize() < 1) {
             LOGGER.warn("Error executing {} at {}. Can not SUB. Can not pop A.",
                     executionFrame.contractID, pointer);
-            stop_REVERT();
+            stopException();
             return;
         }
         Word A = executionFrame.stack.pop();
@@ -285,7 +346,7 @@ public class BytecodeExecutor {
         if (executionFrame.stack.getSize() < 1) {
             LOGGER.warn("Error executing {} at {}. Can not SUB. Can not pop B.",
                     executionFrame.contractID, pointer);
-            stop_REVERT();
+            stopException();
             return;
         }
         Word B = executionFrame.stack.pop();
@@ -300,7 +361,7 @@ public class BytecodeExecutor {
         if (executionFrame.stack.getSize() < 1) {
             LOGGER.warn("Error executing {} at {}. Can not SUM. Can not pop first value - stack is empty.",
                     executionFrame.contractID, pointer);
-            stop_REVERT();
+            stopException();
             return;
         }
         Word a = executionFrame.stack.pop();
@@ -308,7 +369,7 @@ public class BytecodeExecutor {
         if (executionFrame.stack.getSize() < 1) {
             LOGGER.warn("Error executing {} at {}. Can not SUM. Can not pop second value - stack is empty.",
                     executionFrame.contractID, pointer);
-            stop_REVERT();
+            stopException();
             return;
         }
         Word b = executionFrame.stack.pop();
@@ -321,7 +382,7 @@ public class BytecodeExecutor {
         if (executionFrame.stack.getSize() < 1) {
             LOGGER.warn("Error executing {} at {}. Can not DUP. Stack is empty.",
                     executionFrame.contractID, pointer);
-            stop_REVERT();
+            stopException();
             return;
         }
 
