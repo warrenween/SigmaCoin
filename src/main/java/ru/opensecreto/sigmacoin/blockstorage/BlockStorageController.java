@@ -17,7 +17,7 @@ public class BlockStorageController {
     private final Environment environment;
     private final Store blockStore;
 
-    public BlockStorageController(File dbDir, int hashSize, int maxBlockSize, BlockStorageConfiguration configuration) {
+    public BlockStorageController(File dbDir, int hashSize, int maxBlockSize) {
         this.hashSize = hashSize;
         this.maxBlockSize = maxBlockSize;
 
