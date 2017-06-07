@@ -5,6 +5,7 @@ import com.google.common.primitives.Shorts;
 import org.jetbrains.annotations.NotNull;
 import org.jooq.lambda.tuple.Tuple;
 import org.jooq.lambda.tuple.Tuple2;
+import ru.opensecreto.openutil.Util;
 
 import javax.xml.bind.DatatypeConverter;
 import java.util.Arrays;
@@ -183,13 +184,13 @@ public final class Word implements Comparable<Word> {
 
     public Word shiftLeft(int count) {
         byte[] buf = Arrays.copyOf(data, WORD_SIZE);
-        ru.opensecreto.sigmacoin.Util.shiftLeft(buf, count);
+        Util.shiftLeft(buf, count);
         return new Word(buf);
     }
 
     public Word shiftRight(int count) {
         byte[] buf = Arrays.copyOf(data, WORD_SIZE);
-        ru.opensecreto.sigmacoin.Util.shiftRight(buf, count);
+        Util.shiftRight(buf, count);
         return new Word(buf);
     }
 

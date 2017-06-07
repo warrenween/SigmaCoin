@@ -1,7 +1,7 @@
 package ru.opensecreto.sigmacoin.crypto.Ed25519;
 
 import org.bouncycastle.crypto.digests.SHA512Digest;
-import ru.opensecreto.sigmacoin.Util;
+import ru.opensecreto.openutil.Util;
 
 import java.math.BigInteger;
 import java.util.Arrays;

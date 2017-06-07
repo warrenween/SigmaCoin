@@ -8,7 +8,7 @@ public class Ed25519KeyGenerator {
     private final SecureRandom secureRandom;
 
     public Ed25519KeyGenerator() {
-        secureRandom = new SecureRandom(SecureRandom.getSeed(32));
+        this(new SecureRandom(SecureRandom.getSeed(32)));
     }
 
     public Ed25519KeyGenerator(SecureRandom secureRandom) {
