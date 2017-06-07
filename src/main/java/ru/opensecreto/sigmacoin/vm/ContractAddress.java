@@ -17,7 +17,7 @@ public class ContractAddress {
 
     @Override
     public boolean equals(Object obj) {
-        return (obj != null) && (obj instanceof ContractAddress) && (((ContractAddress) obj).id.equals(id));
+        return (obj != null) && (obj instanceof ContractAddress) && ((ContractAddress) obj).id.equals(id);
     }
 
     @Override

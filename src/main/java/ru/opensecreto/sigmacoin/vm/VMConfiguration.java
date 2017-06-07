@@ -1,11 +1,13 @@
 package ru.opensecreto.sigmacoin.vm;
 
+import static com.google.common.base.Preconditions.checkArgument;
+
 public class VMConfiguration {
 
     public final int maxCallDepth;
 
     public VMConfiguration(int maxCallDepth) {
-        if (maxCallDepth <= 0) throw new IllegalArgumentException("maxCallDepth must be >= 1");
+        checkArgument(maxCallDepth > 0);
 
         this.maxCallDepth = maxCallDepth;
     }

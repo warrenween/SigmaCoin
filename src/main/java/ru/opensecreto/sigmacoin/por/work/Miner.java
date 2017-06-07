@@ -14,6 +14,9 @@ import java.time.Duration;
 import java.util.Arrays;
 import java.util.concurrent.Callable;
 
+import static com.google.common.base.Preconditions.checkArgument;
+import static com.google.common.base.Preconditions.checkNotNull;
+
 public class Miner implements Callable<int[]> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(Miner.class);
@@ -25,27 +28,20 @@ public class Miner implements Callable<int[]> {
     private final int n;
     private final byte[] target;
 
-    public Miner(byte[] data, DigestProvider chunkProvider, DigestProvider hashProvider, int n, byte[] target, int maxChunkCount) {
-        if (data == null) throw new IllegalArgumentException("data can not be null");
-        if (chunkProvider == null) throw new IllegalArgumentException("Chunk digest provider can not be null.");
-        if (hashProvider == null) throw new IllegalArgumentException("Hash digest provider can not be null.");
-        if (target == null) throw new IllegalArgumentException("target can not be null");
-
-        if (hashProvider.getDigest() == null)
-            throw new IllegalArgumentException("Hash digest provider can not return null");
-        if (chunkProvider.getDigest() == null)
-            throw new IllegalArgumentException("Chunk digest provider can not return null");
-        if (n < 2) throw new IllegalArgumentException("N must be >= 2");
-        if (hashProvider.getDigest().getDigestSize() != target.length)
-            throw new IllegalArgumentException("Target bytes count is not equal to digest size.");
-        if (maxChunkCount < n) throw new IllegalArgumentException("Max chunk count can not be less than N.");
-
-        this.data = Arrays.copyOf(data, data.length);
-        this.chunkProvider = chunkProvider;
-        this.hashProvider = hashProvider;
+    public Miner(byte[] data, DigestProvider chunkProvider, DigestProvider hashProvider, int n, byte[] target, int maxChunkCount)
+            throws NullPointerException, IllegalArgumentException {
+        this.data = Arrays.copyOf(checkNotNull(data), data.length);
+        this.chunkProvider = checkNotNull(chunkProvider);
+        this.hashProvider = checkNotNull(hashProvider);
         this.n = n;
-        this.target = Arrays.copyOf(target, target.length);
+        this.target = Arrays.copyOf(checkNotNull(target), target.length);
         this.maxChunkCount = maxChunkCount;
+
+        checkNotNull(hashProvider.getDigest());
+        checkNotNull(chunkProvider.getDigest());
+        checkArgument(n > 1);
+        checkArgument(hashProvider.getDigest().getDigestSize() == target.length);
+        checkArgument(maxChunkCount >= n);
     }
 
     @Override

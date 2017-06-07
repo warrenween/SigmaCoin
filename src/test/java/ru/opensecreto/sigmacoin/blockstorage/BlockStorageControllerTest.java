@@ -1,7 +1,6 @@
 package ru.opensecreto.sigmacoin.blockstorage;
 
 import org.testng.annotations.Test;
-import ru.opensecreto.sigmacoin.config.EnvironmentConfig;
 
 import java.io.File;
 
@@ -13,7 +12,7 @@ public class BlockStorageControllerTest {
     @Test
     public void testInvalidArguments() {
         BlockStorageController controller = new BlockStorageController(
-                new File("testInvalid.db"), 4, 4
+                new File("testInvalid.db"), 4
         );
 
         assertThatThrownBy(() -> controller.addBlock(new byte[3], new byte[4]))
@@ -30,7 +29,7 @@ public class BlockStorageControllerTest {
     @Test
     public void test() {
         BlockStorageController controller = new BlockStorageController(
-                new File("test.db"), 2, 2
+                new File("test.db"), 2
         );
 
         assertThat(controller.hasBlock(new byte[]{1, 2})).isFalse();
@@ -51,7 +50,7 @@ public class BlockStorageControllerTest {
         //testing loading database
         controller.close();
         BlockStorageController controllerNew = new BlockStorageController(
-                new File("test.db"), 2, 2
+                new File("test.db"), 2
         );
 
         //check reading block do not changes it

@@ -3,6 +3,8 @@ package ru.opensecreto.sigmacoin.vm;
 import java.util.LinkedList;
 import java.util.List;
 
+import static com.google.common.base.Preconditions.*;
+
 public class Stack {
 
     private final List<Word> stack;
@@ -18,8 +20,8 @@ public class Stack {
      * @param word word to be pushed.
      * @throws IllegalStateException if stack size has reached maximum
      */
-    public void push(Word word) throws IllegalStateException {
-        if (word == null) throw new IllegalArgumentException("word can not be null");
+    public void push(Word word) throws NullPointerException, IllegalStateException {
+        checkNotNull(word);
         stack.add(word);
         size++;
     }
@@ -31,7 +33,7 @@ public class Stack {
      * @throws IllegalStateException if stack is empty
      */
     public Word pop() throws IllegalStateException {
-        if (size == 0) throw new IllegalStateException("Nothing to pop. Stack is empty.");
+        checkState(size > 0, "Stack is empty.");
         size--;
         return stack.remove(size);
     }
@@ -44,6 +46,7 @@ public class Stack {
      * @return array of words. Word from top of stack will be at the end of array.
      */
     public Word[] popCustom(int count) {
+        checkArgument(count >= 0);
         Word[] result = new Word[count];
         for (int i = count - 1; i >= 0; i--) {
             result[i] = pop();
@@ -52,8 +55,8 @@ public class Stack {
     }
 
     public void pushCustom(Word[] words) {
-        for (int i = 0; i < words.length; i++) {
-            push(words[i]);
+        for (Word word : words) {
+            push(word);
         }
     }
 
