@@ -76,6 +76,7 @@ test {
     useTestNG()
     workingDir = "$buildDir"
     systemProperty 'org.slf4j.simpleLogger.defaultLogLevel', 'trace'
+    maxParallelForks = 2
 }
 
 tasks.withType(Test) {
