@@ -1,4 +1,4 @@
-package ru.opensecreto.sigmacoin.blockstorage;
+package ru.opensecreto.sigmacoin.blockchaintorage;
 
 import org.testng.annotations.Test;
 
@@ -7,11 +7,11 @@ import java.io.File;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-public class BlockStorageControllerTest {
+public class BlockchainStorageControllerTest {
 
     @Test
     public void testInvalidArguments() {
-        BlockStorageController controller = new BlockStorageController(
+        BlockchainStorageController controller = new BlockchainStorageController(
                 new File("testInvalid.db"), 4
         );
 
@@ -26,7 +26,7 @@ public class BlockStorageControllerTest {
 
     @Test
     public void test() {
-        BlockStorageController controller = new BlockStorageController(
+        BlockchainStorageController controller = new BlockchainStorageController(
                 new File("test.db"), 2
         );
 
@@ -47,7 +47,7 @@ public class BlockStorageControllerTest {
 
         //testing loading database
         controller.close();
-        BlockStorageController controllerNew = new BlockStorageController(
+        BlockchainStorageController controllerNew = new BlockchainStorageController(
                 new File("test.db"), 2
         );
 
