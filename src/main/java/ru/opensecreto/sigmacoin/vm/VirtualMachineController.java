@@ -16,18 +16,18 @@ public class VirtualMachineController {
 
     private final static Logger LOGGER = LoggerFactory.getLogger(VirtualMachineController.class);
 
-    private final ContractManager contractManager;
+    private final AccountManager accountManager;
     private final VMConfiguration configuration;
 
     private int currentCallStackDepth = 0;
 
-    public VirtualMachineController(ContractManager contractManager, VMConfiguration configuration) {
-        this.contractManager = checkNotNull(contractManager);
+    public VirtualMachineController(AccountManager accountManager, VMConfiguration configuration) {
+        this.accountManager = checkNotNull(accountManager);
         this.configuration = checkNotNull(configuration);
     }
 
-    public StopType execute(byte[] invokationData, ContractAddress contractAddress) {
-        return execute(invokationData, contractAddress.id);
+    public StopType execute(byte[] invokationData, AccountAddress accountAddress) {
+        return execute(invokationData, accountAddress.id);
     }
 
     public StopType execute(byte[] invocationData, Word contractID)
@@ -47,10 +47,10 @@ public class VirtualMachineController {
     public ResultFrame invoke(Stack stack, Word contractID) {
         checkNotNull(stack);
         checkNotNull(contractID);
-        if ((!contractManager.contractExists(contractID)) | (currentCallStackDepth == configuration.maxCallDepth)) {
+        if ((!accountManager.accountExists(contractID)) | (currentCallStackDepth == configuration.maxCallDepth)) {
             return new ResultFrame(new Stack(), StopType.BAD);
         } else {
-            ExecutionFrame executionFrame = new ExecutionFrame(contractManager.getContract(contractID), stack, contractID);
+            ExecutionFrame executionFrame = new ExecutionFrame(accountManager.getAccount(contractID).memory, stack, contractID);
             BytecodeExecutor executor = new BytecodeExecutor(configuration, executionFrame, this);
 
             currentCallStackDepth++;
