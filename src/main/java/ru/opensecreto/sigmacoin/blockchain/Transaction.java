@@ -21,7 +21,6 @@ public class Transaction {
     private final byte[] signature;
     private final byte[] data;
 
-
     public Transaction(BigInteger chainID, BigInteger timestamp, ContractAddress target,
                        BigInteger cuLimit, BigInteger cuPrice, BigInteger sigmethod, byte[] signature,
                        byte[] data)
@@ -142,5 +141,37 @@ public class Transaction {
         return o.chainID.equals(chainID) && o.timestamp.equals(timestamp) && o.target.equals(target) &&
                 o.cuLimit.equals(cuLimit) && o.cuPrice.equals(cuPrice) && o.sigmethod.equals(sigmethod) &&
                 Arrays.equals(o.signature, signature) && Arrays.equals(o.data, data);
+    }
+
+    public BigInteger getChainID() {
+        return chainID;
+    }
+
+    public BigInteger getTimestamp() {
+        return timestamp;
+    }
+
+    public ContractAddress getTarget() {
+        return target;
+    }
+
+    public BigInteger getCuLimit() {
+        return cuLimit;
+    }
+
+    public BigInteger getCuPrice() {
+        return cuPrice;
+    }
+
+    public BigInteger getSigmethod() {
+        return sigmethod;
+    }
+
+    public byte[] getSignature() {
+        return Arrays.copyOf(signature, signature.length);
+    }
+
+    public byte[] getData() {
+        return Arrays.copyOf(data, data.length);
     }
 }
