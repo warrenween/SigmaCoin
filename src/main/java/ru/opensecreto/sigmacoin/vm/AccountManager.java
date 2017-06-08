@@ -1,6 +1,6 @@
 package ru.opensecreto.sigmacoin.vm;
 
-public interface ContractManager {
+public interface AccountManager {
 
     /**
      * Get contract by it's id.
