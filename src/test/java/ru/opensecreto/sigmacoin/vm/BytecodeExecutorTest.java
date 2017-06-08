@@ -13,7 +13,7 @@ public class BytecodeExecutorTest {
     @Test
     public void test_invokeNonExistingContract() {
         AccountManager manager = mock(AccountManager.class);
-        when(manager.contractExists(new Word(0))).thenReturn(false);
+        when(manager.accountExists(new Word(0))).thenReturn(false);
 
         VirtualMachineController controller = new VirtualMachineController(manager,
                 new VMConfiguration(10));
@@ -32,8 +32,8 @@ public class BytecodeExecutorTest {
         }};
 
         AccountManager manager = mock(AccountManager.class);
-        when(manager.contractExists(idA)).thenReturn(true);
-        when(manager.getContract(idA)).thenReturn(contractA);
+        when(manager.accountExists(idA)).thenReturn(true);
+        when(manager.getAccount(idA)).thenReturn(new Account(Account.CODE_CONTROLLED, contractA, null));
 
         VirtualMachineController controller = new VirtualMachineController(manager,
                 new VMConfiguration(10));
@@ -52,8 +52,8 @@ public class BytecodeExecutorTest {
         }};
 
         AccountManager manager = mock(AccountManager.class);
-        when(manager.contractExists(idA)).thenReturn(true);
-        when(manager.getContract(idA)).thenReturn(contractA);
+        when(manager.accountExists(idA)).thenReturn(true);
+        when(manager.getAccount(idA)).thenReturn(new Account(Account.CODE_CONTROLLED, contractA, null));
 
         VirtualMachineController controller = new VirtualMachineController(manager,
                 new VMConfiguration(10));
@@ -77,8 +77,8 @@ public class BytecodeExecutorTest {
         }};
 
         AccountManager manager = mock(AccountManager.class);
-        when(manager.contractExists(idA)).thenReturn(true);
-        when(manager.getContract(idA)).thenReturn(contractA);
+        when(manager.accountExists(idA)).thenReturn(true);
+        when(manager.getAccount(idA)).thenReturn(new Account(Account.CODE_CONTROLLED, contractA, null));
 
         VirtualMachineController controller = new VirtualMachineController(manager,
                 new VMConfiguration(10));
@@ -106,8 +106,8 @@ public class BytecodeExecutorTest {
         }};
 
         AccountManager manager = mock(AccountManager.class);
-        when(manager.contractExists(idA)).thenReturn(true);
-        when(manager.getContract(idA)).thenReturn(contractA);
+        when(manager.accountExists(idA)).thenReturn(true);
+        when(manager.getAccount(idA)).thenReturn(new Account(Account.CODE_CONTROLLED, contractA, null));
 
         VirtualMachineController controller = new VirtualMachineController(manager,
                 new VMConfiguration(10));
@@ -150,10 +150,10 @@ public class BytecodeExecutorTest {
         }};
 
         AccountManager manager = mock(AccountManager.class);
-        when(manager.contractExists(idA)).thenReturn(true);
-        when(manager.getContract(idA)).thenReturn(contractA);
-        when(manager.contractExists(idB)).thenReturn(true);
-        when(manager.getContract(idB)).thenReturn(contractB);
+        when(manager.accountExists(idA)).thenReturn(true);
+        when(manager.getAccount(idA)).thenReturn(new Account(Account.CODE_CONTROLLED, contractA, null));
+        when(manager.accountExists(idB)).thenReturn(true);
+        when(manager.getAccount(idB)).thenReturn(new Account(Account.CODE_CONTROLLED, contractB, null));
 
         VirtualMachineController controller = new VirtualMachineController(manager,
                 new VMConfiguration(10));
@@ -182,8 +182,8 @@ public class BytecodeExecutorTest {
         }};
 
         AccountManager manager = mock(AccountManager.class);
-        when(manager.contractExists(idA)).thenReturn(true);
-        when(manager.getContract(idA)).thenReturn(contractA);
+        when(manager.accountExists(idA)).thenReturn(true);
+        when(manager.getAccount(idA)).thenReturn(new Account(Account.CODE_CONTROLLED, contractA, null));
 
         VirtualMachineController controller = new VirtualMachineController(manager,
                 new VMConfiguration(10));
@@ -210,8 +210,8 @@ public class BytecodeExecutorTest {
         }};
 
         AccountManager manager = mock(AccountManager.class);
-        when(manager.contractExists(idA)).thenReturn(true);
-        when(manager.getContract(idA)).thenReturn(contractA);
+        when(manager.accountExists(idA)).thenReturn(true);
+        when(manager.getAccount(idA)).thenReturn(new Account(Account.CODE_CONTROLLED, contractA, null));
 
         VirtualMachineController controller = new VirtualMachineController(manager,
                 new VMConfiguration(10));
@@ -233,8 +233,8 @@ public class BytecodeExecutorTest {
         }};
 
         AccountManager manager = mock(AccountManager.class);
-        when(manager.contractExists(idA)).thenReturn(true);
-        when(manager.getContract(idA)).thenReturn(contractA);
+        when(manager.accountExists(idA)).thenReturn(true);
+        when(manager.getAccount(idA)).thenReturn(new Account(Account.CODE_CONTROLLED, contractA, null));
 
         VirtualMachineController controller = new VirtualMachineController(manager,
                 new VMConfiguration(10));
@@ -255,8 +255,8 @@ public class BytecodeExecutorTest {
         }};
 
         AccountManager manager = mock(AccountManager.class);
-        when(manager.contractExists(idA)).thenReturn(true);
-        when(manager.getContract(idA)).thenReturn(contractA);
+        when(manager.accountExists(idA)).thenReturn(true);
+        when(manager.getAccount(idA)).thenReturn(new Account(Account.CODE_CONTROLLED, contractA, null));
 
         VirtualMachineController controller = new VirtualMachineController(manager,
                 new VMConfiguration(10));
@@ -280,8 +280,8 @@ public class BytecodeExecutorTest {
         }};
 
         AccountManager manager = mock(AccountManager.class);
-        when(manager.contractExists(idA)).thenReturn(true);
-        when(manager.getContract(idA)).thenReturn(contractA);
+        when(manager.accountExists(idA)).thenReturn(true);
+        when(manager.getAccount(idA)).thenReturn(new Account(Account.CODE_CONTROLLED, contractA, null));
 
         VirtualMachineController controller = new VirtualMachineController(manager,
                 new VMConfiguration(10));
@@ -303,8 +303,8 @@ public class BytecodeExecutorTest {
         }};
 
         AccountManager manager = mock(AccountManager.class);
-        when(manager.contractExists(idA)).thenReturn(true);
-        when(manager.getContract(idA)).thenReturn(contractA);
+        when(manager.accountExists(idA)).thenReturn(true);
+        when(manager.getAccount(idA)).thenReturn(new Account(Account.CODE_CONTROLLED, contractA, null));
 
         VirtualMachineController controller = new VirtualMachineController(manager,
                 new VMConfiguration(10));
@@ -325,8 +325,8 @@ public class BytecodeExecutorTest {
         }};
 
         AccountManager manager = mock(AccountManager.class);
-        when(manager.contractExists(idA)).thenReturn(true);
-        when(manager.getContract(idA)).thenReturn(contractA);
+        when(manager.accountExists(idA)).thenReturn(true);
+        when(manager.getAccount(idA)).thenReturn(new Account(Account.CODE_CONTROLLED, contractA, null));
 
         VirtualMachineController controller = new VirtualMachineController(manager,
                 new VMConfiguration(10));
@@ -345,8 +345,8 @@ public class BytecodeExecutorTest {
         }};
 
         AccountManager manager = mock(AccountManager.class);
-        when(manager.contractExists(idA)).thenReturn(true);
-        when(manager.getContract(idA)).thenReturn(contractA);
+        when(manager.accountExists(idA)).thenReturn(true);
+        when(manager.getAccount(idA)).thenReturn(new Account(Account.CODE_CONTROLLED, contractA, null));
 
         VirtualMachineController controller = new VirtualMachineController(manager,
                 new VMConfiguration(10));
@@ -367,8 +367,8 @@ public class BytecodeExecutorTest {
         }};
 
         AccountManager manager = mock(AccountManager.class);
-        when(manager.contractExists(idA)).thenReturn(true);
-        when(manager.getContract(idA)).thenReturn(contractA);
+        when(manager.accountExists(idA)).thenReturn(true);
+        when(manager.getAccount(idA)).thenReturn(new Account(Account.CODE_CONTROLLED, contractA, null));
 
         VirtualMachineController controller = new VirtualMachineController(manager,
                 new VMConfiguration(10));
@@ -392,8 +392,8 @@ public class BytecodeExecutorTest {
         }};
 
         AccountManager manager = mock(AccountManager.class);
-        when(manager.contractExists(idA)).thenReturn(true);
-        when(manager.getContract(idA)).thenReturn(contractA);
+        when(manager.accountExists(idA)).thenReturn(true);
+        when(manager.getAccount(idA)).thenReturn(new Account(Account.CODE_CONTROLLED, contractA, null));
 
         VirtualMachineController controller = new VirtualMachineController(manager,
                 new VMConfiguration(10));
@@ -419,8 +419,8 @@ public class BytecodeExecutorTest {
         }};
 
         AccountManager manager = mock(AccountManager.class);
-        when(manager.contractExists(idA)).thenReturn(true);
-        when(manager.getContract(idA)).thenReturn(contractA);
+        when(manager.accountExists(idA)).thenReturn(true);
+        when(manager.getAccount(idA)).thenReturn(new Account(Account.CODE_CONTROLLED, contractA, null));
 
         VirtualMachineController controller = new VirtualMachineController(manager,
                 new VMConfiguration(10));
@@ -439,8 +439,8 @@ public class BytecodeExecutorTest {
         }};
 
         AccountManager manager = mock(AccountManager.class);
-        when(manager.contractExists(idA)).thenReturn(true);
-        when(manager.getContract(idA)).thenReturn(contractA);
+        when(manager.accountExists(idA)).thenReturn(true);
+        when(manager.getAccount(idA)).thenReturn(new Account(Account.CODE_CONTROLLED, contractA, null));
 
         VirtualMachineController controller = new VirtualMachineController(manager,
                 new VMConfiguration(10));
@@ -459,8 +459,8 @@ public class BytecodeExecutorTest {
         }};
 
         AccountManager manager = mock(AccountManager.class);
-        when(manager.contractExists(idA)).thenReturn(true);
-        when(manager.getContract(idA)).thenReturn(contractA);
+        when(manager.accountExists(idA)).thenReturn(true);
+        when(manager.getAccount(idA)).thenReturn(new Account(Account.CODE_CONTROLLED, contractA, null));
 
         VirtualMachineController controller = new VirtualMachineController(manager,
                 new VMConfiguration(10));
@@ -479,8 +479,8 @@ public class BytecodeExecutorTest {
         }};
 
         AccountManager manager = mock(AccountManager.class);
-        when(manager.contractExists(idA)).thenReturn(true);
-        when(manager.getContract(idA)).thenReturn(contractA);
+        when(manager.accountExists(idA)).thenReturn(true);
+        when(manager.getAccount(idA)).thenReturn(new Account(Account.CODE_CONTROLLED, contractA, null));
 
         VirtualMachineController controller = new VirtualMachineController(manager,
                 new VMConfiguration(10));
@@ -501,8 +501,8 @@ public class BytecodeExecutorTest {
         }};
 
         AccountManager manager = mock(AccountManager.class);
-        when(manager.contractExists(idA)).thenReturn(true);
-        when(manager.getContract(idA)).thenReturn(contractA);
+        when(manager.accountExists(idA)).thenReturn(true);
+        when(manager.getAccount(idA)).thenReturn(new Account(Account.CODE_CONTROLLED, contractA, null));
 
         VirtualMachineController controller = new VirtualMachineController(manager,
                 new VMConfiguration(10));
@@ -521,8 +521,8 @@ public class BytecodeExecutorTest {
         }};
 
         AccountManager manager = mock(AccountManager.class);
-        when(manager.contractExists(idA)).thenReturn(true);
-        when(manager.getContract(idA)).thenReturn(contractA);
+        when(manager.accountExists(idA)).thenReturn(true);
+        when(manager.getAccount(idA)).thenReturn(new Account(Account.CODE_CONTROLLED, contractA, null));
 
         VirtualMachineController controller = new VirtualMachineController(manager,
                 new VMConfiguration(10));
@@ -543,8 +543,8 @@ public class BytecodeExecutorTest {
         }};
 
         AccountManager manager = mock(AccountManager.class);
-        when(manager.contractExists(idA)).thenReturn(true);
-        when(manager.getContract(idA)).thenReturn(contractA);
+        when(manager.accountExists(idA)).thenReturn(true);
+        when(manager.getAccount(idA)).thenReturn(new Account(Account.CODE_CONTROLLED, contractA, null));
 
         VirtualMachineController controller = new VirtualMachineController(manager,
                 new VMConfiguration(10));
@@ -567,8 +567,8 @@ public class BytecodeExecutorTest {
         }};
 
         AccountManager manager = mock(AccountManager.class);
-        when(manager.contractExists(idA)).thenReturn(true);
-        when(manager.getContract(idA)).thenReturn(contractA);
+        when(manager.accountExists(idA)).thenReturn(true);
+        when(manager.getAccount(idA)).thenReturn(new Account(Account.CODE_CONTROLLED, contractA, null));
 
         VirtualMachineController controller = new VirtualMachineController(manager,
                 new VMConfiguration(10));
@@ -592,8 +592,8 @@ public class BytecodeExecutorTest {
         }};
 
         AccountManager manager = mock(AccountManager.class);
-        when(manager.contractExists(idA)).thenReturn(true);
-        when(manager.getContract(idA)).thenReturn(contractA);
+        when(manager.accountExists(idA)).thenReturn(true);
+        when(manager.getAccount(idA)).thenReturn(new Account(Account.CODE_CONTROLLED, contractA, null));
 
         VirtualMachineController controller = new VirtualMachineController(manager,
                 new VMConfiguration(10));
@@ -620,8 +620,8 @@ public class BytecodeExecutorTest {
         }};
 
         AccountManager manager = mock(AccountManager.class);
-        when(manager.contractExists(idA)).thenReturn(true);
-        when(manager.getContract(idA)).thenReturn(contractA);
+        when(manager.accountExists(idA)).thenReturn(true);
+        when(manager.getAccount(idA)).thenReturn(new Account(Account.CODE_CONTROLLED, contractA, null));
 
         VirtualMachineController controller = new VirtualMachineController(manager,
                 new VMConfiguration(10));
@@ -643,8 +643,8 @@ public class BytecodeExecutorTest {
         }};
 
         AccountManager manager = mock(AccountManager.class);
-        when(manager.contractExists(idA)).thenReturn(true);
-        when(manager.getContract(idA)).thenReturn(contractA);
+        when(manager.accountExists(idA)).thenReturn(true);
+        when(manager.getAccount(idA)).thenReturn(new Account(Account.CODE_CONTROLLED, contractA, null));
 
         VirtualMachineController controller = new VirtualMachineController(manager,
                 new VMConfiguration(10));
@@ -665,8 +665,8 @@ public class BytecodeExecutorTest {
         }};
 
         AccountManager manager = mock(AccountManager.class);
-        when(manager.contractExists(idA)).thenReturn(true);
-        when(manager.getContract(idA)).thenReturn(contractA);
+        when(manager.accountExists(idA)).thenReturn(true);
+        when(manager.getAccount(idA)).thenReturn(new Account(Account.CODE_CONTROLLED, contractA, null));
 
         VirtualMachineController controller = new VirtualMachineController(manager,
                 new VMConfiguration(10));
@@ -691,8 +691,8 @@ public class BytecodeExecutorTest {
         }};
 
         AccountManager manager = mock(AccountManager.class);
-        when(manager.contractExists(idA)).thenReturn(true);
-        when(manager.getContract(idA)).thenReturn(contractA);
+        when(manager.accountExists(idA)).thenReturn(true);
+        when(manager.getAccount(idA)).thenReturn(new Account(Account.CODE_CONTROLLED, contractA, null));
 
         VirtualMachineController controller = new VirtualMachineController(manager,
                 new VMConfiguration(10));
@@ -724,8 +724,8 @@ public class BytecodeExecutorTest {
         }};
 
         AccountManager manager = mock(AccountManager.class);
-        when(manager.contractExists(idA)).thenReturn(true);
-        when(manager.getContract(idA)).thenReturn(contractA);
+        when(manager.accountExists(idA)).thenReturn(true);
+        when(manager.getAccount(idA)).thenReturn(new Account(Account.CODE_CONTROLLED, contractA, null));
 
         VirtualMachineController controller = new VirtualMachineController(manager,
                 new VMConfiguration(10));
@@ -755,8 +755,8 @@ public class BytecodeExecutorTest {
         }};
 
         AccountManager manager = mock(AccountManager.class);
-        when(manager.contractExists(idA)).thenReturn(true);
-        when(manager.getContract(idA)).thenReturn(contractA);
+        when(manager.accountExists(idA)).thenReturn(true);
+        when(manager.getAccount(idA)).thenReturn(new Account(Account.CODE_CONTROLLED, contractA, null));
 
         VirtualMachineController controller = new VirtualMachineController(manager,
                 new VMConfiguration(10));
@@ -790,8 +790,8 @@ public class BytecodeExecutorTest {
         }};
 
         AccountManager manager = mock(AccountManager.class);
-        when(manager.contractExists(idA)).thenReturn(true);
-        when(manager.getContract(idA)).thenReturn(contractA);
+        when(manager.accountExists(idA)).thenReturn(true);
+        when(manager.getAccount(idA)).thenReturn(new Account(Account.CODE_CONTROLLED, contractA, null));
 
         VirtualMachineController controller = new VirtualMachineController(manager,
                 new VMConfiguration(10));

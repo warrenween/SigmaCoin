@@ -2,13 +2,8 @@ package ru.opensecreto.sigmacoin.vm;
 
 public interface AccountManager {
 
-    /**
-     * Get contract by it's id.
-     *
-     * @param contractID contract id
-     * @return contract memory for requested id.
-     */
-    public Memory getContract(Word contractID);
+    public Account getAccount(Word contractID);
+
 
     /**
      * Check if contract with given contractID exists.
@@ -16,6 +11,6 @@ public interface AccountManager {
      * @param contractID contract id to check
      * @return true if contract with given contractID exists, false otherwise
      */
-    public boolean contractExists(Word contractID);
+    public boolean accountExists(Word contractID);
 
 }

@@ -1,7 +1,7 @@
 package ru.opensecreto.sigmacoin.blockchain;
 
 import ru.opensecreto.sigmacoin.crypto.Signers;
-import ru.opensecreto.sigmacoin.vm.ContractAddress;
+import ru.opensecreto.sigmacoin.vm.AccountAddress;
 
 import java.math.BigInteger;
 import java.nio.ByteBuffer;
@@ -14,14 +14,14 @@ public class Transaction {
 
     private final BigInteger chainID;
     private final BigInteger timestamp;
-    private final ContractAddress target;
+    private final AccountAddress target;
     private final BigInteger cuLimit;
     private final BigInteger cuPrice;
     private final BigInteger sigmethod;
     private final byte[] signature;
     private final byte[] data;
 
-    public Transaction(BigInteger chainID, BigInteger timestamp, ContractAddress target,
+    public Transaction(BigInteger chainID, BigInteger timestamp, AccountAddress target,
                        BigInteger cuLimit, BigInteger cuPrice, BigInteger sigmethod, byte[] signature,
                        byte[] data)
             throws IllegalArgumentException, NullPointerException {
@@ -52,7 +52,7 @@ public class Transaction {
         ByteBuffer buf = ByteBuffer.allocate(
                 Integer.BYTES + bigIntBytes(tx.chainID) +
                         Integer.BYTES + bigIntBytes(tx.timestamp) +
-                        ContractAddress.BYTES +//target
+                        AccountAddress.BYTES +//target
                         Integer.BYTES + bigIntBytes(tx.cuLimit) +
                         Integer.BYTES + bigIntBytes(tx.cuPrice) +
                         Integer.BYTES + bigIntBytes(tx.sigmethod) +
@@ -103,9 +103,9 @@ public class Transaction {
         buf.get(timestampArr);
         BigInteger timestamp = new BigInteger(timestampArr);
 
-        byte[] targetArr = new byte[ContractAddress.BYTES];
+        byte[] targetArr = new byte[AccountAddress.BYTES];
         buf.get(targetArr);
-        ContractAddress target = new ContractAddress(targetArr);
+        AccountAddress target = new AccountAddress(targetArr);
 
         byte[] cuLimitArr = new byte[buf.getInt()];
         buf.get(cuLimitArr);
@@ -151,7 +151,7 @@ public class Transaction {
         return timestamp;
     }
 
-    public ContractAddress getTarget() {
+    public AccountAddress getTarget() {
         return target;
     }
 

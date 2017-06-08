@@ -1,7 +1,7 @@
 package ru.opensecreto.sigmacoin.blockchain;
 
 import org.testng.annotations.Test;
-import ru.opensecreto.sigmacoin.vm.ContractAddress;
+import ru.opensecreto.sigmacoin.vm.AccountAddress;
 import ru.opensecreto.sigmacoin.vm.Word;
 
 import java.math.BigInteger;
@@ -21,7 +21,7 @@ public class TransactionTest {
         Transaction tx1 = new Transaction(
                 BigInteger.valueOf(10),
                 BigInteger.valueOf(50),
-                new ContractAddress(new Word(1256)),
+                new AccountAddress(new Word(1256)),
                 BigInteger.valueOf(100),
                 BigInteger.valueOf(500),
                 BigInteger.valueOf(1),
@@ -44,7 +44,7 @@ public class TransactionTest {
         Transaction tx1 = new Transaction(
                 BigInteger.valueOf(10),
                 BigInteger.valueOf(50),
-                new ContractAddress(new Word(1256)),
+                new AccountAddress(new Word(1256)),
                 BigInteger.valueOf(100),
                 BigInteger.valueOf(500),
                 BigInteger.valueOf(1),
@@ -55,7 +55,7 @@ public class TransactionTest {
         Transaction tx2 = new Transaction(
                 BigInteger.valueOf(10),
                 BigInteger.valueOf(50),
-                new ContractAddress(new Word(1256)),
+                new AccountAddress(new Word(1256)),
                 BigInteger.valueOf(100),
                 BigInteger.valueOf(500),
                 BigInteger.valueOf(1),
