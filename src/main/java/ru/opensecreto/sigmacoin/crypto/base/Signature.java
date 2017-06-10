@@ -37,4 +37,9 @@ public class Signature {
         return Util.arrayConcat(Ints.toByteArray(method), signature);
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        return (obj != null) && (obj instanceof Signature) && (((Signature) obj).method == method) &&
+                Arrays.equals(((Signature) obj).signature, signature);
+    }
 }

@@ -1,6 +1,6 @@
 package ru.opensecreto.sigmacoin.blockchain;
 
-import ru.opensecreto.sigmacoin.crypto.Signers;
+import ru.opensecreto.sigmacoin.crypto.base.Signature;
 import ru.opensecreto.sigmacoin.vm.AccountAddress;
 
 import java.math.BigInteger;
@@ -17,12 +17,11 @@ public class Transaction {
     private final AccountAddress target;
     private final BigInteger cuLimit;
     private final BigInteger cuPrice;
-    private final BigInteger sigmethod;
-    private final byte[] signature;
+    private final Signature signature;
     private final byte[] data;
 
     public Transaction(BigInteger chainID, BigInteger timestamp, AccountAddress target,
-                       BigInteger cuLimit, BigInteger cuPrice, BigInteger sigmethod, byte[] signature,
+                       BigInteger cuLimit, BigInteger cuPrice, Signature signature,
                        byte[] data)
             throws IllegalArgumentException, NullPointerException {
         this.chainID = checkNotNull(chainID);
@@ -30,20 +29,13 @@ public class Transaction {
         this.target = checkNotNull(target);
         this.cuLimit = checkNotNull(cuLimit);
         this.cuPrice = checkNotNull(cuPrice);
-        this.sigmethod = checkNotNull(sigmethod);
-        this.signature = Arrays.copyOf(checkNotNull(signature), signature.length);
+        this.signature = checkNotNull(signature);
         this.data = Arrays.copyOf(checkNotNull(data), data.length);
 
         checkArgument(chainID.signum() >= 0, "ChainID can not be negative");
         checkArgument(timestamp.signum() >= 0, "Timestamp can not be negative");
         checkArgument(cuLimit.signum() >= 0, "CU limit can not be negative");
         checkArgument(cuPrice.signum() >= 0, "CU price can not be negative");
-        checkArgument(sigmethod.signum() >= 0, "Sigmethod can not be negative");
-        checkArgument(Signers.SIGNERS.containsKey(sigmethod),
-                "Unknown signature method " + sigmethod);
-        checkArgument(signature.length == Signers.SIG_SIZES.get(sigmethod),
-                "Signature of type " + Signers.SIGNERS_NAMES.get(sigmethod) +
-                        " expected to have length of " + Signers.SIG_SIZES.get(sigmethod));
     }
 
     public static byte[] encode(Transaction tx)
@@ -55,8 +47,7 @@ public class Transaction {
                         AccountAddress.BYTES +//target
                         Integer.BYTES + bigIntBytes(tx.cuLimit) +
                         Integer.BYTES + bigIntBytes(tx.cuPrice) +
-                        Integer.BYTES + bigIntBytes(tx.sigmethod) +
-                        Integer.BYTES + tx.signature.length +
+                        Integer.BYTES + tx.signature.encode().length +
                         Integer.BYTES + tx.data.length
         );
 
@@ -78,12 +69,8 @@ public class Transaction {
         buf.putInt(cuPriceArr.length);
         buf.put(cuPriceArr);
 
-        byte[] sigmethodArr = tx.sigmethod.toByteArray();
-        buf.putInt(sigmethodArr.length);
-        buf.put(sigmethodArr);
-
-        buf.putInt(tx.signature.length);
-        buf.put(tx.signature);
+        buf.putInt(tx.signature.encode().length);
+        buf.put(tx.signature.encode());
 
         buf.putInt(tx.data.length);
         buf.put(tx.data);
@@ -115,17 +102,14 @@ public class Transaction {
         buf.get(cuPriceArr);
         BigInteger cuPrice = new BigInteger(cuPriceArr);
 
-        byte[] sigmethodArr = new byte[buf.getInt()];
-        buf.get(sigmethodArr);
-        BigInteger sigmethod = new BigInteger(sigmethodArr);
-
-        byte[] signature = new byte[buf.getInt()];
-        buf.get(signature);
+        byte[] signatureData = new byte[buf.getInt()];
+        buf.get(signatureData);
+        Signature signature = new Signature(signatureData);
 
         byte[] txData = new byte[buf.getInt()];
         buf.get(txData);
 
-        return new Transaction(chainId, timestamp, target, cuLimit, cuPrice, sigmethod, signature, txData);
+        return new Transaction(chainId, timestamp, target, cuLimit, cuPrice, signature, txData);
     }
 
     private static int bigIntBytes(BigInteger val) {
@@ -139,8 +123,8 @@ public class Transaction {
         }
         Transaction o = (Transaction) obj;
         return o.chainID.equals(chainID) && o.timestamp.equals(timestamp) && o.target.equals(target) &&
-                o.cuLimit.equals(cuLimit) && o.cuPrice.equals(cuPrice) && o.sigmethod.equals(sigmethod) &&
-                Arrays.equals(o.signature, signature) && Arrays.equals(o.data, data);
+                o.cuLimit.equals(cuLimit) && o.cuPrice.equals(cuPrice) &&
+                o.signature.equals(signature) && Arrays.equals(o.data, data);
     }
 
     public BigInteger getChainID() {
@@ -163,12 +147,8 @@ public class Transaction {
         return cuPrice;
     }
 
-    public BigInteger getSigmethod() {
-        return sigmethod;
-    }
-
-    public byte[] getSignature() {
-        return Arrays.copyOf(signature, signature.length);
+    public Signature getSignature() {
+        return signature;
     }
 
     public byte[] getData() {
