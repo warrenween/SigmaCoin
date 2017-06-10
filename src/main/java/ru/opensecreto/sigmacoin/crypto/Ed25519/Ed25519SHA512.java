@@ -1,10 +1,10 @@
 package ru.opensecreto.sigmacoin.crypto.Ed25519;
 
 import ru.opensecreto.openutil.Util;
-import ru.opensecreto.sigmacoin.crypto.interfaces.BaseSigner;
-import ru.opensecreto.sigmacoin.crypto.interfaces.PrivateKey;
-import ru.opensecreto.sigmacoin.crypto.interfaces.PublicKey;
-import ru.opensecreto.sigmacoin.crypto.interfaces.Signature;
+import ru.opensecreto.sigmacoin.crypto.base.BaseSigner;
+import ru.opensecreto.sigmacoin.crypto.base.PrivateKey;
+import ru.opensecreto.sigmacoin.crypto.base.PublicKey;
+import ru.opensecreto.sigmacoin.crypto.base.Signature;
 
 import java.math.BigInteger;
 import java.util.Arrays;
@@ -18,6 +18,8 @@ import static com.google.common.base.Preconditions.checkNotNull;
  * https://tools.ietf.org/html/draft-josefsson-eddsa-ed25519-03
  */
 public class Ed25519SHA512 implements BaseSigner {
+
+    public static final int SIGNER_ID = 0;
 
     public static final int SIGNATURE_SIZE = 64;
 
@@ -41,7 +43,7 @@ public class Ed25519SHA512 implements BaseSigner {
         BigInteger h = Ed25519Math.sha512_modq(Util.arrayConcat(Util.arrayConcat(Rs, A), message));
         //s = (r + h * a) % q
         BigInteger s = h.multiply(a).add(r).mod(Ed25519Math.q);
-        return new Ed25519Signature(Util.arrayConcat(Rs, Arrays.copyOf(Util.switchEndianness(s.toByteArray()), 32)));
+        return new Signature(SIGNER_ID, Util.arrayConcat(Rs, Arrays.copyOf(Util.switchEndianness(s.toByteArray()), 32)));
     }
 
     @Override
@@ -54,9 +56,8 @@ public class Ed25519SHA512 implements BaseSigner {
         checkArgument(publicKey instanceof Ed25519PublicKey,
                 "Public key must have class " + Ed25519PublicKey.class + ". Given " + publicKey.getClass() + "."
         );
-        checkArgument(signature instanceof Ed25519Signature);
-        Ed25519Signature ed25519Signature = (Ed25519Signature) signature;
-        checkArgument(ed25519Signature.encode().length == SIGNATURE_SIZE);
+        checkArgument(signature.getMethod() == SIGNER_ID);
+        checkArgument(signature.getSignature().length == SIGNATURE_SIZE);
 
         Ed25519PublicKey publicKeyCasted = (Ed25519PublicKey) publicKey;
 
@@ -65,7 +66,7 @@ public class Ed25519SHA512 implements BaseSigner {
             return false;
         }
         byte[] Rs = new byte[32];
-        System.arraycopy(ed25519Signature.encode(), 0, Rs, 0, 32);
+        System.arraycopy(signature.getSignature(), 0, Rs, 0, 32);
 
         Point R = Ed25519Math.pointDecompress(Rs);
         if (R == null) {
@@ -73,7 +74,7 @@ public class Ed25519SHA512 implements BaseSigner {
         }
 
         byte[] sigR = new byte[32];
-        System.arraycopy(ed25519Signature.encode(), 32, sigR, 0, 32);
+        System.arraycopy(signature.getSignature(), 32, sigR, 0, 32);
 
         BigInteger s = new BigInteger(1, Util.switchEndianness(sigR));
         BigInteger h = Ed25519Math.sha512_modq(Util.arrayConcat(
