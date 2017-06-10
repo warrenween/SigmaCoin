@@ -1,6 +1,6 @@
 package ru.opensecreto.sigmacoin.vm;
 
-import ru.opensecreto.sigmacoin.crypto.interfaces.PublicKey;
+import ru.opensecreto.sigmacoin.crypto.base.PublicKey;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;

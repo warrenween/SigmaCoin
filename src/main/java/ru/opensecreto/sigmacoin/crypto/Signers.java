@@ -1,7 +1,7 @@
 package ru.opensecreto.sigmacoin.crypto;
 
 import ru.opensecreto.sigmacoin.crypto.Ed25519.Ed25519SHA512;
-import ru.opensecreto.sigmacoin.crypto.interfaces.BaseSigner;
+import ru.opensecreto.sigmacoin.crypto.base.BaseSigner;
 
 import java.math.BigInteger;
 import java.util.Collections;
@@ -21,5 +21,16 @@ public class Signers {
     public static final Map<BigInteger, Integer> SIG_SIZES = Collections.unmodifiableMap(new HashMap<BigInteger, Integer>() {{
         put(BigInteger.valueOf(1), 64);
     }});
+
+    public static final Map<Integer, SignerFactory> SIGNER_FACTORIES = Collections.unmodifiableMap(new HashMap<Integer, SignerFactory>() {{
+        put(Ed25519SHA512.SIGNER_ID, Ed25519SHA512::new);
+    }});
+
+    @FunctionalInterface
+    public static interface SignerFactory {
+
+        public BaseSigner getSigner();
+
+    }
 
 }
