@@ -21,8 +21,7 @@ public class Transaction {
     private final byte[] data;
 
     public Transaction(BigInteger chainID, BigInteger timestamp, AccountAddress target,
-                       BigInteger cuLimit, BigInteger cuPrice, Signature signature,
-                       byte[] data)
+                       BigInteger cuLimit, BigInteger cuPrice, Signature signature, byte[] data)
             throws IllegalArgumentException, NullPointerException {
         this.chainID = checkNotNull(chainID);
         this.timestamp = checkNotNull(timestamp);

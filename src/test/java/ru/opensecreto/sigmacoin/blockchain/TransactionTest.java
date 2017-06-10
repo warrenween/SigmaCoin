@@ -1,6 +1,7 @@
 package ru.opensecreto.sigmacoin.blockchain;
 
 import org.testng.annotations.Test;
+import ru.opensecreto.sigmacoin.crypto.base.Signature;
 import ru.opensecreto.sigmacoin.vm.AccountAddress;
 import ru.opensecreto.sigmacoin.vm.Word;
 
@@ -24,8 +25,7 @@ public class TransactionTest {
                 new AccountAddress(new Word(1256)),
                 BigInteger.valueOf(100),
                 BigInteger.valueOf(500),
-                BigInteger.valueOf(1),
-                sig,
+                new Signature(10, sig),
                 data
         );
 
@@ -47,8 +47,7 @@ public class TransactionTest {
                 new AccountAddress(new Word(1256)),
                 BigInteger.valueOf(100),
                 BigInteger.valueOf(500),
-                BigInteger.valueOf(1),
-                sig,
+                new Signature(11, sig),
                 data
         );
 
@@ -58,8 +57,7 @@ public class TransactionTest {
                 new AccountAddress(new Word(1256)),
                 BigInteger.valueOf(100),
                 BigInteger.valueOf(500),
-                BigInteger.valueOf(1),
-                sig,
+                new Signature(11, sig),
                 data
         );
 
