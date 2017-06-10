@@ -1,4 +1,4 @@
-package ru.opensecreto.sigmacoin.crypto;
+package ru.opensecreto.sigmacoin.crypto.interfaces;
 
 public interface Keypair {
 

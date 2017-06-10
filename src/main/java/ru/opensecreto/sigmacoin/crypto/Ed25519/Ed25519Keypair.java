@@ -1,8 +1,8 @@
 package ru.opensecreto.sigmacoin.crypto.Ed25519;
 
-import ru.opensecreto.sigmacoin.crypto.Keypair;
-import ru.opensecreto.sigmacoin.crypto.PrivateKey;
-import ru.opensecreto.sigmacoin.crypto.PublicKey;
+import ru.opensecreto.sigmacoin.crypto.interfaces.Keypair;
+import ru.opensecreto.sigmacoin.crypto.interfaces.PrivateKey;
+import ru.opensecreto.sigmacoin.crypto.interfaces.PublicKey;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;

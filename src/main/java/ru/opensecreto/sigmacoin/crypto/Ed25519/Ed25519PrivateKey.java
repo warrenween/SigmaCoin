@@ -1,6 +1,6 @@
 package ru.opensecreto.sigmacoin.crypto.Ed25519;
 
-import ru.opensecreto.sigmacoin.crypto.PrivateKey;
+import ru.opensecreto.sigmacoin.crypto.interfaces.PrivateKey;
 
 import java.util.Arrays;
 
