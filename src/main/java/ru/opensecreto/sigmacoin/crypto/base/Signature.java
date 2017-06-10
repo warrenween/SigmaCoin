@@ -29,6 +29,4 @@ public class Signature {
         return Util.arrayConcat(Ints.toByteArray(method), signature);
     }
 
-    ;
-
 }
