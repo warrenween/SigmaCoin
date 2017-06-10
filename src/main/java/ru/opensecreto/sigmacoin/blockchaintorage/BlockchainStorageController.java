@@ -1,4 +1,4 @@
-package ru.opensecreto.sigmacoin.blockstorage;
+package ru.opensecreto.sigmacoin.blockchaintorage;
 
 import jetbrains.exodus.ArrayByteIterable;
 import jetbrains.exodus.env.*;
@@ -10,16 +10,16 @@ import java.io.File;
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 
-public class BlockStorageController {
+public class BlockchainStorageController {
 
-    public static final Logger LOGGER = LoggerFactory.getLogger(BlockStorageController.class);
+    public static final Logger LOGGER = LoggerFactory.getLogger(BlockchainStorageController.class);
 
     private final int hashSize;
 
     private final Environment environment;
     private final Store blockStore;
 
-    public BlockStorageController(File dbDir, int hashSize) {
+    public BlockchainStorageController(File dbDir, int hashSize) {
         checkNotNull(dbDir);
 
         this.hashSize = hashSize;

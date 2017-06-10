@@ -10,7 +10,7 @@ public class VirtualMachineControllerTest {
 
     @Test
     public void testExecutionCorrectStack() {
-        ContractManager manager = mock(ContractManager.class);
+        AccountManager manager = mock(AccountManager.class);
 
         VirtualMachineController controller = new VirtualMachineController(
                 manager,
