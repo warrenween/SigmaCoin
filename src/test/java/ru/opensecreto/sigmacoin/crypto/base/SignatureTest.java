@@ -15,4 +15,15 @@ public class SignatureTest {
         });
     }
 
+    @Test
+    public void testUnmodifiable() {
+        byte[] original = new byte[]{1, 2, 3, 4, 5, 6};
+        Signature signature = new Signature(10, original);
+        original[1] = 10;
+        assertThat(signature.getSignature()).containsExactly(new byte[]{1, 2, 3, 4, 5, 6});
+        byte[] data = signature.getSignature();
+        data[0] = 100;
+        assertThat(signature.getSignature()).containsExactly(new byte[]{1, 2, 3, 4, 5, 6});
+    }
+
 }
