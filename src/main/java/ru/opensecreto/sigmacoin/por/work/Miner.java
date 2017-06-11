@@ -78,6 +78,9 @@ public class Miner implements Callable<int[]> {
         byte[] chunkResult = new byte[chunkSize];
         byte[] hashResult = new byte[hashSize];
 
+        long[] tmpChunkIds = new long[n];
+        int[] finalChunkIds = new int[n];
+
         LOGGER.info("Successfully prepared. Starting mining.");
 
         //by default chunkMaxId>chunksMinId
@@ -139,7 +142,6 @@ public class Miner implements Callable<int[]> {
                     memhashesSuccessfulInRound = memhashesSuccessfulInRound.add(BigInteger.ONE);
 
                     //mapping ids to chunkIds
-                    long[] tmpChunkIds = new long[n];
                     for (int i = 0; i < n; i++) {
                         tmpChunkIds[i] = chunkIds[ids[i]];
                     }
@@ -153,7 +155,6 @@ public class Miner implements Callable<int[]> {
                     Arrays.sort(tmpChunkIds);
 
                     //casting tmpChunkIds back to ints
-                    int[] finalChunkIds = new int[n];
                     for (int i = 0; i < n; i++) {
                         finalChunkIds[i] = (int) tmpChunkIds[i];
                     }
