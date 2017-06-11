@@ -229,6 +229,7 @@ public class Miner implements Callable<int[]> {
             chunkMinId += maxChunkCount;
             chunkMaxId += maxChunkCount;
             roundCounter++;
+            System.gc();
         }
         LOGGER.info("Unable to find solution.");
         throw new Exception("Unable to compute stack.");
