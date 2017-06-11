@@ -3,7 +3,7 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'com.github.ben-manes:gradle-versions-plugin:0.14.0'
+        classpath 'com.github.ben-manes:gradle-versions-plugin:0.15.0'
     }
 }
 
@@ -26,7 +26,7 @@ repositories {
 ext {
     guavaVersion = '22.0'
     bouncyCastleVersion = '1.57'
-    gsonVersion = '2.8.0'
+    gsonVersion = '2.8.1'
     groovyVersion = '2.4.7'
     commonsLangVersion = '3.5'
     slf4jVersion = '1.7.25'
@@ -40,7 +40,7 @@ ext {
 
     //test libraries
     assertjVersion = '3.8.0'
-    assertjSwingVersion = '3.4.0'
+    assertjSwingVersion = '3.6.0'
     testngVersion = '6.11'
     mockitoCoreVersion = '2.+'
     slf4jSimpleVersion = '1.7.25'
