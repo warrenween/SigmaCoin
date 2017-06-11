@@ -1,7 +1,9 @@
 package ru.opensecreto.sigmacoin.crypto.Ed25519;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import ru.opensecreto.openutil.Util;
-import ru.opensecreto.sigmacoin.crypto.base.BaseSigner;
+import ru.opensecreto.sigmacoin.crypto.base.Signer;
 import ru.opensecreto.sigmacoin.crypto.base.PrivateKey;
 import ru.opensecreto.sigmacoin.crypto.base.PublicKey;
 import ru.opensecreto.sigmacoin.crypto.base.Signature;
@@ -9,7 +11,6 @@ import ru.opensecreto.sigmacoin.crypto.base.Signature;
 import java.math.BigInteger;
 import java.util.Arrays;
 
-import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
@@ -17,22 +18,24 @@ import static com.google.common.base.Preconditions.checkNotNull;
  * <p>
  * https://tools.ietf.org/html/draft-josefsson-eddsa-ed25519-03
  */
-public class Ed25519SHA512 implements BaseSigner {
+public class Ed25519SHA512 implements Signer {
 
-    public static final int SIGNER_ID = 0;
+    public static final Logger LOGGER = LoggerFactory.getLogger(Ed25519SHA512.class);
+    public static final int ED25519SHA512_ID = 1;
 
     public static final int SIGNATURE_SIZE = 64;
 
     @Override
     public Signature sign(byte[] message, PrivateKey privateKey)
-            throws NullPointerException, IllegalArgumentException {
+            throws NullPointerException, UnsupportedOperationException {
         checkNotNull(message);
         checkNotNull(privateKey);
-        checkArgument(privateKey instanceof Ed25519PrivateKey,
-                "Private key must have class " + Ed25519PrivateKey.class + ". Given " + privateKey.getClass() + "."
-        );
+        if (privateKey.getMethod() != ED25519SHA512_ID) {
+            throw new UnsupportedOperationException("Invalid method " + privateKey.getMethod());
+        }
 
-        Secret tmp = Ed25519Math.secretExpand(((Ed25519PrivateKey) privateKey).getPrivateKey());
+
+        Secret tmp = Ed25519Math.secretExpand(privateKey.getPrivateKey());
         //-------
         BigInteger a = tmp.v;
         byte[] prefix = tmp.arr;
@@ -43,48 +46,56 @@ public class Ed25519SHA512 implements BaseSigner {
         BigInteger h = Ed25519Math.sha512_modq(Util.arrayConcat(Util.arrayConcat(Rs, A), message));
         //s = (r + h * a) % q
         BigInteger s = h.multiply(a).add(r).mod(Ed25519Math.q);
-        return new Signature(SIGNER_ID, Util.arrayConcat(Rs, Arrays.copyOf(Util.switchEndianness(s.toByteArray()), 32)));
+        return new Signature(ED25519SHA512_ID, Util.arrayConcat(Rs, Arrays.copyOf(Util.switchEndianness(s.toByteArray()), 32)));
     }
 
     @Override
     public boolean verify(byte[] message, Signature signature, PublicKey publicKey)
-            throws NullPointerException, IllegalArgumentException {
+            throws NullPointerException, UnsupportedOperationException {
         checkNotNull(message);
         checkNotNull(signature);
         checkNotNull(publicKey);
 
-        checkArgument(publicKey instanceof Ed25519PublicKey,
-                "Public key must have class " + Ed25519PublicKey.class + ". Given " + publicKey.getClass() + "."
-        );
-        checkArgument(signature.getMethod() == SIGNER_ID);
-        checkArgument(signature.getSignature().length == SIGNATURE_SIZE);
+        if (publicKey.getMethod() != ED25519SHA512_ID) {
+            throw new UnsupportedOperationException();
+        }
 
-        Ed25519PublicKey publicKeyCasted = (Ed25519PublicKey) publicKey;
-
-        Point A = Ed25519Math.pointDecompress(publicKeyCasted.getPublicKey());
-        if (A == null) {
+        if (signature.getMethod() != ED25519SHA512_ID) {
             return false;
         }
-        byte[] Rs = new byte[32];
-        System.arraycopy(signature.getSignature(), 0, Rs, 0, 32);
-
-        Point R = Ed25519Math.pointDecompress(Rs);
-        if (R == null) {
+        if (signature.getSignature().length != SIGNATURE_SIZE) {
             return false;
         }
 
-        byte[] sigR = new byte[32];
-        System.arraycopy(signature.getSignature(), 32, sigR, 0, 32);
+        try {
+            Point A = Ed25519Math.pointDecompress(publicKey.getPublicKey());
+            if (A == null) {
+                return false;
+            }
+            byte[] Rs = new byte[32];
+            System.arraycopy(signature.getSignature(), 0, Rs, 0, 32);
 
-        BigInteger s = new BigInteger(1, Util.switchEndianness(sigR));
-        BigInteger h = Ed25519Math.sha512_modq(Util.arrayConcat(
-                Util.arrayConcat(Rs, publicKeyCasted.getPublicKey()), message)
-        );
+            Point R = Ed25519Math.pointDecompress(Rs);
+            if (R == null) {
+                return false;
+            }
 
-        Point sB = Ed25519Math.pointMultiply(s, Ed25519Math.G);
-        Point hA = Ed25519Math.pointMultiply(h, A);
+            byte[] sigR = new byte[32];
+            System.arraycopy(signature.getSignature(), 32, sigR, 0, 32);
 
-        return Ed25519Math.pointEquals(sB, Ed25519Math.pointAdd(R, hA));
+            BigInteger s = new BigInteger(1, Util.switchEndianness(sigR));
+            BigInteger h = Ed25519Math.sha512_modq(Util.arrayConcat(
+                    Util.arrayConcat(Rs, publicKey.getPublicKey()), message)
+            );
+
+            Point sB = Ed25519Math.pointMultiply(s, Ed25519Math.G);
+            Point hA = Ed25519Math.pointMultiply(h, A);
+
+            return Ed25519Math.pointEquals(sB, Ed25519Math.pointAdd(R, hA));
+        } catch (Throwable e) {
+            LOGGER.warn("Exception when verifying signature.", e);
+            return false;
+        }
     }
 
 }

@@ -2,7 +2,7 @@ package ru.opensecreto.sigmacoin.crypto;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import ru.opensecreto.sigmacoin.crypto.base.BaseSigner;
+import ru.opensecreto.sigmacoin.crypto.base.Signer;
 import ru.opensecreto.sigmacoin.crypto.base.PublicKey;
 import ru.opensecreto.sigmacoin.crypto.base.Signature;
 
@@ -22,7 +22,7 @@ public class SignatureVerifer {
             return false;
         }
 
-        BaseSigner signer = Signers.SIGNER_FACTORIES.get(signature.getMethod()).getSigner();
+        Signer signer = Signers.SIGNER_FACTORIES.get(signature.getMethod()).getSigner();
         return signer.verify(message, signature, publicKey);
     }
 

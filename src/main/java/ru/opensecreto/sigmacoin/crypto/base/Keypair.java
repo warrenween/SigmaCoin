@@ -1,9 +1,26 @@
 package ru.opensecreto.sigmacoin.crypto.base;
 
-public interface Keypair {
+import static com.google.common.base.Preconditions.checkArgument;
+import static com.google.common.base.Preconditions.checkNotNull;
 
-    public PublicKey getPublicKey();
+public class Keypair {
 
-    public PrivateKey getPrivateKey();
+    private final PublicKey publicKey;
+    private final PrivateKey privateKey;
+
+    public Keypair(PublicKey publicKey, PrivateKey privateKey) throws NullPointerException, IllegalArgumentException {
+        this.publicKey = checkNotNull(publicKey);
+        this.privateKey = checkNotNull(privateKey);
+        checkArgument(privateKey.getMethod() == publicKey.getMethod(),
+                "Private and public keys has different methods.");
+    }
+
+    public PublicKey getPublicKey() {
+        return publicKey;
+    }
+
+    public PrivateKey getPrivateKey() {
+        return privateKey;
+    }
 
 }
