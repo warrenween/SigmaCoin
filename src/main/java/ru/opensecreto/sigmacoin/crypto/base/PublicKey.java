@@ -36,4 +36,10 @@ public class PublicKey {
     public byte[] encode() {
         return Util.arrayConcat(Ints.toByteArray(method), publicKey);
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        return (obj != null) && (obj instanceof PublicKey) &&
+                (((PublicKey) obj).method == method) && Arrays.equals(((PublicKey) obj).publicKey, publicKey);
+    }
 }

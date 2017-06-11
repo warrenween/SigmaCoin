@@ -26,4 +26,20 @@ public class PublicKeyTest {
         assertThat(publicKey.getPublicKey()).containsExactly(new byte[]{1, 2, 3, 4, 5, 6});
     }
 
+    @Test
+    public void testEqualsTrue() {
+        PublicKey publicKey1 = new PublicKey(10, new byte[]{1, 2, 3, 4, 5});
+        PublicKey publicKey2 = new PublicKey(10, new byte[]{1, 2, 3, 4, 5});
+        assertThat(publicKey1.equals(publicKey2)).isTrue();
+    }
+
+    @Test
+    public void testEqualFalse() {
+        PublicKey publicKey = new PublicKey(10, new byte[]{1, 2, 3, 4, 5});
+        assertThat(publicKey.equals(null)).isFalse();
+        assertThat(publicKey.equals("abc")).isFalse();
+        assertThat(publicKey.equals(new PublicKey(55, new byte[]{1, 2, 3, 4, 5})));
+        assertThat(publicKey.equals(new PublicKey(10, new byte[]{5, 4, 3, 2, 1})));
+    }
+
 }
