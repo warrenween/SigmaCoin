@@ -74,7 +74,8 @@ test {
     useTestNG()
     workingDir = "$buildDir"
     systemProperty 'org.slf4j.simpleLogger.defaultLogLevel', 'trace'
-    maxHeapSize = "3g"
+    minHeapSize = '2g'
+    maxHeapSize = '3g'
     jvmArgs '-verbose:gc', '-XX:+PrintGCDetails', '-XX:+PrintFlagsFinal'
 }
 
