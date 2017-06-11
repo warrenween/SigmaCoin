@@ -37,4 +37,9 @@ public class PrivateKey {
         return Util.arrayConcat(Ints.toByteArray(method), privateKey);
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        return (obj != null) && (obj instanceof PrivateKey) &&
+                (((PrivateKey) obj).method == method) && Arrays.equals(((PrivateKey) obj).privateKey, privateKey);
+    }
 }

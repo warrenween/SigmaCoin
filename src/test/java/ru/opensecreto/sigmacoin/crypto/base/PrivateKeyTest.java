@@ -26,4 +26,20 @@ public class PrivateKeyTest {
         assertThat(privateKey.getPrivateKey()).containsExactly(new byte[]{1, 2, 3, 4, 5, 6});
     }
 
+    @Test
+    public void testEqualsTrue() {
+        PrivateKey privateKey1 = new PrivateKey(10, new byte[]{1, 2, 3, 4, 5});
+        PrivateKey privateKey2 = new PrivateKey(10, new byte[]{1, 2, 3, 4, 5});
+        assertThat(privateKey1.equals(privateKey2)).isTrue();
+    }
+
+    @Test
+    public void testEqualFalse() {
+        PrivateKey privateKey = new PrivateKey(10, new byte[]{1, 2, 3, 4, 5});
+        assertThat(privateKey.equals(null)).isFalse();
+        assertThat(privateKey.equals("abc")).isFalse();
+        assertThat(privateKey.equals(new PrivateKey(55, new byte[]{1, 2, 3, 4, 5})));
+        assertThat(privateKey.equals(new PrivateKey(10, new byte[]{5, 4, 3, 2, 1})));
+    }
+
 }
