@@ -74,6 +74,7 @@ test {
     useTestNG()
     workingDir = "$buildDir"
     systemProperty 'org.slf4j.simpleLogger.defaultLogLevel', 'trace'
+    jvmArgs '-verbose:gc'
 }
 
 tasks.withType(Test) {
