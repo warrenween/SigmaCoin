@@ -15,4 +15,31 @@ public class SignatureTest {
         });
     }
 
+    @Test
+    public void testUnmodifiable() {
+        byte[] original = new byte[]{1, 2, 3, 4, 5, 6};
+        Signature signature = new Signature(10, original);
+        original[1] = 10;
+        assertThat(signature.getSignature()).containsExactly(new byte[]{1, 2, 3, 4, 5, 6});
+        byte[] data = signature.getSignature();
+        data[0] = 100;
+        assertThat(signature.getSignature()).containsExactly(new byte[]{1, 2, 3, 4, 5, 6});
+    }
+
+    @Test
+    public void testEqualsTrue() {
+        Signature signature1 = new Signature(10, new byte[]{1, 2, 3, 4, 5});
+        Signature signature2 = new Signature(10, new byte[]{1, 2, 3, 4, 5});
+        assertThat(signature1.equals(signature2)).isTrue();
+    }
+
+    @Test
+    public void testEqualFalse() {
+        Signature signature = new Signature(10, new byte[]{1, 2, 3, 4, 5});
+        assertThat(signature.equals(null)).isFalse();
+        assertThat(signature.equals("abc")).isFalse();
+        assertThat(signature.equals(new Signature(55, new byte[]{1, 2, 3, 4, 5})));
+        assertThat(signature.equals(new Signature(10, new byte[]{5, 4, 3, 2, 1})));
+    }
+
 }
