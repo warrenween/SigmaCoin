@@ -87,7 +87,7 @@ public class BlockchainStorageController {
         checkNotNull(hash);
         checkArgument(digestProvider.getDigestSize() == hash.length);
         return environment.computeInReadonlyTransaction(txn ->
-                blockStore.get(txn, new ArrayByteIterable(hash)) != null
+                transactionStore.get(txn, new ArrayByteIterable(hash)) != null
         );
     }
 

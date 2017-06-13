@@ -76,7 +76,7 @@ public class BlockchainStorageControllerTest {
         BlockchainStorageController controller1 = new BlockchainStorageController(
                 new File("txTest"), 32, () -> new KeccakDigest(128)
         );
-        Transaction transaction1 = new Transaction(
+        Transaction transaction = new Transaction(
                 BigInteger.valueOf(1),
                 BigInteger.valueOf(2),
                 new AccountAddress(new Word(3)),
@@ -87,18 +87,18 @@ public class BlockchainStorageControllerTest {
         );
 
         Digest digest = new KeccakDigest(128);
-        byte[] txData1 = Transaction.encode(transaction1);
+        byte[] txData1 = Transaction.encode(transaction);
         digest.update(txData1, 0, txData1.length);
         byte[] hash1 = new byte[digest.getDigestSize()];
         digest.doFinal(hash1, 0);
 
         assertThat(controller1.hasTransaction(hash1)).isFalse();
-        byte[] hashController1 = controller1.addTransaction(transaction1);
+        byte[] hashController1 = controller1.addTransaction(transaction);
         assertThat(controller1.hasTransaction(hash1)).isTrue();
         assertThat(hashController1).containsExactly(hash1);
 
         Transaction transactionController1 = controller1.getTransaction(hashController1);
-        assertThat(transaction1).isEqualTo(transactionController1);
+        assertThat(transaction).isEqualTo(transactionController1);
 
         controller1.close();
         BlockchainStorageController controller2 = new BlockchainStorageController(
@@ -107,7 +107,8 @@ public class BlockchainStorageControllerTest {
         assertThat(controller2.hasTransaction(hash1)).isTrue();
 
         Transaction transactionController2 = controller2.getTransaction(hashController1);
-        assertThat(transactionController2).isEqualTo(transaction1);
+        assertThat(transactionController2).isEqualTo(transaction);
+        controller2.close();
     }
 
 }
