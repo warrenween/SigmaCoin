@@ -93,7 +93,7 @@ public class BlockchainStorageController {
 
     public Transaction getTransaction(byte[] hash) {
         checkNotNull(hash);
-        checkArgument(hash.length == hashSize);
+        checkArgument(hash.length == digestProvider.getDigestSize());
         return Transaction.decode(environment.computeInReadonlyTransaction(txn -> {
             if (!hasTransaction(hash)) throw new IllegalStateException("Can not find transaction.");
             return transactionStore.get(txn, new ArrayByteIterable(hash)).getBytesUnsafe();
