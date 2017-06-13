@@ -75,8 +75,9 @@ public class BlockchainStorageController {
         byte[] hash = new byte[digest.getDigestSize()];
         digest.update(txData, 0, txData.length);
         digest.doFinal(hash, 0);
-        environment.executeInTransaction(txn -> {
+        environment.executeInTransaction((jetbrains.exodus.env.Transaction txn) -> {
             transactionStore.add(txn, new ArrayByteIterable(hash), new ArrayByteIterable(txData));
+            txn.commit();
         });
         return Arrays.copyOf(hash, hash.length);
     }
