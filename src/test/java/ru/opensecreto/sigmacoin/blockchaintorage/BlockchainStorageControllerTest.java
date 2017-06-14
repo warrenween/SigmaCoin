@@ -77,7 +77,6 @@ public class BlockchainStorageControllerTest {
                 new File("txTest"), 32, () -> new KeccakDigest(128)
         );
         Transaction transaction = new Transaction(
-                BigInteger.valueOf(1),
                 BigInteger.valueOf(2),
                 new AccountAddress(new Word(3)),
                 BigInteger.valueOf(4),
