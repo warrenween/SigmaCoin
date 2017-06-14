@@ -20,7 +20,6 @@ public class TransactionTest {
         new Random().nextBytes(data);
 
         Transaction tx1 = new Transaction(
-                BigInteger.valueOf(10),
                 BigInteger.valueOf(50),
                 new AccountAddress(new Word(1256)),
                 BigInteger.valueOf(100),
@@ -42,7 +41,6 @@ public class TransactionTest {
         new Random().nextBytes(data);
 
         Transaction tx1 = new Transaction(
-                BigInteger.valueOf(10),
                 BigInteger.valueOf(50),
                 new AccountAddress(new Word(1256)),
                 BigInteger.valueOf(100),
@@ -52,7 +50,6 @@ public class TransactionTest {
         );
 
         Transaction tx2 = new Transaction(
-                BigInteger.valueOf(10),
                 BigInteger.valueOf(50),
                 new AccountAddress(new Word(1256)),
                 BigInteger.valueOf(100),
