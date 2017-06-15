@@ -110,4 +110,15 @@ public class BlockHeader {
         return new BlockHeader(height, timestamp, difficulty, parentHash, stateRootHash, stateRootHash, pow);
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        if ((obj == null) || !(obj instanceof BlockHeader)) {
+            return false;
+        }
+        BlockHeader header = (BlockHeader) obj;
+        return header.height.equals(height) && header.timestamp.equals(timestamp) && header.difficulty.equals(difficulty) &&
+                Arrays.equals(header.parentHash, parentHash) && Arrays.equals(header.txRootHash, txRootHash) &&
+                Arrays.equals(header.stateRootHash, stateRootHash) && Arrays.equals(header.pow, pow);
+
+    }
 }
