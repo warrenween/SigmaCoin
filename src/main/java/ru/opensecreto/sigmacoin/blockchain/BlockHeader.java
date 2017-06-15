@@ -3,12 +3,12 @@ package ru.opensecreto.sigmacoin.blockchain;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.opensecreto.sigmacoin.config.BaseConfig;
-import ru.opensecreto.sigmacoin.config.CoinConfig;
 
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.math.BigInteger;
+import java.nio.ByteBuffer;
 import java.util.Arrays;
 
 import static com.google.common.base.Preconditions.checkArgument;
@@ -25,7 +25,7 @@ public class BlockHeader {
     private final int[] pow;
 
     public BlockHeader(BigInteger height, BigInteger timestamp, BigInteger difficulty, byte[] parentHash,
-                       byte[] txRootHash, int[] pow, byte[] stateRootHash) {
+                       byte[] txRootHash, byte[] stateRootHash, int[] pow) {
         this.height = checkNotNull(height);
         this.timestamp = checkNotNull(timestamp);
         this.difficulty = checkNotNull(difficulty);
@@ -67,6 +67,7 @@ public class BlockHeader {
             out.write(blockHeader.txRootHash);
             out.write(blockHeader.stateRootHash);
 
+            dataOut.writeInt(blockHeader.pow.length);
             for (int i : blockHeader.pow) {
                 dataOut.writeInt(i);
             }
@@ -76,6 +77,37 @@ public class BlockHeader {
             throw new RuntimeException(e);
         }
         return out.toByteArray();
+    }
+
+    public static BlockHeader decode(byte[] data) {
+        ByteBuffer buffer = ByteBuffer.wrap(data);
+
+        byte[] heightData = new byte[buffer.getInt()];
+        buffer.get(heightData);
+        BigInteger height = new BigInteger(1, heightData);
+
+        byte[] timestampData = new byte[buffer.getInt()];
+        buffer.get(timestampData);
+        BigInteger timestamp = new BigInteger(timestampData);
+
+        byte[] difficultyData = new byte[buffer.getInt()];
+        buffer.get(difficultyData);
+        BigInteger difficulty = new BigInteger(difficultyData);
+
+        byte[] parentHash = new byte[BaseConfig.DEFAULT_IDENTIFICATOR_LENGTH];
+        buffer.get(parentHash);
+
+        byte[] txRoothash = new byte[BaseConfig.DEFAULT_IDENTIFICATOR_LENGTH];
+        buffer.get(txRoothash);
+
+        byte[] stateRootHash = new byte[BaseConfig.DEFAULT_IDENTIFICATOR_LENGTH];
+        buffer.get(stateRootHash);
+
+        int[] pow = new int[buffer.getInt()];
+        for (int i = 0; i < pow.length; i++) {
+            pow[i] = buffer.getInt();
+        }
+        return new BlockHeader(height, timestamp, difficulty, parentHash, stateRootHash, stateRootHash, pow);
     }
 
 }
