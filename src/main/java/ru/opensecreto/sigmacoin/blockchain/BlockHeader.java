@@ -2,6 +2,8 @@ package ru.opensecreto.sigmacoin.blockchain;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import ru.opensecreto.sigmacoin.config.BaseConfig;
+import ru.opensecreto.sigmacoin.config.CoinConfig;
 
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
@@ -37,6 +39,9 @@ public class BlockHeader {
         checkArgument(height.signum() >= 0);
         checkArgument(timestamp.signum() >= 0);
         checkArgument(difficulty.signum() > 0);
+        checkArgument(parentHash.length == BaseConfig.DEFAULT_IDENTIFICATOR_LENGTH);
+        checkArgument(txRootHash.length == BaseConfig.DEFAULT_IDENTIFICATOR_LENGTH);
+        checkArgument(stateRootHash.length == BaseConfig.DEFAULT_IDENTIFICATOR_LENGTH);
         checkArgument(pow.length >= 2);
     }
 

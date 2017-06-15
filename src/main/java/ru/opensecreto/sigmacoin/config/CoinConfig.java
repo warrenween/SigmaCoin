@@ -19,6 +19,8 @@ public class CoinConfig {
     public static final int HASH_LENGTH = 64;
 
     public final static DigestProvider POW_DIGEST = () -> new SHA3Digest(512);
+    public final static DigestProvider DEFAULT_DIGEST_PROVIDER = () -> new SHA3Digest(256);
+
 
     public final static int POW_N = 3;
 
