@@ -17,7 +17,7 @@ public class VirtualMachineControllerTest {
                 new VMConfiguration(3)
         ) {
             @Override
-            public ResultFrame invoke(Stack stack, Word contractID) {
+            public ResultFrame invoke(Stack stack, AccountAddress accountAddress) {
                 assertThat(stack.getSize()).isEqualTo(2);
                 assertThat(stack.pop()).isEqualTo(new Word(0x9876));
                 assertThat(stack.pop()).isEqualTo(new Word(0x1234));
@@ -33,7 +33,7 @@ public class VirtualMachineControllerTest {
         arraycopy(a.getData(), 0, data, 0, Word.WORD_SIZE);
         arraycopy(b.getData(), 0, data, Word.WORD_SIZE, Word.WORD_SIZE);
 
-        controller.execute(data, new Word(0));
+        controller.execute(data, new AccountAddress(new Word(0)));
     }
 
 }

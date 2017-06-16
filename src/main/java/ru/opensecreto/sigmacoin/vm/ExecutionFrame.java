@@ -6,11 +6,11 @@ public class ExecutionFrame {
 
     public final Memory memory;
     public final Stack stack;
-    public final Word contractID;
+    public final AccountAddress accountAddress;
 
-    public ExecutionFrame(Memory memory, Stack stack, Word contractID) {
+    public ExecutionFrame(Memory memory, Stack stack, AccountAddress accountAddress) {
         this.memory = checkNotNull(memory);
         this.stack = checkNotNull(stack);
-        this.contractID = checkNotNull(contractID);
+        this.accountAddress = checkNotNull(accountAddress);
     }
 }

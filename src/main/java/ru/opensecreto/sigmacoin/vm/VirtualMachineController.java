@@ -26,14 +26,10 @@ public class VirtualMachineController {
         this.configuration = checkNotNull(configuration);
     }
 
-    public StopType execute(byte[] invokationData, AccountAddress accountAddress) {
-        return execute(invokationData, accountAddress.id);
-    }
-
-    public StopType execute(byte[] invocationData, Word contractID)
+    public StopType execute(byte[] invocationData, AccountAddress accountAddress)
             throws IllegalArgumentException {
         checkNotNull(invocationData);
-        checkNotNull(contractID);
+        checkNotNull(accountAddress);
         checkArgument(invocationData.length % WORD_SIZE == 0);
         Stack stack = new Stack();
 
@@ -41,16 +37,16 @@ public class VirtualMachineController {
             stack.push(new Word(Arrays.copyOfRange(invocationData, i * WORD_SIZE, i * WORD_SIZE + WORD_SIZE)));
         }
 
-        return invoke(stack, contractID).stopType;
+        return invoke(stack, accountAddress).stopType;
     }
 
-    public ResultFrame invoke(Stack stack, Word contractID) {
+    public ResultFrame invoke(Stack stack, AccountAddress accountAddress) {
         checkNotNull(stack);
-        checkNotNull(contractID);
-        if ((!accountManager.accountExists(contractID)) | (currentCallStackDepth == configuration.maxCallDepth)) {
+        checkNotNull(accountAddress);
+        if ((!accountManager.accountExists(accountAddress)) | (currentCallStackDepth == configuration.maxCallDepth)) {
             return new ResultFrame(new Stack(), StopType.BAD);
         } else {
-            ExecutionFrame executionFrame = new ExecutionFrame(accountManager.getAccount(contractID).memory, stack, contractID);
+            ExecutionFrame executionFrame = new ExecutionFrame(accountManager.getAccount(accountAddress).memory, stack, accountAddress);
             BytecodeExecutor executor = new BytecodeExecutor(configuration, executionFrame, this);
 
             currentCallStackDepth++;
