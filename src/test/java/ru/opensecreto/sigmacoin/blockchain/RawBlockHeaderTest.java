@@ -93,10 +93,6 @@ public class RawBlockHeaderTest {
                 BigInteger.valueOf(1), BigInteger.valueOf(2), BigInteger.valueOf(3),
                 a1, a2, new byte[32]
         ))).isFalse();
-        assertThat(header.equals(new RawBlockHeader(
-                BigInteger.valueOf(1), BigInteger.valueOf(2), BigInteger.valueOf(3),
-                a1, a2, a3
-        ))).isFalse();
     }
 
 }
