@@ -12,7 +12,6 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 public class Transaction {
 
-    private final BigInteger chainID;
     private final BigInteger timestamp;
     private final AccountAddress target;
     private final BigInteger cuLimit;
@@ -20,10 +19,9 @@ public class Transaction {
     private final Signature signature;
     private final byte[] data;
 
-    public Transaction(BigInteger chainID, BigInteger timestamp, AccountAddress target,
+    public Transaction( BigInteger timestamp, AccountAddress target,
                        BigInteger cuLimit, BigInteger cuPrice, Signature signature, byte[] data)
             throws IllegalArgumentException, NullPointerException {
-        this.chainID = checkNotNull(chainID);
         this.timestamp = checkNotNull(timestamp);
         this.target = checkNotNull(target);
         this.cuLimit = checkNotNull(cuLimit);
@@ -31,7 +29,6 @@ public class Transaction {
         this.signature = checkNotNull(signature);
         this.data = Arrays.copyOf(checkNotNull(data), data.length);
 
-        checkArgument(chainID.signum() >= 0, "ChainID can not be negative");
         checkArgument(timestamp.signum() >= 0, "Timestamp can not be negative");
         checkArgument(cuLimit.signum() >= 0, "CU limit can not be negative");
         checkArgument(cuPrice.signum() >= 0, "CU price can not be negative");
@@ -41,7 +38,7 @@ public class Transaction {
             throws NullPointerException {
         checkNotNull(tx);
         ByteBuffer buf = ByteBuffer.allocate(
-                Integer.BYTES + bigIntBytes(tx.chainID) +
+
                         Integer.BYTES + bigIntBytes(tx.timestamp) +
                         AccountAddress.BYTES +//target
                         Integer.BYTES + bigIntBytes(tx.cuLimit) +
@@ -49,10 +46,6 @@ public class Transaction {
                         Integer.BYTES + tx.signature.encode().length +
                         Integer.BYTES + tx.data.length
         );
-
-        byte[] chainIdArr = tx.chainID.toByteArray();
-        buf.putInt(chainIdArr.length);
-        buf.put(chainIdArr);
 
         byte[] timestampArr = tx.timestamp.toByteArray();
         buf.putInt(timestampArr.length);
@@ -81,10 +74,6 @@ public class Transaction {
             throws NullPointerException {
         ByteBuffer buf = ByteBuffer.wrap(checkNotNull(data));
 
-        byte[] chainIdArr = new byte[buf.getInt()];
-        buf.get(chainIdArr);
-        BigInteger chainId = new BigInteger(chainIdArr);
-
         byte[] timestampArr = new byte[buf.getInt()];
         buf.get(timestampArr);
         BigInteger timestamp = new BigInteger(timestampArr);
@@ -108,7 +97,7 @@ public class Transaction {
         byte[] txData = new byte[buf.getInt()];
         buf.get(txData);
 
-        return new Transaction(chainId, timestamp, target, cuLimit, cuPrice, signature, txData);
+        return new Transaction( timestamp, target, cuLimit, cuPrice, signature, txData);
     }
 
     private static int bigIntBytes(BigInteger val) {
@@ -121,13 +110,9 @@ public class Transaction {
             return false;
         }
         Transaction o = (Transaction) obj;
-        return o.chainID.equals(chainID) && o.timestamp.equals(timestamp) && o.target.equals(target) &&
+        return  o.timestamp.equals(timestamp) && o.target.equals(target) &&
                 o.cuLimit.equals(cuLimit) && o.cuPrice.equals(cuPrice) &&
                 o.signature.equals(signature) && Arrays.equals(o.data, data);
-    }
-
-    public BigInteger getChainID() {
-        return chainID;
     }
 
     public BigInteger getTimestamp() {
