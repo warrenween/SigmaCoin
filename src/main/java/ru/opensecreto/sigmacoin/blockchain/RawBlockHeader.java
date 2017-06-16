@@ -90,13 +90,13 @@ public class RawBlockHeader {
         byte[] parentHash = new byte[BaseConfig.DEFAULT_IDENTIFICATOR_LENGTH];
         buffer.get(parentHash);
 
-        byte[] txRoothash = new byte[BaseConfig.DEFAULT_IDENTIFICATOR_LENGTH];
-        buffer.get(txRoothash);
+        byte[] txRootHash = new byte[BaseConfig.DEFAULT_IDENTIFICATOR_LENGTH];
+        buffer.get(txRootHash);
 
         byte[] stateRootHash = new byte[BaseConfig.DEFAULT_IDENTIFICATOR_LENGTH];
         buffer.get(stateRootHash);
 
-        return new RawBlockHeader(height, timestamp, difficulty, parentHash, stateRootHash, stateRootHash);
+        return new RawBlockHeader(height, timestamp, difficulty, parentHash, txRootHash, stateRootHash);
     }
 
     public byte[] getHash(DigestProvider provider) {
