@@ -1,6 +1,5 @@
 package ru.opensecreto.sigmacoin.blockchain;
 
-import org.bouncycastle.crypto.Digest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.opensecreto.sigmacoin.core.DigestProvider;
@@ -72,11 +71,6 @@ public class FullBlockHeader {
     }
 
     public byte[] getHash(DigestProvider provider) {
-        byte[] data = encode(this);
-        Digest digest = provider.getDigest();
-        digest.update(data, 0, data.length);
-        byte[] out = new byte[provider.getDigestSize()];
-        digest.doFinal(out, 0);
-        return out;
+        return rawBlockHeader.getHash(provider);
     }
 }
