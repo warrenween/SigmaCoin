@@ -16,7 +16,7 @@ import java.util.Arrays;
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 
-public class BlockHeader {
+public class RawBlockHeader {
 
     private final BigInteger height;
     private final BigInteger timestamp;
@@ -24,18 +24,15 @@ public class BlockHeader {
     private final byte[] parentHash;
     private final byte[] txRootHash;
     private final byte[] stateRootHash;
-    private final int[] pow;
 
-    public BlockHeader(BigInteger height, BigInteger timestamp, BigInteger difficulty, byte[] parentHash,
-                       byte[] txRootHash, byte[] stateRootHash, int[] pow) {
+    public RawBlockHeader(BigInteger height, BigInteger timestamp, BigInteger difficulty, byte[] parentHash,
+                          byte[] txRootHash, byte[] stateRootHash) {
         this.height = checkNotNull(height);
         this.timestamp = checkNotNull(timestamp);
         this.difficulty = checkNotNull(difficulty);
         this.parentHash = Arrays.copyOf(checkNotNull(parentHash), parentHash.length);
         this.stateRootHash = Arrays.copyOf(checkNotNull(stateRootHash), stateRootHash.length);
         this.txRootHash = Arrays.copyOf(checkNotNull(txRootHash), txRootHash.length);
-
-        this.pow = checkNotNull(pow);
 
         //------
         checkArgument(height.signum() >= 0);
@@ -44,12 +41,11 @@ public class BlockHeader {
         checkArgument(parentHash.length == BaseConfig.DEFAULT_IDENTIFICATOR_LENGTH);
         checkArgument(txRootHash.length == BaseConfig.DEFAULT_IDENTIFICATOR_LENGTH);
         checkArgument(stateRootHash.length == BaseConfig.DEFAULT_IDENTIFICATOR_LENGTH);
-        checkArgument(pow.length >= 2);
     }
 
-    public static final Logger LOGGER = LoggerFactory.getLogger(BlockHeader.class);
+    public static final Logger LOGGER = LoggerFactory.getLogger(RawBlockHeader.class);
 
-    public static byte[] encode(BlockHeader blockHeader) {
+    public static byte[] encode(RawBlockHeader blockHeader) {
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         DataOutputStream dataOut = new DataOutputStream(out);
         try {
@@ -69,11 +65,6 @@ public class BlockHeader {
             out.write(blockHeader.txRootHash);
             out.write(blockHeader.stateRootHash);
 
-            dataOut.writeInt(blockHeader.pow.length);
-            for (int i : blockHeader.pow) {
-                dataOut.writeInt(i);
-            }
-
         } catch (IOException e) {
             LOGGER.warn("Something unexpected happened when encoding block header.", e);
             throw new RuntimeException(e);
@@ -81,7 +72,7 @@ public class BlockHeader {
         return out.toByteArray();
     }
 
-    public static BlockHeader decode(byte[] data) {
+    public static RawBlockHeader decode(byte[] data) {
         ByteBuffer buffer = ByteBuffer.wrap(data);
 
         byte[] heightData = new byte[buffer.getInt()];
@@ -105,23 +96,7 @@ public class BlockHeader {
         byte[] stateRootHash = new byte[BaseConfig.DEFAULT_IDENTIFICATOR_LENGTH];
         buffer.get(stateRootHash);
 
-        int[] pow = new int[buffer.getInt()];
-        for (int i = 0; i < pow.length; i++) {
-            pow[i] = buffer.getInt();
-        }
-        return new BlockHeader(height, timestamp, difficulty, parentHash, stateRootHash, stateRootHash, pow);
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if ((obj == null) || !(obj instanceof BlockHeader)) {
-            return false;
-        }
-        BlockHeader header = (BlockHeader) obj;
-        return header.height.equals(height) && header.timestamp.equals(timestamp) && header.difficulty.equals(difficulty) &&
-                Arrays.equals(header.parentHash, parentHash) && Arrays.equals(header.txRootHash, txRootHash) &&
-                Arrays.equals(header.stateRootHash, stateRootHash) && Arrays.equals(header.pow, pow);
-
+        return new RawBlockHeader(height, timestamp, difficulty, parentHash, stateRootHash, stateRootHash);
     }
 
     public byte[] getHash(DigestProvider provider) {
@@ -132,4 +107,16 @@ public class BlockHeader {
         digest.doFinal(out, 0);
         return out;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if ((obj == null) || !(obj instanceof RawBlockHeader)) {
+            return false;
+        }
+        RawBlockHeader header = (RawBlockHeader) obj;
+        return header.height.equals(height) && header.timestamp.equals(timestamp) &&
+                header.difficulty.equals(difficulty) && Arrays.equals(header.parentHash, parentHash) &&
+                Arrays.equals(header.txRootHash, txRootHash) && Arrays.equals(header.stateRootHash, stateRootHash);
+    }
+
 }

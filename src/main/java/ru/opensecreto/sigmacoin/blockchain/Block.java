@@ -10,19 +10,19 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 public class Block {
 
-    private final BlockHeader header;
+    private final FullBlockHeader fullBlockHeader;
 
     private final List<byte[]> transactionHashes;
 
-    public Block(BlockHeader header, List<byte[]> transactionHashes) {
-        this.header = checkNotNull(header);
+    public Block(FullBlockHeader fullBlockHeader, List<byte[]> transactionHashes) {
+        this.fullBlockHeader = checkNotNull(fullBlockHeader);
 
         checkNotNull(transactionHashes);
         this.transactionHashes = new ArrayList<>(transactionHashes.size());
         transactionHashes.forEach(bytes -> transactionHashes.add(Arrays.copyOf(bytes, bytes.length)));
     }
 
-    public byte[] getHash(DigestProvider provider) {
-        return header.getHash(provider);
+    public byte[] getBlockHash(DigestProvider provider) {
+        return fullBlockHeader.getHash(provider);
     }
 }
