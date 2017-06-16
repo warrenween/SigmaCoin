@@ -26,7 +26,7 @@ public class Block {
 
         checkNotNull(transactionHashes);
         this.transactionHashes = new ArrayList<>(transactionHashes.size());
-        this.transactionHashes.forEach(bytes -> transactionHashes.add(Arrays.copyOf(bytes, bytes.length)));
+        transactionHashes.forEach(bytes -> this.transactionHashes.add(Arrays.copyOf(bytes, bytes.length)));
     }
 
     public byte[] getBlockHash(DigestProvider provider) {
