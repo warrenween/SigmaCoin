@@ -23,8 +23,9 @@ public class Account {
     public final Memory memory;
     private PublicKey publicKey;
     private BigInteger balance;
+    public final AccountAddress accountAddress;
 
-    public Account(int type, Memory memory, PublicKey publicKey, BigInteger balance) {
+    public Account(int type, Memory memory, PublicKey publicKey, BigInteger balance, AccountAddress accountAddress) {
         this.type = checkNotNull(type);
         this.memory = checkNotNull(memory);
         this.balance = checkNotNull(balance);
@@ -34,6 +35,7 @@ public class Account {
             checkArgument(publicKey == null);
             this.publicKey = null;
         } else throw new IllegalArgumentException();
+        this.accountAddress = checkNotNull(accountAddress);
     }
 
     public BigInteger getBalance() {
