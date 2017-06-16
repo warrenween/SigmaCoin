@@ -1,8 +1,10 @@
 package ru.opensecreto.sigmacoin.blockchain;
 
+import org.bouncycastle.crypto.Digest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.opensecreto.sigmacoin.config.BaseConfig;
+import ru.opensecreto.sigmacoin.core.DigestProvider;
 
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
@@ -120,5 +122,14 @@ public class BlockHeader {
                 Arrays.equals(header.parentHash, parentHash) && Arrays.equals(header.txRootHash, txRootHash) &&
                 Arrays.equals(header.stateRootHash, stateRootHash) && Arrays.equals(header.pow, pow);
 
+    }
+
+    public byte[] getHash(DigestProvider provider) {
+        byte[] data = encode(this);
+        Digest digest = provider.getDigest();
+        digest.update(data, 0, data.length);
+        byte[] out = new byte[provider.getDigestSize()];
+        digest.doFinal(out, 0);
+        return out;
     }
 }

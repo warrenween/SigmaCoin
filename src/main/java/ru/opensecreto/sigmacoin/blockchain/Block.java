@@ -1,5 +1,7 @@
 package ru.opensecreto.sigmacoin.blockchain;
 
+import ru.opensecreto.sigmacoin.core.DigestProvider;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -18,5 +20,9 @@ public class Block {
         checkNotNull(transactionHashes);
         this.transactionHashes = new ArrayList<>(transactionHashes.size());
         transactionHashes.forEach(bytes -> transactionHashes.add(Arrays.copyOf(bytes, bytes.length)));
+    }
+
+    public byte[] getHash(DigestProvider provider) {
+        return header.getHash(provider);
     }
 }
