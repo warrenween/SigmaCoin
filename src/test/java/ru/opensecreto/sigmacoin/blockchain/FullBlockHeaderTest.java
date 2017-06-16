@@ -56,6 +56,8 @@ public class FullBlockHeaderTest {
                 a1, a2, a3
         ), pow);
 
+        assertThat(header.equals(null)).isFalse();
+        assertThat(header.equals("")).isFalse();
         assertThat(header.equals(new FullBlockHeader(new RawBlockHeader(
                 BigInteger.valueOf(10), BigInteger.valueOf(2), BigInteger.valueOf(3),
                 a1, a2, a3), pow)
