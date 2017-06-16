@@ -77,6 +77,11 @@ public class Block {
             return false;
         }
         Block block = (Block) obj;
-        return block.fullBlockHeader.equals(fullBlockHeader) && block.transactionHashes.equals(transactionHashes);
+        if (!(block.fullBlockHeader.equals(fullBlockHeader) &&
+                (block.transactionHashes.size() == transactionHashes.size()))) return false;
+        for (int i = 0; i < block.transactionHashes.size(); i++) {
+            if (!Arrays.equals(block.transactionHashes.get(i), transactionHashes.get(i))) return false;
+        }
+        return true;
     }
 }
