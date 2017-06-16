@@ -2,6 +2,8 @@ package ru.opensecreto.sigmacoin.vm;
 
 import ru.opensecreto.sigmacoin.crypto.base.PublicKey;
 
+import java.math.BigInteger;
+
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -19,11 +21,13 @@ public class Account {
 
     public final int type;
     public final Memory memory;
-    public final PublicKey publicKey;
+    private PublicKey publicKey;
+    private BigInteger balance;
 
-    public Account(int type, Memory memory, PublicKey publicKey) {
+    public Account(int type, Memory memory, PublicKey publicKey, BigInteger balance) {
         this.type = checkNotNull(type);
         this.memory = checkNotNull(memory);
+        this.balance = checkNotNull(balance);
         if (type == USER_CONTROLLED) {
             this.publicKey = checkNotNull(publicKey);
         } else if (type == CODE_CONTROLLED) {
@@ -32,4 +36,19 @@ public class Account {
         } else throw new IllegalArgumentException();
     }
 
+    public BigInteger getBalance() {
+        return balance;
+    }
+
+    public void setBalance(BigInteger balance) {
+        this.balance = checkNotNull(balance);
+    }
+
+    public PublicKey getPublicKey() {
+        return publicKey;
+    }
+
+    public void setPublicKey(PublicKey publicKey) {
+        this.publicKey = checkNotNull(publicKey);
+    }
 }
