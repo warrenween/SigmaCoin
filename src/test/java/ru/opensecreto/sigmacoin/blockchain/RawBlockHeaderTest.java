@@ -11,6 +11,25 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class RawBlockHeaderTest {
 
     @Test
+    public void testSerialization() {
+        byte[] a1 = new byte[BaseConfig.DEFAULT_IDENTIFICATOR_LENGTH];
+        byte[] a2 = new byte[BaseConfig.DEFAULT_IDENTIFICATOR_LENGTH];
+        byte[] a3 = new byte[BaseConfig.DEFAULT_IDENTIFICATOR_LENGTH];
+
+        Random rnd = new Random();
+        rnd.nextBytes(a1);
+        rnd.nextBytes(a2);
+        rnd.nextBytes(a3);
+
+        RawBlockHeader header1 = new RawBlockHeader(
+                BigInteger.valueOf(1), BigInteger.valueOf(2), BigInteger.valueOf(3),
+                a1, a2, a3
+        );
+        RawBlockHeader header2 = RawBlockHeader.decode(RawBlockHeader.encode(header1));
+        assertThat(header2).isEqualTo(header1);
+    }
+
+    @Test
     public void testEqualsTrue() {
         byte[] a1 = new byte[BaseConfig.DEFAULT_IDENTIFICATOR_LENGTH];
         byte[] a2 = new byte[BaseConfig.DEFAULT_IDENTIFICATOR_LENGTH];
