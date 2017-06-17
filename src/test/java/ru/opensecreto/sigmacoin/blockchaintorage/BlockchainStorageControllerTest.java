@@ -1,7 +1,6 @@
 package ru.opensecreto.sigmacoin.blockchaintorage;
 
 import org.bouncycastle.crypto.Digest;
-import org.bouncycastle.crypto.digests.KeccakDigest;
 import org.bouncycastle.crypto.digests.SHA3Digest;
 import org.testng.annotations.Test;
 import ru.opensecreto.sigmacoin.blockchain.Block;
@@ -117,7 +116,7 @@ public class BlockchainStorageControllerTest {
     @Test
     public void testTransactions() {
         BlockchainStorageController controller1 = new BlockchainStorageController(
-                new File("txTest"), () -> new KeccakDigest(128)
+                new File("txTest"), SHA3Digest::new
         );
         Transaction transaction = new Transaction(
                 BigInteger.valueOf(2),
@@ -128,7 +127,7 @@ public class BlockchainStorageControllerTest {
                 new byte[20]
         );
 
-        Digest digest = new KeccakDigest(128);
+        Digest digest = new SHA3Digest(256);
         byte[] txData1 = Transaction.encode(transaction);
         digest.update(txData1, 0, txData1.length);
         byte[] hash1 = new byte[digest.getDigestSize()];
@@ -144,7 +143,7 @@ public class BlockchainStorageControllerTest {
 
         controller1.close();
         BlockchainStorageController controller2 = new BlockchainStorageController(
-                new File("txTest"), () -> new KeccakDigest(128)
+                new File("txTest"), SHA3Digest::new
         );
         assertThat(controller2.hasTransaction(hash1)).isTrue();
 
