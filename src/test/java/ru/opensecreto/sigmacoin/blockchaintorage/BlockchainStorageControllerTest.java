@@ -80,18 +80,18 @@ public class BlockchainStorageControllerTest {
             add(hashB2);
             add(hashB3);
         }});
-        byte[] blockHashB = blockA.getBlockHash(SHA3Digest::new);
+        byte[] blockHashB = blockB.getBlockHash(SHA3Digest::new);
 
 
         assertThat(controller.hasBlock(blockHashA)).isFalse();
         assertThat(controller.hasBlock(blockHashB)).isFalse();
 
         byte[] blockHashA1 = controller.addBlock(blockA);
-        assertThat(blockHashA1).containsExactly(blockHashA);
+        assertThat(blockHashA1).inHexadecimal().containsExactly(blockHashA);
         assertThat(controller.hasBlock(blockHashA));
 
         byte[] blockHashB1 = controller.addBlock(blockB);
-        assertThat(blockHashB1).containsExactly(blockHashB);
+        assertThat(blockHashB1).inHexadecimal().containsExactly(blockHashB);
         assertThat(controller.hasBlock(blockHashB));
 
         assertThat(controller.hasBlock(blockHashA)).isTrue();
