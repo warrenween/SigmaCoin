@@ -5,6 +5,7 @@ import ru.opensecreto.sigmacoin.config.BaseConfig;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Random;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -140,6 +141,42 @@ public class BlockTest {
             add(hash2);
             add(new byte[BaseConfig.DEFAULT_IDENTIFICATOR_LENGTH]);
         }}))).isFalse();
+    }
+
+    @Test
+    public void testValuesUnmodifiable() {
+        Random rnd = new Random();
+
+        byte[] hash1 = new byte[BaseConfig.DEFAULT_IDENTIFICATOR_LENGTH];
+        rnd.nextBytes(hash1);
+        byte[] hash2 = new byte[BaseConfig.DEFAULT_IDENTIFICATOR_LENGTH];
+        rnd.nextBytes(hash2);
+        byte[] hash3 = new byte[BaseConfig.DEFAULT_IDENTIFICATOR_LENGTH];
+        rnd.nextBytes(hash3);
+
+        byte[] hashCopy1 = Arrays.copyOf(hash1, hash1.length);
+        byte[] hashCopy2 = Arrays.copyOf(hash2, hash2.length);
+        byte[] hashCopy3 = Arrays.copyOf(hash3, hash3.length);
+
+        Block block1 = new Block(new FullBlockHeader(new RawBlockHeader(
+                BigInteger.valueOf(1), BigInteger.valueOf(2), BigInteger.valueOf(3),
+                new byte[BaseConfig.DEFAULT_IDENTIFICATOR_LENGTH],
+                new byte[BaseConfig.DEFAULT_IDENTIFICATOR_LENGTH],
+                new byte[BaseConfig.DEFAULT_IDENTIFICATOR_LENGTH]
+        ), new int[4]), new ArrayList<byte[]>() {{
+            add(hashCopy1);
+            add(hashCopy2);
+            add(hashCopy3);
+        }});
+        hashCopy1[0] ^= 45;
+        hashCopy1[10] ^= -45;
+        hashCopy2[5] |= -100;
+        hashCopy2[14] ^= 100;
+        hashCopy2[2] *= -22;
+        hashCopy2[20] += -30;
+        assertThat(block1.transactionHashes.get(0)).containsExactly(hash1);
+        assertThat(block1.transactionHashes.get(1)).containsExactly(hash2);
+        assertThat(block1.transactionHashes.get(2)).containsExactly(hash3);
     }
 
 }

@@ -11,22 +11,25 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
 public class Block {
 
-    private final FullBlockHeader fullBlockHeader;
+    public final FullBlockHeader fullBlockHeader;
 
-    private final List<byte[]> transactionHashes;
+    public final List<byte[]> transactionHashes;
 
     public Block(FullBlockHeader fullBlockHeader, List<byte[]> transactionHashes) {
         this.fullBlockHeader = checkNotNull(fullBlockHeader);
 
         checkNotNull(transactionHashes);
-        this.transactionHashes = new ArrayList<>(transactionHashes.size());
-        transactionHashes.forEach(bytes -> this.transactionHashes.add(Arrays.copyOf(bytes, bytes.length)));
+
+        List<byte[]> transactionHashesCopy = new ArrayList<>(transactionHashes.size());
+        transactionHashes.forEach(bytes -> transactionHashesCopy.add(Arrays.copyOf(bytes, bytes.length)));
+        this.transactionHashes = Collections.unmodifiableList(transactionHashesCopy);
     }
 
     public byte[] getBlockHash(DigestProvider provider) {
