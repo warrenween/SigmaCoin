@@ -7,8 +7,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.opensecreto.sigmacoin.blockchain.Block;
 import ru.opensecreto.sigmacoin.blockchain.Transaction;
+import ru.opensecreto.sigmacoin.config.BaseConfig;
 import ru.opensecreto.sigmacoin.core.DigestProvider;
 
+import javax.xml.bind.DatatypeConverter;
 import java.io.File;
 import java.util.Arrays;
 
@@ -24,8 +26,10 @@ public class BlockchainStorageController {
     private final Store transactionStore;
     private final DigestProvider digestProvider;
 
-    public BlockchainStorageController(File dbDir, DigestProvider digestProvider) {
+    public BlockchainStorageController(File dbDir, DigestProvider digestProvider)
+            throws NullPointerException, IllegalArgumentException {
         checkNotNull(dbDir);
+        checkArgument(digestProvider.getDigestSize() == BaseConfig.DEFAULT_IDENTIFICATOR_LENGTH);
         this.digestProvider = checkNotNull(digestProvider);
 
         environment = Environments.newInstance(dbDir, new EnvironmentConfig().setLogDurableWrite(true));
@@ -50,20 +54,24 @@ public class BlockchainStorageController {
         return hash;
     }
 
-    public boolean hasBlock(byte[] hash)
-            throws NullPointerException, IllegalArgumentException {
+    public boolean hasBlock(byte[] hash) throws NullPointerException, IllegalArgumentException {
         checkNotNull(hash);
+        checkArgument(hash.length == digestProvider.getDigestSize());
         return environment.computeInReadonlyTransaction(txn ->
                 blockStore.get(txn, new ArrayByteIterable(hash)) != null
         );
     }
 
-    public Block getBlock(byte[] hash) {
+    public Block getBlock(byte[] hash) throws NullPointerException, IllegalArgumentException {
         checkNotNull(hash);
-        return Block.decode(environment.computeInReadonlyTransaction(txn -> {
-            if (!hasBlock(hash)) throw new IllegalStateException("Can not find block");
-            return blockStore.get(txn, new ArrayByteIterable(hash)).getBytesUnsafe();
-        }));
+        checkArgument(hash.length == digestProvider.getDigestSize());
+        if (!hasBlock(hash)) {
+            LOGGER.warn("No existing block 0x{} is requested.", DatatypeConverter.printHexBinary(hash));
+            return null;
+        }
+        return Block.decode(environment.computeInReadonlyTransaction(
+                txn -> blockStore.get(txn, new ArrayByteIterable(hash)).getBytesUnsafe())
+        );
     }
 
     public byte[] addTransaction(Transaction transaction)
@@ -90,13 +98,16 @@ public class BlockchainStorageController {
         );
     }
 
-    public Transaction getTransaction(byte[] hash) {
+    public Transaction getTransaction(byte[] hash) throws NullPointerException, IllegalArgumentException {
         checkNotNull(hash);
         checkArgument(hash.length == digestProvider.getDigestSize());
-        return Transaction.decode(environment.computeInReadonlyTransaction(txn -> {
-            if (!hasTransaction(hash)) throw new IllegalStateException("Can not find transaction.");
-            return transactionStore.get(txn, new ArrayByteIterable(hash)).getBytesUnsafe();
-        }));
+        if (!hasTransaction(hash)) {
+            LOGGER.warn("No existing transaction 0x{} requested.", DatatypeConverter.printHexBinary(hash));
+            return null;
+        }
+        return Transaction.decode(environment.computeInReadonlyTransaction(
+                txn -> transactionStore.get(txn, new ArrayByteIterable(hash)).getBytesUnsafe())
+        );
     }
 
 
