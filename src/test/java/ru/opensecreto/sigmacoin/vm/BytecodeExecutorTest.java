@@ -2,6 +2,8 @@ package ru.opensecreto.sigmacoin.vm;
 
 import org.testng.annotations.Test;
 
+import java.math.BigInteger;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -13,12 +15,12 @@ public class BytecodeExecutorTest {
     @Test
     public void test_invokeNonExistingContract() {
         AccountManager manager = mock(AccountManager.class);
-        when(manager.accountExists(new Word(0))).thenReturn(false);
+        when(manager.accountExists(new AccountAddress(new Word(0)))).thenReturn(false);
 
         VirtualMachineController controller = new VirtualMachineController(manager,
                 new VMConfiguration(10));
 
-        ResultFrame result = controller.invoke(new Stack(), new Word(0));
+        ResultFrame result = controller.invoke(new Stack(), new AccountAddress(new Word(0)));
 
         assertThat(result.stopType).isEqualTo(BAD);
         assertThat(result.stack.getSize()).isEqualTo(0);
@@ -26,14 +28,16 @@ public class BytecodeExecutorTest {
 
     @Test
     public void test_STOP_GOOD() {
-        Word idA = new Word(0);
+        AccountAddress idA = new AccountAddress(new Word(0));
         Memory contractA = new SimpleTestMemory() {{
             set(0, STOP_GOOD);// |good(top)
         }};
 
         AccountManager manager = mock(AccountManager.class);
         when(manager.accountExists(idA)).thenReturn(true);
-        when(manager.getAccount(idA)).thenReturn(new Account(Account.CODE_CONTROLLED, contractA, null));
+        when(manager.getAccount(idA)).thenReturn(new Account(
+                Account.CODE_CONTROLLED, contractA, null, BigInteger.ZERO, idA
+        ));
 
         VirtualMachineController controller = new VirtualMachineController(manager,
                 new VMConfiguration(10));
@@ -46,14 +50,16 @@ public class BytecodeExecutorTest {
 
     @Test
     public void test_INVOKE_bad() {
-        Word idA = new Word(0);
+        AccountAddress idA = new AccountAddress(new Word(0));
         Memory contractA = new SimpleTestMemory() {{
             set(0, STOP_BAD);// |bad(top)
         }};
 
         AccountManager manager = mock(AccountManager.class);
         when(manager.accountExists(idA)).thenReturn(true);
-        when(manager.getAccount(idA)).thenReturn(new Account(Account.CODE_CONTROLLED, contractA, null));
+        when(manager.getAccount(idA)).thenReturn(new Account(
+                Account.CODE_CONTROLLED, contractA, null, BigInteger.ZERO, idA
+        ));
 
         VirtualMachineController controller = new VirtualMachineController(manager,
                 new VMConfiguration(10));
@@ -66,7 +72,7 @@ public class BytecodeExecutorTest {
 
     @Test
     public void test_INVOKE_returnsCorrectStack() {
-        Word idA = new Word(0);
+        AccountAddress idA = new AccountAddress(new Word(0));
         Memory contractA = new SimpleTestMemory() {{
             set(0, PUSH);
             set(1, new Word(0x1f));// 0x1f (top)
@@ -78,7 +84,9 @@ public class BytecodeExecutorTest {
 
         AccountManager manager = mock(AccountManager.class);
         when(manager.accountExists(idA)).thenReturn(true);
-        when(manager.getAccount(idA)).thenReturn(new Account(Account.CODE_CONTROLLED, contractA, null));
+        when(manager.getAccount(idA)).thenReturn(new Account(
+                Account.CODE_CONTROLLED, contractA, null, BigInteger.ZERO, idA
+        ));
 
         VirtualMachineController controller = new VirtualMachineController(manager,
                 new VMConfiguration(10));
@@ -94,7 +102,7 @@ public class BytecodeExecutorTest {
 
     @Test
     public void test_PUSH_POP_DUP() {
-        Word idA = new Word(0x00);
+        AccountAddress idA = new AccountAddress(new Word(0));
         Memory contractA = new SimpleTestMemory() {{
             set(0, PUSH);
             set(1, new Word(0x1f));//0x1f (top)
@@ -107,7 +115,9 @@ public class BytecodeExecutorTest {
 
         AccountManager manager = mock(AccountManager.class);
         when(manager.accountExists(idA)).thenReturn(true);
-        when(manager.getAccount(idA)).thenReturn(new Account(Account.CODE_CONTROLLED, contractA, null));
+        when(manager.getAccount(idA)).thenReturn(new Account(
+                Account.CODE_CONTROLLED, contractA, null, BigInteger.ZERO, idA
+        ));
 
         VirtualMachineController controller = new VirtualMachineController(manager,
                 new VMConfiguration(10));
@@ -123,7 +133,7 @@ public class BytecodeExecutorTest {
 
     @Test
     public void test_INVOKE_fromCode() {
-        Word idA = new Word(0x00);
+        AccountAddress idA = new AccountAddress(new Word(0));
         Memory contractA = new SimpleTestMemory() {{
             set(0, PUSH);
             set(1, new Word(0x12));// 0x12 (top)
@@ -139,7 +149,7 @@ public class BytecodeExecutorTest {
             set(11, STOP_GOOD); // 0x12 0x34 0x56 0x56 0x1f 0x05 0x01 |good(top)
         }};
 
-        Word idB = new Word(0x01);
+        AccountAddress idB = new AccountAddress(new Word(0x01));
         Memory contractB = new SimpleTestMemory() {{
             // 0x12 0x34 0x56 (top)
             set(0, DUP);// 0x12 0x34 0x56 0x56 (top)
@@ -151,9 +161,13 @@ public class BytecodeExecutorTest {
 
         AccountManager manager = mock(AccountManager.class);
         when(manager.accountExists(idA)).thenReturn(true);
-        when(manager.getAccount(idA)).thenReturn(new Account(Account.CODE_CONTROLLED, contractA, null));
+        when(manager.getAccount(idA)).thenReturn(new Account(
+                Account.CODE_CONTROLLED, contractA, null, BigInteger.ZERO, idA
+        ));
         when(manager.accountExists(idB)).thenReturn(true);
-        when(manager.getAccount(idB)).thenReturn(new Account(Account.CODE_CONTROLLED, contractB, null));
+        when(manager.getAccount(idB)).thenReturn(new Account(
+                Account.CODE_CONTROLLED, contractB, null, BigInteger.ZERO, idB
+        ));
 
         VirtualMachineController controller = new VirtualMachineController(manager,
                 new VMConfiguration(10));
@@ -171,7 +185,7 @@ public class BytecodeExecutorTest {
 
     @Test
     public void test_ADD() {
-        Word idA = new Word(0x00);
+        AccountAddress idA = new AccountAddress(new Word(0));
         Memory contractA = new SimpleTestMemory() {{
             set(0, PUSH);
             set(1, new Word(123456));// 123456 (top)
@@ -183,7 +197,9 @@ public class BytecodeExecutorTest {
 
         AccountManager manager = mock(AccountManager.class);
         when(manager.accountExists(idA)).thenReturn(true);
-        when(manager.getAccount(idA)).thenReturn(new Account(Account.CODE_CONTROLLED, contractA, null));
+        when(manager.getAccount(idA)).thenReturn(new Account(
+                Account.CODE_CONTROLLED, contractA, null, BigInteger.ZERO, idA
+        ));
 
         VirtualMachineController controller = new VirtualMachineController(manager,
                 new VMConfiguration(10));
@@ -199,7 +215,7 @@ public class BytecodeExecutorTest {
 
     @Test
     public void test_SUB() {
-        Word idA = new Word(0x00);
+        AccountAddress idA = new AccountAddress(new Word(0));
         Memory contractA = new SimpleTestMemory() {{
             set(0, PUSH);
             set(1, new Word(100));// 100 (top)
@@ -211,7 +227,9 @@ public class BytecodeExecutorTest {
 
         AccountManager manager = mock(AccountManager.class);
         when(manager.accountExists(idA)).thenReturn(true);
-        when(manager.getAccount(idA)).thenReturn(new Account(Account.CODE_CONTROLLED, contractA, null));
+        when(manager.getAccount(idA)).thenReturn(new Account(
+                Account.CODE_CONTROLLED, contractA, null, BigInteger.ZERO, idA
+        ));
 
         VirtualMachineController controller = new VirtualMachineController(manager,
                 new VMConfiguration(10));
@@ -227,14 +245,16 @@ public class BytecodeExecutorTest {
 
     @Test
     public void test_SUB_noValues() {
-        Word idA = new Word(0x00);
+        AccountAddress idA = new AccountAddress(new Word(0));
         Memory contractA = new SimpleTestMemory() {{
             set(0, SUB);// |revert(top)
         }};
 
         AccountManager manager = mock(AccountManager.class);
         when(manager.accountExists(idA)).thenReturn(true);
-        when(manager.getAccount(idA)).thenReturn(new Account(Account.CODE_CONTROLLED, contractA, null));
+        when(manager.getAccount(idA)).thenReturn(new Account(
+                Account.CODE_CONTROLLED, contractA, null, BigInteger.ZERO, idA
+        ));
 
         VirtualMachineController controller = new VirtualMachineController(manager,
                 new VMConfiguration(10));
@@ -247,7 +267,7 @@ public class BytecodeExecutorTest {
 
     @Test
     public void test_SUB_oneValues() {
-        Word idA = new Word(0x00);
+        AccountAddress idA = new AccountAddress(new Word(0));
         Memory contractA = new SimpleTestMemory() {{
             set(0, PUSH);
             set(1, new Word(100));// 100 (top)
@@ -256,7 +276,9 @@ public class BytecodeExecutorTest {
 
         AccountManager manager = mock(AccountManager.class);
         when(manager.accountExists(idA)).thenReturn(true);
-        when(manager.getAccount(idA)).thenReturn(new Account(Account.CODE_CONTROLLED, contractA, null));
+        when(manager.getAccount(idA)).thenReturn(new Account(
+                Account.CODE_CONTROLLED, contractA, null, BigInteger.ZERO, idA
+        ));
 
         VirtualMachineController controller = new VirtualMachineController(manager,
                 new VMConfiguration(10));
@@ -269,7 +291,7 @@ public class BytecodeExecutorTest {
 
     @Test
     public void test_DIV() {
-        Word idA = new Word(0x00);
+        AccountAddress idA = new AccountAddress(new Word(0));
         Memory contractA = new SimpleTestMemory() {{
             set(0, PUSH);
             set(1, new Word(23));// 23 (top)
@@ -281,7 +303,9 @@ public class BytecodeExecutorTest {
 
         AccountManager manager = mock(AccountManager.class);
         when(manager.accountExists(idA)).thenReturn(true);
-        when(manager.getAccount(idA)).thenReturn(new Account(Account.CODE_CONTROLLED, contractA, null));
+        when(manager.getAccount(idA)).thenReturn(new Account(
+                Account.CODE_CONTROLLED, contractA, null, BigInteger.ZERO, idA
+        ));
 
         VirtualMachineController controller = new VirtualMachineController(manager,
                 new VMConfiguration(10));
@@ -297,14 +321,16 @@ public class BytecodeExecutorTest {
 
     @Test
     public void test_DIV_noValues() {
-        Word idA = new Word(0x00);
+        AccountAddress idA = new AccountAddress(new Word(0));
         Memory contractA = new SimpleTestMemory() {{
             set(0, DIV);// |revert(top)
         }};
 
         AccountManager manager = mock(AccountManager.class);
         when(manager.accountExists(idA)).thenReturn(true);
-        when(manager.getAccount(idA)).thenReturn(new Account(Account.CODE_CONTROLLED, contractA, null));
+        when(manager.getAccount(idA)).thenReturn(new Account(
+                Account.CODE_CONTROLLED, contractA, null, BigInteger.ZERO, idA
+        ));
 
         VirtualMachineController controller = new VirtualMachineController(manager,
                 new VMConfiguration(10));
@@ -317,7 +343,7 @@ public class BytecodeExecutorTest {
 
     @Test
     public void test_DIV_oneValue() {
-        Word idA = new Word(0x00);
+        AccountAddress idA = new AccountAddress(new Word(0));
         Memory contractA = new SimpleTestMemory() {{
             set(0, PUSH);
             set(1, new Word(23));// 23 (top)
@@ -326,7 +352,9 @@ public class BytecodeExecutorTest {
 
         AccountManager manager = mock(AccountManager.class);
         when(manager.accountExists(idA)).thenReturn(true);
-        when(manager.getAccount(idA)).thenReturn(new Account(Account.CODE_CONTROLLED, contractA, null));
+        when(manager.getAccount(idA)).thenReturn(new Account(
+                Account.CODE_CONTROLLED, contractA, null, BigInteger.ZERO, idA
+        ));
 
         VirtualMachineController controller = new VirtualMachineController(manager,
                 new VMConfiguration(10));
@@ -339,14 +367,16 @@ public class BytecodeExecutorTest {
 
     @Test
     public void test_MOD_noValues() {
-        Word idA = new Word(0x00);
+        AccountAddress idA = new AccountAddress(new Word(0));
         Memory contractA = new SimpleTestMemory() {{
             set(0, MOD);// |revert(top)
         }};
 
         AccountManager manager = mock(AccountManager.class);
         when(manager.accountExists(idA)).thenReturn(true);
-        when(manager.getAccount(idA)).thenReturn(new Account(Account.CODE_CONTROLLED, contractA, null));
+        when(manager.getAccount(idA)).thenReturn(new Account(
+                Account.CODE_CONTROLLED, contractA, null, BigInteger.ZERO, idA
+        ));
 
         VirtualMachineController controller = new VirtualMachineController(manager,
                 new VMConfiguration(10));
@@ -359,7 +389,7 @@ public class BytecodeExecutorTest {
 
     @Test
     public void test_MOD_oneValue() {
-        Word idA = new Word(0x00);
+        AccountAddress idA = new AccountAddress(new Word(0));
         Memory contractA = new SimpleTestMemory() {{
             set(0, PUSH);
             set(1, new Word(23));// 23 (top)
@@ -368,7 +398,9 @@ public class BytecodeExecutorTest {
 
         AccountManager manager = mock(AccountManager.class);
         when(manager.accountExists(idA)).thenReturn(true);
-        when(manager.getAccount(idA)).thenReturn(new Account(Account.CODE_CONTROLLED, contractA, null));
+        when(manager.getAccount(idA)).thenReturn(new Account(
+                Account.CODE_CONTROLLED, contractA, null, BigInteger.ZERO, idA
+        ));
 
         VirtualMachineController controller = new VirtualMachineController(manager,
                 new VMConfiguration(10));
@@ -381,7 +413,7 @@ public class BytecodeExecutorTest {
 
     @Test
     public void test_MOD() {
-        Word idA = new Word(0x00);
+        AccountAddress idA = new AccountAddress(new Word(0));
         Memory contractA = new SimpleTestMemory() {{
             set(0, PUSH);
             set(1, new Word(23));// 23 (top)
@@ -393,7 +425,9 @@ public class BytecodeExecutorTest {
 
         AccountManager manager = mock(AccountManager.class);
         when(manager.accountExists(idA)).thenReturn(true);
-        when(manager.getAccount(idA)).thenReturn(new Account(Account.CODE_CONTROLLED, contractA, null));
+        when(manager.getAccount(idA)).thenReturn(new Account(
+                Account.CODE_CONTROLLED, contractA, null, BigInteger.ZERO, idA
+        ));
 
         VirtualMachineController controller = new VirtualMachineController(manager,
                 new VMConfiguration(10));
@@ -409,7 +443,7 @@ public class BytecodeExecutorTest {
 
     @Test
     public void test_DIV_byZero() {
-        Word idA = new Word(0x00);
+        AccountAddress idA = new AccountAddress(new Word(0));
         Memory contractA = new SimpleTestMemory() {{
             set(0, PUSH);
             set(1, new Word(23));// 23 (top)
@@ -420,7 +454,9 @@ public class BytecodeExecutorTest {
 
         AccountManager manager = mock(AccountManager.class);
         when(manager.accountExists(idA)).thenReturn(true);
-        when(manager.getAccount(idA)).thenReturn(new Account(Account.CODE_CONTROLLED, contractA, null));
+        when(manager.getAccount(idA)).thenReturn(new Account(
+                Account.CODE_CONTROLLED, contractA, null, BigInteger.ZERO, idA
+        ));
 
         VirtualMachineController controller = new VirtualMachineController(manager,
                 new VMConfiguration(10));
@@ -433,14 +469,16 @@ public class BytecodeExecutorTest {
 
     @Test
     public void test_POP_fromEmpty() {
-        Word idA = new Word(0x00);
+        AccountAddress idA = new AccountAddress(new Word(0));
         Memory contractA = new SimpleTestMemory() {{
             set(0, POP);// |revert(top)
         }};
 
         AccountManager manager = mock(AccountManager.class);
         when(manager.accountExists(idA)).thenReturn(true);
-        when(manager.getAccount(idA)).thenReturn(new Account(Account.CODE_CONTROLLED, contractA, null));
+        when(manager.getAccount(idA)).thenReturn(new Account(
+                Account.CODE_CONTROLLED, contractA, null, BigInteger.ZERO, idA
+        ));
 
         VirtualMachineController controller = new VirtualMachineController(manager,
                 new VMConfiguration(10));
@@ -453,14 +491,16 @@ public class BytecodeExecutorTest {
 
     @Test
     public void test_DUP_fromEmpty() {
-        Word idA = new Word(0x00);
+        AccountAddress idA = new AccountAddress(new Word(0));
         Memory contractA = new SimpleTestMemory() {{
             set(0, DUP);// |revert(top)
         }};
 
         AccountManager manager = mock(AccountManager.class);
         when(manager.accountExists(idA)).thenReturn(true);
-        when(manager.getAccount(idA)).thenReturn(new Account(Account.CODE_CONTROLLED, contractA, null));
+        when(manager.getAccount(idA)).thenReturn(new Account(
+                Account.CODE_CONTROLLED, contractA, null, BigInteger.ZERO, idA
+        ));
 
         VirtualMachineController controller = new VirtualMachineController(manager,
                 new VMConfiguration(10));
@@ -473,14 +513,16 @@ public class BytecodeExecutorTest {
 
     @Test
     public void test_SWAP_noValues() {
-        Word idA = new Word(0x00);
+        AccountAddress idA = new AccountAddress(new Word(0));
         Memory contractA = new SimpleTestMemory() {{
             set(0, SWAP);// |revert(top)
         }};
 
         AccountManager manager = mock(AccountManager.class);
         when(manager.accountExists(idA)).thenReturn(true);
-        when(manager.getAccount(idA)).thenReturn(new Account(Account.CODE_CONTROLLED, contractA, null));
+        when(manager.getAccount(idA)).thenReturn(new Account(
+                Account.CODE_CONTROLLED, contractA, null, BigInteger.ZERO, idA
+        ));
 
         VirtualMachineController controller = new VirtualMachineController(manager,
                 new VMConfiguration(10));
@@ -493,7 +535,7 @@ public class BytecodeExecutorTest {
 
     @Test
     public void test_SWAP_oneValue() {
-        Word idA = new Word(0x00);
+        AccountAddress idA = new AccountAddress(new Word(0));
         Memory contractA = new SimpleTestMemory() {{
             set(0, PUSH);
             set(1, new Word(12));// 12 (top)
@@ -502,7 +544,9 @@ public class BytecodeExecutorTest {
 
         AccountManager manager = mock(AccountManager.class);
         when(manager.accountExists(idA)).thenReturn(true);
-        when(manager.getAccount(idA)).thenReturn(new Account(Account.CODE_CONTROLLED, contractA, null));
+        when(manager.getAccount(idA)).thenReturn(new Account(
+                Account.CODE_CONTROLLED, contractA, null, BigInteger.ZERO, idA
+        ));
 
         VirtualMachineController controller = new VirtualMachineController(manager,
                 new VMConfiguration(10));
@@ -515,14 +559,16 @@ public class BytecodeExecutorTest {
 
     @Test
     public void test_ADD_noValues() {
-        Word idA = new Word(0x00);
+        AccountAddress idA = new AccountAddress(new Word(0));
         Memory contractA = new SimpleTestMemory() {{
             set(0, ADD);// |revert(top)
         }};
 
         AccountManager manager = mock(AccountManager.class);
         when(manager.accountExists(idA)).thenReturn(true);
-        when(manager.getAccount(idA)).thenReturn(new Account(Account.CODE_CONTROLLED, contractA, null));
+        when(manager.getAccount(idA)).thenReturn(new Account(
+                Account.CODE_CONTROLLED, contractA, null, BigInteger.ZERO, idA
+        ));
 
         VirtualMachineController controller = new VirtualMachineController(manager,
                 new VMConfiguration(10));
@@ -535,7 +581,7 @@ public class BytecodeExecutorTest {
 
     @Test
     public void test_ADD_oneValue() {
-        Word idA = new Word(0x00);
+        AccountAddress idA = new AccountAddress(new Word(0));
         Memory contractA = new SimpleTestMemory() {{
             set(0, PUSH);
             set(1, new Word(12));// 12 (top)
@@ -544,7 +590,9 @@ public class BytecodeExecutorTest {
 
         AccountManager manager = mock(AccountManager.class);
         when(manager.accountExists(idA)).thenReturn(true);
-        when(manager.getAccount(idA)).thenReturn(new Account(Account.CODE_CONTROLLED, contractA, null));
+        when(manager.getAccount(idA)).thenReturn(new Account(
+                Account.CODE_CONTROLLED, contractA, null, BigInteger.ZERO, idA
+        ));
 
         VirtualMachineController controller = new VirtualMachineController(manager,
                 new VMConfiguration(10));
@@ -557,7 +605,7 @@ public class BytecodeExecutorTest {
 
     @Test
     public void test_MOD_byZero() {
-        Word idA = new Word(0x00);
+        AccountAddress idA = new AccountAddress(new Word(0));
         Memory contractA = new SimpleTestMemory() {{
             set(0, PUSH);
             set(1, new Word(23));// 23 (top)
@@ -568,7 +616,9 @@ public class BytecodeExecutorTest {
 
         AccountManager manager = mock(AccountManager.class);
         when(manager.accountExists(idA)).thenReturn(true);
-        when(manager.getAccount(idA)).thenReturn(new Account(Account.CODE_CONTROLLED, contractA, null));
+        when(manager.getAccount(idA)).thenReturn(new Account(
+                Account.CODE_CONTROLLED, contractA, null, BigInteger.ZERO, idA
+        ));
 
         VirtualMachineController controller = new VirtualMachineController(manager,
                 new VMConfiguration(10));
@@ -581,7 +631,7 @@ public class BytecodeExecutorTest {
 
     @Test
     public void test_SWAP() {
-        Word idA = new Word(0x00);
+        AccountAddress idA = new AccountAddress(new Word(0));
         Memory contractA = new SimpleTestMemory() {{
             set(0, PUSH);
             set(1, new Word(23));// 23 (top)
@@ -593,7 +643,9 @@ public class BytecodeExecutorTest {
 
         AccountManager manager = mock(AccountManager.class);
         when(manager.accountExists(idA)).thenReturn(true);
-        when(manager.getAccount(idA)).thenReturn(new Account(Account.CODE_CONTROLLED, contractA, null));
+        when(manager.getAccount(idA)).thenReturn(new Account(
+                Account.CODE_CONTROLLED, contractA, null, BigInteger.ZERO, idA
+        ));
 
         VirtualMachineController controller = new VirtualMachineController(manager,
                 new VMConfiguration(10));
@@ -609,7 +661,7 @@ public class BytecodeExecutorTest {
 
     @Test
     public void test_GET() {
-        Word idA = new Word(0x00);
+        AccountAddress idA = new AccountAddress(new Word(0));
         Memory contractA = new SimpleTestMemory() {{
             set(0, PUSH);
             set(1, new Word(5));// 5 (top)
@@ -621,7 +673,9 @@ public class BytecodeExecutorTest {
 
         AccountManager manager = mock(AccountManager.class);
         when(manager.accountExists(idA)).thenReturn(true);
-        when(manager.getAccount(idA)).thenReturn(new Account(Account.CODE_CONTROLLED, contractA, null));
+        when(manager.getAccount(idA)).thenReturn(new Account(
+                Account.CODE_CONTROLLED, contractA, null, BigInteger.ZERO, idA
+        ));
 
         VirtualMachineController controller = new VirtualMachineController(manager,
                 new VMConfiguration(10));
@@ -637,14 +691,16 @@ public class BytecodeExecutorTest {
 
     @Test
     public void test_GET_noValues() {
-        Word idA = new Word(0x00);
+        AccountAddress idA = new AccountAddress(new Word(0));
         Memory contractA = new SimpleTestMemory() {{
             set(0, GET);// |revert(top)
         }};
 
         AccountManager manager = mock(AccountManager.class);
         when(manager.accountExists(idA)).thenReturn(true);
-        when(manager.getAccount(idA)).thenReturn(new Account(Account.CODE_CONTROLLED, contractA, null));
+        when(manager.getAccount(idA)).thenReturn(new Account(
+                Account.CODE_CONTROLLED, contractA, null, BigInteger.ZERO, idA
+        ));
 
         VirtualMachineController controller = new VirtualMachineController(manager,
                 new VMConfiguration(10));
@@ -657,7 +713,7 @@ public class BytecodeExecutorTest {
 
     @Test
     public void test_GET_negativeValue() {
-        Word idA = new Word(0x00);
+        AccountAddress idA = new AccountAddress(new Word(0));
         Memory contractA = new SimpleTestMemory() {{
             set(0, PUSH);
             set(1, new Word(-23));// -23 (top)
@@ -666,7 +722,9 @@ public class BytecodeExecutorTest {
 
         AccountManager manager = mock(AccountManager.class);
         when(manager.accountExists(idA)).thenReturn(true);
-        when(manager.getAccount(idA)).thenReturn(new Account(Account.CODE_CONTROLLED, contractA, null));
+        when(manager.getAccount(idA)).thenReturn(new Account(
+                Account.CODE_CONTROLLED, contractA, null, BigInteger.ZERO, idA
+        ));
 
         VirtualMachineController controller = new VirtualMachineController(manager,
                 new VMConfiguration(10));
@@ -679,7 +737,7 @@ public class BytecodeExecutorTest {
 
     @Test
     public void test_PUT() {
-        Word idA = new Word(0x00);
+        AccountAddress idA = new AccountAddress(new Word(0));
         Memory contractA = new SimpleTestMemory() {{
             set(0, PUSH);
             set(1, new Word(-123456789));// -123456789 (top)
@@ -692,7 +750,9 @@ public class BytecodeExecutorTest {
 
         AccountManager manager = mock(AccountManager.class);
         when(manager.accountExists(idA)).thenReturn(true);
-        when(manager.getAccount(idA)).thenReturn(new Account(Account.CODE_CONTROLLED, contractA, null));
+        when(manager.getAccount(idA)).thenReturn(new Account(
+                Account.CODE_CONTROLLED, contractA, null, BigInteger.ZERO, idA
+        ));
 
         VirtualMachineController controller = new VirtualMachineController(manager,
                 new VMConfiguration(10));
@@ -716,7 +776,7 @@ public class BytecodeExecutorTest {
 
     @Test
     public void test_PUT_oneValue() {
-        Word idA = new Word(0x00);
+        AccountAddress idA = new AccountAddress(new Word(0));
         Memory contractA = new SimpleTestMemory() {{
             set(0, PUSH);
             set(1, new Word(-123456789));// -123456789 (top)
@@ -725,7 +785,9 @@ public class BytecodeExecutorTest {
 
         AccountManager manager = mock(AccountManager.class);
         when(manager.accountExists(idA)).thenReturn(true);
-        when(manager.getAccount(idA)).thenReturn(new Account(Account.CODE_CONTROLLED, contractA, null));
+        when(manager.getAccount(idA)).thenReturn(new Account(
+                Account.CODE_CONTROLLED, contractA, null, BigInteger.ZERO, idA
+        ));
 
         VirtualMachineController controller = new VirtualMachineController(manager,
                 new VMConfiguration(10));
@@ -749,14 +811,16 @@ public class BytecodeExecutorTest {
 
     @Test
     public void test_PUT_noValues() {
-        Word idA = new Word(0x00);
+        AccountAddress idA = new AccountAddress(new Word(0));
         Memory contractA = new SimpleTestMemory() {{
             set(0, PUT);// |revert(top)
         }};
 
         AccountManager manager = mock(AccountManager.class);
         when(manager.accountExists(idA)).thenReturn(true);
-        when(manager.getAccount(idA)).thenReturn(new Account(Account.CODE_CONTROLLED, contractA, null));
+        when(manager.getAccount(idA)).thenReturn(new Account(
+                Account.CODE_CONTROLLED, contractA, null, BigInteger.ZERO, idA
+        ));
 
         VirtualMachineController controller = new VirtualMachineController(manager,
                 new VMConfiguration(10));
@@ -780,7 +844,7 @@ public class BytecodeExecutorTest {
 
     @Test
     public void test_PUT_negativeIndex() {
-        Word idA = new Word(0x00);
+        AccountAddress idA = new AccountAddress(new Word(0));
         Memory contractA = new SimpleTestMemory() {{
             set(0, PUSH);
             set(1, new Word(-123456789));// -123456789 (top)
@@ -791,7 +855,9 @@ public class BytecodeExecutorTest {
 
         AccountManager manager = mock(AccountManager.class);
         when(manager.accountExists(idA)).thenReturn(true);
-        when(manager.getAccount(idA)).thenReturn(new Account(Account.CODE_CONTROLLED, contractA, null));
+        when(manager.getAccount(idA)).thenReturn(new Account(
+                Account.CODE_CONTROLLED, contractA, null, BigInteger.ZERO, idA
+        ));
 
         VirtualMachineController controller = new VirtualMachineController(manager,
                 new VMConfiguration(10));
