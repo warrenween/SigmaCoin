@@ -5,6 +5,7 @@ import jetbrains.exodus.env.*;
 import org.bouncycastle.crypto.Digest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import ru.opensecreto.sigmacoin.blockchain.Block;
 import ru.opensecreto.sigmacoin.blockchain.Transaction;
 import ru.opensecreto.sigmacoin.core.DigestProvider;
 
@@ -18,18 +19,14 @@ public class BlockchainStorageController {
 
     public static final Logger LOGGER = LoggerFactory.getLogger(BlockchainStorageController.class);
 
-    private final int hashSize;
-
     private final Environment environment;
     private final Store blockStore;
     private final Store transactionStore;
     private final DigestProvider digestProvider;
 
-    public BlockchainStorageController(File dbDir, int hashSize, DigestProvider digestProvider) {
+    public BlockchainStorageController(File dbDir, DigestProvider digestProvider) {
         checkNotNull(dbDir);
         this.digestProvider = checkNotNull(digestProvider);
-
-        this.hashSize = hashSize;
 
         environment = Environments.newInstance(dbDir, new EnvironmentConfig().setLogDurableWrite(true));
 
@@ -41,30 +38,32 @@ public class BlockchainStorageController {
         );
     }
 
-    public boolean addBlock(byte[] hash, byte[] data)
-            throws NullPointerException, IllegalArgumentException {
-        checkNotNull(hash);
-        checkNotNull(data);
-        checkArgument(hash.length == hashSize);
-        return environment.computeInTransaction(
-                txn -> blockStore.add(txn, new ArrayByteIterable(hash), new ArrayByteIterable(data))
+    public byte[] addBlock(Block block)
+            throws NullPointerException {
+        checkNotNull(block);
+        byte[] blockData = Block.encode(block);
+        byte[] hash = block.getBlockHash(digestProvider);
+
+        environment.executeInTransaction(
+                txn -> blockStore.add(txn, new ArrayByteIterable(hash), new ArrayByteIterable(blockData))
         );
+        return hash;
     }
 
     public boolean hasBlock(byte[] hash)
             throws NullPointerException, IllegalArgumentException {
         checkNotNull(hash);
-        checkArgument(hash.length == hashSize);
-        return environment.computeInReadonlyTransaction(txn -> blockStore.get(txn, new ArrayByteIterable(hash)) != null);
+        return environment.computeInReadonlyTransaction(txn ->
+                blockStore.get(txn, new ArrayByteIterable(hash)) != null
+        );
     }
 
-    public byte[] getBlock(byte[] hash) {
+    public Block getBlock(byte[] hash) {
         checkNotNull(hash);
-        checkArgument(hash.length == hashSize);
-        return environment.computeInReadonlyTransaction(txn -> {
+        return Block.decode(environment.computeInReadonlyTransaction(txn -> {
             if (!hasBlock(hash)) throw new IllegalStateException("Can not find block");
             return blockStore.get(txn, new ArrayByteIterable(hash)).getBytesUnsafe();
-        });
+        }));
     }
 
     public byte[] addTransaction(Transaction transaction)
